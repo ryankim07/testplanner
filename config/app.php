@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'url' => 'http://testcase.dev',
+    'url' => 'http://testplanner.dev',
 
     /*
     |--------------------------------------------------------------------------
@@ -145,6 +145,8 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\EmailServiceProvider::class,
+        App\Providers\UtilsServiceProvider::class,
 
     ],
 
@@ -198,5 +200,4 @@ return [
         'Html'      => Collective\Html\HtmlFacade::class,
 
     ],
-
 ];

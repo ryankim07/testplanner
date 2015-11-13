@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use app\Extensions\TestPlannerGuard;
 use Illuminate\Support\ServiceProvider;
+
+use Auth;
 
 class AppServiceProvider extends ServiceProvider
 {

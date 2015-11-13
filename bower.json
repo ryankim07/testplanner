@@ -1,6 +1,6 @@
 {
-  "name": "testcase",
-  "description": "TestCase",
+  "name": "testplanner",
+  "description": "Mophie Test Planner",
   "license": "MIT",
   "version": "0.0.0",
   "keywords": [
@@ -26,3 +26,4 @@
     "eonasdan-bootstrap-datetimepicker": "~4.17.37"
   }
 }
+

@@ -9,50 +9,49 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        @if (!isset($page))
-            <?php
-                header('Cache-Control: no-cache, no-store, must-revalidate'); // HTTP 1.1.
-                header('Pragma: no-cache'); // HTTP 1.0.
-                header('Expires: 0'); // Proxies.
-            ?>
-        @endif
+    @if (!isset($page))
+        <?php
+        header('Cache-Control: no-cache, no-store, must-revalidate'); // HTTP 1.1.
+        header('Pragma: no-cache'); // HTTP 1.0.
+        header('Expires: 0'); // Proxies.
+        ?>
+    @endif
 
-        <title>Juice Pack H2Pro Enrollment</title>
-        <link rel="icon" href="{!! asset('favicon.ico') !!}" type="image/x-icon" />
+    <title>Test Planner</title>
+    <link rel="icon" href="{!! asset('favicon.ico') !!}" type="image/x-icon" />
+    <link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 
-        <!-- CSS -->
-        {!! Html::style('css/app.css') !!}
+    <!-- CSS -->
+    {!! Html::style('css/bootstrap.min.css') !!}
+    {!! Html::style('css/all.css') !!}
+    {!! Html::style('css/main.css') !!}
 
-        <!-- Scripts -->
-        {!! Html::script('js/vendor.js') !!}
-        {!! Html::script('js/app.js') !!}
-    </head>
-    <body class="@yield('body-class')">
-	  
-        @include('layout.main.header')
+            <!-- Scripts -->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    {!! Html::script('js/vendor.js') !!}
+    {!! Html::script('js/main.js') !!}
 
-        <div class="container">
-            @if (App::isDownForMaintenance())
-                @yield('content')
-            @else
-                @if (isset($page))
-                    @if ($page == 'home')
-                        @yield('content')
-                        @include('layout.main.navigation')
-                    @else
-                        @include('layout.main.navigation')
-                        @yield('content')
-                    @endif
-                @else
-                    @include('layout.main.navigation')
-                    @yield('content')
-                @endif
-            @endif
-		</div>
-    </body>
+</head>
+<body class="@yield('body-class')">
+@include('layout.main.header')
+
+<div class="container-fluid">
+    <div class="row-fluid">
+
+        @include('layout.main.sidebar')
+
+        @yield('content')
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    @yield ('scripts')
+</script>
+</body>
 </html>

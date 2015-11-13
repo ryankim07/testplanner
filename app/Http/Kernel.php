@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Http;
+<?php namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -26,8 +24,10 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'auth'        => \App\Http\Middleware\Authenticate::class,
+        'auth.basic'  => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'guest'       => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'roles' 	  => \App\Http\Middleware\CheckRole::class,
+        'testplanner' => \App\Http\Middleware\TestPlannerSession::class,
     ];
 }

@@ -55,7 +55,7 @@ return [
         'mysql' => [
             'driver'    => 'mysql',
             'host'      => env('DB_HOST', 'localhost'),
-            'database'  => env('DB_DATABASE', 'testcase'),
+            'database'  => env('DB_DATABASE', 'testplanner'),
             'username'  => env('DB_USERNAME', 'mophie'),
             'password'  => env('DB_PASSWORD', 'mophie'),
             'charset'   => 'utf8',

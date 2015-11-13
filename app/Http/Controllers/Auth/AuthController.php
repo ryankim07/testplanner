@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use Validator;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Contracts\Auth\Registrar;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use App\Http\Requests\LoginFormRequest;
+use App\Http\Requests\RegisterFormRequest;
+
+use App\User;
+
+use Auth;
 
 class AuthController extends Controller
 {
@@ -21,45 +26,98 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use AuthenticatesAndRegistersUsers;
 
     /**
      * Create a new authentication controller instance.
      *
-     * @return void
+     * @param Guard $auth
+     * @param User $user
      */
-    public function __construct()
+    public function __construct(Guard $auth, User $user)
     {
-        $this->middleware('guest', ['except' => 'getLogout']);
-    }
+        $this->auth  = $auth;
+        $this->user  = $user;
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
+        $this->middleware('auth', [
+            'except' => [
+                'getLogin',
+                'postLogin',
+                'getRegister',
+                'postRegister'
+            ]
         ]);
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Show the application registration form.
      *
-     * @param  array  $data
-     * @return User
+     * @return Response
      */
-    protected function create(array $data)
+    public function getRegister()
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        return view('pages.main.register');
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param RegisterFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function postRegister(RegisterFormRequest $request)
+    {
+        $this->user->first_name = $request->first_name;
+        $this->user->last_name  = $request->last_name;
+        $this->user->email      = $request->email;
+        $this->user->password   = bcrypt($request->password);
+        $this->user->save();
+
+        $this->auth->login($this->user);
+
+        return redirect('auth/login');
+    }
+
+    /**
+     * Show the application login form.
+     *
+     * @return Response
+     */
+    public function getLogin()
+    {
+        if (!Auth::guest()) {
+            return redirect('/dashboard');
+        }
+
+        return view('pages.main.login');
+    }
+
+    /**
+     * Handle a login request to the application.
+     *
+     * @param LoginFormRequest $request
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function postLogin(LoginFormRequest $request)
+    {
+        if ($this->auth->attempt($request->only('email', 'password')))
+        {
+            return redirect('/dashboard');
+        }
+
+        return redirect()->action('Auth\AuthController@getLogin')
+            ->with('flash_message', config('testplanner.admin_credentials_problem_msg'));
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     * @return Response
+     */
+    public function getLogout()
+    {
+        $this->auth->logout();
+
+        return redirect('auth/login');
     }
 }
