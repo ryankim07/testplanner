@@ -19,7 +19,7 @@
     {!! Form::open(['route' => 'plan.save.user.response', 'class' => 'enroll-form', 'id' => 'plan-user-response-form']) !!}
 
     <input type="hidden" name="plan_id" value="{!! $id !!}">
-    <input type="hidden" name="user_id" value="{!! $user_id !!}">
+    <input type="hidden" name="user_id" value="{!! $tester_id !!}">
 
     @foreach($tickets as $ticket)
 

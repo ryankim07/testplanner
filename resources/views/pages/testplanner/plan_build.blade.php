@@ -24,7 +24,7 @@
 
         {!! Form::open(['route' => 'plan.store', 'class' => '', 'id' => 'plan-build-form']) !!}
 
-        @include('pages/testplanner/partials/plan', ['creatorId' => $creatorId])
+        @include('pages/testplanner/partials/plan', ['userId' => $userId])
         @include('pages/main/partials/submit_button', ['submitBtnText' => 'Add Tickets'])
 
         {!! Form::close() !!}

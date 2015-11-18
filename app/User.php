@@ -46,59 +46,38 @@ class User extends Model implements AuthenticatableContract,
     /**
      * Get role
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function role()
     {
-        return $this->hasOne('App\Role', 'id', 'role_id');
+        return $this->belongsToMany('App\Role', 'user_role', 'user_id', 'role_id');
     }
 
     /**
      * Check if has a specific role
      *
      * @param $roles
+     * @param null $section
      * @return bool
      */
-    public function hasRole($roles)
+    public function hasRole($roles, $section = null)
     {
-        $this->have_role = $this->getUserRole();
+        // Get all user's roles
+        $userRoles = $this->role()->getResults();
 
-        // Check if the user is a root account
-        if (in_array($this->have_role->name, ['Root', 'Administrator'])) {
-            return true;
-        }
-
-        if (is_array($roles)) {
-            foreach ($roles as $need_role) {
-                if ($this->checkIfUserHasRole($need_role)) {
+        // Check which section they belond to
+        foreach($userRoles as $hasRole) {
+            if (preg_match('/^\/admin/', $section)) {
+                if (in_array($hasRole->name, ['Root', 'Administrator'])) {
+                    return true;
+                }
+            } else {
+                if (in_array($hasRole->name, ['Root', 'Administrator', 'User'])) {
                     return true;
                 }
             }
-        } else {
-            return $this->checkIfUserHasRole($roles);
         }
 
         return false;
-    }
-
-    /**
-     * Get user's role
-     *
-     * @return mixed
-     */
-    public function getUserRole()
-    {
-        return $this->role()->getResults();
-    }
-
-    /**
-     * Check if user has a role
-     *
-     * @param $need_role
-     * @return bool
-     */
-    private function checkIfUserHasRole($need_role)
-    {
-        return (strtolower($need_role) == strtolower($this->have_role->name)) ? true : false;
     }
 }

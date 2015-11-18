@@ -14,9 +14,6 @@
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-
-use App\Facades\Utils;
 
 use App\Dashboard;
 
@@ -31,19 +28,50 @@ class DashboardController extends Controller
     }
 
     /**
-     * Show the application dashboard to the user.
+     * Show all the plans assigned to user
      *
      * @return \Illuminate\View\View
      */
     public function index()
     {
-        $planStatus   = Dashboard::displayPlanStatus();
-        $ticketStatus = Dashboard::displayTicketStatus();
+        $testerPlans = Dashboard::getTesterPlans();
 
         // Return view
         return view('pages.main.dashboard', [
-            'planStatus'   => $planStatus,
-            'ticketStatus' => $ticketStatus
+            'testerPlans' => $testerPlans
         ]);
+    }
+
+    /**
+     * Display or edit plan
+     *
+     * @param $planId
+     * @param $userId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function view($planId, $userId)
+    {
+        $response = Dashboard::getTesterResponse($planId, $userId);
+
+        $viewHtml = view('pages.admin.response_view', [
+            'op'   => 'view',
+            'plan' => $response
+        ])->render();
+
+        return response()->json([
+            "editTitle" => '',
+            "viewBody"  => $viewHtml,
+            "editBody"  => ''
+        ]);
+    }
+
+    /**
+     * Save plan response
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function save()
+    {
+
     }
 }

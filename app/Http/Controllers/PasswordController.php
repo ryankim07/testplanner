@@ -1,4 +1,4 @@
-<?php namespace App\Http\Controllers\Auth;
+<?php namespace App\Http\Controllers;
 
 /**
  * Class PasswordController

@@ -19,7 +19,7 @@
 
                     @include('errors.list')
 
-                    {!! Form::open(['route' => 'auth.login', 'class' => 'form-horizontal', 'id' => 'auth-login-form']) !!}
+                    {!! Form::open(['route' => $formAction, 'class' => 'form-horizontal', 'id' => 'auth-login-form']) !!}
 
                     <div class="form-group">
                         <div class="col-xs-12 col-md-8">

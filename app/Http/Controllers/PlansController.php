@@ -29,7 +29,6 @@ use App\Plans;
 use App\Tickets;
 use App\Testers;
 use App\TicketsResponses;
-use App\PlansTrack;
 use App\User;
 
 use Auth;
@@ -63,9 +62,22 @@ class PlansController extends Controller
      */
     public function build()
     {
-        $user = Auth::user();
+        $userId = Auth::user();
 
-        return view('pages.testplanner.plan_build', ['creatorId', $user->id]);
+        return view('pages.testplanner.plan_build', ['userId' => $userId->id]);
+    }
+
+    /**
+     * View plan
+     *
+     * @param $id
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function view($id)
+    {
+        $plan = Plans::findOrFail($id);
+
+        return view('pages.testplanner.plan_view', $plan);
     }
 
     /**
@@ -132,8 +144,6 @@ class PlansController extends Controller
 
         // Start plan creation
         try {
-            $user = $user = Auth::user();
-
             // Save new plan build
             $plan = Plans::create($planData);
 
@@ -152,25 +162,18 @@ class PlansController extends Controller
             // Save testers build
             foreach($testerData as $tester) {
                 Testers::create([
-                    'plan_id' => $plan->id,
-                    'user_id' => $tester['id'],
-                    'browser' => $tester['browser']
-                ]);
-
-                // Track plan and set to new
-                PlansTrack::create([
-                    'plan_id' => $plan->id,
-                    'user_id' => $tester['id'],
-                    'status'  => 'new'
+                    'plan_id'   => $plan->id,
+                    'tester_id' => $tester['id'],
+                    'browser'   => $tester['browser']
                 ]);
 
                 // Create object for email
                 $testersWithEmail[] = [
                     'plan_desc'  => $plan->description,
-                    'user_id'    => $tester['id'],
+                    'tester_id'  => $tester['id'],
                     'first_name' => $tester['first_name'],
                     'browser'    => $tester['browser'],
-                    'email'      => $user->email
+                    'email'      => $tester['email']
                 ];
             }
         } catch (\Exception $e) {
@@ -220,7 +223,7 @@ class PlansController extends Controller
     public function response($id)
     {
         $plan = Plans::renderPlan($id);
-        $plan['user_id'] = Auth::user()->id;
+        $plan['tester_id'] = Auth::user()->id;
 
         return view('pages.testplanner.response', $plan);
     }
@@ -252,10 +255,10 @@ class PlansController extends Controller
 
             // Add entry to tickets responses table
             $ticketResponse = TicketsResponses::create([
-                'plan_id' => $plan->id,
-                'user_id' => $user->id,
-                'status'  => $planStatus,
-                'tickets' => serialize($tickets)
+                'plan_id'   => $plan->id,
+                'tester_id' => $user->id,
+                'status'    => $planStatus,
+                'tickets'   => serialize($tickets)
             ]);
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
@@ -292,7 +295,7 @@ class PlansController extends Controller
             $ticket = [
                 'ticket_resp_id'    => $ticketResponse->id,
                 'plan_desc'         => $plan->description,
-                'user_id'           => $user->id,
+                'tester_id'         => $user->id,
                 'tester_first_name' => $user->first_name,
                 'email'             => $user->email,
                 'status'            => $planStatus,

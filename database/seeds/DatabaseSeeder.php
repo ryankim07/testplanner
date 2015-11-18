@@ -12,10 +12,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
+        DB::table('roles')->insert([
+            'id'          => 1,
+            'name'        => 'Root',
+            'description' => 'Use this account with extreme caution. When using this account it is possible to cause irreversible damage to the system.'
+        ]);
 
-        // $this->call(UserTableSeeder::class);
+        DB::table('roles')->insert([
+            'id'          => 2,
+            'name'        => 'Administrator',
+            'description' => 'Full access to create, edit, and update companies, and orders.'
+        ]);
 
-        Model::reguard();
+        DB::table('roles')->insert([
+            'id'          => 3,
+            'name'        => 'User',
+            'description' => 'A standard user that can have a licence assigned to them. No administrative features.'
+        ]);
     }
 }

@@ -12,6 +12,7 @@
  */
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Testers extends Model
 {
@@ -29,7 +30,7 @@ class Testers extends Model
      */
     protected $fillable = [
         'plan_id',
-        'user_id',
+        'tester_id',
         'browser'
     ];
 
@@ -45,5 +46,16 @@ class Testers extends Model
      */
     public static function boot()
     {
+    }
+
+    public static function getTestersByPlanId($planId)
+    {
+        $allTesters = DB::table('testers AS t')
+            ->join('users AS u', 'u.id', '=', 't.tester_id')
+            ->select('u.id', 'u.first_name')
+            ->where('t.plan_id', '=', $planId)
+            ->get();
+
+        return $allTesters;
     }
 }

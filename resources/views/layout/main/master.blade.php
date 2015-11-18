@@ -28,8 +28,7 @@
 
     <!-- CSS -->
     {!! Html::style('css/bootstrap.min.css') !!}
-    {!! Html::style('css/all.css') !!}
-    {!! Html::style('css/main.css') !!}
+    {!! Html::style('css/app.css') !!}
 
             <!-- Scripts -->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -42,8 +41,6 @@
 
 <div class="container-fluid">
     <div class="row-fluid">
-
-        @include('layout.main.sidebar')
 
         @yield('content')
 

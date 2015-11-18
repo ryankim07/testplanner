@@ -1,6 +1,15 @@
-<?php
+<?php namespace App\Http\Controllers\Admin;
 
-namespace App\Http\Controllers\Auth;
+/**
+ * Class AuthController
+ *
+ * Admin Controller
+ *
+ * @author     Ryan Kim
+ * @category   Mophie
+ * @package    Test Planner
+ * @copyright  Copyright (c) 2015 mophie (https://lpp.nophie.com)
+ */
 
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Registrar;
@@ -17,7 +26,7 @@ class AuthController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
-    | Registration & Login Controller
+    | Admin Registration & Login Controller
     |--------------------------------------------------------------------------
     |
     | This controller handles the registration of new users, as well as the
@@ -39,14 +48,7 @@ class AuthController extends Controller
         $this->auth  = $auth;
         $this->user  = $user;
 
-        $this->middleware('auth', [
-            'except' => [
-                'getLogin',
-                'postLogin',
-                'getRegister',
-                'postRegister'
-            ]
-        ]);
+        $this->middleware('auth', ['except' => ['getLogin', 'postLogin']]);
     }
 
     /**
@@ -75,7 +77,7 @@ class AuthController extends Controller
 
         $this->auth->login($this->user);
 
-        return redirect('auth/login');
+        return redirect('admin/auth/login');
     }
 
     /**
@@ -86,10 +88,10 @@ class AuthController extends Controller
     public function getLogin()
     {
         if (!Auth::guest()) {
-            return redirect('/dashboard');
+            return redirect('/admin/dashboard');
         }
 
-        return view('pages.main.login');
+        return view('pages.main.login', ['formAction' => 'admin.login']);
     }
 
     /**
@@ -102,10 +104,10 @@ class AuthController extends Controller
     {
         if ($this->auth->attempt($request->only('email', 'password')))
         {
-            return redirect('/dashboard');
+            return redirect('/admin/dashboard');
         }
 
-        return redirect()->action('Auth\AuthController@getLogin')
+        return redirect()->action('\Admin\AuthController@getLogin')
             ->with('flash_message', config('testplanner.admin_credentials_problem_msg'));
     }
 
@@ -118,6 +120,6 @@ class AuthController extends Controller
     {
         $this->auth->logout();
 
-        return redirect('auth/login');
+        return redirect('/admin/auth/login');
     }
 }

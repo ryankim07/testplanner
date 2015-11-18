@@ -17,6 +17,7 @@ class CreatePlansTable extends Migration
             $table->increments('id');
             $table->text('description');
             $table->integer('creator_id');
+            $table->string('status', 20);
             $table->timestamps();
         });
     }

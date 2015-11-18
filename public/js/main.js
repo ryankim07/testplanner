@@ -1,8 +1,9 @@
 $(document).ready(function() {
-    // Open viewer if closed, otherwise do nothing
-    $('.toggler').on('click', function(e) {
+    // Open viewer for dropdown
+    $('.viewer').on('change, click', function(e) {
         e.preventDefault();
 
+        var userId       = '';
         var currentClass = $('#main').attr('class');
 
         if (currentClass != 'col-xs-12 col-md-8') {
@@ -16,15 +17,18 @@ $(document).ready(function() {
             $('#main').css({'z-index':'1000'});
         }
 
+        // Detect event type
+        if (e.type == 'change') {
+            userId = '/' + $(this).val();
+        }
+
         $.when(
             $.ajax({
                 method: "GET",
-                url: $(this).data('url'),
+                url: $(this).data('url') + userId,
                 dataType: "json",
                 success: function(resp) {
                     $('#viewer').html(resp.viewBody);
-                    $('.modal-win .modal-title').html(resp.editTitle);
-                    $('.modal-win .modal-body').html(resp.editBody);
                 }
             })
         ).done(function(resp) {
@@ -34,17 +38,6 @@ $(document).ready(function() {
                     $('#main').toggleClass('col-md-12 col-md-8');
                     $('#viewer').toggleClass('col-md-0 col-md-4');
                     $('#viewer').empty();
-                });
-
-                // Open modal window
-                $('.modal-link').on('click', function(e) {
-                    e.preventDefault();
-                    $('.modal-win').modal('show');
-                });
-
-                // Update contents in modal window
-                $('.modal-win-update').on('click', function(e) {
-                    $('.admin-form-update').submit();
                 });
             });
     });

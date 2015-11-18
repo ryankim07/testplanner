@@ -17,8 +17,8 @@ class CreateTicketsResponsesTable extends Migration
             $table->increments('id');
             $table->integer('plan_id')->unsigned();
             $table->foreign('plan_id')->references('id')->on('plans');
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('tester_id')->unsigned();
+            $table->foreign('tester_id')->references('id')->on('users');
             $table->string('status', 20);
             $table->longText('tickets');
             $table->timestamps();
