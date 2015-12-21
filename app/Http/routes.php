@@ -12,35 +12,21 @@
 */
 
 /**
- * Frontend Auth
+ * Auth
  */
 Route::get('/', 'AuthController@getLogin');
-Route::get('auth/login', 'AuthController@getLogin');
-Route::post('auth/login', ['as' => 'auth.login', 'uses' => 'AuthController@postLogin']);
-Route::get('auth/getEmail', 'PasswordController@getEmail');
-Route::post('auth/postEmail', ['as' => 'auth.password.email', 'uses' => 'PasswordController@postEmail']);
-Route::get('auth/getReset/{token}', 'PasswordController@getReset');
-Route::post('auth/postReset', ['as' => 'auth.password.reset', 'uses' => 'PasswordController@postReset']);
-Route::get('auth/logout', 'AuthController@getLogout');
-
-
-/**
- * Admin Auth
- */
-Route::get('admin', 'Admin\AuthController@getLogin');
-Route::get('admin/auth/login', 'Admin\AuthController@getLogin');
-Route::post('admin/auth/login', ['as' => 'admin.login', 'uses' => 'Admin\AuthController@postLogin']);
-Route::get('admin/auth/register', ['uses' => 'Admin\AuthController@getRegister']);
-Route::post('admin/auth/register', ['as' => 'admin.register', 'uses' => 'Admin\AuthController@postRegister']);
-Route::get('admin/auth/getEmail', 'PasswordController@getEmail');
-Route::post('admin/auth/postEmail', ['as' => 'auth.password.email', 'uses' => 'PasswordController@postEmail']);
-Route::get('admin/auth/getReset/{token}', 'PasswordController@getReset');
-Route::post('admin/auth/postReset', ['as' => 'auth.password.reset', 'uses' => 'PasswordController@postReset']);
-Route::get('admin/auth/logout', 'Admin\AuthController@getLogout');
-
+Route::get('auth/login', ['as' => 'auth.login', 'uses' => 'AuthController@getLogin']);
+Route::post('auth/postLogin', ['as' => 'auth.post.login', 'uses' => 'AuthController@postLogin']);
+Route::get('auth/register', ['as' => 'auth.register','uses' => 'AuthController@getRegister']);
+Route::post('auth/postRegister', ['as' => 'auth.post.register', 'uses' => 'AuthController@postRegister']);
+Route::get('password/getEmail', ['as' =>'password.email', 'uses' => 'PasswordController@getEmail']);
+Route::post('password/postEmail', ['as' => 'password.post.email', 'uses' => 'PasswordController@postEmail']);
+Route::get('password/getReset/{token}', ['as' =>'password.reset', 'uses' => 'PasswordController@getReset']);
+Route::post('password/postReset', ['as' => 'password.post.reset', 'uses' => 'PasswordController@postReset']);
+Route::get('auth/logout', ['as' => 'auth.logout', 'uses' => 'AuthController@getLogout']);
 
 /**
- * Frontend Dashboard
+ * Dashboard
  */
 Route::get('dashboard', [
     'as'         => 'dashboard',
@@ -56,6 +42,13 @@ Route::get('dashboard/view/{plan_id}/{user_id}', [
     'uses'       => 'DashboardController@view'
 ]);
 
+Route::get('dashboard/respond/{plan_id}/{user_id}', [
+    'as'         => 'dashboard.plan.respond',
+    'middleware' => 'roles',
+    'roles'      => ['root', 'administrator', 'user'],
+    'uses'       => 'DashboardController@respond'
+]);
+
 Route::post('dashboard/save', [
     'as'         => 'dashboard.plan.save',
     'middleware' => 'roles',
@@ -65,39 +58,21 @@ Route::post('dashboard/save', [
 
 
 /**
- * Admin Dashboard
- */
-Route::get('admin/dashboard', [
-    'as'         => 'admin.dashboard',
-    'middleware' => 'roles',
-    'roles'      => ['root', 'administrator'],
-    'uses'       => 'Admin\DashboardController@index'
-]);
-
-Route::get('admin/dashboard/view/{plan_id}/{user_id}', [
-    'as'         => 'admin.dashboard.plan.view',
-    'middleware' => 'roles',
-    'roles'      => ['root', 'administrator'],
-    'uses'       => 'Admin\DashboardController@view'
-]);
-
-
-/**
  * Plans
  */
 Route::get('plan/view/{id}', ['as' => 'plan.view', 'uses' => 'PlansController@view']);
 Route::get('plan/build', [
+    'as'         => 'plan.build',
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator'],
     'uses'       => 'PlansController@build'
 ]);
-Route::get('plan/review', 'PlansController@review');
-Route::get('plan/response/{id}', ['as' => 'plan.response', 'uses' => 'PlansController@response']);
-Route::get('plan/viewAll', 'PlansController@viewAll');
+Route::get('plan/review', ['as' => 'plan.review', 'uses' => 'PlansController@review']);
+Route::get('plan/viewAll', ['as' => 'plan.view.all', 'uses' => 'PlansController@viewAll']);
 
 
 Route::post('plan/saveUserResponse', ['as' => 'plan.save.user.response', 'uses' => 'PlansController@saveUserResponse']);
-Route::post('plan/save', 'PlansController@save');
+Route::post('plan/save', ['as' => 'plan.save', 'uses' => 'PlansController@save']);
 Route::resource('plan', 'PlansController');
 
 
@@ -105,11 +80,12 @@ Route::resource('plan', 'PlansController');
  * Tickets
  */
 Route::get('ticket/build', [
+    'as'         => 'ticket.build',
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator'],
     'uses'       => 'TicketsController@build'
 ]);
-Route::get('ticket/respond', 'TicketsController@respond');
+Route::get('ticket/response', ['as' => 'plan.response', 'uses' => 'TicketsController@response']);
 Route::resource('ticket', 'TicketsController');
 
 
@@ -117,6 +93,7 @@ Route::resource('ticket', 'TicketsController');
  * Testers
  */
 Route::get('tester/build', [
+    'as'         => 'tester.build',
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator'],
     'uses'       => 'TesterController@build'

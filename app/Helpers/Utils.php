@@ -17,6 +17,24 @@ use Log;
 class Utils
 {
     /**
+     * Generate random numbers according to length
+     *
+     * @param int $max
+     * @return string
+     */
+    public function generateSalt($max = 32)
+    {
+        $baseStr = time() . rand(0, 1000000) . rand(0, 1000000);
+        $md5Hash = md5($baseStr);
+
+        if($max < 32) {
+            $md5Hash = substr($md5Hash, 0, $max);
+        }
+
+        return $md5Hash;
+    }
+
+    /**
      * Converts datetime to mm/dd/YYY format
      *
      * @param $date
@@ -28,6 +46,17 @@ class Utils
     }
 
     /**
+     * Converts datetime to mm/dd/YYY format
+     *
+     * @param $date
+     * @return bool|string
+     */
+    public function dateAndTimeConverter($date)
+    {
+        return date('m/d/Y h:i:s', strtotime($date));
+    }
+
+    /**
      * Converts datetime to db format
      *
      * @param $date
@@ -35,7 +64,7 @@ class Utils
      */
     public function dbDateConverter($date, $time)
     {
-        return date('Y-m-d ' . $time, strtotime($date));
+        return date('Y-m-d' . $time, strtotime($date));
     }
 
     /**

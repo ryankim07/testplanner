@@ -13,17 +13,6 @@ use Auth;
 
 class AuthController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users, as well as the
-    | authentication of existing users. By default, this controller uses
-    | a simple trait to add these behaviors. Why don't you explore it?
-    |
-    */
-
     use AuthenticatesAndRegistersUsers;
 
     /**
@@ -37,7 +26,7 @@ class AuthController extends Controller
         $this->auth  = $auth;
         $this->user  = $user;
 
-        $this->middleware('auth', ['except' => ['getLogin', 'postLogin']]);
+        $this->middleware('auth', ['except' => ['getLogin', 'postLogin', 'getRegister', 'postRegister']]);
     }
 
     /**
@@ -48,10 +37,10 @@ class AuthController extends Controller
     public function getLogin()
     {
         if (!Auth::guest()) {
-            return redirect('/dashboard');
+            return redirect('dashboard');
         }
 
-        return view('pages.main.login', ['formAction' => 'auth.login']);
+        return view('pages.main.login', ['formAction' => 'auth.post.login']);
     }
 
     /**
@@ -64,10 +53,10 @@ class AuthController extends Controller
     {
         if ($this->auth->attempt($request->only('email', 'password')))
         {
-            return redirect('/dashboard');
+            return redirect('dashboard');
         }
 
-        return redirect()->action('AuthController@getLogin')
+        return redirect('admin/auth/login')
             ->with('flash_message', config('testplanner.admin_credentials_problem_msg'));
     }
 
@@ -81,5 +70,67 @@ class AuthController extends Controller
         $this->auth->logout();
 
         return redirect('auth/login');
+    }
+
+    /**
+     * Show the application registration form.
+     *
+     * @return Response
+     */
+    public function getRegister()
+    {
+        return view('pages.main.register');
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param RegisterFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function postRegister(RegisterFormRequest $request)
+    {
+        // Create new user
+        $user = $this->user->where('email', '=', $request->email)->first();
+
+        if (!isset($user->id)) {
+            $this->user->first_name = $request->first_name;
+            $this->user->last_name  = $request->last_name;
+            $this->user->email      = $request->email;
+            $this->user->password   = bcrypt($request->password);
+            $this->user->save();
+        }
+
+        // Find all roles for this user
+        $roles = $this->user->find($user->id)->roles()->get();
+
+        $roleExists = false;
+        foreach($roles as $role) {
+            if ($role->role_id == $request->assign_role) {
+                $roleExists = true;
+                break;
+            }
+        }
+
+        if ($roleExists) {
+            return redirect('admin/auth/register')
+                ->with('flash_message', config('testplanner.admin_identical_role_msg'));
+        }
+
+        $newRole = RoleUser::create([
+            'user_id' => $user->id,
+            'role_id' => $request->assign_role
+        ]);
+
+        //Email
+        if (isset($newRole->id)) {
+            /*Email::sendEmail('registration', [
+                'user_id'    => $user->id,
+                'first_name' => $request->first_name,
+                'email'      => $request->email
+            ]);*/
+        }
+
+        return redirect('admin/dashboard');
     }
 }

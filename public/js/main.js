@@ -32,14 +32,14 @@ $(document).ready(function() {
                 }
             })
         ).done(function(resp) {
-                // Close viewer
-                $('.close-viewer').on('click', function(e) {
-                    e.preventDefault();
-                    $('#main').toggleClass('col-md-12 col-md-8');
-                    $('#viewer').toggleClass('col-md-0 col-md-4');
-                    $('#viewer').empty();
-                });
+            // Close viewer
+            $('.close-viewer').on('click', function(e) {
+                e.preventDefault();
+                $('#main').toggleClass('col-md-12 col-md-8');
+                $('#viewer').toggleClass('col-md-0 col-md-4');
+                $('#viewer').empty();
             });
+        });
     });
 
     // Redirect when clicking links from tables

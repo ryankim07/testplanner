@@ -20,7 +20,7 @@
                     <ul class="dropdown-menu" role="menu">
 
                         @foreach($options as $option)
-                            <li>{!! HTML::linkRoute($option['url'], $option['link_name'], $option['params'], $option['attributes']) !!}</li>
+                            <li>{!! Html::linkRoute($option['url'], $option['link_name'], $option['params'], $option['attributes']) !!}</li>
                         @endforeach
 
                     </ul>

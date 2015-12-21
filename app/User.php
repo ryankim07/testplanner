@@ -37,6 +37,13 @@ class User extends Model implements AuthenticatableContract,
     ];
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = array('id');
+
+    /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
@@ -54,6 +61,16 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * User has many roles
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function roles()
+    {
+        return $this->hasMany('App\UserRole', 'user_id', 'id');
+    }
+
+    /**
      * Check if has a specific role
      *
      * @param $roles
@@ -67,17 +84,24 @@ class User extends Model implements AuthenticatableContract,
 
         // Check which section they belond to
         foreach($userRoles as $hasRole) {
-            if (preg_match('/^\/admin/', $section)) {
-                if (in_array($hasRole->name, ['Root', 'Administrator'])) {
-                    return true;
-                }
-            } else {
-                if (in_array($hasRole->name, ['Root', 'Administrator', 'User'])) {
-                    return true;
-                }
+            if (in_array($hasRole->name, ['Root', 'Administrator', 'User'])) {
+                return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Get user's info
+     *
+     * @param $userId
+     * @return mixed
+     */
+    public static function getUserFirstName($userId)
+    {
+        $info = User::find($userId)->first();
+
+        return $info->first_name;
     }
 }

@@ -19,22 +19,12 @@ use App\Http\Requests\LoginFormRequest;
 use App\Http\Requests\RegisterFormRequest;
 
 use App\User;
+use App\RoleUser;
 
 use Auth;
 
 class AuthController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Admin Registration & Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users, as well as the
-    | authentication of existing users. By default, this controller uses
-    | a simple trait to add these behaviors. Why don't you explore it?
-    |
-    */
-
     use AuthenticatesAndRegistersUsers;
 
     /**
@@ -48,37 +38,10 @@ class AuthController extends Controller
         $this->auth  = $auth;
         $this->user  = $user;
 
-        $this->middleware('auth', ['except' => ['getLogin', 'postLogin']]);
+        $this->middleware('auth', ['except' => ['getLogin', 'postLogin', 'getRegister', 'postRegister']]);
     }
 
-    /**
-     * Show the application registration form.
-     *
-     * @return Response
-     */
-    public function getRegister()
-    {
-        return view('pages.main.register');
-    }
 
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param RegisterFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function postRegister(RegisterFormRequest $request)
-    {
-        $this->user->first_name = $request->first_name;
-        $this->user->last_name  = $request->last_name;
-        $this->user->email      = $request->email;
-        $this->user->password   = bcrypt($request->password);
-        $this->user->save();
-
-        $this->auth->login($this->user);
-
-        return redirect('admin/auth/login');
-    }
 
     /**
      * Show the application login form.
@@ -88,10 +51,10 @@ class AuthController extends Controller
     public function getLogin()
     {
         if (!Auth::guest()) {
-            return redirect('/admin/dashboard');
+            return redirect('admin/dashboard');
         }
 
-        return view('pages.main.login', ['formAction' => 'admin.login']);
+        return view('pages.main.login', ['formAction' => 'admin.auth.post.login']);
     }
 
     /**
@@ -104,10 +67,10 @@ class AuthController extends Controller
     {
         if ($this->auth->attempt($request->only('email', 'password')))
         {
-            return redirect('/admin/dashboard');
+            return redirect('admin/dashboard');
         }
 
-        return redirect()->action('\Admin\AuthController@getLogin')
+        return redirect('admin/auth/login')
             ->with('flash_message', config('testplanner.admin_credentials_problem_msg'));
     }
 
@@ -120,6 +83,6 @@ class AuthController extends Controller
     {
         $this->auth->logout();
 
-        return redirect('/admin/auth/login');
+        return redirect('admin/auth/login');
     }
 }

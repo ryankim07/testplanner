@@ -46,7 +46,7 @@ class TicketsController extends Controller
      */
     public function build()
     {
-        return view('pages.testplanner.ticket_build');
+        return view('pages.testplanner.plan_build_step_2');
     }
 
     /**

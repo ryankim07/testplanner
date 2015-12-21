@@ -10,7 +10,7 @@
 
                     @include('errors.list')
 
-                    {!! Form::open(['route' => 'admin.password.email', 'files' => true, 'class' => 'form-horizontal', 'id' => 'admin-password-send-form']) !!}
+                    {!! Form::open(['route' => 'password.email', 'files' => true, 'class' => 'form-horizontal', 'id' => 'admin-password-send-form']) !!}
 
                     <div class="form-group">
                         <div class="col-xs-12 col-md-8">

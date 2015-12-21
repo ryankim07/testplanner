@@ -8,36 +8,36 @@
 --}}
 
 @if (isset($columns) && count($columns) > 0)
-<colgroup>
+    <colgroup>
 
-    @foreach($columns as $column)
+        @foreach($columns as $column)
 
-        <col width="{!! $column['width'] !!}">
+            <col width="{!! $column['width'] !!}">
 
-    @endforeach
+        @endforeach
 
-</colgroup>
-<thead>
+    </colgroup>
+    <thead>
     <tr>
 
         @foreach($columns as $column)
 
-        <th>
+            <th>
 
-            @if ($column['sortable'])
+                @if ($column['sortable'])
 
-                {!! HTML::linkAction($columnsLink, $column['colname'], [
-                    'sortBy' => $column['sortable'],
-                    'order'  => $column['order'] == 'ASC' ? 'DESC' : 'ASC'
-                ]) !!}
+                    {!! Html::linkAction($columnsLink, $column['colname'], [
+                        'sortBy' => $column['sortable'],
+                        'order'  => $column['order'] == 'ASC' ? 'DESC' : 'ASC'
+                    ]) !!}
 
-            @else
+                @else
 
-                {!! $column['colname'] !!}
+                    {!! $column['colname'] !!}
 
-            @endif
+                @endif
 
-        </th>
+            </th>
 
         @endforeach
 
@@ -89,6 +89,6 @@
         @endforeach
 
     </tr>
-</thead>
+    </thead>
 
 @endif

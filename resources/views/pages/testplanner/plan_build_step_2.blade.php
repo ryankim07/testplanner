@@ -12,8 +12,8 @@
 @section('content')
 
 <div class="content">
-	<fieldset id="step2" class="form-group">
-		<h5>Step 2 of 5</h5>
+	<fieldset class="form-group">
+		<h5>Step 2 of 4</h5>
 		<div class="row">
 		    <div class="col-md-12">
 		        <h6>All Fields Required</h6>
@@ -92,9 +92,10 @@
             $('.ticket-row').each(function () {
                 // Create ticket object
                 tickets.push({
+                    "id":          stringGen(5),
                     "description": $(this).find('.description').val(),
-                    "objective": $(this).find('.objective').val(),
-                    "test_steps": $(this).find('.test-steps').val()
+                    "objective":   $(this).find('.objective').val(),
+                    "test_steps":  $(this).find('.test-steps').val()
                 });
             });
 
@@ -105,6 +106,18 @@
 
             $('form').append($(input));
         });
+
+        function stringGen(len)
+        {
+            var text = " ";
+
+            var charset = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+            for( var i=0; i < len; i++ )
+                text += charset.charAt(Math.floor(Math.random() * charset.length));
+
+            return text;
+        }
     });
 
 </script>

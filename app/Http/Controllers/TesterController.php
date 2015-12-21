@@ -50,7 +50,7 @@ class TesterController extends Controller
     public function build()
     {
         $users = User::all();
-        return view('pages.testplanner.tester_build', ['users' => $users]);
+        return view('pages.testplanner.plan_build_step_3', ['users' => $users]);
     }
 
     /**

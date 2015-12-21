@@ -23,8 +23,8 @@
 
                     <div class="form-group">
                         <div class="col-xs-12 col-md-8">
-                            {!! Form::label('role_id', 'Role') !!}
-                            {!! Form::select('role_id', ['2' => 'Administrator', '3' => 'Moderator'], ['class' => 'form-control input-sm', 'id' => 'role-id']) !!}
+                            {!! Form::label('assign_role', 'Role') !!}
+                            {!! Form::select('assign_role', ['2' => 'Administrator', '3' => 'User'], ['class' => 'form-control input-sm', 'id' => 'role-id']) !!}
                         </div>
                     </div>
 
@@ -69,7 +69,7 @@
                         </div>
                     </div>
 
-            {!! Form::close() !!}
+                    {!! Form::close() !!}
 
             </div>
         </div>

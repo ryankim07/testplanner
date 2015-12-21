@@ -12,8 +12,8 @@
 @section('content')
 
 <div class="content">
-	<fieldset id="step2" class="form-group">
-		<h5>Step 3 of 5</h5>
+	<fieldset class="form-group">
+		<h5>Step 3 of 4</h5>
 		<div class="row">
 		    <div class="col-md-12">
 		        <h6>All Fields Required</h6>

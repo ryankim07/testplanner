@@ -208,3 +208,22 @@ table:not(.dashboard) tbody tr:hover {
     z-index: 9999;
     background: #fff;
 }
+
+.ticket-header{
+    overflow: hidden;
+}
+
+.ticket-header:after {
+    background-color: #e5e5e5;
+    content: "";
+    display: inline-block;
+    height: 1px;
+    position: relative;
+    vertical-align: middle;
+    width: 90%;
+}
+
+.ticket-header:after {
+    left: 0.5em;
+    margin-right: -50%;
+}

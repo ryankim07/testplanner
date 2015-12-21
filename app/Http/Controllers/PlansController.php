@@ -15,13 +15,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\PlansFormRequest;
+use App\Http\Requests\ReviewFormRequest;
+use App\Http\Requests\UserResponseFormRequest;
 use Illuminate\Contracts\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use PhpSpec\Exception\Exception;
-use App\Http\Requests\PlansFormRequest;
-use App\Http\Requests\ReviewFormRequest;
-use App\Http\Requests\UserResponseFormRequest;
 
 use App\Facades\Email;
 
@@ -62,9 +62,9 @@ class PlansController extends Controller
      */
     public function build()
     {
-        $userId = Auth::user();
+        $user = Auth::user();
 
-        return view('pages.testplanner.plan_build', ['userId' => $userId->id]);
+        return view('pages.testplanner.plan_build_step_1', ['userId' => $user->id]);
     }
 
     /**
@@ -121,7 +121,7 @@ class PlansController extends Controller
             'testers' => Session::get('mophie_testplanner.testers')
         ];
 
-        return view('pages.testplanner.review', $data);
+        return view('pages.testplanner.plan_build_review', $data);
     }
 
     /**
@@ -147,34 +147,30 @@ class PlansController extends Controller
             // Save new plan build
             $plan = Plans::create($planData);
 
-            // Save new tickets build
             if (isset($plan->id)) {
-                foreach ($ticketsData as $ticket) {
-                    $ticket = Tickets::create([
-                        'plan_id'     => $plan->id,
-                        'description' => $ticket['description'],
-                        'objective'   => $ticket['objective'],
-                        'test_steps'  => $ticket['test_steps']
-                    ]);
-                }
-            }
-
-            // Save testers build
-            foreach($testerData as $tester) {
-                Testers::create([
-                    'plan_id'   => $plan->id,
-                    'tester_id' => $tester['id'],
-                    'browser'   => $tester['browser']
+                // Save new tickets
+                Tickets::create([
+                    'plan_id' => $plan->id,
+                    'tickets' => serialize($ticketsData)
                 ]);
 
-                // Create object for email
-                $testersWithEmail[] = [
-                    'plan_desc'  => $plan->description,
-                    'tester_id'  => $tester['id'],
-                    'first_name' => $tester['first_name'],
-                    'browser'    => $tester['browser'],
-                    'email'      => $tester['email']
-                ];
+                // Save new testers
+                foreach($testerData as $tester) {
+                    Testers::create([
+                        'plan_id'   => $plan->id,
+                        'tester_id' => $tester['id'],
+                        'browser'   => $tester['browser']
+                    ]);
+
+                    // Create object for email
+                    $testersWithEmail[] = [
+                        'plan_desc'  => $plan->description,
+                        'tester_id'  => $tester['id'],
+                        'first_name' => $tester['first_name'],
+                        'browser'    => $tester['browser'],
+                        /*'email'      => $tester['email']*/
+                    ];
+                }
             }
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
@@ -215,32 +211,19 @@ class PlansController extends Controller
     }
 
     /**
-     * Tester's response
-     *
-     * @param $id
-     * @return array|\Illuminate\View\View|mixed
-     */
-    public function response($id)
-    {
-        $plan = Plans::renderPlan($id);
-        $plan['tester_id'] = Auth::user()->id;
-
-        return view('pages.testplanner.response', $plan);
-    }
-
-    /**
      * Save user's plan response
      *
      * @param UserResponseFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
     public function saveUserResponse(UserResponseFormRequest $request)
     {
         $res        = array_except($request->all(), '_token');
-        $tickets    = json_decode($res['tickets-obj'], true);
+        $responses  = json_decode($res['tickets-obj'], true);
         $planStatus = 'complete';
 
-        foreach($tickets as $ticket) {
-            if (!isset($ticket['status'])) {
+        foreach($responses as $response) {
+            if (!isset($response['test_status'])) {
                 $planStatus = 'incomplete';
             }
         }
@@ -248,18 +231,19 @@ class PlansController extends Controller
         // Start transaction
         DB::beginTransaction();
 
-        // Start plan creation
         try {
             $plan = Plans::find($res['plan_id']);
             $user = $user = Auth::user();
 
-            // Add entry to tickets responses table
-            $ticketResponse = TicketsResponses::create([
-                'plan_id'   => $plan->id,
-                'tester_id' => $user->id,
-                'status'    => $planStatus,
-                'tickets'   => serialize($tickets)
-            ]);
+            // Create or update ticket response
+            $ticketResponse = TicketsResponses::updateOrCreate([
+                'id' => $res['ticket_resp_id']], [
+                    'plan_id'   => $plan->id,
+                    'tester_id' => $user->id,
+                    'status'    => $planStatus,
+                    'responses' => serialize($responses)
+                ]
+            );
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
             $redirect = true;
@@ -275,7 +259,7 @@ class PlansController extends Controller
         }
 
         // Commit all changes
-       // DB::commit();
+        DB::commit();
 
         // Redirect if errors
         /*if ($redirect) {
@@ -290,21 +274,19 @@ class PlansController extends Controller
         }*/
 
         // Mail all test browsers
-        if ($planStatus == 'complete') {
+        /*if ($planStatus == 'complete') {
             // Create object for email
-            $ticket = [
+            Email::sendEmail('ticket-responded', [
                 'ticket_resp_id'    => $ticketResponse->id,
                 'plan_desc'         => $plan->description,
                 'tester_id'         => $user->id,
                 'tester_first_name' => $user->first_name,
                 'email'             => $user->email,
                 'status'            => $planStatus,
-                'tickets'           => serialize($tickets)
-            ];
+                'tickets'           => serialize($responses)
+            ]);
+        }*/
 
-            Email::sendEmail('ticket-responded', $ticket);
-        }
-
-        //return view('pages.testplanner.plan_response_thankyou');
+        return redirect('dashboard');
     }
 }

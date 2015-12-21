@@ -1,7 +1,7 @@
 <?php namespace App;
 
 /**
- * Class Tickets
+ * Class UserRole
  *
  * Model
  *
@@ -13,14 +13,14 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tickets extends Model
+class UserRole extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = "tickets";
+    protected $table = 'user_role';
 
     /**
      * The attributes that are mass assignable.
@@ -28,8 +28,8 @@ class Tickets extends Model
      * @var array
      */
     protected $fillable = [
-        'plan_id',
-        'tickets'
+        'user_id',
+        'role_id',
     ];
 
     /**
@@ -40,19 +40,19 @@ class Tickets extends Model
     protected $guarded = array('id');
 
     /**
-     * Model event to change data before saving to database
-     */
-    public static function boot()
-    {
-    }
-
-    /**
-     * Only one task belongs to a case
+     * Only one role belongs to a user
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function plans()
+    public function user()
     {
-        return $this->belongsTo('App\Plans', 'id', 'plan_id');
+        return $this->belongsTo('App\User');
     }
+
+
+    public static function saveUserRole($userId, $roleId)
+    {
+
+    }
+
 }

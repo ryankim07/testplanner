@@ -50,7 +50,7 @@
 
                     <div class="form-group">
                         <div class="col-xs-12 col-md-8">
-                            {!! Html::link('/auth/getEmail', 'Forgot Your Password?') !!}
+                            {!! Html::linkRoute('password.email', 'Forgot Your Password?') !!}
                         </div>
                     </div>
 

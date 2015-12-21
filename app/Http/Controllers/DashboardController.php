@@ -15,7 +15,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
-use App\Dashboard;
+use App\Plans;
+use Auth;
 
 class DashboardController extends Controller
 {
@@ -34,12 +35,19 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $testerPlans = Dashboard::getTesterPlans();
+        $userRoles               = Auth::user()->role()->get();
+        $plans['plans_assigned'] = Plans::getPlansAssigned();
+
+        foreach($userRoles as $role) {
+            if ($role->name == "Administrator") {
+                // Display administrator dashboard
+                $plans['admin_created_plans'] = Plans::getAdminCreatedPlans($role->id);
+                break;
+            }
+        }
 
         // Return view
-        return view('pages.main.dashboard', [
-            'testerPlans' => $testerPlans
-        ]);
+        return view('pages.main.dashboard', ['plans' => array_filter($plans)]);
     }
 
     /**
@@ -51,27 +59,20 @@ class DashboardController extends Controller
      */
     public function view($planId, $userId)
     {
-        $response = Dashboard::getTesterResponse($planId, $userId);
 
-        $viewHtml = view('pages.admin.response_view', [
-            'op'   => 'view',
-            'plan' => $response
-        ])->render();
-
-        return response()->json([
-            "editTitle" => '',
-            "viewBody"  => $viewHtml,
-            "editBody"  => ''
-        ]);
     }
 
     /**
-     * Save plan response
+     * Display or edit plan
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @param $planId
+     * @param $userId
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function save()
+    public function respond($planId, $userId)
     {
+        $plan = Plans::getPlanResponses($planId, $userId);
 
+        return view('pages.testplanner.plan_response', ['plan' => $plan]);
     }
 }

@@ -33,7 +33,7 @@ class RegisterFormRequest extends Request {
 	public function rules()
 	{
         return [
-            'email'    => 'required|email|unique:users',
+            'email'    => 'required|email',
             'password' => 'required|confirmed|min:6',
         ];
 	}
@@ -48,7 +48,6 @@ class RegisterFormRequest extends Request {
         return [
             'email.required'     => 'Email is required',
             'email.email'        => 'Enter correct email address',
-            'email.unique'       => 'An account already exists with this associated email',
             'password.required'  => 'Password is required',
             'password.confirmed' => 'Password confirmation is required',
             'password.min'       => 'Password must have a length of 6 characters'
