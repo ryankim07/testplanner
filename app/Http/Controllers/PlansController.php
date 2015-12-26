@@ -8,7 +8,7 @@
  * @author     Ryan Kim
  * @category   Mophie
  * @package    Test Planner
- * @copyright  Copyright (c) 2015 mophie (https://lpp.nophie.com)
+ * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
 use App\Http\Controllers\Controller;
@@ -29,7 +29,9 @@ use App\Plans;
 use App\Tickets;
 use App\Testers;
 use App\TicketsResponses;
+use App\ActivityStream;
 use App\User;
+use App\Tables;
 
 use Auth;
 use Session;
@@ -81,15 +83,44 @@ class PlansController extends Controller
     }
 
     /**
-     * Show all plans
+     * Show all plans or plans created by an administrator
      *
-     * @return array|\Illuminate\View\View|mixed
+     * @param $userId
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
-    public function viewAll()
+    public function all($userId)
     {
-        $plans = Plans::all();
+        $userRoles = Auth::user()->role()->get();
 
-        return view('pages.testplanner.view_all_plans', ['plans' => $plans]);
+        // Display all plans
+        $query = '';
+        foreach($userRoles as $role) {
+            if ($role->name == "Administrator") {
+                $sorting = Tables::sorting();
+                $table   = Plans::prepareTable($sorting['order'], [
+                    'description',
+                    'first_name',
+                    'status',
+                    'created_at',
+                    'updated_at'
+                ]);
+                $query   = Plans::getAllPlans($sorting['sortBy'], $sorting['order'], $userId);
+                break;
+            }
+        }
+
+        return view('pages.testplanner.plans', [
+            'plans'       => isset($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
+            'totalPlans'  => isset($query) ? Plans::count() : 0,
+            'columns'     => $table['columns'],
+            'columnsLink' => $table['columns_link'],
+            'link'        => ''
+        ]);
+    }
+
+    public function search()
+    {
+
     }
 
     /**
@@ -146,18 +177,20 @@ class PlansController extends Controller
         try {
             // Save new plan build
             $plan = Plans::create($planData);
+            $planId = $plan->id;
+            $planData['id'] = $planId;
 
             if (isset($plan->id)) {
                 // Save new tickets
                 Tickets::create([
-                    'plan_id' => $plan->id,
+                    'plan_id' => $planId,
                     'tickets' => serialize($ticketsData)
                 ]);
 
                 // Save new testers
                 foreach($testerData as $tester) {
                     Testers::create([
-                        'plan_id'   => $plan->id,
+                        'plan_id'   => $planId,
                         'tester_id' => $tester['id'],
                         'browser'   => $tester['browser']
                     ]);
@@ -204,10 +237,40 @@ class PlansController extends Controller
         // Commit all changes
         DB::commit();
 
+        // Log activity
+        ActivityStream::saveActivityStream($planData, 'plan');
+
         // Mail all test browsers
         //Email::sendEmail('plan-created', array_merge(array('plan' => $planData), array('testers' => $testersWithEmail)));
 
-        //return view('pages.testplanner.plan_thankyou');
+        return redirect('dashboard');
+    }
+
+    /**
+     * Display or edit plan
+     *
+     * @param $planId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function viewResponse($planId, $userId)
+    {
+        $plan = Plans::getPlanResponses($planId, $userId);
+
+        return view('pages.testplanner.plan_view_response', ['plan' => $plan]);
+    }
+
+    /**
+     * Display or edit plan
+     *
+     * @param $planId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function respond($planId)
+    {
+        $user = Auth::user();
+        $plan = Plans::getPlanResponses($planId, $user->id);
+
+        return view('pages.testplanner.plan_response', ['plan' => $plan]);
     }
 
     /**
@@ -218,32 +281,19 @@ class PlansController extends Controller
      */
     public function saveUserResponse(UserResponseFormRequest $request)
     {
-        $res        = array_except($request->all(), '_token');
-        $responses  = json_decode($res['tickets-obj'], true);
-        $planStatus = 'complete';
+        $res      = array_except($request->all(), '_token');
+        $planData = json_decode($res['plan'], true);
+        $tickets  = json_decode($res['tickets-obj'], true);
+        $planData['tickets_responses'] = $tickets;
 
-        foreach($responses as $response) {
-            if (!isset($response['test_status'])) {
-                $planStatus = 'incomplete';
-            }
-        }
 
         // Start transaction
         DB::beginTransaction();
 
         try {
-            $plan = Plans::find($res['plan_id']);
-            $user = $user = Auth::user();
+            // Save ticket response
+            $response = TicketsResponses::saveTicketResponse($planData);
 
-            // Create or update ticket response
-            $ticketResponse = TicketsResponses::updateOrCreate([
-                'id' => $res['ticket_resp_id']], [
-                    'plan_id'   => $plan->id,
-                    'tester_id' => $user->id,
-                    'status'    => $planStatus,
-                    'responses' => serialize($responses)
-                ]
-            );
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
             $redirect = true;
@@ -273,17 +323,20 @@ class PlansController extends Controller
                 ->with('flash_message', config('h2pro.registration_problems'));
         }*/
 
+        // Log activity
+        ActivityStream::saveActivityStream($planData, 'ticket-response', $response);
+
         // Mail all test browsers
         /*if ($planStatus == 'complete') {
             // Create object for email
             Email::sendEmail('ticket-responded', [
-                'ticket_resp_id'    => $ticketResponse->id,
-                'plan_desc'         => $plan->description,
-                'tester_id'         => $user->id,
-                'tester_first_name' => $user->first_name,
+                'ticket_resp_id'    => $resp['ticket_resp_id'],
+                'plan_desc'         => $planData['description'],
+                'tester_id'         => $planData['tester_id'],
+                'tester_first_name' => $planData['assignee'],
                 'email'             => $user->email,
-                'status'            => $planStatus,
-                'tickets'           => serialize($responses)
+                'ticket_status'     => $ticketStatus,
+                'tickets'           => serialize($tickets))
             ]);
         }*/
 

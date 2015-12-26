@@ -227,3 +227,18 @@ table:not(.dashboard) tbody tr:hover {
     left: 0.5em;
     margin-right: -50%;
 }
+
+.activity-actions {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    text-align: left;
+}
+
+.activity-actions li {
+    display: inline;
+}
+
+.activity-link-actions {
+    padding: 0px 10px;
+}

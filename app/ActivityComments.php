@@ -1,7 +1,7 @@
 <?php namespace App;
 
 /**
- * Class Tickets
+ * Class ActivityComments
  *
  * Model
  *
@@ -12,15 +12,16 @@
  */
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
-class Tickets extends Model
+class ActivityComments extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = "tickets";
+    protected $table = "activity_comments";
 
     /**
      * The attributes that are mass assignable.
@@ -28,8 +29,9 @@ class Tickets extends Model
      * @var array
      */
     protected $fillable = [
-        'plan_id',
-        'tickets'
+        'as_id',
+        'user_id',
+        'comment'
     ];
 
     /**
@@ -47,12 +49,31 @@ class Tickets extends Model
     }
 
     /**
-     * Only one task belongs to a case
+     * Create comment in activity stream
+     *
+     * @param $asId
+     * @param $userId
+     * @param $comment
+     * @return bool
+     */
+    public static function saveActivityComment($asId, $userId, $comment)
+    {
+        ActivityComments::create([
+            'as_id'   => $asId,
+            'user_id' => $userId,
+            'comment' => $comment
+        ]);
+
+        return true;
+    }
+
+    /**
+     * Only one comment belongs to an activity stream
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function plans()
+    public function streams()
     {
-        return $this->belongsTo('App\Plans');
+        return $this->belongsTo('App\ActivityStream');
     }
 }

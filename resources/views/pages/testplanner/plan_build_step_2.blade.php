@@ -26,15 +26,22 @@
 
         <div class="row ticket-row">
             <div class="col-md-12">
-                <label for="description">Please enter the description for ticket</label>
-                <button type="button" class="btn btn-primary btn-xs remove-ticket-btn">-</button>
-                <input type="text" name="description" class="required form-control description">
-                <label for="objective">Please enter the objective</label>
-                <input type="text" name="objective" class="required form-control objective">
-                <label for="test">Please enter the steps for test</label>
-                <textarea name="test-steps" class="test-steps" rows="10" cols="80"></textarea>
+                {!! Form::label('description', 'Please enter the description for ticket') !!}
+                {!! Form::button('Remove Ticket', ['class' => 'btn btn-primary btn-xs remove-ticket-btn']) !!}
+                {!! Form::text('description', null, ['class' => 'required form-control description']) !!}
+            </div>
+            <div class="col-md-12">
+                {!! Form::label('objective', 'Please enter the objective') !!}
+                {!! Form::text('objective', null, ['class' => 'required form-control objective']) !!}
+            </div>
+            <div class="col-md-12">
+                {!! Form::label('test_steps', 'Please enter the steps for test') !!}
+            </div>
+            <div class="col-md-12">
+                {!! Form::textarea('test_steps', '', ['class' => 'test_steps', 'size' => '100x10']) !!}
+
                 <div class="button-group">
-                    <button type="button" class="btn btn-primary btn-xs add-ticket-btn">Add New Ticket</button>
+                    {!! Form::button('Add New Ticket', ['class' => 'btn btn-primary btn-xs add-ticket-btn']) !!}
                 </div>
             </div>
         </div>
@@ -95,7 +102,7 @@
                     "id":          stringGen(5),
                     "description": $(this).find('.description').val(),
                     "objective":   $(this).find('.objective').val(),
-                    "test_steps":  $(this).find('.test-steps').val()
+                    "test_steps":  $(this).find('.test_steps').val()
                 });
             });
 

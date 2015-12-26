@@ -8,7 +8,7 @@
  * @author     Ryan Kim
  * @category   Mophie
  * @package    Mophie H2Pro
- * @copyright  Copyright (c) 2015 mophie (https://lpp.nophie.com)
+ * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
 use Illuminate\Http\Request;

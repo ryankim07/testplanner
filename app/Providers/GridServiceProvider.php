@@ -1,19 +1,19 @@
 <?php namespace App\Providers;
 
 /**
- * Class EmailServiceProvider
+ * Class GridServiceProvider
  *
  * Service Provider
  *
  * @author     Ryan Kim
  * @category   Mophie
- * @package    Test Planner
- * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
+ * @package    Mophie H2Pro
+ * @copyright  Copyright (c) 2015 mophie (https://lpp.nophie.com)
  */
 
 use Illuminate\Support\ServiceProvider;
 
-class EmailServiceProvider extends ServiceProvider
+class GridServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
@@ -22,13 +22,13 @@ class EmailServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('email',function() {
-            return new \App\Helpers\Email;
+        $this->app->bind('grid',function() {
+            return new \App\Helpers\Grid;
         });
 
         $this->app->booting(function() {
             $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-            $loader->alias('Email', 'App\Facades\Email');
+            $loader->alias('Grid', 'App\Facades\Grid');
         });
     }
 }

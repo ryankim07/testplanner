@@ -19,10 +19,11 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Plans <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             @if (Auth::user()->hasRole(['root', 'administrator']))
-                                <li>{!! Html::linkRoute('plan.build', 'Create new plan') !!}</li>
-                            @else
-                                <li>{!! Html::linkRoute('plan.view.all', 'View all plans') !!}</li>
+                                <li>{!! Html::linkRoute('plan.build', 'New') !!}</li>
+                                <li>{!! Html::linkRoute('plan.view.all', 'View All', 0) !!}</li>
                             @endif
+
+                            <li>{!! Html::linkRoute('view.all.assigned', 'View All Assigned', 0) !!}</li>
                         </ul>
                     </li>
 

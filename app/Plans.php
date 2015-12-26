@@ -8,16 +8,14 @@
  * @author     Ryan Kim
  * @category   Mophie
  * @package    Test Planner
- * @copyright  Copyright (c) 2015 mophie (https://lpp.nophie.com)
+ * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 use App\Facades\Utils;
-
-use App\Tasks;
-use App\SubTasks;
+use App\Facades\Grid;
 
 use Auth;
 
@@ -56,69 +54,79 @@ class Plans extends Model
     }
 
     /**
+     * Get all plans created by a certain administrator
+     *
+     * @param $sortBy
+     * @param $order
+     * @param null $userId
+     * @return mixed
+     */
+    public static function getAllPlans($sortBy, $order, $userId = null)
+    {
+        $query = DB::table('plans AS p')
+            ->join('users AS u', 'u.id', '=', 'p.creator_id')
+            ->select('p.*', 'u.first_name', 'u.last_name');
+
+        if (!empty($userId)) {
+            $query->where('p.creator_id', '=', $userId);
+        }
+
+        $query->orderBy($sortBy, $order);
+
+        return $query;
+    }
+
+    /**
      * Get all plans created by admin
      *
      * @param $roleId
+     * @param $from
      * @return array
      */
-    public static function getAdminCreatedPlans($roleId)
+    public static function getAdminCreatedPlansResponses($roleId, $sortBy, $order, $from = null)
     {
         $user = UserRole::where('role_id', '=', $roleId)->first();
 
         $query = DB::table('plans AS p')
             ->join('users AS u', 'u.id', '=', 'p.creator_id')
-            ->select('p.id', 'p.description', 'p.status', 'p.created_at', 'u.id AS user_id', 'u.first_name')
+            ->select('p.id', 'p.description', 'p.creator_id', 'p.status', 'p.created_at', 'u.id AS user_id', 'u.first_name')
             ->where('p.creator_id', '=', $user->user_id)
-            ->orderBy('p.created_at', 'desc')
-            ->get();
+            ->orderBy($sortBy, $order);
 
-        $plans = array();
-
-        foreach($query as $plan) {
-            $allTesters = Testers::getTestersByPlanId($plan->id);
-
-            foreach($allTesters as $tester) {
-                $browserTester[$tester->id] = $tester->first_name;
-            }
-
-            $plans[] = [
-                'id'          => $plan->id,
-                'description' => $plan->description,
-                'status'      => $plan->status,
-                'created_at'  => $plan->created_at,
-                'testers'     => $browserTester
-            ];
+        if ($from == 'dashboard') {
+            $query->take(5);
         }
 
-        return $plans;
+        return $query;
     }
 
     /**
-     * Get all plans in which a user is part of
+     * Get all plans in which an admin was assigned
      *
-     * @return mixed
+     * @param $sortBy
+     * @param $order
+     * @param null $from
+     * @return array
      */
-    public static function getPlansAssigned()
+    public static function getPlansAssignedResponses($sortBy, $order, $from = null)
     {
         $user  = Auth::user();
 
         $query = DB::table('plans AS p')
             ->join('testers AS t', 'p.id', '=', 't.plan_id')
+            ->join('users AS u', 'u.id', '=', 'p.creator_id')
             ->leftJoin('tickets_responses AS tr', 'p.id', '=', 'tr.plan_id')
-            ->select('p.*', 't.tester_id', 't.browser', 'tr.status AS ticket_response_status')
+            ->select('p.*', 't.tester_id', 'u.first_name AS creator', 't.browser', 'tr.status AS ticket_response_status')
             ->where('t.tester_id', '=', $user->id)
             ->where('p.status', '=', 'new')
             ->orWhere('p.status', '=', 'incomplete')
-            ->orderBy('p.created_at', 'desc')
-            ->get();
+            ->orderBy($sortBy, $order);
 
-        $plans = '';
-
-        foreach($query as $results) {
-            $plans[] = get_object_vars($results);
+        if ($from == 'dashboard') {
+            $query->take(5);
         }
 
-        return $plans;
+        return $query;
     }
 
     /**
@@ -151,7 +159,7 @@ class Plans extends Model
                             'objective'      => $ticket['objective'],
                             'test_steps'     => $ticket['test_steps'],
                             'notes_response' => nl2br($response['notes_response']),
-                            'test_status'    => $response['test_status']
+                            'test_status'    => isset($response['test_status']) ? $response['test_status'] : null
                         );
                     }
                 }
@@ -184,12 +192,110 @@ class Plans extends Model
             ->where('t.tester_id', '=', $userId)
             ->first();
 
-        $results               = get_object_vars($results);
-        $results['reporter']   = User::getUserFirstName($results['creator_id'], 'first_name');
-        $results['assignee']   = User::getUserFirstName($results['tester_id'], 'first_name');
-        $results['tickets']    = unserialize($results['tickets']);
+        $results             = get_object_vars($results);
+        $results['reporter'] = User::getUserFirstName($results['creator_id'], 'first_name');
+        $results['assignee'] = User::getUserFirstName($results['tester_id'], 'first_name');
+        $results['tickets']  = unserialize($results['tickets']);
 
         return $results;
+    }
+
+    /**
+     * Prepare columns for header
+     *
+     * This function must be implemented whenever table is rendered
+     *
+     * @param $order
+     * @return mixed
+     */
+    public static function prepareColumns($order, $columnsToDisplay)
+    {
+        $columns['description'] = [
+            'type'       => 'text',
+            'colname'    => 'Description',
+            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
+            'sortable'   => 'description',
+            'order'      => $order,
+            'filterable' => true,
+            'width'      => '100px'
+        ];
+
+        $columns['first_name'] = [
+            'type'       => 'text',
+            'colname'    => 'Creator',
+            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
+            'sortable'   => 'first_name',
+            'order'      => $order,
+            'filterable' => true,
+            'width'      => '40px'
+        ];
+
+        $columns['status'] = [
+            'type'       => 'text',
+            'colname'    => 'Status',
+            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
+            'sortable'   => 'status',
+            'order'      => $order,
+            'filterable' => true,
+            'width'      => '20px'
+        ];
+
+        $columns['created_at'] = [
+            'type'       => 'date',
+            'colname'    => 'Created',
+            'from_data'  => ['class' => 'form-control input-sm', 'id' => 'created_from'],
+            'to_data'    => ['class' => 'form-control input-sm', 'id' => 'created_to'],
+            'from_index' => 'created_from',
+            'to_index'   => 'created_to',
+            'sortable'   => 'created_at',
+            'order'      => $order,
+            'width'      => '60px'
+        ];
+
+        $columns['updated_at'] = [
+            'type'    => 'text',
+            'colname' => 'Updated',
+            'width'   => '60px'
+        ];
+
+        foreach($columnsToDisplay as $column) {
+            $results = Grid::addColumn($column, $columns[$column]);
+        }
+
+        return $results;
+    }
+
+    /**
+     * Prepare table for view
+     *
+     * @param $order
+     * @param $columnToDisplay
+     * @param bool $showSort
+     * @param bool $showFilter
+     * @return mixed
+     */
+    public static function prepareTable($order, $columnToDisplay, $showSort = true, $showFilter = true)
+    {
+        $preparedColumns = self::prepareColumns($order, $columnToDisplay);
+
+        if (!$showSort || !$showFilter) {
+            foreach($preparedColumns as $column) {
+                if (!$showSort) {
+                    $column['sortable'] = null;
+                }
+
+                if (!$showFilter) {
+                    $column['filterable'] = false;
+                }
+
+                $columns[] = $column;
+            }
+        }
+
+        $table['columns']      = !$showSort || !$showFilter ? $columns : $preparedColumns;
+        $table['columns_link'] = 'PlansController@index';
+
+        return $table;
     }
 
     /**
@@ -199,6 +305,6 @@ class Plans extends Model
      */
     public function tickets()
     {
-        return $this->hasMany('App\Tickets');
+        return $this->hasMany('App\Tickets', 'plan_id', 'id');
     }
 }

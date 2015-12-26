@@ -8,7 +8,7 @@
  * @author     Ryan Kim
  * @category   Mophie
  * @package    Test Planner
- * @copyright  Copyright (c) 2015 mophie (https://lpp.nophie.com)
+ * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
 use App\Http\Controllers\Controller;
@@ -66,7 +66,7 @@ class TicketsController extends Controller
      */
     public function store(TicketsFormRequest $request)
     {
-        $res     = $request->all();
+        $res     = array_except($request->all(), '_token');
         $tickets = json_decode($res['tickets-obj'], true);
 
         // Save case data to session

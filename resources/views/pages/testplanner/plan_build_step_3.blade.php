@@ -42,11 +42,11 @@
 
                     <tr>
                         <td>{!! $user['first_name'] !!}</td>
-                        <td><input type="radio" name="browser[{!! $user['id'] !!}]" value="{!! $user['id'] !!},{!! $user['first_name'] !!},ios"></td>
-                        <td><input type="radio" name="browser[{!! $user['id'] !!}]" value="{!! $user['id'] !!},{!! $user['first_name'] !!},chrome"></td>
-                        <td><input type="radio" name="browser[{!! $user['id'] !!}]" value="{!! $user['id'] !!},{!! $user['first_name'] !!},firefox"></td>
-                        <td><input type="radio" name="browser[{!! $user['id'] !!}]" value="{!! $user['id'] !!},{!! $user['first_name'] !!},ie"></td>
-                        <td><input type="radio" name="browser[{!! $user['id'] !!}]" value="{!! $user['id'] !!},{!! $user['first_name'] !!},safari"></td>
+                        <td>{!! Form::radio('browser[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',ios', null, ['class' => 'test_status']) !!}</td>
+                        <td>{!! Form::radio('browser[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',chrome', null, ['class' => 'test_status']) !!}</td>
+                        <td>{!! Form::radio('browser[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',firefox', null, ['class' => 'test_status']) !!}</td>
+                        <td>{!! Form::radio('browser[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',ie', null, ['class' => 'test_status']) !!}</td>
+                        <td>{!! Form::radio('browser[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',safari', null, ['class' => 'test_status']) !!}</td>
                     </tr>
 
                     @endforeach

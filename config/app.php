@@ -147,7 +147,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\EmailServiceProvider::class,
         App\Providers\UtilsServiceProvider::class,
-
+        App\Providers\GridServiceProvider::class,
     ],
 
     /*

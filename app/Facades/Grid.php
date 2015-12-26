@@ -1,19 +1,19 @@
 <?php namespace App\Facades;
 
 /**
- * Class Utils
+ * Class Grid
  *
  * Facade
  *
  * @author     Ryan Kim
  * @category   Mophie
- * @package    Test Planner
+ * @package    TestPlanner
  * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
 use Illuminate\Support\Facades\Facade;
 
-class Utils extends Facade
+class Grid extends Facade
 {
     /**
      * Region Facade accessor
@@ -22,6 +22,6 @@ class Utils extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'utils';
+        return 'grid';
     }
 }

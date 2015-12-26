@@ -36,9 +36,9 @@
             @foreach($tickets as $ticket)
 
                 <ul class="list-unstyled">
-                    <li>{!! $ticket['description'] !!}</li>
-                    <li>{!! $ticket['objective'] !!}</li>
-                    <li>{!! nl2br($ticket['test_steps']) !!}</li>
+                    <li>Description: {!! $ticket['description'] !!}</li>
+                    <li>Objective: {!! $ticket['objective'] !!}</li>
+                    <li>Test Steps: {!! nl2br($ticket['test_steps']) !!}</li>
                 </ul>
 
             @endforeach

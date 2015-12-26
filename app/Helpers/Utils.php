@@ -8,7 +8,7 @@
  * @author     Ryan Kim
  * @category   Mophie
  * @package    Test Planner
- * @copyright  Copyright (c) 2015 mophie (https://lpp.nophie.com)
+ * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
 use Lang;
@@ -68,16 +68,65 @@ class Utils
     }
 
     /**
-     * Return phone number with parantheses and dash
+     * Get days, hours or minutes difference
      *
-     * Output: (000) 000-0000
-     *
-     * @param $phone
-     * @return mixed
+     * @param $date
+     * @return string
      */
-    public function getFormattedPhone($phone)
+    public function timeDifference($date)
     {
-        return preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "($1) $2-$3", $phone);
+        $interval = date_diff(date_create($date), date_create(date('Y-m-d H:i:s', time())));
+        $years    = $interval->format('%y');
+        $months   = $interval->format('%m');
+        $days     = $interval->format('%d');
+        $hours    = $interval->format('%h');
+        $minutes  = $interval->format('%i');
+        $curMonth = date('m', time());
+        $curYear  = date('Y', time());
+
+        if ($years != 0) {
+            $results = $years . ' ' . ($years > 1 ? 'years' : 'year') . ' ' . $ago;
+        } else if ($years == 0 && $months != 0) {
+            if ($months == 12) {
+                $results = '1 year ago';
+            } else {
+                $results = $months . ' months ago' ;
+            }
+        } else if ($years == 0 && $months == 0 && $days != 0) {
+            if ($days == 1) {
+                $results = 'Yesterday';
+            } else if ($days > 1 && $days < 7) {
+                $results = $days . ' days ago';
+            } else if ($days == 7) {
+                $results = 'Last week';
+            } else if ($days > 7 && $days <= 14) {
+                $results = '2 weeks ago';
+            } else if ($days > 14 && $days <= 21) {
+                $results = '3 weeks ago';
+            } else if ($days > 21 && $days <= cal_days_in_month(CAL_GREGORIAN, $curMonth, $curYear)) {
+                $results = '1 month ago';
+            }
+
+            if ($days != 1 && $days != 7) {
+                $results = $days . ' ago';
+            }
+        } else if ($years == 0 && $months == 0 && $days == 0 && $hours != 0) {
+            if ($hours == 24) {
+                $results = '1 day ago';
+            } else {
+                $results = $hours . ' ' . ($hours > 1 ? 'hours' : 'hour') . ' ago';
+            }
+        } else if ($years == 0 && $months == 0 && $days == 0 && $hours == 0 && $minutes != 0) {
+            if ($minutes == 60) {
+                $results = '1 hour ago';
+            } else {
+                $results = $minutes . ' ' . ($minutes > 1 ? 'minutes' : 'minute') . ' ago';
+            }
+        } else {
+            $results = '1 minute ago';
+        }
+
+        return $results;
     }
 
     /**
