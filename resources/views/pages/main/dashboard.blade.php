@@ -152,7 +152,9 @@
 
                             @foreach($log['comments'] as $eachComment)
 
-                                <div class="row">Comments: {!! $eachComment['comment'] !!} - added by {!! $eachComment['commentator'] !!}</div>
+                                <div class="row">
+                                    {!! $eachComment['comment'] !!} (comment by {!! $eachComment['commentator'] !!} on {!! $eachComment['created_at'] !!})
+                                </div>
 
                             @endforeach
 

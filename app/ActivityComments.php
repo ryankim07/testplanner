@@ -72,7 +72,7 @@ class ActivityComments extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function streams()
+    public function stream()
     {
         return $this->belongsTo('App\ActivityStream');
     }

@@ -74,7 +74,8 @@ class ActivityStream extends Model
                     $comments[$eachComment->id] = array(
                         'comment_id'  => $eachComment->id,
                         'commentator' => User::getUserFirstName($eachComment->user_id),
-                        'comment'     => $eachComment->comment
+                        'comment'     => $eachComment->comment,
+                        'created_at'  => date('m/d/Y', strtotime($eachComment->created_at))
                     );
                 }
 
