@@ -77,9 +77,60 @@ class PlansController extends Controller
      */
     public function view($id)
     {
-        $plan = Plans::findOrFail($id);
+        $plan       = Plans::find($id);
+        $allTickets = $plan->tickets()->get();
+        $allTesters = $plan->testers()->get();
 
-        return view('pages.testplanner.plan_view', $plan);
+        foreach($allTickets as $ticket) {
+            $ticketDetails = unserialize($ticket->tickets);
+
+            foreach($ticketDetails as $detail) {
+                $tickets[$ticket->id] = $detail;
+            }
+        }
+
+        foreach($allTesters as $tester) {
+            $testers[$tester->id] = [
+                'id'         => $tester->tester_id,
+                'first_name' => User::getUserFirstName($tester->tester_id),
+                'browser'    => $tester->browser
+            ];
+        }
+
+        return view('pages.testplanner.view', [
+            'plan'    => [
+                'id'          => $plan->id,
+                'description' => $plan->description,
+                'tickets'     => $tickets,
+                'testers'     => $testers
+            ]
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource
+     *
+     * @return \Illuminate\View\View
+     */
+    public function edit()
+    {
+        // Get item session data
+        $itemData             = Session::get('mophie_h2pro.item');
+        $itemData['carriers'] = Utils::getCarriersList();
+
+        return view('pages.registration.item_edit', compact('itemData'));
+    }
+
+    /**
+     * Update the specified resource in storage
+     *
+     * @param ItemFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update($planId, Request $request)
+    {
+        $plan = Plans::find($planId);
+        $plan->update(['description' => $request->get('description')]);
     }
 
     /**
@@ -88,29 +139,27 @@ class PlansController extends Controller
      * @param $userId
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
-    public function all($userId)
+    public function viewAllPlans($userId)
     {
         $userRoles = Auth::user()->role()->get();
-
-        // Display all plans
+        $sorting   = Tables::sorting();
+        $table     = Plans::prepareTable($sorting['order'], [
+            'description',
+            'first_name',
+            'status',
+            'created_at',
+            'updated_at'
+        ]);
         $query = '';
-        foreach($userRoles as $role) {
-            if ($role->name == "Administrator") {
-                $sorting = Tables::sorting();
-                $table   = Plans::prepareTable($sorting['order'], [
-                    'description',
-                    'first_name',
-                    'status',
-                    'created_at',
-                    'updated_at'
-                ]);
 
+        foreach($userRoles as $role) {
+            if ($role->name == "administrator") {
                 $query = Plans::getAllPlans($sorting['sortBy'], $sorting['order'], $userId);
                 break;
             }
         }
 
-        return view('pages.testplanner.plans', [
+        return view('pages.testplanner.view_all_plans', [
             'userId'      => isset($userId) ? $userId : 0,
             'plans'       => isset($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
             'totalPlans'  => isset($query) ? Plans::count() : 0,
@@ -156,7 +205,7 @@ class PlansController extends Controller
             $browserTesters[$tester->id] = $tester->first_name;
         }
 
-        return view('pages.testplanner.plan_view_response', [
+        return view('pages.testplanner.view_response', [
             'userId'  => $userId,
             'plan'    => $plan,
             'testers' => $browserTesters
@@ -174,7 +223,7 @@ class PlansController extends Controller
         $user = Auth::user();
         $plan = Plans::getPlanResponses($planId, $user->id);
 
-        return view('pages.testplanner.plan_respond', ['plan' => $plan]);
+        return view('pages.testplanner.respond', ['plan' => $plan]);
     }
 
     /**

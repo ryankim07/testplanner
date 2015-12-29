@@ -48,9 +48,4 @@ class UserRole extends Model
     {
         return $this->belongsTo('App\User');
     }
-
-
-    public static function saveUserRole($userId, $roleId)
-    {
-    }
 }

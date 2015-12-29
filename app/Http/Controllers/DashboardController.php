@@ -46,15 +46,18 @@ class DashboardController extends Controller
         // Get assigned plans
         $assignedResponses = Plans::getPlansAssignedResponses('created_at', 'DESC', 'dashboard');
 
-        foreach($assignedResponses->get() as $plan) {
-            $results[] = get_object_vars($plan);
-        }
+        if (isset($assignedResponses)) {
+            $results = array();
+            foreach($assignedResponses->get() as $plan) {
+                $results[] = get_object_vars($plan);
+            }
 
-        $plans['plans_assigned'] = $results;
+            $plans['plans_assigned'] = $results;
+        }
 
         // Display administrator dashboard
         foreach($userRoles as $role) {
-            if ($role->name == "Administrator") {
+            if ($role->name == "administrator") {
                 $adminCreated = Plans::getAdminCreatedPlansResponses($role->id, 'created_at', 'DESC', 'dashboard');
 
                 foreach ($adminCreated->get() as $plan) {
@@ -80,7 +83,7 @@ class DashboardController extends Controller
         // Return view
         return view('pages.main.dashboard', [
             'activities' => $activityStream,
-            'plans'      => array_filter($plans)
+            'plans'      => isset($plans) ? array_filter($plans) : ''
         ]);
     }
 
@@ -92,27 +95,26 @@ class DashboardController extends Controller
     public function viewAllAssigned()
     {
         $userRoles = Auth::user()->role()->get();
-
-        // Display all plans
+        $sorting   = Tables::sorting();
+        $table     = Plans::prepareTable($sorting['order'], [
+            'description',
+            'first_name',
+            'status',
+            'created_at',
+            'updated_at'
+        ]);
         $query = '';
+
         foreach($userRoles as $role) {
-            if ($role->name == "Administrator") {
-                $sorting = Tables::sorting();
-                $table   = Plans::prepareTable($sorting['order'], [
-                    'description',
-                    'first_name',
-                    'status',
-                    'created_at',
-                    'updated_at'
-                ]);
+            if ($role->name == "administrator") {
                 $query = Plans::getPlansAssignedResponses($sorting['sortBy'], $sorting['order']);
                 break;
             }
         }
 
         return view('pages.testplanner.view_all_assigned', [
-            'plans'       => isset($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
-            'totalPlans'  => isset($query) ? Plans::count() : 0,
+            'plans'       => !empty($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
+            'totalPlans'  => !empty($query) ? Plans::count() : 0,
             'columns'     => $table['columns'],
             'columnsLink' => $table['columns_link'],
             'link'        => ''
@@ -127,23 +129,22 @@ class DashboardController extends Controller
     public function viewAllAdmin()
     {
         $userRoles = Auth::user()->role()->get();
-
-        // Display all plans
+        $sorting   = Tables::sorting();
+        $table     = Plans::prepareTable($sorting['order'], [
+            'description',
+            'first_name',
+            'status',
+            'created_at',
+            'updated_at',
+            'testers',
+            'view'
+        ]);
         $query = '';
-        foreach($userRoles as $role) {
-            if ($role->name == "Administrator") {
-                $sorting = Tables::sorting();
-                $table   = Plans::prepareTable($sorting['order'], [
-                    'description',
-                    'first_name',
-                    'status',
-                    'created_at',
-                    'updated_at',
-                    'testers',
-                    'view'
-                ]);
 
+        foreach($userRoles as $role) {
+            if ($role->name == "administrator") {
                 $query = Plans::getAdminCreatedPlansResponses($role->id, $sorting['sortBy'], $sorting['order']);
+                $browserTesters  = array();
 
                 foreach ($query->get() as $plan) {
                     $allTesters = Testers::getTestersByPlanId($plan->id);
@@ -160,8 +161,8 @@ class DashboardController extends Controller
         }
 
         return view('pages.testplanner.view_all_admin', [
-            'plans'       => isset($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
-            'totalPlans'  => isset($query) ? Plans::count() : 0,
+            'plans'       => !empty($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
+            'totalPlans'  => !empty($query) ? Plans::count() : 0,
             'testers'     => $browserTesters,
             'columns'     => $table['columns'],
             'columnsLink' => $table['columns_link'],

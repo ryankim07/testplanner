@@ -1,42 +1,42 @@
 {{--
 |--------------------------------------------------------------------------
-| Customer registration
+| Step 1
 |--------------------------------------------------------------------------
-|
-| This partial is used when showing customer registraton form.
-|
 --}}
 
 @extends('layout.main.master')
 
 @section('content')
 
-<div class="content">
-	<fieldset class="form-group">
-		<h5>Step 1 of 4</h5>
-		<div class="row">
-		    <div class="col-md-12">
-		        <h6>All Fields Required</h6>
-		    </div>
-		</div>
-          
-        @include('errors.list')
+	<div class="col-xs-12 col-md-12" id="main">
 
-        {!! Form::open(['route' => 'plan.store', 'class' => '', 'id' => 'plan-build-form']) !!}
+		{!! Form::open(['route' => 'plan.store', 'class' => '', 'id' => 'plan-build-form']) !!}
 
-		<div class="row">
-			<div class="col-md-12">
-				{!! Form::label('description', 'Please enter a description for this plan') !!}
-				{!! Form::text('description', null, ['class' => 'required', 'id' => 'description']) !!}
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div class="clearfix">
+					<div class="pull-left"><h3>Step 1 of 3 - Add plan details</h3></div>
+					<div class="pull-right"><h5>All fields required</h5></div>
+				</div>
+			</div>
+			<div class="panel-body">
+
+				@include('errors.list')
+
 				{!! Form::hidden('creator_id', $userId) !!}
+
+				@include('pages/testplanner/partials/plan', [
+					'userId'      => $userId,
+					'description' => null,
+					'mode'        => 'create'
+				])
+
+				@include('pages/main/partials/submit_button', ['submitBtnText' => 'Add Tickets'])
 			</div>
 		</div>
 
-        @include('pages/main/partials/submit_button', ['submitBtnText' => 'Add Tickets'])
+		{!! Form::close() !!}
 
-        {!! Form::close() !!}
-
-    </fieldset>
-</div>
+	</div>
 
 @stop

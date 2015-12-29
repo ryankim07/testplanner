@@ -7,7 +7,7 @@
 |
 --}}
 
-@extends('layout.admin.master')
+@extends('layout.main.master')
 
 @section('content')
 
@@ -22,7 +22,7 @@
 
                 {!! Form::open(['route' => 'plan.search', 'class' => 'form-horizontal', 'role' => 'search']) !!}
 
-                @if (count($plans) > 0)
+                @if ($totalPlans > 0)
 
                     <div class="row table-options">
                         <div class="pull-right">
@@ -58,7 +58,7 @@
 
                 @else
 
-                    <p>No records found.</p>
+                    <p>Records not found.</p>
 
                 @endif
 

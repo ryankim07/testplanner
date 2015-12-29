@@ -84,7 +84,7 @@ class User extends Model implements AuthenticatableContract,
 
         // Check which section they belond to
         foreach($userRoles as $hasRole) {
-            if (in_array($hasRole->name, ['Root', 'Administrator', 'User'])) {
+            if (in_array($hasRole->name, $roles)) {
                 return true;
             }
         }

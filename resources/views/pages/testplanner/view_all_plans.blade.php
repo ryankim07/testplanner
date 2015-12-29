@@ -7,7 +7,7 @@
 |
 --}}
 
-@extends('layout.admin.master')
+@extends('layout.main.master')
 
 @section('content')
 
@@ -18,7 +18,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="clearfix">
-                    <div class="pull-left"><h3>Plans <span class="badge">{!! $totalPlans !!}</span></h3></div>
+                    <div class="pull-left"><h3>All Plans <span class="badge">{!! $totalPlans !!}</span></h3></div>
                     <div class="pull-right">
                         {!! Form::select('view_user_type', ['0' => 'All', Auth::user()->id => 'My Plans'], $userId, ['id' => 'view_user_type']) !!}
                     </div>
@@ -26,7 +26,7 @@
             </div>
             <div class="panel-body">
 
-                @if (count($plans) > 0)
+                @if (count($totalPlans) > 0)
 
                     <div class="row table-options">
                         <div class="pull-right">
@@ -62,7 +62,7 @@
 
                 @else
 
-                    <p>No records found.</p>
+                    <p>Records not found.</p>
 
                 @endif
 
@@ -76,11 +76,16 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-    // Open viewer for dropdown
-    $('#view_user_type').on('change', function (e) {
+    // Show all or adminstrator plans
+    $('#view_user_type').on('change', function(e) {
         var route = "{!! URL::route('plan.view.all', null) !!}";
         var adminId = $(this).val();
         window.location.href =  route + '/' + adminId;
+    });
+
+    // View or edit single plan
+    $('.toggler').on('click', function(e) {
+        window.location.href = $(this).data('url');
     });
 });
 

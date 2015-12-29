@@ -7,8 +7,14 @@
 |
 --}}
 
-<div class="row btn-row">
-    <div class="col-md-4">
-        {!! Form::submit($submitBtnText, ['class' => 'green-btn step-btn', 'id' => 'continue-btn']) !!}
+<div class="form-group">
+    <?php
+        if (empty($css)) {
+            $css = 'col-xs-12 col-md-8';
+        }
+    ?>
+
+    <div class="{!! $css !!}">
+        {!! Form::submit($submitBtnText, ['class' => 'btn btn-primary', 'id' => 'continue-btn']) !!}
     </div>
 </div>

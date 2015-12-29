@@ -108,7 +108,7 @@ class Utils
             }
 
             if ($days != 1 && $days != 7) {
-                $results = $days . ' ago';
+                $results = $days . ' days ago';
             }
         } else if ($years == 0 && $months == 0 && $days == 0 && $hours != 0) {
             if ($hours == 24) {

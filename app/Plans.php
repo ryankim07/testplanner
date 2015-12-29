@@ -327,4 +327,14 @@ class Plans extends Model
     {
         return $this->hasMany('App\Tickets', 'plan_id', 'id');
     }
+
+    /**
+     * One plan could have multiple testers
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function testers()
+    {
+        return $this->hasMany('App\Testers', 'plan_id', 'id');
+    }
 }

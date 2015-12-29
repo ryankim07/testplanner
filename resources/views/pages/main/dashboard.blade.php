@@ -7,7 +7,7 @@
 |
 --}}
 
-@extends('layout.admin.master')
+@extends('layout.main.master')
 
 @section('content')
 
@@ -18,12 +18,12 @@
 
     @include('errors.list')
 
-    <div class="col-xs-6 col-md-6">
-        @if (count($plans) > 0)
+    @if (count($plans) > 0)
 
+        <div class="col-xs-6 col-md-6">
             @foreach($plans as $type => $plan)
+
                 <div class="row">
-                    <!-- ADMIN PLANS TABLE -->
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             @if($type == 'admin_created_plans')
@@ -72,25 +72,25 @@
                                             <td>
                                                 @if($type == 'admin_created_plans')
                                                     <?php
-                                                        if($detail['status'] == 'completed') {
-                                                            $label = 'label-default';
-                                                        } else if($detail['status'] == 'pending') {
-                                                            $label = 'label-warning';
-                                                        } else {
-                                                            $label = 'label-success';
-                                                        }
+                                                    if($detail['status'] == 'completed') {
+                                                        $label = 'label-default';
+                                                    } else if($detail['status'] == 'pending') {
+                                                        $label = 'label-warning';
+                                                    } else {
+                                                        $label = 'label-success';
+                                                    }
                                                     ?>
 
                                                     <span class="label {!! $label !!}">{!! $detail['status'] !!}</span>
                                                 @else
                                                     <?php
-                                                        if($detail['ticket_response_status'] == 'completed') {
-                                                            $trLabel = 'label-default';
-                                                        } else if($detail['ticket_response_status'] == 'pending') {
-                                                            $trLabel = 'label-warning';
-                                                        } else {
-                                                            $trLabel = 'label-success';
-                                                        }
+                                                    if($detail['ticket_response_status'] == 'completed') {
+                                                        $trLabel = 'label-default';
+                                                    } else if($detail['ticket_response_status'] == 'pending') {
+                                                        $trLabel = 'label-warning';
+                                                    } else {
+                                                        $trLabel = 'label-success';
+                                                    }
                                                     ?>
 
                                                     <span class="label {!! $trLabel !!}">{!! $detail['ticket_response_status'] !!}</span>
@@ -120,7 +120,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
                             <div class="row">
                                 @if($type == 'admin_created_plans')
                                     {!! Html::linkRoute('dashboard.view.all.admin', 'View more') !!}
@@ -134,8 +133,9 @@
 
             @endforeach
 
-        @endif
-    </div>
+        </div>
+
+    @endif
 
     <div class="col-xs-6 col-md-6">
         <div class="panel panel-primary">

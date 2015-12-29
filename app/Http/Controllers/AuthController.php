@@ -8,6 +8,7 @@ use App\Http\Requests\LoginFormRequest;
 use App\Http\Requests\RegisterFormRequest;
 
 use App\User;
+use App\UserRole;
 
 use Auth;
 
@@ -117,7 +118,7 @@ class AuthController extends Controller
                 ->with('flash_message', config('testplanner.admin_identical_role_msg'));
         }
 
-        $newRole = RoleUser::create([
+        $newRole = UserRole::create([
             'user_id' => $user->id,
             'role_id' => $request->assign_role
         ]);
@@ -131,6 +132,6 @@ class AuthController extends Controller
             ]);*/
         }
 
-        return redirect('admin/dashboard');
+        return redirect('dashboard');
     }
 }

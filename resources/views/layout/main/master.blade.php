@@ -7,7 +7,7 @@
 |
 --}}
 
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -24,14 +24,15 @@
 
     <title>Test Planner</title>
     <link rel="icon" href="{!! asset('favicon.ico') !!}" type="image/x-icon" />
-    <link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+    <!--<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>-->
 
     <!-- CSS -->
     {!! Html::style('css/bootstrap.min.css') !!}
     {!! Html::style('css/app.css') !!}
+    {!! Html::style('css/main.css') !!}
 
             <!-- Scripts -->
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <!--<script type="text/javascript" src="https://www.google.com/jsapi"></script>-->
     {!! Html::script('js/vendor.js') !!}
     {!! Html::script('js/main.js') !!}
 

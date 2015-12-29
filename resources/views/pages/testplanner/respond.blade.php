@@ -7,28 +7,25 @@
 |
 --}}
 
-@extends('layout.admin.master')
+@extends('layout.main.master')
 
 @section('content')
 
 <div class="col-xs-12 col-md-12" id="main">
 
-    {!! Form::open(['route' => 'plan.view.response', 'class' => 'enroll-form', 'id' => 'plan-user-response-form']) !!}
+    {!! Form::open(['route' => 'plan.save.user.response', 'class' => 'enroll-form', 'id' => 'plan-user-response-form']) !!}
     {!! Form::hidden('plan', json_encode($plan)) !!}
-    {!! Form::hidden('plan_id', $plan['id'], ['id' => 'plan_id']) !!}
     {!! Form::hidden('ticket_resp_id', $plan['ticket_resp_id']) !!}
 
     <div class="page-header">
-        <div class="pull-left">{!! $plan['description'] !!}</div>
-        <div class="pull-right">
-            {!! Form::select('tester', $testers, $userId, ['id' => 'tester']) !!}
-        </div>
+        <h3>{!! $plan['description'] !!}</h3>
     </div>
 
     @include('errors.list')
 
     <div class="col-xs-8 col-md-8">
 
+        <?php $i = 1; ?>
         @foreach($plan['tickets'] as $ticket)
 
             <div class="panel panel-default ticket-panel">
@@ -63,39 +60,38 @@
                         <li>
                             <?php $notesResponse = isset($ticket['notes_response']) ? $ticket['notes_response'] : null; ?>
 
-                                <span class="ticket-header">Notes</span>
+                            <span>Notes</span>
 
                             <ul class="list-unstyled">
-                                <li>{!! $notesResponse !!}</li>
+                                <li>
+                                    {!! Form::textarea('notes_response', $notesResponse, ['class' => 'notes_response', 'size' => '100x10']) !!}
+                                </li>
                             </ul>
                         </li>
                         <li>
-                            <span class="ticket-header">Status</span>
-                            <ul class="list-unstyled">
-                                <li>
-                                    <?php
-                                        $passed = '';
-                                        $failed = '';
+                            <?php
+                                $passed = '';
+                                $failed = '';
 
-                                        if (isset($ticket['test_status'])) {
-                                            $passed = $ticket['test_status'] == 1 ? true : '';
-                                            $failed = $ticket['test_status'] == 0 ? true : '';
-                                        }
-                                    ?>
+                                if (isset($ticket['test_status'])) {
+                                    $passed = $ticket['test_status'] == 1 ? true : '';
+                                    $failed = $ticket['test_status'] == 0 ? true : '';
+                                }
+                            ?>
 
-                                    @if($passed)
-                                        <span>Passed</span>
-                                    @elseif($failed)
-                                        <span>Failed</span>
-                                    @endif
-                                </li>
-                            </ul>
+                            {!! Form::label('test_status_label', 'Passed') !!}
+                            {!! Form::radio('test_status_' . $i, 1, $passed, ['class' => 'test_status']) !!}
+                            {!! Form::label('test_status_label', 'Failed') !!}
+                            {!! Form::radio('test_status_' . $i, 0, $failed, ['class' => 'test_status']) !!}
                         </li>
                     </ul>
                 </div>
             </div>
 
+        <?php $i++; ?>
         @endforeach
+
+        @include('pages/main/partials/submit_button', ['submitBtnText' => 'Submit Response'])
     </div>
 
     <div class="col-xs-4 col-md-4">
@@ -136,13 +132,24 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
-        // Open viewer for dropdown
-        $('#tester').on('change', function () {
-            var route = "{!! URL::route('plan.view.response', null) !!}";
-            var userId = $(this).val();
-            var planId = $('#plan_id').val();
+        $('#continue-btn').on('click', function(e) {
+            var tickets = [];
 
-            window.location.href = route + '/' + planId + "/" + userId;
+            $('.ticket-panel').each(function () {
+                // Create ticket object
+                tickets.push({
+                    "id": $(this).find('.ticket_id').val(),
+                    "test_status": $(this).find('input[type="radio"]:checked').val(),
+                    "notes_response": $(this).find('.notes_response').val()
+                });
+            });
+
+            // Create hidden field
+            var input = $("<input>")
+                .attr("type", "hidden")
+                .attr("name", "tickets-obj").val(JSON.stringify(tickets));
+
+            $('form').append($(input));
         });
     });
 

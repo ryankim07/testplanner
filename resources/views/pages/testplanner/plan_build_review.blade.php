@@ -1,69 +1,67 @@
 {{--
 |--------------------------------------------------------------------------
-| Regsitration review
+| Review new created plan
 |--------------------------------------------------------------------------
-|
-| This partial is used when showing registration review page.
-|
 --}}
 
 @extends('layout.main.master')
 
 @section('content')
 
-<div class="content">
-    <fieldset class="form-group">
-        <h5>Step 4 of 4</h5>
-        <div class="row">
-            <div class="col-md-12">
-                <h6>Please review your information and click submit to finish new test case:</h6>
-            </div>
-        </div>
-
-        @include('errors.list')
+    <div class="col-xs-12 col-md-12" id="main">
 
         {!! Form::open(['action' => ['PlansController@save'], 'class' => '', 'id' => 'plan-review-form']) !!}
 
-        <div class="row">
-            <h5>Plan Description</h5>
-            <ul class="list-unstyled">
-                <li>{!! $plan['description'] !!}</li>
-            </ul>
-        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="clearfix">
+                    <div class="pull-left"><h3>Review</h3></div>
+                </div>
+            </div>
+            <div class="panel-body">
 
-        <div class="row">
-            <h5>Tickets</h5>
-            @foreach($tickets as $ticket)
+                @include('errors.list')
 
-                <ul class="list-unstyled">
-                    <li>Description: {!! $ticket['description'] !!}</li>
-                    <li>Objective: {!! $ticket['objective'] !!}</li>
-                    <li>Test Steps: {!! nl2br($ticket['test_steps']) !!}</li>
-                </ul>
+                <div class="row">
+                    <h5>Plan Description</h5>
+                    <ul class="list-unstyled">
+                        <li>{!! $plan['description'] !!}</li>
+                    </ul>
+                </div>
 
-            @endforeach
-        </div>
+                <div class="row">
+                    <h5>Tickets</h5>
+                    @foreach($tickets as $ticket)
 
-        <div class="row">
-            <h5>Browser Testers</h5>
-            <ul class="list-unstyled">
+                        <ul class="list-unstyled">
+                            <li>Description: {!! $ticket['description'] !!}</li>
+                            <li>Objective: {!! $ticket['objective'] !!}</li>
+                            <li>Test Steps: {!! nl2br($ticket['test_steps']) !!}</li>
+                        </ul>
 
-                @foreach($testers as $tester)
+                    @endforeach
+                </div>
 
-                    <li>{!! $tester['first_name'] !!} -> {!! $tester['browser'] !!}</li>
+                <div class="row">
+                    <h5>Browser Testers</h5>
+                    <ul class="list-unstyled">
 
-                @endforeach
+                        @foreach($testers as $tester)
 
-            </ul>
-        </div>
+                            <li>{!! $tester['first_name'] !!} -> {!! $tester['browser'] !!}</li>
 
-        <div class="row">
-            {!! Form::submit('Create Test Plan', ['class' => 'green-btn step-btn', 'id' => 'submit-btn']) !!}
+                        @endforeach
+
+                    </ul>
+                </div>
+
+                @include('pages/main/partials/submit_button', ['submitBtnText' => 'Finalize'])
+
+            </div>
         </div>
 
         {!! Form::close() !!}
 
-    </fieldset>
-</div>
+    </div>
 
 @stop

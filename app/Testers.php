@@ -48,6 +48,12 @@ class Testers extends Model
     {
     }
 
+    /**
+     * Get testers by plan ID
+     *
+     * @param $planId
+     * @return mixed
+     */
     public static function getTestersByPlanId($planId)
     {
         $allTesters = DB::table('testers AS t')
@@ -57,5 +63,15 @@ class Testers extends Model
             ->get();
 
         return $allTesters;
+    }
+
+    /**
+     * Only one task belongs to a case
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function plan()
+    {
+        return $this->belongsTo('App\Plans');
     }
 }

@@ -20,10 +20,10 @@
                         <ul class="dropdown-menu" role="menu">
                             @if (Auth::user()->hasRole(['root', 'administrator']))
                                 <li>{!! Html::linkRoute('plan.build', 'New') !!}</li>
-                                <li>{!! Html::linkRoute('plan.view.all', 'View All', 0) !!}</li>
+                                <li>{!! Html::linkRoute('plan.view.all', 'View All Plans', 0) !!}</li>
                             @endif
 
-                            <li>{!! Html::linkRoute('dashboard.view.all.assigned', 'View All Assigned') !!}</li>
+                            <li>{!! Html::linkRoute('dashboard.view.all.assigned', 'View All Assigned Plans', []) !!}</li>
                         </ul>
                     </li>
 

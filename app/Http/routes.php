@@ -95,7 +95,7 @@ Route::get('plan/respond/{plan_id}', [
 ]);
 
 Route::get('plan/review', ['as' => 'plan.review', 'uses' => 'PlansController@review']);
-Route::get('plan/all/{id}', ['as' => 'plan.view.all', 'uses' => 'PlansController@all']);
+Route::get('plan/all/{id}', ['as' => 'plan.view.all', 'uses' => 'PlansController@viewAllPlans']);
 Route::get('plan/search', 'PlansController@search');
 Route::post('plan/search', ['as' => 'plan.search', 'uses' => 'PlansController@search']);
 Route::post('plan/save', ['as' => 'plan.save', 'uses' => 'PlansController@save']);
