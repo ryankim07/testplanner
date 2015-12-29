@@ -23,7 +23,7 @@
                                 <li>{!! Html::linkRoute('plan.view.all', 'View All', 0) !!}</li>
                             @endif
 
-                            <li>{!! Html::linkRoute('view.all.assigned', 'View All Assigned', 0) !!}</li>
+                            <li>{!! Html::linkRoute('dashboard.view.all.assigned', 'View All Assigned') !!}</li>
                         </ul>
                     </li>
 

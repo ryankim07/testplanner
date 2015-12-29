@@ -18,10 +18,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="clearfix">
-                    <div class="pull-left"><h3>Plans <span class="badge">{!! $totalPlans !!}</span></h3></div>
-                    <div class="pull-right">
-                        {!! Form::select('view_user_type', ['0' => 'All', Auth::user()->id => 'My Plans'], $userId, ['id' => 'view_user_type']) !!}
-                    </div>
+                    <div class="pull-left"><h3>All plans assigned to others <span class="badge">{!! $totalPlans !!}</span></h3></div>
                 </div>
             </div>
             <div class="panel-body">
@@ -35,7 +32,7 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover table-bordered">
+                        <table class="table table-striped table-hover table-bordered view-all-admin">
 
                             @include('pages.main.partials.table_header', $columns)
 
@@ -43,12 +40,14 @@
 
                             @foreach($plans as $plan)
 
-                                <tr class="toggler" data-url="{!! URL::route('plan.view', $plan->id) !!}">
+                                <tr class="plan-row">
                                     <td>{!! $plan->description !!}</td>
-                                    <td>{!! $plan->first_name !!}</td>
+                                    <td>{!! $plan->creator !!}</td>
                                     <td>{!! $plan->status !!}</td>
                                     <td>{!! Utils::dateConverter($plan->created_at) !!}</td>
                                     <td>{!! Utils::dateConverter($plan->updated_at) !!}</td>
+                                    <td>{!! Form::select('tester', $testers[$plan->id], null, ['class' => 'tester']) !!}</td>
+                                    <td><a href="{!! URL::route('plan.view.response', [$plan->id]) !!}" class="view-tester-plan"><span class="glyphicon glyphicon-search"></span></a></td>
                                 </tr>
 
                             @endforeach
@@ -76,11 +75,15 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-    // Open viewer for dropdown
-    $('#view_user_type').on('change', function (e) {
-        var route = "{!! URL::route('plan.view.all', null) !!}";
-        var adminId = $(this).val();
-        window.location.href =  route + '/' + adminId;
+    // Select row for viewing
+    $('.view-tester-plan').on('click', function (e) {
+        e.preventDefault();
+
+        var parent = $(this).closest('tr');
+        var tester = parent.find('.tester').val();
+        var url    = $(this).attr('href');
+
+        window.location.href = url + '/' + tester;
     });
 });
 

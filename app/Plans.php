@@ -89,7 +89,7 @@ class Plans extends Model
 
         $query = DB::table('plans AS p')
             ->join('users AS u', 'u.id', '=', 'p.creator_id')
-            ->select('p.id', 'p.description', 'p.creator_id', 'p.status', 'p.created_at', 'u.id AS user_id', 'u.first_name')
+            ->select('p.*', 'u.id AS user_id', 'u.first_name AS creator')
             ->where('p.creator_id', '=', $user->user_id)
             ->orderBy($sortBy, $order);
 
@@ -256,6 +256,26 @@ class Plans extends Model
             'type'    => 'text',
             'colname' => 'Updated',
             'width'   => '60px'
+        ];
+
+        $columns['testers'] = [
+            'type'       => 'text',
+            'colname'    => 'Testers',
+            'data'       => ['class' => 'form-control'],
+            'sortable'   => '',
+            'order'      => '',
+            'filterable' => false,
+            'width'      => '30px'
+        ];
+
+        $columns['view'] = [
+            'type'       => 'text',
+            'colname'    => 'View',
+            'data'       => ['class' => 'form-control'],
+            'sortable'   => '',
+            'order'      => '',
+            'filterable' => false,
+            'width'      => '20px'
         ];
 
         foreach($columnsToDisplay as $column) {

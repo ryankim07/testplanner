@@ -71,10 +71,7 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-    // Open viewer for dropdown
-    $('#view_user_type').on('change', function (e) {
-        window.location.href = 'http://testplanner.dev/dashboard/assigned/' + $(this).val();
-    });
+
 });
 
 </script>

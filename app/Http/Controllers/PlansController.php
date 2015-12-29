@@ -104,12 +104,14 @@ class PlansController extends Controller
                     'created_at',
                     'updated_at'
                 ]);
-                $query   = Plans::getAllPlans($sorting['sortBy'], $sorting['order'], $userId);
+
+                $query = Plans::getAllPlans($sorting['sortBy'], $sorting['order'], $userId);
                 break;
             }
         }
 
         return view('pages.testplanner.plans', [
+            'userId'      => isset($userId) ? $userId : 0,
             'plans'       => isset($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
             'totalPlans'  => isset($query) ? Plans::count() : 0,
             'columns'     => $table['columns'],
@@ -135,6 +137,44 @@ class PlansController extends Controller
         Session::put('mophie_testplanner.plan', array_except($request->all(), '_token'));
 
         return redirect('ticket/build');
+    }
+
+    /**
+     * View response by plan and user ID
+     *
+     * @param $planId
+     * @param $userId
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function viewResponse($planId, $userId)
+    {
+        $plan       = Plans::getPlanResponses($planId, $userId);
+        $allTesters = Testers::getTestersByPlanId($planId);
+
+        $browserTesters[''] = 'Select other users';
+        foreach ($allTesters as $tester) {
+            $browserTesters[$tester->id] = $tester->first_name;
+        }
+
+        return view('pages.testplanner.plan_view_response', [
+            'userId'  => $userId,
+            'plan'    => $plan,
+            'testers' => $browserTesters
+        ]);
+    }
+
+    /**
+     * Display or edit plan
+     *
+     * @param $planId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function respond($planId)
+    {
+        $user = Auth::user();
+        $plan = Plans::getPlanResponses($planId, $user->id);
+
+        return view('pages.testplanner.plan_respond', ['plan' => $plan]);
     }
 
     /**
@@ -247,33 +287,6 @@ class PlansController extends Controller
     }
 
     /**
-     * Display or edit plan
-     *
-     * @param $planId
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function viewResponse($planId, $userId)
-    {
-        $plan = Plans::getPlanResponses($planId, $userId);
-
-        return view('pages.testplanner.plan_view_response', ['plan' => $plan]);
-    }
-
-    /**
-     * Display or edit plan
-     *
-     * @param $planId
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function respond($planId)
-    {
-        $user = Auth::user();
-        $plan = Plans::getPlanResponses($planId, $user->id);
-
-        return view('pages.testplanner.plan_response', ['plan' => $plan]);
-    }
-
-    /**
      * Save user's plan response
      *
      * @param UserResponseFormRequest $request
@@ -285,7 +298,6 @@ class PlansController extends Controller
         $planData = json_decode($res['plan'], true);
         $tickets  = json_decode($res['tickets-obj'], true);
         $planData['tickets_responses'] = $tickets;
-
 
         // Start transaction
         DB::beginTransaction();

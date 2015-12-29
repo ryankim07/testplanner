@@ -79,8 +79,15 @@
 
                     @endforeach
 
-                @else
+                @elseif ($column['type'] == 'select')
 
+                    <div class="form-group col-md-12">
+
+                        {!! Form::text($column['filters']['attr']['index'], null, $column['filters']['attr']['data']) !!}
+
+                    </div>
+
+                @else
                     <div class="form-group col-md-12"></div>
 
                 @endif

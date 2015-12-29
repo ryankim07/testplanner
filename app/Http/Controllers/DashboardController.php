@@ -84,8 +84,12 @@ class DashboardController extends Controller
         ]);
     }
 
-
-    public function assigned()
+    /**
+     * Display all assigned plans created by other administrators
+     *
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function viewAllAssigned()
     {
         $userRoles = Auth::user()->role()->get();
 
@@ -116,12 +120,62 @@ class DashboardController extends Controller
     }
 
     /**
+     * Display all plans created by the administrator
+     *
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function viewAllAdmin()
+    {
+        $userRoles = Auth::user()->role()->get();
+
+        // Display all plans
+        $query = '';
+        foreach($userRoles as $role) {
+            if ($role->name == "Administrator") {
+                $sorting = Tables::sorting();
+                $table   = Plans::prepareTable($sorting['order'], [
+                    'description',
+                    'first_name',
+                    'status',
+                    'created_at',
+                    'updated_at',
+                    'testers',
+                    'view'
+                ]);
+
+                $query = Plans::getAdminCreatedPlansResponses($role->id, $sorting['sortBy'], $sorting['order']);
+
+                foreach ($query->get() as $plan) {
+                    $allTesters = Testers::getTestersByPlanId($plan->id);
+
+                    foreach ($allTesters as $tester) {
+                         $tmp[$tester->id] = $tester->first_name;
+                    }
+
+                    $browserTesters[$plan->id] = $tmp;
+                }
+
+                break;
+            }
+        }
+
+        return view('pages.testplanner.view_all_admin', [
+            'plans'       => isset($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
+            'totalPlans'  => isset($query) ? Plans::count() : 0,
+            'testers'     => $browserTesters,
+            'columns'     => $table['columns'],
+            'columnsLink' => $table['columns_link'],
+            'link'        => ''
+        ]);
+    }
+
+    /**
      * Create comment in activity stream
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function comment(Request $request)
+    public function saveComment(Request $request)
     {
         $user = Auth::user();
         $res  = array_except($request->all(), '_token');

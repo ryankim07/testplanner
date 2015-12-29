@@ -12,15 +12,16 @@
 @section('content')
 
 <div class="col-xs-12 col-md-12" id="main">
+
+    {!! Form::open(['route' => 'plan.save.user.response', 'class' => 'enroll-form', 'id' => 'plan-user-response-form']) !!}
+    {!! Form::hidden('plan', json_encode($plan)) !!}
+    {!! Form::hidden('ticket_resp_id', $plan['ticket_resp_id']) !!}
+
     <div class="page-header">
         <h3>{!! $plan['description'] !!}</h3>
     </div>
 
     @include('errors.list')
-
-    {!! Form::open(['route' => 'plan.save.user.response', 'class' => 'enroll-form', 'id' => 'plan-user-response-form']) !!}
-    {!! Form::hidden('plan', json_encode($plan)) !!}
-    {!! Form::hidden('ticket_resp_id', $plan['ticket_resp_id']) !!}
 
     <div class="col-xs-8 col-md-8">
 

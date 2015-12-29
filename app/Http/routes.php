@@ -46,16 +46,16 @@ Route::get('dashboard/view/{plan_id}/{user_id}', [
     'uses'       => 'DashboardController@view'
 ]);
 
-Route::get('dashboard/admin', [
-    'as'         => 'view.all.admin',
+Route::get('dashboard/view-all-admin', [
+    'as'         => 'dashboard.view.all.admin',
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator', 'user'],
-    'uses'       => 'DashboardController@admin']);
-Route::get('dashboard/assigned', [
-    'as'         => 'view.all.assigned',
+    'uses'       => 'DashboardController@viewAllAdmin']);
+Route::get('dashboard/view-all-assigned', [
+    'as'         => 'dashboard.view.all.assigned',
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator', 'user'],
-    'uses'       => 'DashboardController@assigned'
+    'uses'       => 'DashboardController@viewAllAssigned'
 ]);
 
 Route::post('dashboard/save', [
@@ -65,11 +65,11 @@ Route::post('dashboard/save', [
     'uses'       => 'DashboardController@save'
 ]);
 
-Route::post('dashboard/comment', [
+Route::post('dashboard/save-comment', [
     'as'         => 'dashboard.comment.save',
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator', 'user'],
-    'uses'       => 'DashboardController@comment'
+    'uses'       => 'DashboardController@saveComment'
 ]);
 
 
@@ -79,8 +79,7 @@ Route::post('dashboard/comment', [
  *
  */
 Route::get('plan/view/{id}', ['as' => 'plan.view', 'uses' => 'PlansController@view']);
-Route::get('plan/viewResponse/{plan_id}/{user_id}', ['as' => 'plan.view.response', 'uses' => 'PlansController@viewResponse']);
-
+Route::get('plan/view-response/{plan_id}/{user_id}', ['as' => 'plan.view.response', 'uses' => 'PlansController@viewResponse']);
 Route::get('plan/build', [
     'as'         => 'plan.build',
     'middleware' => 'roles',
@@ -99,7 +98,6 @@ Route::get('plan/review', ['as' => 'plan.review', 'uses' => 'PlansController@rev
 Route::get('plan/all/{id}', ['as' => 'plan.view.all', 'uses' => 'PlansController@all']);
 Route::get('plan/search', 'PlansController@search');
 Route::post('plan/search', ['as' => 'plan.search', 'uses' => 'PlansController@search']);
-Route::post('plan/saveUserResponse', ['as' => 'plan.save.user.response', 'uses' => 'PlansController@saveUserResponse']);
 Route::post('plan/save', ['as' => 'plan.save', 'uses' => 'PlansController@save']);
 Route::resource('plan', 'PlansController');
 
