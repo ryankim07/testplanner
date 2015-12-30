@@ -20,7 +20,7 @@
                 <div class="clearfix">
                     <div class="pull-left"><h3>All Plans <span class="badge">{!! $totalPlans !!}</span></h3></div>
                     <div class="pull-right">
-                        {!! Form::select('view_user_type', ['0' => 'All', Auth::user()->id => 'My Plans'], $userId, ['id' => 'view_user_type']) !!}
+                        {!! Form::select('view_user_type', ['0' => 'All', Auth::user()->id => 'My Plans'], $userId, ['class' => 'form-control input-sm', 'id' => 'view_user_type']) !!}
                     </div>
                 </div>
             </div>

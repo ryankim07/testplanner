@@ -10,6 +10,12 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
             <a href="{!! URL::to('/dashboard') !!}">{!! Html::image('images/mophie-logo.png', 'mophie') !!}</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -40,7 +46,8 @@
 
             @endif
 
-            <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right">
+
                 @if (Auth::guest())
                     <li>{!! Html::linkRoute('auth.login', 'Login') !!}</li>
                 @else
@@ -56,13 +63,13 @@
                     </li>
                 @endif
 
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-globe" aria-hidden="true" title="Settings"></span> <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li>{!! Html::link('/', 'Main Site') !!}</li>
-                    </ul>
-                </li>
-            </ul>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-globe" aria-hidden="true" title="Settings"></span> <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>{!! Html::link('/', 'Main Site') !!}</li>
+                        </ul>
+                    </li>
+                </ul>
         </div>
     </div>
 </nav>

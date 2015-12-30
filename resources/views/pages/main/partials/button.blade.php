@@ -15,7 +15,7 @@
                 $id    = !isset($id) ? '' : $id;
             ?>
 
-            {!! Form::button($btnText, ['class' => 'btn btn-primary' . ' ' . $class, 'id' => $id]) !!}
+            {!! Form::button($btnText, ['class' => 'btn ' . ' ' . $class, 'id' => $id]) !!}
         </div>
     </div>
 </div>

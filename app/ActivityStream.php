@@ -109,7 +109,7 @@ class ActivityStream extends Model
             $userId       = $plan['tester_id'];
         }
 
-        $planLink = link_to_route('dashboard.plan.respond', $plan['description'], [$plan['id']]);
+        $planLink = link_to_route('plan.view.response', $plan['description'], [$plan['id'], $plan['tester_id']]);
         $message  = '';
 
         switch($type) {

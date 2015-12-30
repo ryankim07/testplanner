@@ -49,14 +49,27 @@ $(document).ready(function() {
             });
     });
 
-    // Redirect when clicking links from tables
-    $('.link-viewer').on('click', function(e) {
-        e.preventDefault();
-        window.open($(this).attr('href'), '_blank');
-    });
+    /**
+     * WHEN RESPONDING TO TICKET
+     */
+    $('#respond-btn').on('click', function(e) {
+        var tickets = [];
 
-    $('.dashboard-toggler').on('click', function(e) {
-        window.open($(this).data('url'), '_blank');
+        $('.ticket-panel').each(function () {
+            // Create ticket object
+            tickets.push({
+                "id": $(this).find('.ticket-id').val(),
+                "test_status": $(this).find('input[type="radio"]:checked').val(),
+                "notes_response": $(this).find('.notes-response').val()
+            });
+        });
+
+        // Create hidden field
+        var input = $("<input>")
+            .attr("type", "hidden")
+            .attr("name", "tickets-obj").val(JSON.stringify(tickets));
+
+        $('form').append($(input));
     });
 
     /*

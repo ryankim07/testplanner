@@ -22,14 +22,14 @@
 
                 @include('errors.list')
 
-                <div class="row">
+                <div class="row nested-block">
                     <h5>Plan Description</h5>
                     <ul class="list-unstyled">
                         <li>{!! $plan['description'] !!}</li>
                     </ul>
                 </div>
 
-                <div class="row">
+                <div class="row nested-block">
                     <h5>Tickets</h5>
                     @foreach($tickets as $ticket)
 
@@ -42,7 +42,7 @@
                     @endforeach
                 </div>
 
-                <div class="row">
+                <div class="row nested-block">
                     <h5>Browser Testers</h5>
                     <ul class="list-unstyled">
 

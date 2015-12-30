@@ -98,6 +98,7 @@ Route::get('plan/review', ['as' => 'plan.review', 'uses' => 'PlansController@rev
 Route::get('plan/all/{id}', ['as' => 'plan.view.all', 'uses' => 'PlansController@viewAllPlans']);
 Route::get('plan/search', 'PlansController@search');
 Route::post('plan/search', ['as' => 'plan.search', 'uses' => 'PlansController@search']);
+Route::post('plan/save-user-response', ['as' => 'plan.save.user.response', 'uses' => 'PlansController@saveUserResponse']);
 Route::post('plan/save', ['as' => 'plan.save', 'uses' => 'PlansController@save']);
 Route::resource('plan', 'PlansController');
 

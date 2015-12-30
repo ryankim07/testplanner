@@ -15,7 +15,7 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="clearfix">
-                    <div class="pull-left"><h3>Step 3 of 3 - Assign browser testers</h3></div>
+                    <div class="pull-left"><h3>Step 3 of 3 - Assign testers</h3></div>
                     <div class="pull-right"><h5>All fields required</h5></div>
                 </div>
             </div>

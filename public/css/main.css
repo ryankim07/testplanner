@@ -288,3 +288,11 @@ legend {
     padding: 0;
     width: 100%;
 }
+
+.respond legend {
+    font-size: 18.5px;
+}
+
+.comment-btn {
+    margin-top: 10px;
+}

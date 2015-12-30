@@ -12,142 +12,88 @@
 @section('content')
 
 <div class="col-xs-12 col-md-12" id="main">
+    <div class="page-header">
+        <div class="pull-left"><h4>{!! $plan['description'] !!}</h4></div>
+        <div class="pull-right">
+            {!! Form::select('tester', $testers, $userId, ['class' => 'form-control input-sm', 'id' => 'tester']) !!}
+        </div>
+    </div>
+
+    @include('errors.list')
 
     {!! Form::open(['route' => 'plan.view.response', 'class' => 'enroll-form', 'id' => 'plan-user-response-form']) !!}
     {!! Form::hidden('plan', json_encode($plan)) !!}
     {!! Form::hidden('plan_id', $plan['id'], ['id' => 'plan_id']) !!}
     {!! Form::hidden('ticket_resp_id', $plan['ticket_resp_id']) !!}
 
-    <div class="page-header">
-        <div class="pull-left">{!! $plan['description'] !!}</div>
-        <div class="pull-right">
-            {!! Form::select('tester', $testers, $userId, ['id' => 'tester']) !!}
+    <div class="row nested-block">
+        <div class="col-xs-12 col-md-6">
+            <div class="form-group">
+                <legend>People</legend>
+                <p><span>Reporter: {!! $plan['reporter'] !!}</span></p>
+                <p><span>Assignee: {!! $plan['assignee'] !!}</span></p>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-6">
+            <div class="form-group">
+                <legend>Dates</legend>
+                <p><span>Created: {!! $plan['created_at'] !!}</span></p>
+                <p><span>Updated: {!! $plan['updated_at'] !!}</span></p>
+            </div>
         </div>
     </div>
 
-    @include('errors.list')
-
-    <div class="col-xs-8 col-md-8">
-
-        @foreach($plan['tickets'] as $ticket)
-
-            <div class="panel panel-default ticket-panel">
-                <div class="panel-body">
-
-                    {!! Form::hidden('ticket_id', $ticket['id'], ['class' => 'ticket_id']) !!}
-
-                    <ul class="list-unstyled">
-                        <li>
-                            <span class="ticket-header">Ticket</span>
-                            <ul class="list-unstyled">
-                                <li>
-                                    <span class="ticket-description">{!! $ticket['description'] !!}</span>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <span class="ticket-header">Objective</span>
-                            <ul class="list-unstyled">
-                                <li>
-                                    <span>{!! $ticket['objective'] !!}</span>
-                                </li>
-                            </ul>
-                        <li>
-                            <span class="ticket-header">Steps to test</span>
-                            <ul class="list-unstyled">
-                                <li>
-                                    <span>{!! nl2br($ticket['test_steps']) !!}</span>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <?php $notesResponse = isset($ticket['notes_response']) ? $ticket['notes_response'] : null; ?>
-
-                                <span class="ticket-header">Notes</span>
-
-                            <ul class="list-unstyled">
-                                <li>{!! $notesResponse !!}</li>
-                            </ul>
-                        </li>
-                        <li>
-                            <span class="ticket-header">Status</span>
-                            <ul class="list-unstyled">
-                                <li>
-                                    <?php
-                                        $passed = '';
-                                        $failed = '';
-
-                                        if (isset($ticket['test_status'])) {
-                                            $passed = $ticket['test_status'] == 1 ? true : '';
-                                            $failed = $ticket['test_status'] == 0 ? true : '';
-                                        }
-                                    ?>
-
-                                    @if($passed)
-                                        <span>Passed</span>
-                                    @elseif($failed)
-                                        <span>Failed</span>
-                                    @endif
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+    @foreach($plan['tickets'] as $ticket)
+        <div class="row nested-block ticket-panel">
+            <div class="col-xs-12 col-md-6">
+                <div class="form-group">
+                    <legend>Ticket</legend>
+                    <p><span class="ticket-description">{!! $ticket['description'] !!}</span></p>
+                </div>
+                <div class="form-group">
+                    <legend>Objective</legend>
+                    <p><span>{!! $ticket['objective'] !!}</span></p>
+                </div>
+                <div class="form-group">
+                    <legend>Steps to test</legend>
+                    <p><span>{!! nl2br($ticket['test_steps']) !!}</span></p>
                 </div>
             </div>
+            <div class="col-xs-12 col-md-2">
+                <div class="form-group">
+                    <legend>Status</legend>
+                    <?php
+                        if (isset($ticket['test_status'])) {
+                            $passed = $ticket['test_status'] == 1 ? true : '';
+                            $failed = $ticket['test_status'] == 0 ? true : '';
+                        }
+                    ?>
 
-        @endforeach
-    </div>
+                    <p><span>
 
-    <div class="col-xs-4 col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <ul class="list-unstyled">
-                    <li>
-                        <span class="ticket-header">People</span>
-                        <ul class="list-unstyled">
-                            <li>
-                                <span>Reporter: {!! $plan['reporter'] !!}</span>
-                            </li>
-                            <li>
-                                <span>Assignee: {!! $plan['assignee'] !!}</span>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <span class="ticket-header">Dates</span>
-                        <ul class="list-unstyled">
-                            <li>
-                                <span>Created: {!! $plan['created_at'] !!}</span>
-                            </li>
-                            <li>
-                                <span>Updated: {!! $plan['updated_at'] !!}</span>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+                    @if($passed)
+                        Passed
+                    @elseif($failed)
+                        Failed
+                    @endif
+
+                    </span></p>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="form-group">
+                    <legend>Notes</legend>
+
+                    {!! isset($ticket['notes_response']) ? nl2br($ticket['notes_response']) : null !!}
+
+                </div>
             </div>
         </div>
-    </div>
+
+    @endforeach
 
     {!! Form::close() !!}
 
 </div>
-
-<script type="text/javascript">
-
-    $(document).ready(function() {
-        // Open viewer for dropdown
-        $('#tester').on('change', function () {
-            var route = "{!! URL::route('plan.view.response', null) !!}";
-            var userId = $(this).val();
-            var planId = $('#plan_id').val();
-
-            if (userId != '') {
-                window.location.href = route + '/' + planId + "/" + userId;
-            }
-        });
-    });
-
-</script>
 
 @stop

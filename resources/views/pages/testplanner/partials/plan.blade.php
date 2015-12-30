@@ -8,10 +8,11 @@
 --}}
 
 <div class="row nested-block">
-    <div class="col-xs-12 col-md-8">
-        <legend>Plan</legend>
-
-        {!! Form::label('description', 'Name') !!}
-        {!! Form::text('description', $description, ['class' => 'form-control input-md required', 'id' => 'description']) !!}
+    <legend>Plan</legend>
+    <div class="form-group">
+        <div class="col-xs-12 col-md-6">
+            {!! Form::label('description', 'Description') !!}
+            {!! Form::text('description', $description, ['class' => 'form-control input-md required', 'id' => 'description']) !!}
+        </div>
     </div>
 </div>

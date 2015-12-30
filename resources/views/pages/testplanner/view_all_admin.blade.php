@@ -46,7 +46,7 @@
                                     <td>{!! $plan->status !!}</td>
                                     <td>{!! Utils::dateConverter($plan->created_at) !!}</td>
                                     <td>{!! Utils::dateConverter($plan->updated_at) !!}</td>
-                                    <td>{!! Form::select('tester', $testers[$plan->id], null, ['class' => 'tester']) !!}</td>
+                                    <td>{!! Form::select('tester', $testers[$plan->id], null, ['class' => 'form-control input-sm tester']) !!}</td>
                                     <td><a href="{!! URL::route('plan.view.response', [$plan->id]) !!}" class="view-tester-plan"><span class="glyphicon glyphicon-search"></span></a></td>
                                 </tr>
 
