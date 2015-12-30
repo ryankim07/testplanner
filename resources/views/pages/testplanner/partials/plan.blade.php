@@ -9,10 +9,22 @@
 
 <div class="row nested-block">
     <legend>Plan</legend>
-    <div class="form-group">
-        <div class="col-xs-12 col-md-6">
-            {!! Form::label('description', 'Description') !!}
-            {!! Form::text('description', $description, ['class' => 'form-control input-md required', 'id' => 'description']) !!}
+    <div class="col-xs-12 col-md-8">
+
+        {!! Form::label('description', 'Description') !!}
+
+        <div class="input-group">
+
+            {!! Form::text('description', $description, ['class' => 'form-control input-md required', 'id' => 'plan-description']) !!}
+
+            <span class="input-group-btn">
+                @include('pages/main/partials/button', [
+                    'btnText'   => 'Clear',
+                    'direction' => 'pull-left',
+                    'class'     => 'btn-default',
+                    'id'        => 'clear-btn'
+                ])
+            </span>
         </div>
     </div>
 </div>

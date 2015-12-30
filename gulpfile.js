@@ -25,22 +25,14 @@ elixir(function(mix) {
 
     mix.less(['app.less'], 'public/css', { paths: lessPaths });
 
-    /*mix.styles([
-            'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
-        ], 'public/css', bowerDir
-    );*/
-
     mix.scripts([
             'jquery/dist/jquery.min.js',
+            'jquery-ui/jquery-ui.min.js',
             'moment/min/moment.min.js',
             'bootstrap/dist/js/bootstrap.min.js',
             'bootstrap-select/dist/js/bootstrap-select.min.js',
             'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-            'validate/jquery.validate.min.js',
             'dropzone/jquery.dropzone.min.js',
-            'modernizr/src/modernizr.js',
-            'respond/dest/respond.min.js',
-            'html5shiv/dist/html5shiv.min.js'
         ], 'public/js/vendor.js', bowerDir
     );
 

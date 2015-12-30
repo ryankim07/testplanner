@@ -16,41 +16,41 @@ enrollForm = function() {
 		thumbnailHeight: 48,
 		headers: { 'X-CSRF-TOKEN' : $("input[name='_token']").val() },
 		maxfilesexceeded: function(file) {
-      this.removeAllFiles();
-      this.addFile(file);
-    },
-    processing: function() {
+			this.removeAllFiles();
+			this.addFile(file);
+		},
+		processing: function() {
 			if (this.files.length > 1) {
-      	this.removeFile(this.files[0]);
-      }
-    },
+				this.removeFile(this.files[0]);
+			}
+		},
 		success: function (response) {
 			if(response.xhr) {
 				var data = JSON.parse(response.xhr.responseText);
-  	    $('#device_sn_upload').val(data.uploaded_path);
-  	    if(v.checkForm()){
-  	    	$('input[type="submit"]').removeClass('disabled').attr('disabled',false);
-  	    }
-  	  } else {
-  	  	alert('Upload problem, please try again');
-  	  }
+				$('#device_sn_upload').val(data.uploaded_path);
+				if(v.checkForm()){
+					$('input[type="submit"]').removeClass('disabled').attr('disabled',false);
+				}
+			} else {
+				alert('Upload problem, please try again');
+			}
 		},
 		init: function () {
-      if($('#device_sn_upload').val()){
-      	var existingUrl = $('#device_sn_upload').val();
-      	var existingName = existingUrl.match(/.*\/(.*)$/)[1];
-      	var existingFile = { name: existingName, size: 12345, url: existingUrl };
-      	this.options.addedfile.call(this, existingFile);
-      	this.options.thumbnail.call(this, existingFile, existingFile.url);
-      	this.files = [existingFile];
-      }
-      this.on("error", function(file,error){
-      	if (!Dropzone.isValidFile(file,this.options.acceptedFiles)){
-      		this.removeFile(file);
-      		alert(error);
-      	}
-      });
-    }
+			if($('#device_sn_upload').val()){
+				var existingUrl = $('#device_sn_upload').val();
+				var existingName = existingUrl.match(/.*\/(.*)$/)[1];
+				var existingFile = { name: existingName, size: 12345, url: existingUrl };
+				this.options.addedfile.call(this, existingFile);
+				this.options.thumbnail.call(this, existingFile, existingFile.url);
+				this.files = [existingFile];
+			}
+			this.on("error", function(file,error){
+				if (!Dropzone.isValidFile(file,this.options.acceptedFiles)){
+					this.removeFile(file);
+					alert(error);
+				}
+			});
+		}
 	}
 	var receiptdropzoneOpts = {
 		url: document.location.origin + "/main/upload",
@@ -64,39 +64,39 @@ enrollForm = function() {
 		thumbnailHeight: 48,
 		headers: { 'X-CSRF-TOKEN' : $("input[name='_token']").val() },
 		maxfilesexceeded: function(file) {
-      this.removeAllFiles();
-      this.addFile(file);
-    },
-    processing: function() {
+			this.removeAllFiles();
+			this.addFile(file);
+		},
+		processing: function() {
 			if (this.files.length > 1) {
-      	this.removeFile(this.files[0]);
-      }
-    },
+				this.removeFile(this.files[0]);
+			}
+		},
 		success: function (response) {
 			if(response.xhr) {
 				var data = JSON.parse(response.xhr.responseText);
-  	    $('#receipt_upload').val(data.uploaded_path);
-  	    if(v.checkForm()){
-  	    	$('input[type="submit"]').removeClass('disabled').attr('disabled',false);
-  	    }
-  	  }
+				$('#receipt_upload').val(data.uploaded_path);
+				if(v.checkForm()){
+					$('input[type="submit"]').removeClass('disabled').attr('disabled',false);
+				}
+			}
 		},
 		init: function () {
-      if($('#receipt_upload').val()){
-      	var existingUrl = $('#receipt_upload').val();
-      	var existingName = existingUrl.match(/.*\/(.*)$/)[1];
-      	var existingFile = { name: existingName, size: 12345, url: existingUrl };
-      	this.options.addedfile.call(this, existingFile);
-      	this.options.thumbnail.call(this, existingFile, existingFile.url);
-      	this.files = [existingFile];
-      }
-      this.on("error", function(file,error){
-      	if (!Dropzone.isValidFile(file,this.options.acceptedFiles)){
-      		this.removeFile(file);
-      		alert(error);
-      	}
-      });
-    }
+			if($('#receipt_upload').val()){
+				var existingUrl = $('#receipt_upload').val();
+				var existingName = existingUrl.match(/.*\/(.*)$/)[1];
+				var existingFile = { name: existingName, size: 12345, url: existingUrl };
+				this.options.addedfile.call(this, existingFile);
+				this.options.thumbnail.call(this, existingFile, existingFile.url);
+				this.files = [existingFile];
+			}
+			this.on("error", function(file,error){
+				if (!Dropzone.isValidFile(file,this.options.acceptedFiles)){
+					this.removeFile(file);
+					alert(error);
+				}
+			});
+		}
 	}
 
 	function initialize() {
@@ -136,22 +136,22 @@ enrollForm = function() {
 
 		// form validation
 		$("#purchased_at").mask("00r00r0000", {
-		  translation: {
-		    'r': {
-		      pattern: /[\/]/, 
-		      fallback: '/'
-		    }, 
-		    placeholder: "__/__/____"
-		  }
+			translation: {
+				'r': {
+					pattern: /[\/]/,
+					fallback: '/'
+				},
+				placeholder: "__/__/____"
+			}
 		});
 		$("#postcode").mask("00000");
 		$('#device_imei').mask("00 000000 000000 0");
 
 		jQuery.validator.addMethod("dateRange",function(value,element) {
-      var today = new Date();
-      var parts = value.split("/");
-   		var date = new Date(parts[0] + "/" + parts[1] + "/" + parts[2]);
-      return Math.round(Math.abs(today - date) / (1000 * 60 * 60 * 24)) <= 14;
+			var today = new Date();
+			var parts = value.split("/");
+			var date = new Date(parts[0] + "/" + parts[1] + "/" + parts[2]);
+			return Math.round(Math.abs(today - date) / (1000 * 60 * 60 * 24)) <= 14;
 		}, jQuery.validator.format("You need to register within 14 days of purchase"));
 		jQuery.validator.addMethod("phoneUS",function(a,b){return a=a.replace(/\s+/g,""),this.optional(b)||a.length>9&&a.match(/^(\+?1-?)?(\([2-9]([02-9]\d|1[02-9])\)|[2-9]([02-9]\d|1[02-9]))-?[2-9]([02-9]\d|1[02-9])-?\d{4}$/)},"Please specify a valid phone number")
 
@@ -185,46 +185,46 @@ enrollForm = function() {
 				}
 			},
 			rules: {
-        email: 'required',
-        emailConfirm: {
-          equalTo: '#email'
-        },
-        purchased_at: {
-        	required: true,
-        	dateRange: true
-        },
-        device_imei: {
-        	required: true,
-        	rangelength: [15, 18]
-        },
-        case_sn: {
-        	required: true
-        },
-        device_sn: {
-        	required: true
-        },
-        reg_code: {
-        	required: true,
-        	rangelength: [10, 10],
-        	digits: true
-        },
-        device_sn_upload: {
-        	required: true
-        },
-        postcode: {
-        	required: true,
-        	rangelength: [5, 5]
-        },
-        phone: {
-        	required: true,
-        	phoneUS: true
-        }
-	    },
-		  errorPlacement: function(error, element) {
-		  	if(element.attr('id') == 'purchased_at' && error.text() != "This field is required."){
-		  		error.prependTo(element.parents('form'));
-		  	}
-		  }
+				email: 'required',
+				emailConfirm: {
+					equalTo: '#email'
+				},
+				purchased_at: {
+					required: true,
+					dateRange: true
+				},
+				device_imei: {
+					required: true,
+					rangelength: [15, 18]
+				},
+				case_sn: {
+					required: true
+				},
+				device_sn: {
+					required: true
+				},
+				reg_code: {
+					required: true,
+					rangelength: [10, 10],
+					digits: true
+				},
+				device_sn_upload: {
+					required: true
+				},
+				postcode: {
+					required: true,
+					rangelength: [5, 5]
+				},
+				phone: {
+					required: true,
+					phoneUS: true
+				}
+			},
+			errorPlacement: function(error, element) {
+				if(element.attr('id') == 'purchased_at' && error.text() != "This field is required."){
+					error.prependTo(element.parents('form'));
+				}
+			}
 		});
 	}
 	initialize();
@@ -253,7 +253,7 @@ claimForm = function() {
 			$('.checkbox-container span').on("click", function(){
 				var checkbox = $(this).parent('.checkbox-container').find(':checkbox');
 				checkbox.prop("checked", !checkbox.prop("checked"));
-	    	instance.showbillingAddress(checkbox.prop("checked"));
+				instance.showbillingAddress(checkbox.prop("checked"));
 				if (v2.checkForm()) {
 					$('input[type="submit"]').removeClass('disabled').attr('disabled',false);
 				} else {
@@ -261,33 +261,33 @@ claimForm = function() {
 				}
 			});
 
-            // Checkout form
-            // Same as shipping information toggler
-            if ($('#edit-type').val() == 'non-edit') {
-                $('#billing-information').hide();
-            }
+			// Checkout form
+			// Same as shipping information toggler
+			if ($('#edit-type').val() == 'non-edit') {
+				$('#billing-information').hide();
+			}
 
-            $('#same_as_shipping:checkbox').change( function(){
-                instance.showbillingAddress(this.checked);
-            });
+			$('#same_as_shipping:checkbox').change( function(){
+				instance.showbillingAddress(this.checked);
+			});
 
 		});
 	}
 
 	this.showbillingAddress = function(checker) {
-    if (checker) {
-      $('#billing-information').slideUp("slow", function(){
-        $('.billing-fields').each(function(i){
-        	field = $(this);
-        	fieldId = field.attr('id').split("_");
-        	oldVal = $('#shipping_' + fieldId[1]).val();
-        	field.val(oldVal);
-        });
-      });
-    } else {
-      $('.billing-fields').val('');
-      $('#billing-information').slideDown("slow");
-    }
+		if (checker) {
+			$('#billing-information').slideUp("slow", function(){
+				$('.billing-fields').each(function(i){
+					field = $(this);
+					fieldId = field.attr('id').split("_");
+					oldVal = $('#shipping_' + fieldId[1]).val();
+					field.val(oldVal);
+				});
+			});
+		} else {
+			$('.billing-fields').val('');
+			$('#billing-information').slideDown("slow");
+		}
 	}
 
 	this.formValidator = function(){
@@ -295,12 +295,12 @@ claimForm = function() {
 		// form validation
 		$("#postcode").mask("00000");
 		$("#cc_cid").mask("000Z", {
-	    translation: {
-	      'Z': {
-	        pattern: /[0-9]/, optional: true
-	      }
-	    }
-	  });
+			translation: {
+				'Z': {
+					pattern: /[0-9]/, optional: true
+				}
+			}
+		});
 
 		v2 = $(".claim-form").validate({
 			ignore: [],
@@ -332,31 +332,31 @@ claimForm = function() {
 				}
 			},
 			rules: {
-        shipping_postcode: {
-        	required: true,
-        	rangelength: [5, 5]
-        },
-        billing_postcode: {
-        	required: true,
-        	rangelength: [5, 5]
-        },
-        cc_cid: {
-        	required: true,
-        	rangelength: [3,4],
-        	digits: true
-        },
-        cc_num: {
-        	required: true,
-        	digits: true
-        },
-        billing_email: 'required',
-        shipping_email: 'required'
-	    },
-		  errorPlacement: function(error, element) {
-		  	if(element.attr('id') == 'purchased_at' && error.text() != "This field is required."){
-		  		error.prependTo(element.parents('form'));
-		  	}
-		  }
+				shipping_postcode: {
+					required: true,
+					rangelength: [5, 5]
+				},
+				billing_postcode: {
+					required: true,
+					rangelength: [5, 5]
+				},
+				cc_cid: {
+					required: true,
+					rangelength: [3,4],
+					digits: true
+				},
+				cc_num: {
+					required: true,
+					digits: true
+				},
+				billing_email: 'required',
+				shipping_email: 'required'
+			},
+			errorPlacement: function(error, element) {
+				if(element.attr('id') == 'purchased_at' && error.text() != "This field is required."){
+					error.prependTo(element.parents('form'));
+				}
+			}
 		});
 	}
 	initialize();
@@ -397,14 +397,14 @@ function pageNav() {
 		$('.sitenav').animate({
 			top: "0"
 		}, 1000, function() {
-		    if(newLocation != undefined){
-			    window.location = newLocation;
+			if(newLocation != undefined){
+				window.location = newLocation;
 			}
 		});
 	};
 	// handles animation from other pages
 	this.pageani = function(newLocation) {
-  	
+
 		if(newLocation != undefined){
 			$('.header').css('opacity','0' );
 			$('.content').css('opacity','0' );
@@ -415,7 +415,7 @@ function pageNav() {
 				//check if on first step or form has already been submitted
 				if($('body').hasClass('thankyou') || $('body').hasClass('checkcode')){
 					window.setTimeout(function() {
-					  window.location = newLocation;
+						window.location = newLocation;
 					}, 250);
 				} else {
 					// prompt for confirmation
@@ -429,7 +429,7 @@ function pageNav() {
 				}
 			} else { // any other pages
 				window.setTimeout(function() {
-				  window.location = newLocation;
+					window.location = newLocation;
 				}, 250);
 			}
 		}

@@ -8,19 +8,21 @@
 --}}
 
 @if ($errors->any())
-    <div class="alert row">
-        <ul class="col-md-12">
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+
+    <div class="alert alert-danger" role="alert">
+
+        @foreach($errors->all() as $error)
+            {!! $error !!}
+        @endforeach
+
     </div>
+
 @endif
 
 @if (Session::has('flash_message'))
-    <div class="alert row">
-        <ul class="col-md-12">
-            <li>{!! Session::get('flash_message') !!}</li>
-        </ul>
+
+    <div class="alert alert-danger" role="alert">
+        {!! Session::get('flash_message') !!}
     </div>
+
 @endif

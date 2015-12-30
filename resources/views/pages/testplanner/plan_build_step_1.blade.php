@@ -44,4 +44,22 @@
 
 	</div>
 
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+			var jiraIssues = <?php echo json_encode($jiraIssues); ?>
+
+			$('#plan-description').autocomplete({
+
+				source: jiraIssues
+			});
+
+			$('#clear-btn').on('click', function(e) {
+				$('#plan-description').val('');
+
+			});
+		});
+
+	</script>
+
 @stop

@@ -1560,7 +1560,7 @@ class Builder
      * Get an array with the values of a given column.
      *
      * @param  string  $column
-     * @param  string  $key
+     * @param  string|null  $key
      * @return array
      */
     public function lists($column, $key = null)
@@ -1608,7 +1608,7 @@ class Builder
     /**
      * Determine if any rows exist for the current query.
      *
-     * @return bool|null
+     * @return bool
      */
     public function exists()
     {
@@ -1621,6 +1621,8 @@ class Builder
 
             return (bool) $results['exists'];
         }
+
+        return false;
     }
 
     /**

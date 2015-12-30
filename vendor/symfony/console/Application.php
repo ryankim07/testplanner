@@ -631,6 +631,8 @@ class Application
      */
     public function renderException($e, $output)
     {
+        $output->writeln('');
+
         do {
             $title = sprintf('  [%s]  ', get_class($e));
 
@@ -653,14 +655,13 @@ class Application
                 }
             }
 
-            $messages = array('', '');
+            $messages = array();
             $messages[] = $emptyLine = $formatter->format(sprintf('<error>%s</error>', str_repeat(' ', $len)));
             $messages[] = $formatter->format(sprintf('<error>%s%s</error>', $title, str_repeat(' ', max(0, $len - $this->stringWidth($title)))));
             foreach ($lines as $line) {
                 $messages[] = $formatter->format(sprintf('<error>  %s  %s</error>', $line[0], str_repeat(' ', $len - $line[1])));
             }
             $messages[] = $emptyLine;
-            $messages[] = '';
             $messages[] = '';
 
             $output->writeln($messages, OutputInterface::OUTPUT_RAW);
@@ -688,13 +689,11 @@ class Application
                 }
 
                 $output->writeln('');
-                $output->writeln('');
             }
         } while ($e = $e->getPrevious());
 
         if (null !== $this->runningCommand) {
             $output->writeln(sprintf('<info>%s</info>', sprintf($this->runningCommand->getSynopsis(), $this->getName())));
-            $output->writeln('');
             $output->writeln('');
         }
     }
@@ -1070,7 +1069,7 @@ class Application
             return strlen($string);
         }
 
-        if (false === $encoding = mb_detect_encoding($string)) {
+        if (false === $encoding = mb_detect_encoding($string, null, true)) {
             return strlen($string);
         }
 
@@ -1087,7 +1086,7 @@ class Application
             return str_split($string, $width);
         }
 
-        if (false === $encoding = mb_detect_encoding($string)) {
+        if (false === $encoding = mb_detect_encoding($string, null, true)) {
             return str_split($string, $width);
         }
 

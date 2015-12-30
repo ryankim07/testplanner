@@ -24,6 +24,7 @@ use Illuminate\Database\QueryException;
 use PhpSpec\Exception\Exception;
 
 use App\Facades\Email;
+use App\Facades\Jira;
 
 use App\Plans;
 use App\Tickets;
@@ -66,7 +67,17 @@ class PlansController extends Controller
     {
         $user = Auth::user();
 
-        return view('pages.testplanner.plan_build_step_1', ['userId' => $user->id]);
+        // Get JIRA issues
+        $issues = Jira::getIssues();
+
+        foreach($issues as $issue) {
+            $jiraIssues[] = $issue['summary'];
+        }
+
+        return view('pages.testplanner.plan_build_step_1', [
+            'userId'     => $user->id,
+            'jiraIssues' => $jiraIssues
+        ]);
     }
 
     /**

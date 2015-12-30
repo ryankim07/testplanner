@@ -63,12 +63,6 @@
                     </li>
                 @endif
 
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-globe" aria-hidden="true" title="Settings"></span> <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>{!! Html::link('/', 'Main Site') !!}</li>
-                        </ul>
-                    </li>
                 </ul>
         </div>
     </div>

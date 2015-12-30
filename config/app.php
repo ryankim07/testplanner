@@ -148,6 +148,8 @@ return [
         App\Providers\EmailServiceProvider::class,
         App\Providers\UtilsServiceProvider::class,
         App\Providers\GridServiceProvider::class,
+        App\Providers\JiraServiceProvider::class,
+
     ],
 
     /*

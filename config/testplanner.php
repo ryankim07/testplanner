@@ -14,6 +14,8 @@ return [
 
     'admin_email'             => 'ryan.kim@mophie.com',
 
+    'jira_app_url'            => 'https://mophie.atlassian.net',
+
     'pagination_count'        => 50,
 
     'credentials_problem_msg' => 'The credentials you entered did not match our records. Try again?',

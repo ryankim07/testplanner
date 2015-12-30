@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
     /**
      *  CREATING NEW TICKETS
      */
