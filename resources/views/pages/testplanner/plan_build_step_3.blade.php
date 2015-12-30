@@ -15,7 +15,7 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="clearfix">
-                    <div class="pull-left"><h3>Step 3 of 3 - Select browser testers</h3></div>
+                    <div class="pull-left"><h3>Step 3 of 3 - Assign browser testers</h3></div>
                     <div class="pull-right"><h5>All fields required</h5></div>
                 </div>
             </div>
@@ -25,10 +25,15 @@
 
                 @include('pages/testplanner/partials/testers')
 
-                @include('pages/main/partials/submit_button', ['submitBtnText' => 'Review'])
-
             </div>
         </div>
+
+        @include('pages/main/partials/submit_button', [
+            'submitBtnText' => 'Review',
+            'direction'     => 'pull-right',
+            'class'		    => 'btn-success btn-lg',
+			'id'			=> 'continue-btn'
+		])
 
         {!! Form::close() !!}
 

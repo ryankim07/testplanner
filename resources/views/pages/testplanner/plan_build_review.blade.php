@@ -54,11 +54,15 @@
 
                     </ul>
                 </div>
-
-                @include('pages/main/partials/submit_button', ['submitBtnText' => 'Finalize'])
-
             </div>
         </div>
+
+        @include('pages/main/partials/submit_button', [
+            'submitBtnText' => 'Finalize',
+            'direction'     => 'pull-right',
+            'class'		    => 'btn-success btn-lg',
+            'id'            => 'continue-btn'
+        ])
 
         {!! Form::close() !!}
 

@@ -15,7 +15,7 @@
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<div class="clearfix">
-					<div class="pull-left"><h3>Step 1 of 3 - Add plan details</h3></div>
+					<div class="pull-left"><h3>Step 1 of 3 - Start building plan</h3></div>
 					<div class="pull-right"><h5>All fields required</h5></div>
 				</div>
 			</div>
@@ -27,13 +27,18 @@
 
 				@include('pages/testplanner/partials/plan', [
 					'userId'      => $userId,
-					'description' => null,
-					'mode'        => 'create'
+					'description' => null
 				])
 
-				@include('pages/main/partials/submit_button', ['submitBtnText' => 'Add Tickets'])
 			</div>
 		</div>
+
+		@include('pages/main/partials/submit_button', [
+			'submitBtnText' => 'Continue',
+            'direction'     => 'pull-right',
+            'class'		    => 'btn-success btn-lg',
+			'id'			=> 'continue-btn'
+		])
 
 		{!! Form::close() !!}
 

@@ -49,7 +49,12 @@
 					'mode'  => 'edit'
 				])
 
-				@include('pages/main/partials/submit_button', ['submitBtnText' => 'Update', 'css' => 'col-xs-4 col-md-4'])
+				@include('pages/main/partials/submit_button', [
+					'submitBtnText' => 'Update',
+					'css'           => 'col-xs-4 col-md-4',
+					'id'			=> 'update-tickets-btn'
+				])
+
 				@include('pages/main/partials/back_link')
 			</div>
 		</div>
@@ -57,5 +62,30 @@
 		{!! Form::close() !!}
 
 	</div>
+
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+			<?php
+				foreach($plan['testers'] as $tester) {
+					$testers[] = 'browser_' . $tester['id'] . '_' . $tester['browser'];
+				}
+
+				echo 'var testers = ' . json_encode($testers);
+			?>
+
+			$('.browser_tester').each(function () {
+				var browser   = $(this);
+				var browserId = browser.attr('id');
+
+				$.each(testers, function (i, testerBrowserId) {
+					if (browserId == testerBrowserId) {
+						browser.prop("checked", true);
+					}
+				});
+			});
+		});
+
+	</script>
 
 @stop

@@ -7,14 +7,11 @@
 |
 --}}
 
-<div class="row">
+<div class="row nested-block">
     <div class="col-xs-12 col-md-8">
+        <legend>Plan</legend>
 
-        <?php
-            $label = $mode == 'create' ? 'Please enter a description for this plan' : 'Plan description';
-        ?>
-
-        {!! Form::label('description', $label) !!}
+        {!! Form::label('description', 'Name') !!}
         {!! Form::text('description', $description, ['class' => 'form-control input-md required', 'id' => 'description']) !!}
     </div>
 </div>

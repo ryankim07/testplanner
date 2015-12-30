@@ -242,3 +242,49 @@ table:not(.dashboard) tbody tr:hover {
 .activity-link-actions {
     padding: 0px 10px;
 }
+
+/**
+ * NEW CSS
+ */
+
+.nested-block {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #f7f7f8;
+    border-color: #eee #eee #eee #d4d5d9;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px 1px 1px 5px;
+    margin: 5px 0 10px 0px;
+    padding: 10px 30px 20px 20px;
+    position: relative;
+}
+
+.trash {
+    line-height: 12px;
+    margin-top: 6px;
+    margin-right: 4px;
+    position:absolute;
+    top:0;
+    right:0;
+}
+
+legend {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color -moz-use-text-color #e5e5e5;
+    border-image: none;
+    border-style: none none solid;
+    border-width: 0 0 1px;
+    color: #777777;
+    display: block;
+    font-size: 22.5px;
+    line-height: inherit;
+    margin-bottom: 21px;
+    padding: 0;
+    width: 100%;
+}

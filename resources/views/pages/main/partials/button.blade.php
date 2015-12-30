@@ -1,6 +1,6 @@
 {{--
 |--------------------------------------------------------------------------
-| Submit button partial
+| Button partial
 |--------------------------------------------------------------------------
 |
 | This template is used when showing submit button.
@@ -15,7 +15,7 @@
                 $id    = !isset($id) ? '' : $id;
             ?>
 
-            {!! Form::submit($submitBtnText, ['class' => 'btn ' . $class, 'id' => $id]) !!}
+            {!! Form::button($btnText, ['class' => 'btn btn-primary' . ' ' . $class, 'id' => $id]) !!}
         </div>
     </div>
 </div>

@@ -7,51 +7,34 @@
 |
 --}}
 
-<div class="row ticket-row">
+<div class="row ticket-row nested-block">
 
     @if ($mode == 'edit')
         {!! Form::hidden('ticket_id', $ticket['id']) !!}
     @endif
 
+    <div class="wrapper">
+        <legend>Ticket</legend>
+        <a href="#" class="remove-ticket-btn"><span class="glyphicon glyphicon-trash trash"></span></a>
+    </div>
     <div class="col-md-12">
-
-        <?php
-            $label = $mode == 'create' ? 'Please enter the description for ticket' : 'Ticket description';
-        ?>
-
-        {!! Form::label('description', $label) !!}
-
-        @if ($mode == 'create')
-            {!! Form::button('Remove Ticket', ['class' => 'btn btn-primary btn-xs remove-ticket-btn']) !!}
-        @endif
-
+        {!! Form::label('description',  'Description') !!}
         {!! Form::text('description', $ticket['description'], ['class' => 'required form-control description']) !!}
     </div>
     <div class="col-md-12">
-
-        <?php
-            $label = $mode == 'create' ? 'Please enter the objective' : 'Objective';
-        ?>
-
-        {!! Form::label('objective', $label) !!}
+        {!! Form::label('objective', 'Objective') !!}
         {!! Form::text('objective', $ticket['objective'], ['class' => 'required form-control objective']) !!}
     </div>
     <div class="col-md-12">
-
-        <?php
-            $label = $mode == 'create' ? 'Please enter the steps for test' : 'Steps for test';
-        ?>
-
-        {!! Form::label('test_steps', $label) !!}
+        {!! Form::label('test_steps', 'Steps for test') !!}
     </div>
     <div class="col-md-12">
         {!! Form::textarea('test_steps', $ticket['test_steps'], ['class' => 'test_steps', 'size' => '100x10']) !!}
-
-        @if ($mode == 'create')
-            <div class="button-group">
-                {!! Form::button('Add New Ticket', ['class' => 'btn btn-primary btn-xs add-ticket-btn']) !!}
-            </div>
-        @endif
-
     </div>
 </div>
+
+@include('pages/main/partials/button', [
+    'btnText'   => 'Add another ticket',
+    'direction' => 'pull-left',
+    'id'        => 'add-ticket-btn'
+])
