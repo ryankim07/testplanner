@@ -11,7 +11,7 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-4" id="main">
+    <div class="col-xs-12 col-md-4 main" id="register-main">
 
         {!! Form::open(['route' => 'auth.post.register', 'class' => 'form-horizontal', 'id' => 'admin-register-form']) !!}
 

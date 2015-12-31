@@ -17,13 +17,13 @@ class Jira
 {
     private $_username;
     private $_password;
-    protected $_jira_app_url;
+    private $_jira_rest_url;
 
     public function __construct()
     {
         $this->_username = env('JIRA_LOGIN');
         $this->_password = env('JIRA_PASS');
-        $this->_jira_app_url = config('testplanner.jira_app_url');
+        $this->_jira_rest_url = config('testplanner.jira_rest_url');
     }
 
     /**
@@ -32,7 +32,7 @@ class Jira
      * @param $data
      * @return mixed
      */
-    public function connect($data)
+    private function _connect($data)
     {
         try {
             $ch = curl_init();
@@ -66,23 +66,52 @@ class Jira
 
     /**
      * Get all issues from JIRA
+     *
+     * @param $project
+     * @return array
      */
-    public function getIssues()
+    public function getAllIssues($project)
     {
         // Query type
-        $data['query_url'] = $this->_jira_app_url . '/rest/api/2/search?jql=project=ECOM';
+        $data['query_url'] = $this->_jira_rest_url . '/search?jql=project=' . $project;
 
         // Connect to api and get results
-        $data = $this->connect($data);
+        $data = $this->_connect($data);
 
+        // Return on a certain array structure
         foreach($data->issues as $issue) {
             $key = $issue->key;
             $results[] = [
-                'key'        => $key,
-                'summary'    => $key . ': ' . $issue->fields->summary,
-                'browse_url' => $this->_jira_app_url . '/browse/' . $key,
+                'key'     => $key,
+                'summary' => $issue->fields->summary
             ];
         }
+
+        ksort($results, SORT_NUMERIC);
+
+        return $results;
+    }
+
+    /**
+     * Get all versions of certain project
+     *
+     * @param $project
+     * @return mixed
+     */
+    public function getAllProjectVersions($project)
+    {
+        // Query type
+        $data['query_url'] = $this->_jira_rest_url . '/project/' . $project . '/versions';
+
+        // Connect to api and get results
+        $data = $this->_connect($data);
+
+        // Return on a certain array structure
+        foreach($data as $version) {
+            $results[] = ['name' => $version->name];
+        }
+
+        krsort($results, SORT_NUMERIC);
 
         return $results;
     }

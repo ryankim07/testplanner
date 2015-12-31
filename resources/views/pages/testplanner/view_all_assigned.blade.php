@@ -11,7 +11,10 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-12" id="main">
+    <div class="col-xs-12 col-md-12 main" id="view-all-assigned-main">
+
+        {!! Form::open(['route' => 'plan.search', 'class' => 'form-horizontal', 'role' => 'search']) !!}
+
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="clearfix">
@@ -19,8 +22,6 @@
                 </div>
             </div>
             <div class="panel-body">
-
-                {!! Form::open(['route' => 'plan.search', 'class' => 'form-horizontal', 'role' => 'search']) !!}
 
                 @if ($totalPlans > 0)
 
@@ -62,18 +63,11 @@
 
                 @endif
 
-                {!! Form::close() !!}
-
             </div>
         </div>
+
+        {!! Form::close() !!}
+
     </div>
-
-<script type="text/javascript">
-
-$(document).ready(function() {
-
-});
-
-</script>
 
 @stop

@@ -8,11 +8,11 @@
 
 @section('content')
 
-	<div class="col-xs-12 col-md-12" id="main">
+	<div class="col-xs-12 col-md-12 main" id="view-main">
 
 		{!! Form::model($plan, ['method' => 'PATCH', 'route' => ['plan.update', $plan['id']], 'class' => 'plan-form-update']) !!}
 
-		<div class="panel panel-primary">
+		<div class="panel panel-default">
 			<div class="panel-heading">
 				<div class="clearfix">
 					<div class="pull-left"><h3>Edit plan - {!! $plan['description'] !!}</h3></div>
@@ -65,26 +65,13 @@
 
 	<script type="text/javascript">
 
-		$(document).ready(function() {
-			<?php
-				foreach($plan['testers'] as $tester) {
-					$testers[] = 'browser_' . $tester['id'] . '_' . $tester['browser'];
-				}
+		<?php
+			foreach($plan['testers'] as $tester) {
+				$testers[] = 'browser_' . $tester['id'] . '_' . $tester['browser'];
+			}
 
-				echo 'var testers = ' . json_encode($testers);
-			?>
-
-			$('.browser_tester').each(function () {
-				var browser   = $(this);
-				var browserId = browser.attr('id');
-
-				$.each(testers, function (i, testerBrowserId) {
-					if (browserId == testerBrowserId) {
-						browser.prop("checked", true);
-					}
-				});
-			});
-		});
+			echo 'var testers = ' . json_encode($testers);
+		?>
 
 	</script>
 

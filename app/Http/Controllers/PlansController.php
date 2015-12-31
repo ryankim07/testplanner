@@ -67,16 +67,16 @@ class PlansController extends Controller
     {
         $user = Auth::user();
 
-        // Get JIRA issues
-        $issues = Jira::getIssues();
+        // Get JIRA project versions
+        $results = Jira::getAllProjectVersions('ECOM');
 
-        foreach($issues as $issue) {
-            $jiraIssues[] = $issue['summary'];
+        foreach($results as $version) {
+            $versions[] = 'Test Plan for build v' . $version['name'];
         }
 
         return view('pages.testplanner.plan_build_step_1', [
-            'userId'     => $user->id,
-            'jiraIssues' => $jiraIssues
+            'userId'   => $user->id,
+            'versions' => json_encode($versions)
         ]);
     }
 
@@ -211,7 +211,7 @@ class PlansController extends Controller
         $plan       = Plans::getPlanResponses($planId, $userId);
         $allTesters = Testers::getTestersByPlanId($planId);
 
-        $browserTesters[''] = 'Select other users';
+        $browserTesters[''] = 'View other responses';
         foreach ($allTesters as $tester) {
             $browserTesters[$tester->id] = $tester->first_name;
         }

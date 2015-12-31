@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 use App\Facades\Utils;
+use App\Facades\Jira;
 use App\Facades\Grid;
 
 use Auth;
@@ -153,13 +154,20 @@ class Plans extends Model
 
                 foreach($responses as $response) {
                     if ($ticket['id'] == $response['id']) {
+                        $ticketDesc = $ticket['description'];
+                        list($project, $summary) = explode(':', $ticketDesc);
+
+                        if (preg_match('/^ECOM-\d/', $project)) {
+                            $descUrl = url(config('testplanner.jira_domain')) . '/browse/' . $project;
+                        }
                         $newResults[$ticket['id']] = array(
-                            'id'             => $ticket['id'],
-                            'description'    => $ticket['description'],
-                            'objective'      => $ticket['objective'],
-                            'test_steps'     => $ticket['test_steps'],
-                            'notes_response' => nl2br($response['notes_response']),
-                            'test_status'    => isset($response['test_status']) ? $response['test_status'] : null
+                            'id'              => $ticket['id'],
+                            'description'     => $ticket['description'],
+                            'description_url' => $descUrl,
+                            'objective'       => $ticket['objective'],
+                            'test_steps'      => $ticket['test_steps'],
+                            'notes_response'  => nl2br($response['notes_response']),
+                            'test_status'     => isset($response['test_status']) ? $response['test_status'] : null
                         );
                     }
                 }

@@ -14,7 +14,9 @@ return [
 
     'admin_email'             => 'ryan.kim@mophie.com',
 
-    'jira_app_url'            => 'https://mophie.atlassian.net',
+    'jira_domain'             => 'https://mophie.atlassian.net',
+
+    'jira_rest_url'           => 'https://mophie.atlassian.net/rest/api/2',
 
     'pagination_count'        => 50,
 

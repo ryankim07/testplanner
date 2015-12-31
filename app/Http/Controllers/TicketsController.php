@@ -15,10 +15,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TicketsFormRequest;
 use PhpSpec\Exception\Exception;
 
-use Validator;
+use App\Facades\Jira;
+
 use Session;
-use Input;
-use App;
 
 class TicketsController extends Controller
 {
@@ -31,31 +30,20 @@ class TicketsController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-    }
-
-    /**
      * Show the form for creating a new resource
      *
-     * @return \Illuminate\View\View|Redirect
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function build()
     {
-        return view('pages.testplanner.plan_build_step_2');
-    }
+        // Get JIRA issues
+        $issues = Jira::getAllIssues('ECOM');
 
-    /**
-     * Show the form for creating a new resource
-     *
-     * @return \Illuminate\View\View|Redirect
-     */
-    public function create()
-    {
+        foreach($issues as $issue) {
+            $jiraIssues[] = $issue['key'] . ': ' . $issue['summary'];
+        }
+
+        return view('pages.testplanner.plan_build_step_2',  ['jiraIssues' => json_encode($jiraIssues)]);
     }
 
     /**

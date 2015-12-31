@@ -10,13 +10,13 @@ $(document).ready(function() {
     $('.remove-ticket-btn').hide();
 
     // Append new ticket rows
-    $(document).on('click', '#add-ticket-btn', function() {
+    $('#build-step-2-main').on('click', '#add-ticket-btn', function() {
         ticketRow.insertAfter('.nested-block').last();
         $('.remove-ticket-btn').show();
     });
 
     // Remove tickets
-    $(document).on('click', '.remove-ticket-btn', function(e) {
+    $('#build-step-2-main').on('click', '.remove-ticket-btn', function(e) {
         e.preventDefault();
 
         $(this).closest('.ticket-row').remove();
@@ -34,14 +34,14 @@ $(document).ready(function() {
         }
     });
 
-    $('#submit-tickets-btn, #update-tickets-btn').on('click', function(e) {
+    $('#build-step-2-main').on('click', '#submit-tickets-btn, #update-tickets-btn', function(e) {
         var tickets = [];
 
         $('.ticket-row').each(function () {
             // Create ticket object
             tickets.push({
                 "id":          stringGen(5),
-                "description": $(this).find('.description').val(),
+                "description": $(this).find('.ticket-description').val(),
                 "objective":   $(this).find('.objective').val(),
                 "test_steps":  $(this).find('.test_steps').val()
             });
@@ -53,6 +53,21 @@ $(document).ready(function() {
             .attr("name", "tickets-obj").val(JSON.stringify(tickets));
 
         $('form').append($(input));
+    });
+
+
+    /**
+     * VIEW MAIN
+     */
+    $('.browser_tester').each(function () {
+        var browser   = $(this);
+        var browserId = browser.attr('id');
+
+        $.each(testers, function (i, testerBrowserId) {
+            if (browserId == testerBrowserId) {
+                browser.prop("checked", true);
+            }
+        });
     });
 
 
@@ -84,8 +99,8 @@ $(document).ready(function() {
      * VIEW RESPONSE DROPDOWN VIEWER FOR A CERTAIN USER
      */
 
-    $('#tester').on('change', function () {
-        var route = "{!! URL::route('plan.view.response', null) !!}";
+    $('#view-response-main').on('change', '#view-tester', function () {
+        var route  = $(this).data('url');
         var userId = $(this).val();
         var planId = $('#plan_id').val();
 
@@ -102,7 +117,7 @@ $(document).ready(function() {
     $('.activity-comment-content').hide();
 
     // Toggle comment to show or hide
-    $('.activity-comment-link').on('click', function (e) {
+    $('#dashboard-main').on('click', '.activity-comment-link', function(e) {
         e.preventDefault();
         var parent = $(this).parentsUntil('.activity-log');
 
@@ -110,7 +125,7 @@ $(document).ready(function() {
     });
 
     // Add comment
-    $('.activity-comment-add').on('click', function (e) {
+    $('#dashboard-main').on('click', '.activity-comment-add', function() {
         var parent  = $(this).parentsUntil('.activity-log');
         var logId   = parent.find('.log_id').val();
         var comment = parent.find('.activity-comment').val();
@@ -130,9 +145,36 @@ $(document).ready(function() {
     });
 
     // Cancel comment
-    $('.activity-comment-cancel').on('click', function (e) {
+    $('#dashboard-main').on('click', '.activity-comment-cancel', function() {
         var parent = $(this).parentsUntil('.activity-log');
         parent.find('.activity-comment-content').hide();
+    });
+
+    // View all admin
+    $('#view-all-admin-main').on('click', '.view-tester-plan', function (e) {
+        e.preventDefault();
+
+        var parent = $(this).closest('tr');
+        var tester = parent.find('.tester').val();
+        var url    = $(this).attr('href');
+
+        window.location.href = url + '/' + tester;
+    });
+
+    /**
+     * ADMIN
+     */
+    // Show all or adminstrator plans
+    $('#view-all-plans-main').on('change', '#view-user', function() {
+        var route   = $(this).data('url');
+        var adminId = $(this).val();
+
+        window.location.href =  route + '/' + adminId;
+    });
+
+    // View or edit single plan
+    $('#view-all-plans-main').on('click', '.toggler', function() {
+        window.location.href = $(this).data('url');
     });
 
 

@@ -11,7 +11,7 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-12" id="main">
+    <div class="col-xs-12 col-md-12 main" id="view-all-admin-main">
 
         {!! Form::open(['route' => 'plan.search', 'class' => 'form-horizontal', 'role' => 'search']) !!}
 
@@ -71,22 +71,5 @@
         {!! Form::close() !!}
 
     </div>
-
-<script type="text/javascript">
-
-$(document).ready(function() {
-    // Select row for viewing
-    $('.view-tester-plan').on('click', function (e) {
-        e.preventDefault();
-
-        var parent = $(this).closest('tr');
-        var tester = parent.find('.tester').val();
-        var url    = $(this).attr('href');
-
-        window.location.href = url + '/' + tester;
-    });
-});
-
-</script>
 
 @stop

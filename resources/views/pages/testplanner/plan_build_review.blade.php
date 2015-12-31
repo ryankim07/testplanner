@@ -8,14 +8,21 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-12" id="main">
+    <div class="col-xs-12 col-md-12 main" id="review-main">
 
         {!! Form::open(['action' => ['PlansController@save'], 'class' => '', 'id' => 'plan-review-form']) !!}
 
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="clearfix">
-                    <div class="pull-left"><h3>Review</h3></div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4>Review</h4>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">Completed</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="panel-body">
@@ -48,7 +55,7 @@
 
                         @foreach($testers as $tester)
 
-                            <li>{!! $tester['first_name'] !!} -> {!! $tester['browser'] !!}</li>
+                            <li>{!! Html::image('images/' . $tester['browser'] . '.png', 'Chrome', ['width' => 32, 'height' => 32]) !!}  {!! $tester['first_name'] !!}</li>
 
                         @endforeach
 

@@ -11,7 +11,7 @@
 
 @section('content')
 
-<div class="col-xs-12 col-md-12" id="main">
+<div class="col-xs-12 col-md-12 main" id="dashboard-main">
     <div class="page-header">
         <h2>Dashboard</h2>
     </div>
@@ -34,7 +34,7 @@
                         </div>
                         <div class="panel-body">
                             <div class="table-responsive">
-                                <table class="table dashboard">
+                                <table class="table dashboard-table">
                                     <thead>
                                     <tr>
                                         <th>Description</th>

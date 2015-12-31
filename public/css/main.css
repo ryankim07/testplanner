@@ -92,14 +92,14 @@ body {
  */
 
 @media (min-width: 768px) {
-    #main {
+    .main {
         left: 0px;
         padding-right: 0px;
         padding-left: 0px;
     }
 }
 
-#main .page-header {
+.main .page-header {
     margin-top: 0;
 }
 
@@ -149,7 +149,7 @@ div{
  * Tables
  */
 
-table:not(.dashboard) tbody tr:hover {
+table:not(.dashboard-table) tbody tr:hover {
     color: green;
     cursor: pointer;
 }
@@ -295,4 +295,16 @@ legend {
 
 .comment-btn {
     margin-top: 10px;
+}
+
+.plan-img {
+    float:left;
+    min-width: 84px;
+    padding-right: 20px;
+}
+
+.progress {
+    position: relative;
+    top: 10px;
+    margin-bottom: 0px;
 }

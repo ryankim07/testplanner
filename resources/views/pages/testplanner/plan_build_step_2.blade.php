@@ -8,15 +8,21 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-12" id="main">
+    <div class="col-xs-12 col-md-12 main" id="build-step-2-main">
 
         {!! Form::open(['route' => 'ticket.store', 'class' => '', 'id' => 'ticket-build-form']) !!}
 
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="clearfix">
-                    <div class="pull-left"><h3>Step 2 of 3 - Add tickets to be tested</h3></div>
-                    <div class="pull-right"><h5>All fields required</h5></div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4>Step 2 of 3 - Add tickets to be tested</h4>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">45%</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="panel-body">
@@ -41,5 +47,21 @@
         {!! Form::close() !!}
 
     </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var jiraIssues = <?php echo $jiraIssues; ?>
+
+            $('#build-step-2-main').on('focus', '.ticket-description', function () {
+                $(this).autocomplete({
+                    source: jiraIssues
+                });
+            });
+
+            $('#build-step-2-main').on('click', '.clear-btn', function () {
+                $('.ticket-description').val('');
+            });
+        });
+    </script>
 
 @stop
