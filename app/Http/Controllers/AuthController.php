@@ -17,7 +17,7 @@ class AuthController extends Controller
     use AuthenticatesAndRegistersUsers;
 
     /**
-     * Create a new authentication controller instance.
+     * AuthController constructor.
      *
      * @param Guard $auth
      * @param User $user
@@ -33,7 +33,7 @@ class AuthController extends Controller
     /**
      * Show the application login form.
      *
-     * @return Response
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View|mixed|void
      */
     public function getLogin()
     {
@@ -45,10 +45,10 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle a login request to the application.
+     *  Handle a login request to the application.
      *
      * @param LoginFormRequest $request
-     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
     public function postLogin(LoginFormRequest $request)
     {
@@ -64,7 +64,7 @@ class AuthController extends Controller
     /**
      * Log the user out of the application.
      *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
     public function getLogout()
     {
@@ -76,7 +76,7 @@ class AuthController extends Controller
     /**
      * Show the application registration form.
      *
-     * @return Response
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function getRegister()
     {
@@ -87,7 +87,7 @@ class AuthController extends Controller
      * Handle a registration request for the application.
      *
      * @param RegisterFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
     public function postRegister(RegisterFormRequest $request)
     {

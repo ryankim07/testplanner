@@ -31,7 +31,7 @@
 
                 <div class="row nested-block">
                     <legend>Plan Description</legend>
-                    <a href="{!! URL::route('plan.edit', [$plan['id']]) !!}" class="cog"><span class="glyphicon glyphicon-cog"></span></a>
+                    <a href="{!! URL::route('plan.edit') !!}" class="cog"><span class="glyphicon glyphicon-cog"></span></a>
                     <ul class="list-unstyled">
                         <li><h5>{!! $plan['description'] !!}</h5></li>
                     </ul>
@@ -39,7 +39,7 @@
                 @foreach($tickets as $ticket)
                     <div class="row nested-block">
                         <legend>Ticket</legend>
-                        <a href="#" class="cog"><span class="glyphicon glyphicon-cog"></span></a>
+                        <a href="{!! URL::route('ticket.edit') !!}" class="cog"><span class="glyphicon glyphicon-cog"></span></a>
                         <ul class="list-unstyled">
                             <li><h4><span class="label label-default">Description</span></h4><h5>{!! $ticket['description'] !!}</h5></li>
                             <li><h4><span class="label label-primary">Objective</span></h4><h5>{!! $ticket['objective'] !!}</h5></li>
@@ -49,7 +49,7 @@
                 @endforeach
                 <div class="row nested-block">
                     <legend>Browser Testers</legend>
-                    <a href="#" class="cog"><span class="glyphicon glyphicon-cog"></span></a>
+                    <a href="{!! URL::route('tester.edit') !!}" class="cog"><span class="glyphicon glyphicon-cog"></span></a>
                     @foreach($testers as $tester)
                     <div class="text-center review-testers">
                         {!! Html::image('images/' . $tester['browser'] . '.png', 'Chrome') !!}<h5><span class="caption">{!! $tester['first_name'] !!}</span></h5>

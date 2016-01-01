@@ -7,16 +7,16 @@ $(document).ready(function() {
     var ticketRow = $('.ticket-row').clone();
 
     // Since there is only one ticket, hide remove button
-    $('.remove-ticket-btn').hide();
+    $('.trash').hide();
 
     // Append new ticket rows
-    $('#build-step-2-main').on('click', '#add-ticket-btn', function() {
+    $('#step-2-main').on('click', '#add-ticket-btn', function() {
         ticketRow.insertAfter('.nested-block').last();
-        $('.remove-ticket-btn').show();
+        $('.trash').show();
     });
 
     // Remove tickets
-    $('#build-step-2-main').on('click', '.remove-ticket-btn', function(e) {
+    $('#step-2-main').on('click', '.trash', function(e) {
         e.preventDefault();
 
         $(this).closest('.ticket-row').remove();
@@ -25,7 +25,7 @@ $(document).ready(function() {
         if ($('.ticket-row').length == 1) {
             // After removing tickets, the only one left cannot show
             // remove button
-            $('.remove-ticket-btn').hide();
+            $('.trash').hide();
 
             // Display back add ticket button
             if ($('.ticket-row .add-ticket-btn').css('display') == 'none') {
@@ -34,23 +34,27 @@ $(document).ready(function() {
         }
     });
 
-    $('#build-step-2-main').on('click', '#submit-tickets-btn, #update-tickets-btn', function(e) {
+    $('#step-2-main').on('click', '#continue-btn, #update-btn', function() {
         var tickets = [];
 
-        $('.ticket-row').each(function () {
+        $('.ticket-row').each(function(i, items) {
+            var description = $(this).find('.ticket-description').val();
+            var objective   = $(this).find('.objective').val();
+            var testSteps   = $(this).find('.test_steps').val();
+
             // Create ticket object
             tickets.push({
-                "id":          stringGen(5),
-                "description": $(this).find('.ticket-description').val(),
-                "objective":   $(this).find('.objective').val(),
-                "test_steps":  $(this).find('.test_steps').val()
+                "id": stringGen(5),
+                "description": description,
+                "objective": objective,
+                "test_steps": testSteps
             });
         });
 
         // Create hidden field
         var input = $("<input>")
             .attr("type", "hidden")
-            .attr("name", "tickets-obj").val(JSON.stringify(tickets));
+            .attr("name", "tickets_obj").val(JSON.stringify(tickets));
 
         $('form').append($(input));
     });
@@ -59,7 +63,7 @@ $(document).ready(function() {
     /**
      * VIEW MAIN
      */
-    $('.browser_tester').each(function () {
+    $('.browser_tester').each(function() {
         var browser   = $(this);
         var browserId = browser.attr('id');
 
@@ -74,10 +78,10 @@ $(document).ready(function() {
     /**
      * RESPONDING TO TICKET
      */
-    $('#respond-btn').on('click', function(e) {
+    $('#respond-btn').on('click', function() {
         var tickets = [];
 
-        $('.ticket-panel').each(function () {
+        $('.ticket-panel').each(function() {
             // Create ticket object
             tickets.push({
                 "id": $(this).find('.ticket-id').val(),
@@ -89,7 +93,7 @@ $(document).ready(function() {
         // Create hidden field
         var input = $("<input>")
             .attr("type", "hidden")
-            .attr("name", "tickets-obj").val(JSON.stringify(tickets));
+            .attr("name", "tickets_obj").val(JSON.stringify(tickets));
 
         $('form').append($(input));
     });
@@ -98,8 +102,7 @@ $(document).ready(function() {
     /**
      * VIEW RESPONSE DROPDOWN VIEWER FOR A CERTAIN USER
      */
-
-    $('#view-response-main').on('change', '#view-tester', function () {
+    $('#view-response-main').on('change', '#view-tester', function() {
         var route  = $(this).data('url');
         var userId = $(this).val();
         var planId = $('#plan_id').val();
@@ -113,7 +116,7 @@ $(document).ready(function() {
     /**
      * DASHBOARD ACTIVITY STREAM COMMENTS
      */
-        // Hide initially
+    // Hide initially
     $('.activity-comment-content').hide();
 
     // Toggle comment to show or hide
@@ -151,7 +154,7 @@ $(document).ready(function() {
     });
 
     // View all admin
-    $('#view-all-admin-main').on('click', '.view-tester-plan', function (e) {
+    $('#view-all-admin-main').on('click', '.view-tester-plan', function(e) {
         e.preventDefault();
 
         var parent = $(this).closest('tr');
@@ -183,7 +186,7 @@ $(document).ready(function() {
      */
     function stringGen(len)
     {
-        var text = " ";
+        var text = "";
 
         var charset = "abcdefghijklmnopqrstuvwxyz0123456789";
 

@@ -33,7 +33,6 @@ class TesterFormRequest extends Request
 	public function rules()
     {
         return [
-
         ];
     }
 
@@ -45,7 +44,6 @@ class TesterFormRequest extends Request
     public function messages()
     {
         return [
-
         ];
 	}
 }

@@ -131,4 +131,4 @@ Route::get('tester/build', [
     'roles'      => ['root', 'administrator'],
     'uses'       => 'TestersController@build'
 ]);
-Route::resource('browser-tester', 'TestersController');
+Route::resource('tester', 'TestersController');

@@ -69,16 +69,14 @@ class PlansController extends Controller
      */
     public function build()
     {
+        // Current user
         $user = Auth::user();
 
-        // Get JIRA project versions
-        $results = Jira::getAllProjectVersions('ECOM');
+        // Get Jira versions
+        $versions = $this->_Jira();
 
-        foreach($results as $version) {
-            $versions[] = 'Test Plan for build v' . $version['name'];
-        }
-
-        return view('pages.testplanner.build_step_1', [
+        return view('pages.testplanner.step_1', [
+            'mode'     => 'build',
             'userId'   => $user->id,
             'versions' => json_encode($versions)
         ]);
@@ -94,7 +92,14 @@ class PlansController extends Controller
         // Get plan session data
         $planData = Session::get('mophie_testplanner.plan');
 
-        return view('pages.testplanner.plan_edit_step_1', compact('$planData'));
+        // Get Jira versions
+        $versions = $this->_Jira();
+
+        return view('pages.testplanner.step_1', [
+            'mode'     => 'edit',
+            'planData' => $planData,
+            'versions' => json_encode($versions)
+        ]);
     }
 
     /**
@@ -269,7 +274,7 @@ class PlansController extends Controller
             'testers' => Session::get('mophie_testplanner.testers')
         ];
 
-        return view('pages.testplanner.build_review', $data);
+        return view('pages.testplanner.review', $data);
     }
 
     /**
@@ -373,7 +378,7 @@ class PlansController extends Controller
     {
         $res      = array_except($request->all(), '_token');
         $planData = json_decode($res['plan'], true);
-        $tickets  = json_decode($res['tickets-obj'], true);
+        $tickets  = json_decode($res['tickets_obj'], true);
         $planData['tickets_responses'] = $tickets;
 
         // Start transaction
@@ -430,5 +435,22 @@ class PlansController extends Controller
         }*/
 
         return redirect('dashboard');
+    }
+
+    /**
+     * Use Jira API
+     *
+     * @return array
+     */
+    private function _Jira()
+    {
+        // Get JIRA project versions
+        $results = Jira::getAllProjectVersions('ECOM');
+
+        foreach($results as $version) {
+            $versions[] = 'Test Plan for build v' . $version['name'];
+        }
+
+        return $versions;
     }
 }

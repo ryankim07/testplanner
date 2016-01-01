@@ -17,6 +17,7 @@ use App\Http\Requests\TesterFormRequest;
 use PhpSpec\Exception\Exception;
 
 use App\User;
+use App\Testers;
 
 use Validator;
 use Session;
@@ -52,33 +53,40 @@ class TestersController extends Controller
      */
     public function build()
     {
+        // Current user
         $users = User::all();
-        return view('pages.testplanner.build_step_3', ['users' => $users]);
+
+        return view('pages.testplanner.step_3', [
+            'mode'  => 'build',
+            'users' => $users
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource
      *
-     * @return \Illuminate\View\View
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function edit()
     {
-        // Get item session data
-        $itemData             = Session::get('mophie_h2pro.item');
-        $itemData['carriers'] = Utils::getCarriersList();
+        // Get testers session data
+        $testersData = Session::get('mophie_testplanner.tester');
 
-        return view('pages.registration.item_edit', compact('itemData'));
+        return view('pages.testplanner.step_3', [
+            'mode'        => 'edit',
+            'testersData' => $testersData
+        ]);
     }
 
     /**
      * Update the specified resource in storage
      *
-     * @param ItemFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param $planId
+     * @param Request $request
      */
     public function update($planId, Request $request)
     {
-        $plan = Plans::find($planId);
+        $plan = Testers::find($planId);
         $plan->update(['description' => $request->get('description')]);
     }
 

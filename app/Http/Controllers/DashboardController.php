@@ -31,12 +31,13 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('testplanner', ['only' => ['index']]);
     }
 
     /**
      * Show all the plans assigned to user
      *
-     * @return \Illuminate\View\View
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function index()
     {

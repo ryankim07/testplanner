@@ -16,13 +16,13 @@ use App;
 
 class TestPlannerSession
 {
-	/**
-	 * Handle an incoming request.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Closure  $next
-	 * @return mixed
-	 */
+    /**
+     * Handle an incoming request.
+     *
+     * @param $request
+     * @param Closure $next
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
+     */
 	public function handle($request, Closure $next)
 	{
         // Force https on all routes
@@ -31,9 +31,17 @@ class TestPlannerSession
         }
 
         $session = $request->session()->get('mophie_testplanner');
-        $url     = $request->url();
+        $url     = rawurldecode($request->url());
 
         switch($url) {
+            /** DASHBOARD **/
+
+            case url() . '/dashboard':
+                if (isset($session)) {
+                    $request->session()->forget('mophie_testplanner');
+                }
+            break;
+
             /** PLANS **/
 
             case url() . '/plan/build':
@@ -42,7 +50,15 @@ class TestPlannerSession
                 }
             break;
 
-            case url() . '/plan/edit':
+            case url() . '/plan/{plan}':
+                if (!isset($session['plan'])) {
+                    return redirect('/')
+                        ->withInput()
+                        ->withErrors(array('message' => config('testplanner.plan_session_error')));
+                }
+            break;
+
+            case url() . '/plan/{plan}/edit':
                 if (!isset($session['plan'])) {
                     return redirect('/')
                         ->withInput()
@@ -55,7 +71,8 @@ class TestPlannerSession
                 if (!isset($session['plan']) ||
                     !isset($session['tickets']) ||
                     !isset($session['testers'])) {
-                    return redirect('plan.build');
+                    return redirect('plan.build')->withInput()
+                        ->withErrors(array('message' => config('testplanner.plan_session_error')));
                 }
             break;
 
@@ -67,7 +84,15 @@ class TestPlannerSession
                 }
             break;
 
-            case url() . '/ticket/edit':
+            case url() . '/ticket/{ticket}':
+                if (!isset($session['ticket'])) {
+                    return redirect('/')
+                        ->withInput()
+                        ->withErrors(array('message' => config('testplanner.plan_session_error')));
+                }
+            break;
+
+            case url() . '/ticket/{ticket}/edit':
                 if (!isset($session['tickets'])) {
                     return redirect('/')
                         ->withInput()
@@ -84,13 +109,21 @@ class TestPlannerSession
                 }
             break;
 
-            case url() . '/tester/edit':
+            case url() . '/tester/{tester}':
                 if (!isset($session['testers'])) {
                     return redirect('/')
                         ->withInput()
                         ->withErrors(array('message' => config('testplanner.plan_session_error')));
                 }
-                break;
+            break;
+
+            case url() . '/tester/{tester}/edit':
+                if (!isset($session['testers'])) {
+                    return redirect('/')
+                        ->withInput()
+                        ->withErrors(array('message' => config('testplanner.plan_session_error')));
+                }
+            break;
 
             default:
                 if (!isset($session)) {

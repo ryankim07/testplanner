@@ -32,8 +32,8 @@ class TicketsFormRequest extends Request
 	 */
 	public function rules()
     {
-        return [
-
+		return [
+			'tickets_obj' => 'required'
         ];
     }
 
@@ -45,7 +45,7 @@ class TicketsFormRequest extends Request
     public function messages()
     {
         return [
-
+			'tickets_obj.required' => 'At least one ticket must be created'
         ];
 	}
 }

@@ -17,6 +17,8 @@ use PhpSpec\Exception\Exception;
 
 use App\Facades\Jira;
 
+use App\Tickets;
+
 use Session;
 
 class TicketsController extends Controller
@@ -39,39 +41,44 @@ class TicketsController extends Controller
      */
     public function build()
     {
-        // Get JIRA issues
-        $issues = Jira::getAllIssues('ECOM');
+        // Get Jira issues
+        $jiraIssues = $this->_Jira();
 
-        foreach($issues as $issue) {
-            $jiraIssues[] = $issue['key'] . ': ' . $issue['summary'];
-        }
-
-        return view('pages.testplanner.build_step_2',  ['jiraIssues' => json_encode($jiraIssues)]);
+        return view('pages.testplanner.step_2', [
+            'mode'       => 'build',
+            'jiraIssues' => json_encode($jiraIssues)
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource
      *
-     * @return \Illuminate\View\View
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function edit()
     {
-        // Get item session data
-        $itemData             = Session::get('mophie_h2pro.item');
-        $itemData['carriers'] = Utils::getCarriersList();
+        // Get tickets session data
+        $ticketsData = Session::get('mophie_testplanner.tester');
 
-        return view('pages.registration.item_edit', compact('itemData'));
+        // Get Jira issues
+        $jiraIssues    = $this->_Jira();
+
+        return view('pages.testplanner.step_2', [
+            'mode'        => 'edit',
+            'ticketsData' => $ticketsData,
+            'jiraIssues'  => json_encode($jiraIssues)
+        ]);
     }
 
     /**
      * Update the specified resource in storage
      *
-     * @param ItemFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param $planId
+     * @param Request $request
      */
     public function update($planId, Request $request)
     {
-        $plan = Plans::find($planId);
+        $plan = Tickets::find($planId);
         $plan->update(['description' => $request->get('description')]);
     }
 
@@ -84,11 +91,28 @@ class TicketsController extends Controller
     public function store(TicketsFormRequest $request)
     {
         $res     = array_except($request->all(), '_token');
-        $tickets = json_decode($res['tickets-obj'], true);
+        $tickets = json_decode($res['tickets_obj'], true);
 
         // Save case data to session
         Session::put('mophie_testplanner.tickets', $tickets);
 
         return redirect('tester/build');
+    }
+
+    /**
+     * Use Jira API
+     *
+     * @return array
+     */
+    private function _Jira()
+    {
+        // Get JIRA issues
+        $results = Jira::getAllIssues('ECOM');
+
+        foreach($results as $issue) {
+            $issues[] = $issue['key'] . ': ' . $issue['summary'];
+        }
+
+        return $issues;
     }
 }

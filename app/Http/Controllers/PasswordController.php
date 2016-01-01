@@ -34,7 +34,7 @@ class PasswordController extends Controller
     use ResetsPasswords;
 
     /**
-     * Create a new password controller instance.
+     * PasswordController constructor.
      *
      * @param Guard $auth
      * @param PasswordBroker $passwords
@@ -50,7 +50,7 @@ class PasswordController extends Controller
     /**
      * Display the form to request a password reset link.
      *
-     * @return Response
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function getEmail()
     {
@@ -60,8 +60,8 @@ class PasswordController extends Controller
     /**
      * Send a reset link to the given user.
      *
-     * @param  Request  $request
-     * @return Response
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
      */
     public function postEmail(Request $request)
     {
@@ -86,7 +86,6 @@ class PasswordController extends Controller
      *
      * @param null $token
      * @return $this
-     * @throws NotFoundHttpException
      */
     public function getReset($token = null)
     {
@@ -100,8 +99,8 @@ class PasswordController extends Controller
     /**
      * Reset the given user's password.
      *
-     * @param  Request  $request
-     * @return Response
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
     public function postReset(Request $request)
     {
