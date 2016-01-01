@@ -24,5 +24,7 @@ return [
 
     'unauthorized_msg'        => 'You are not authorized to access this resource.',
 
-    'identical_role_msg'      => 'The role for the user you are trying to register already exists.'
+    'identical_role_msg'      => 'The role for the user you are trying to register already exists.',
+
+    'plan_build_error'        => 'Plan building cannot be done at the current moment.  Please try again later.',
 ];

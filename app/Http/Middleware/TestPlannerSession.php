@@ -34,11 +34,36 @@ class TestPlannerSession
         $url     = $request->url();
 
         switch($url) {
-            /** CUSTOMER **/
+            /** PLANS **/
 
-            case url() . '/customer/create':
+            case url() . '/plan/build':
+                if (isset($session)) {
+                    $request->session()->forget('mophie_testplanner');
+                }
+            break;
+
+            case url() . '/plan/review':
+            case url() . '/plan/save':
+                if (!isset($session['plan']) ||
+                    !isset($session['tickets']) ||
+                    !isset($session['testers'])) {
+                    return redirect('plan.build');
+                }
+
+            /** TICKETS **/
+
+            case url() . '/ticket/build':
                 if (!isset($session['plan'])) {
-                    return redirect('plan');
+                    return redirect('plan.build');
+                }
+            break;
+
+            /** TESTERS **/
+
+            case url() . '/tester/build':
+                if (!isset($session['plan']) ||
+                    !isset($session['tickets'])) {
+                    return redirect('plan.build');
                 }
             break;
 

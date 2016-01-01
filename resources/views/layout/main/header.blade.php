@@ -19,12 +19,12 @@
             <a href="{!! URL::to('/dashboard') !!}">{!! Html::image('images/mophie-logo.png', 'mophie') !!}</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            @if (!Auth::guest())
+            @if(!Auth::guest())
                 <ul class="nav navbar-nav navbar-left">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Plans <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            @if (Auth::user()->hasRole(['root', 'administrator']))
+                            @if(Auth::user()->hasRole(['root', 'administrator']))
                                 <li>{!! Html::linkRoute('plan.build', 'Build Plan') !!}</li>
                                 <li>{!! Html::linkRoute('plan.view.all', 'Created Plans', 0) !!}</li>
                             @endif
@@ -33,7 +33,7 @@
                         </ul>
                     </li>
 
-                    @if (Auth::user()->hasRole(['root']))
+                    @if(Auth::user()->hasRole(['root']))
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Accounts <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
@@ -48,13 +48,13 @@
 
                 <ul class="nav navbar-nav navbar-right">
 
-                @if (Auth::guest())
+                @if(Auth::guest())
                     <li>{!! Html::linkRoute('auth.login', 'Login') !!}</li>
                 @else
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{!! Auth::user()->first_name !!} <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            @if (Auth::user()->hasRole(['root', 'administrator']))
+                            @if(Auth::user()->hasRole(['root', 'administrator']))
                                 <li>{!! Html::linkRoute('auth.logout', 'Logout') !!}</li>
                             @elseif (Auth::user()->hasRole(['user']))
                                 <li>{!! Html::linkRoute('auth.logout', 'Logout') !!}</li>

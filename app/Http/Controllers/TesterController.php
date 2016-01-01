@@ -31,6 +31,9 @@ class TesterController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('testplanner', [
+            'only' => ['build']
+        ]);
     }
 
     /**
@@ -45,21 +48,12 @@ class TesterController extends Controller
     /**
      * Show the form for creating a new resource
      *
-     * @return \Illuminate\View\View|Redirect
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function build()
     {
         $users = User::all();
         return view('pages.testplanner.plan_build_step_3', ['users' => $users]);
-    }
-
-    /**
-     * Show the form for creating a new resource
-     *
-     * @return \Illuminate\View\View|Redirect
-     */
-    public function create()
-    {
     }
 
     /**

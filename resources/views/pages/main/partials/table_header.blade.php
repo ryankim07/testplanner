@@ -7,7 +7,7 @@
 |
 --}}
 
-@if (isset($columns) && count($columns) > 0)
+@if(isset($columns) && count($columns) > 0)
     <colgroup>
 
         @foreach($columns as $column)
@@ -24,7 +24,7 @@
 
             <th>
 
-                @if ($column['sortable'])
+                @if($column['sortable'])
 
                     {!! Html::linkAction($columnsLink, $column['colname'], [
                         'sortBy' => $column['sortable'],
@@ -51,7 +51,7 @@
 
             <th>
 
-                @if ($column['type'] == 'text' && $column['filterable'])
+                @if($column['type'] == 'text' && $column['filterable'])
 
                     <div class="form-group col-md-12">
 

@@ -26,7 +26,7 @@
             </div>
             <div class="panel-body">
 
-                @if (count($totalPlans) > 0)
+                @if(count($totalPlans) > 0)
 
                     <div class="row table-options">
                         <div class="pull-right">

@@ -14,7 +14,7 @@
     <div class="pull-right">
         <ul class="nav navbar-nav navbar-left">
 
-            @if (isset($options) && count($options) > 0)
+            @if(isset($options) && count($options) > 0)
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true" title="Options"></span></a>
                     <ul class="dropdown-menu" role="menu">

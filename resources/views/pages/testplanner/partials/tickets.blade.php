@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    @if ($mode == 'edit')
+    @if($mode == 'edit')
         {!! Form::hidden('ticket_id', $ticket['id']) !!}
     @endif
 </div>

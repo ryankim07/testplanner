@@ -47,6 +47,9 @@ class PlansController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('testplanner', [
+            'only' => ['build', 'review', 'save']
+        ]);
     }
 
     /**
@@ -56,12 +59,13 @@ class PlansController extends Controller
      */
     public function index()
     {
+        return redirect('dashboard');
     }
 
     /**
      * Show the form for creating a new resource
      *
-     * @return \Illuminate\View\View|Redirect
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function build()
     {
@@ -301,7 +305,7 @@ class PlansController extends Controller
                         'tester_id'  => $tester['id'],
                         'first_name' => $tester['first_name'],
                         'browser'    => $tester['browser'],
-                        /*'email'      => $tester['email']*/
+                        'email'      => User::getUserEmail($tester['id'])
                     ];
                 }
             }
@@ -320,28 +324,28 @@ class PlansController extends Controller
         }
 
         // Redirect if errors
-        /*if ($redirect) {
+        if ($redirect) {
             // Rollback
             DB::rollback();
 
             // Log to system
-            Utils::log($errorMsg, $mergedData);
+            //Utils::log($errorMsg, $mergedData);
 
             // Delete session
-            Session::forget('mophie_h2pro');
+            Session::forget('mophie_testplanner');
 
-            return redirect()->action('RegistrationController@index')
-                ->with('flash_message', config('h2pro.registration_problems'));
-        }*/
+            return redirect()->action('PlansController@build')
+                ->with('flash_message', config('testplanner.plan_build_error'));
+        }
 
         // Commit all changes
         DB::commit();
 
-        // Log activity
+        // Log to activity stream
         ActivityStream::saveActivityStream($planData, 'plan');
 
         // Mail all test browsers
-        //Email::sendEmail('plan-created', array_merge(array('plan' => $planData), array('testers' => $testersWithEmail)));
+        Email::sendEmail('plan-created', array_merge(array('plan' => $planData), array('testers' => $testersWithEmail)));
 
         return redirect('dashboard');
     }

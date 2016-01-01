@@ -23,7 +23,7 @@
             </div>
             <div class="panel-body">
 
-                @if ($totalPlans > 0)
+                @if($totalPlans > 0)
 
                     <div class="row table-options">
                         <div class="pull-right">

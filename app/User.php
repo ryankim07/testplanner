@@ -104,4 +104,17 @@ class User extends Model implements AuthenticatableContract,
 
         return $info->first_name;
     }
+
+    /**
+     * Get user's email
+     *
+     * @param $userId
+     * @return mixed
+     */
+    public static function getUserEmail($userId)
+    {
+        $info = User::find($userId)->first();
+
+        return $info->email;
+    }
 }
