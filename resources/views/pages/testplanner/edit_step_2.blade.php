@@ -40,6 +40,6 @@
 
     </div>
 
-    @include('pages/main/partials/step_1_js')
+    @include('pages/testplanner/partials/step_2_js')
 
 @stop

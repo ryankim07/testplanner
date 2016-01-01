@@ -73,7 +73,7 @@ class TestPlannerSession
                         ->withInput()
                         ->withErrors(array('message' => config('testplanner.plan_session_error')));
                 }
-                break;
+            break;
 
             /** TESTERS **/
 

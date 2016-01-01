@@ -16,7 +16,7 @@
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-md-8">
-						<h4>Step 1 of 3 - Start building plan</h4>
+						<h4>Step 1 of 3 - Update plan</h4>
 					</div>
 				</div>
 			</div>
@@ -26,13 +26,13 @@
 
 				{!! Form::hidden('creator_id', $userId) !!}
 
-				@include('pages/testplanner/partials/plan'])
+				@include('pages/testplanner/partials/plan')
 
 			</div>
 		</div>
 
 		@include('pages/main/partials/submit_button', [
-			'submitBtnText' => 'Continue',
+			'submitBtnText' => 'Update',
             'direction'     => 'pull-right',
             'class'		    => 'btn-success btn-lg',
 			'id'			=> 'continue-btn'
@@ -44,20 +44,6 @@
 
 	</div>
 
-	<script type="text/javascript">
-		$(document).ready(function() {
-			var versions = <?php echo $versions; ?>
-
-            $('#build-step-1-main').on('focus', '#plan-description', function () {
-				$(this).autocomplete({
-					source: versions
-				});
-			});
-
-			$('#build-step-1-main').on('click', '.clear-btn', function () {
-				$('#plan-description').val('');
-			});
-		});
-	</script>
+	@include('pages/testplanner/partials/step_1_js')
 
 @stop
