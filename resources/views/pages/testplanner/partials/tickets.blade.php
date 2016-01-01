@@ -16,7 +16,7 @@
             <div class="col-xs-12 col-md-8">
                 {!! Form::label('description',  'Description') !!}
                 <div class="input-group">
-                    {!! Form::text('description[]', $ticket['description'], ['class' => 'form-control ticket-description required']) !!}
+                    {!! Form::text('description[]', $ticket['description'], ['class' => 'form-control input-sm ticket-description required']) !!}
                     <span class="input-group-btn">
 
                         @include('pages/main/partials/button', [
@@ -32,7 +32,7 @@
         <div class="form-group">
             <div class="col-xs-12 col-md-8">
                 {!! Form::label('objective', 'Objective') !!}
-                {!! Form::text('objective[]', $ticket['objective'], ['class' => 'form-control objective required']) !!}
+                {!! Form::text('objective[]', $ticket['objective'], ['class' => 'form-control input-sm objective required']) !!}
             </div>
         </div>
         <div class="form-group">

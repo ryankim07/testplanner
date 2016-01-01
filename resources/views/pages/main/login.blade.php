@@ -33,11 +33,14 @@
                         {!! Form::password('password', ['class' => 'form-control input-sm', 'id' => 'password']) !!}
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-md-8">
-                        {!! Form::submit('Login', ['class' => 'btn btn-primary', 'id' => 'continue-btn']) !!}
-                    </div>
-                </div>
+
+                @include('pages/main/partials/submit_button', [
+                    'submitBtnText' => 'Login',
+                    'direction'     => 'pull-left',
+                    'class'		    => 'btn-primary',
+                    'id'			=> 'login-btn'
+                ])
+
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
                         {!! Form::checkbox('remember', 1, false, ['class' => '', 'aria-required' => 'true', 'id' => 'remember']) !!}

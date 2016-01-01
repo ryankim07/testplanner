@@ -13,7 +13,7 @@
 
     <div class="col-xs-12 col-md-12 main" id="view-all-assigned-main">
 
-        @include('pages.testplanner.partials.table_header', [
+        @include('pages.testplanner.partials.table', [
             'table_type' => 'view-all-assigned',
             'header'     => 'All plans assigned to me'
         ])

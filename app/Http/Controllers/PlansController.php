@@ -174,7 +174,7 @@ class PlansController extends Controller
             }
         }
 
-        return view('pages.testplanner.view_all_plans', [
+        return view('pages.testplanner.view_all_admin', [
             'userId'      => isset($userId) ? $userId : 0,
             'plans'       => isset($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
             'totalPlans'  => isset($query) ? Plans::count() : 0,

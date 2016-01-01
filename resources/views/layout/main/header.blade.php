@@ -16,7 +16,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="{!! URL::to('/dashboard') !!}">{!! Html::image('images/mophie-logo.png', 'mophie') !!}</a>
+                <a href="{!! URL::to('/') !!}">{!! Html::image('images/mophie-logo.png', 'mophie') !!}</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 @if(!Auth::guest())

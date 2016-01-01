@@ -7,4 +7,4 @@
 |
 --}}
 
-Click here to reset your password: {{ url('admin/getReset/'.$token) }}
+Click here to reset your password: {!! url('password/getReset/'.$token) !!}

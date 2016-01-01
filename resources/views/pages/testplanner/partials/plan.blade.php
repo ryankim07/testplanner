@@ -12,7 +12,7 @@
         <div class="col-xs-12 col-md-8">
             {!! Form::label('description', 'Description') !!}
             <div class="input-group">
-                {!! Form::text('description', $description, ['class' => 'form-control required', 'id' => 'plan-description']) !!}
+                {!! Form::text('description', $description, ['class' => 'form-control input-sm required', 'id' => 'plan-description']) !!}
                 <span class="input-group-btn">
 
                     @include('pages/main/partials/button', [

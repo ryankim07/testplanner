@@ -13,7 +13,14 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="clearfix">
-                <div class="pull-left"><h3>$header <span class="badge">{!! $totalPlans !!}</span></h3></div>
+                <div class="pull-left">
+                    <h3>{!! $header !!} <span class="badge">{!! $totalPlans !!}</span></h3>
+                </div>
+                @if($table_type == 'view_all_admin')
+                    <div class="pull-right">
+                        {!! Form::select('view_user_type', ['0' => 'All', Auth::user()->id => 'My Plans'], $userId, ['class' => 'form-control input-sm', 'id' => 'view-user', 'data-url' => route('plan.view.all', ['id' => null])]) !!}
+                    </div>
+                @endif
             </div>
         </div>
         <div class="panel-body">
@@ -40,8 +47,6 @@
                                 <td>{!! $plan->status !!}</td>
                                 <td>{!! Utils::dateConverter($plan->created_at) !!}</td>
                                 <td>{!! Utils::dateConverter($plan->updated_at) !!}</td>
-                                <td>{!! Form::select('tester', $testers[$plan->id], null, ['class' => 'form-control input-sm tester']) !!}</td>
-                                <td><a href="{!! URL::route('plan.view.response', [$plan->id]) !!}" class="view-tester-plan"><span class="glyphicon glyphicon-search"></span></a></td>
                                 @if($table_type == 'view_all_admin')
                                     <td>{!! Form::select('tester', $testers[$plan->id], null, ['class' => 'form-control input-sm tester']) !!}</td>
                                     <td><a href="{!! URL::route('plan.view.response', [$plan->id]) !!}" class="view-tester-plan"><span class="glyphicon glyphicon-search"></span></a></td>

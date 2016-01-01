@@ -25,67 +25,6 @@ body {
     border: 0;
 }
 
-/*
- * Sidebar
- */
-
-@media (min-width: 768px) {
-    .sidebar {
-        position: fixed;
-        top: 51px;
-        bottom: 0;
-        left: 0;
-        display: block;
-        padding: 20px;
-        overflow-x: hidden;
-        overflow-y: auto;
-        background-color: #f5f5f5;
-        border-right: 1px solid #eee;
-    }
-}
-
-@media (max-width: 767px) and (min-width: 0px) {
-    .nav-sidebar {
-        background-color: #f5f5f5;
-        padding-top: 10px;
-        padding-left: 20px;
-        padding-bottom: 10px;
-    }
-
-    .nav-sidebar > li {
-        display: inline;
-    }
-
-    .nav-sidebar > li a {
-        display: inline;
-    }
-
-    .table-responsive, #viewer {
-        font-size: 12px;
-    }
-
-    .table-responsive .column-filters {
-        display:none;
-    }
-}
-
-.nav-sidebar {
-    margin-right: -21px;
-    margin-bottom: 20px;
-    margin-left: -20px;
-}
-
-.nav-sidebar > li > a {
-    padding-right: 20px;
-    padding-left: 20px;
-}
-
-.nav-sidebar > .active > a,
-.nav-sidebar > .active > a:hover,
-.nav-sidebar > .active > a:focus {
-    color: #fff;
-    background-color: #428bca;
-}
 
 /*
  * Main content
@@ -97,10 +36,46 @@ body {
         padding-right: 0px;
         padding-left: 0px;
     }
+
+    #login-main, #password-main, #reset-main {
+        left: 30%;
+        padding-right: 0px;
+        padding-left: 0px;
+    }
 }
 
 .main .page-header {
     margin-top: 0;
+}
+
+legend {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color -moz-use-text-color #e5e5e5;
+    border-image: none;
+    border-style: none none solid;
+    border-width: 0 0 1px;
+    color: #777777;
+    display: block;
+    font-size: 22.5px;
+    line-height: inherit;
+    margin-bottom: 21px;
+    padding: 0;
+    width: 100%;
+}
+
+/*
+ * Panel
+ */
+
+.panel {
+    margin-top: 20px;
+}
+
+.panel-body-chart{
+    overflow: auto;
 }
 
 /*
@@ -126,26 +101,6 @@ body {
 }
 
 /*
- * Fluid viewer
- */
-
-.col-md-0 {
-    width: 0px;
-    float: left;
-    overflow: hidden;
-    margin: 0px;
-    padding: 0px;
-    min-height: 1px;
-}
-
-div{
-    -webkit-transition: all 500ms ease-in-out 0s;
-    -moz-transition: 	all 500ms ease-in-out 0s;
-    -o-transition: 		all 500ms ease-in-out 0s;
-    transition: 		all 500ms ease-in-out 0s;
-}
-
-/*
  * Tables
  */
 
@@ -163,40 +118,23 @@ table:not(.dashboard-table) tbody tr:hover {
     margin-bottom: 100px;
 }
 
-/*
- * Dashboard Chart
- */
-
-.panel {
-    margin-top: 20px;
-}
-
-.panel-body-chart{
-    overflow: auto;
-}
-
-#reg-service-content, #payments-content {
-    margin: 0 auto;
-    width: 650px;
-    height: 300px;
-}
-
-#regionChart {
-    margin:0 auto;
-    width: 650px;
-    height: 340px;
+.nested-block {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #f7f7f8;
+    border-color: #eee #eee #eee #d4d5d9;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px 1px 1px 5px;
+    margin: 5px 0 10px 0px;
+    padding: 10px 30px 20px 20px;
+    position: relative;
 }
 
 /*
- * View all link
- */
-
-#viewAllLink {
-    color: #FFFFFF
-}
-
-/*
- * Loading spinner
+ * Others
  */
 
 #loadingSpinner {
@@ -207,25 +145,6 @@ table:not(.dashboard-table) tbody tr:hover {
     height: 19px;
     z-index: 9999;
     background: #fff;
-}
-
-.ticket-header{
-    overflow: hidden;
-}
-
-.ticket-header:after {
-    background-color: #e5e5e5;
-    content: "";
-    display: inline-block;
-    height: 1px;
-    position: relative;
-    vertical-align: middle;
-    width: 90%;
-}
-
-.ticket-header:after {
-    left: 0.5em;
-    margin-right: -50%;
 }
 
 .activity-actions {
@@ -243,25 +162,6 @@ table:not(.dashboard-table) tbody tr:hover {
     padding: 0px 10px;
 }
 
-/**
- * NEW CSS
- */
-
-.nested-block {
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    background-color: #f7f7f8;
-    border-color: #eee #eee #eee #d4d5d9;
-    border-image: none;
-    border-style: solid;
-    border-width: 1px 1px 1px 5px;
-    margin: 5px 0 10px 0px;
-    padding: 10px 30px 20px 20px;
-    position: relative;
-}
-
 .trash {
     line-height: 12px;
     margin-top: 6px;
@@ -269,24 +169,6 @@ table:not(.dashboard-table) tbody tr:hover {
     position:absolute;
     top:0;
     right:0;
-}
-
-legend {
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    border-color: -moz-use-text-color -moz-use-text-color #e5e5e5;
-    border-image: none;
-    border-style: none none solid;
-    border-width: 0 0 1px;
-    color: #777777;
-    display: block;
-    font-size: 22.5px;
-    line-height: inherit;
-    margin-bottom: 21px;
-    padding: 0;
-    width: 100%;
 }
 
 .respond legend {

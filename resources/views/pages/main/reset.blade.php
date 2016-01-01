@@ -24,27 +24,30 @@
                 <input type="hidden" name="token" value="{{ $token }}">
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
-                        {!! Form::label('email', 'E-Mail Address', ['class' => 'col-md-4 control-label']) !!}
-                        {!! Form::email('email', old('email'), ['class' => 'form-control', 'id' => 'email']) !!}
+                        {!! Form::label('email', 'E-Mail Address') !!}
+                        {!! Form::email('email', old('email'), ['class' => 'form-control input-sm', 'id' => 'email']) !!}
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
-                        {!! Form::label('password', 'Password', ['class' => 'col-md-4 control-label']) !!}
-                        {!! Form::password('password', null, ['class' => 'form-control', 'id' => 'password']) !!}
+                        {!! Form::label('password', 'Password') !!}
+                        {!! Form::password('password', ['class' => 'form-control input-sm', 'id' => 'password']) !!}
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
-                        {!! Form::label('password_confirmation', 'Confirm Password', ['class' => 'col-md-4 control-label']) !!}
-                        {!! Form::password('password_confirmation', null, ['class' => 'form-control', 'id' => 'password']) !!}
+                        {!! Form::label('password_confirmation', 'Confirm Password') !!}
+                        {!! Form::password('password_confirmation', ['class' => 'form-control input-sm', 'id' => 'password_confirmation']) !!}
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-md-8">
-                        {!! Form::submit('Reset Password', ['class' => 'btn btn-primary', 'id' => 'continue-btn']) !!}
-                    </div>
-                </div>
+
+                @include('pages/main/partials/submit_button', [
+                    'submitBtnText' => 'Reset Password',
+                    'direction'     => 'pull-left',
+                    'class'		    => 'btn-primary',
+                    'id'			=> 'reset-btn'
+                ])
+
             </div>
 
         {!! Form::close() !!}

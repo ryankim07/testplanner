@@ -4,7 +4,7 @@
 
     <div class="col-xs-12 col-md-4 main" id="password-main">
 
-        {!! Form::open(['route' => 'password.email', 'files' => true, 'class' => 'form-horizontal', 'id' => 'admin-password-send-form']) !!}
+        {!! Form::open(['route' => 'password.post.email', 'files' => true, 'class' => 'form-horizontal', 'id' => 'admin-password-send-form']) !!}
 
         <div class="panel panel-primary">
             <div class="panel-body">
@@ -18,11 +18,14 @@
                         {!! Form::email('email', old('email'), ['class' => 'form-control input-sm', 'id' => 'email']) !!}
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-md-8">
-                        {!! Form::submit('Send Password Reset Link', ['class' => 'btn btn-primary', 'id' => 'continue-btn']) !!}
-                    </div>
-                </div>
+
+                @include('pages/main/partials/submit_button', [
+                    'submitBtnText' => 'Send Password Reset Link',
+                    'direction'     => 'pull-left',
+                    'class'		    => 'btn-primary',
+                    'id'			=> 'send-btn'
+                ])
+
             </div>
         </div>
 
