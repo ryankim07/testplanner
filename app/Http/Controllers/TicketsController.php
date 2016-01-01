@@ -28,7 +28,7 @@ class TicketsController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('testplanner', [
-            'only' => ['build']
+            'only' => ['build', 'edit']
         ]);
     }
 
@@ -46,7 +46,33 @@ class TicketsController extends Controller
             $jiraIssues[] = $issue['key'] . ': ' . $issue['summary'];
         }
 
-        return view('pages.testplanner.plan_build_step_2',  ['jiraIssues' => json_encode($jiraIssues)]);
+        return view('pages.testplanner.build_step_2',  ['jiraIssues' => json_encode($jiraIssues)]);
+    }
+
+    /**
+     * Show the form for editing the specified resource
+     *
+     * @return \Illuminate\View\View
+     */
+    public function edit()
+    {
+        // Get item session data
+        $itemData             = Session::get('mophie_h2pro.item');
+        $itemData['carriers'] = Utils::getCarriersList();
+
+        return view('pages.registration.item_edit', compact('itemData'));
+    }
+
+    /**
+     * Update the specified resource in storage
+     *
+     * @param ItemFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update($planId, Request $request)
+    {
+        $plan = Plans::find($planId);
+        $plan->update(['description' => $request->get('description')]);
     }
 
     /**

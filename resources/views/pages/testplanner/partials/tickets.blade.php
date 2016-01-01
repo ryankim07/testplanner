@@ -10,7 +10,7 @@
     <div class="row ticket-row nested-block">
         <div class="wrapper">
             <legend>Ticket</legend>
-            <a href="#" class="remove-ticket-btn"><span class="glyphicon glyphicon-trash trash"></span></a>
+            <a href="#" class="trash"><span class="glyphicon glyphicon-trash"></span></a>
         </div>
         <div class="form-group">
             <div class="col-xs-12 col-md-8">
@@ -22,7 +22,7 @@
                         @include('pages/main/partials/button', [
                             'btnText'   => 'Clear',
                             'direction' => 'pull-left',
-                            'class'     => 'btn-default clear-btn'
+                            'class'     => 'btn-default btn-sm clear-btn'
                         ])
 
                     </span>
@@ -41,9 +41,6 @@
                 {!! Form::textarea('test_steps[]', $ticket['test_steps'], ['class' => 'form-control test_steps required', 'rows' => '10']) !!}
             </div>
         </div>
-        @if($mode == 'edit')
-            {!! Form::hidden('ticket_id', $ticket['id']) !!}
-        @endif
     </div>
 
     @include('pages/main/partials/button', [

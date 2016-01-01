@@ -48,14 +48,14 @@ class PlansController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('testplanner', [
-            'only' => ['build', 'review', 'save']
+            'only' => ['build', 'edit', 'update', 'review', 'save']
         ]);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
     public function index()
     {
@@ -78,10 +78,49 @@ class PlansController extends Controller
             $versions[] = 'Test Plan for build v' . $version['name'];
         }
 
-        return view('pages.testplanner.plan_build_step_1', [
+        return view('pages.testplanner.build_step_1', [
             'userId'   => $user->id,
             'versions' => json_encode($versions)
         ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource
+     *
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function edit()
+    {
+        // Get plan session data
+        $planData = Session::get('mophie_testplanner.plan');
+
+        return view('pages.testplanner.plan_edit_step_1', compact('$planData'));
+    }
+
+    /**
+     * Update the specified resource in storage
+     *
+     * @param PlansFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(PlansFormRequest $request)
+    {
+        // Save plan data to session
+        Session::put('mophie_testplanner.plan', array_except($request->all(), ['_token', '_method']));
+
+        return redirect()->action('PlansController@review');
+    }
+
+    /**
+     * Update all the plan details
+     *
+     * @param $planId
+     * @param Request $request
+     */
+    public function updatePlanDetails($planId, Request $request)
+    {
+        $plan = Plans::find($planId);
+        $plan->update(['description' => $request->get('description')]);
     }
 
     /**
@@ -120,32 +159,6 @@ class PlansController extends Controller
                 'testers'     => $testers
             ]
         ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource
-     *
-     * @return \Illuminate\View\View
-     */
-    public function edit()
-    {
-        // Get item session data
-        $itemData             = Session::get('mophie_h2pro.item');
-        $itemData['carriers'] = Utils::getCarriersList();
-
-        return view('pages.registration.item_edit', compact('itemData'));
-    }
-
-    /**
-     * Update the specified resource in storage
-     *
-     * @param ItemFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update($planId, Request $request)
-    {
-        $plan = Plans::find($planId);
-        $plan->update(['description' => $request->get('description')]);
     }
 
     /**
@@ -231,7 +244,7 @@ class PlansController extends Controller
      * Display or edit plan
      *
      * @param $planId
-     * @return \Illuminate\Http\JsonResponse
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function respond($planId)
     {
@@ -245,7 +258,7 @@ class PlansController extends Controller
      * Show complete information of all forms filled on each
      * registration step
      *
-     * @return \Illuminate\View\View
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function review()
     {
@@ -256,14 +269,14 @@ class PlansController extends Controller
             'testers' => Session::get('mophie_testplanner.testers')
         ];
 
-        return view('pages.testplanner.plan_build_review', $data);
+        return view('pages.testplanner.build_review', $data);
     }
 
     /**
      * Finalize Plan setup
      *
      * @param ReviewFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void\
      */
     public function save(ReviewFormRequest $request)
     {
@@ -395,8 +408,8 @@ class PlansController extends Controller
             // Log to system
             Utils::log($errorMsg, $mergedData);
 
-            return redirect()->action('PlansController@index')
-                ->with('flash_message', config('h2pro.registration_problems'));
+            return redirect()->action('PlansController@index')->withInput()
+       ->withErrors(array('message' => 'Login field is required.'));
         }*/
 
         // Log activity

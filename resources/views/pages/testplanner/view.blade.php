@@ -10,7 +10,7 @@
 
 	<div class="col-xs-12 col-md-12 main" id="view-main">
 
-		{!! Form::model($plan, ['method' => 'PATCH', 'route' => ['plan.update', $plan['id']], 'class' => 'plan-form-update']) !!}
+		{!! Form::model($plan, ['method' => 'PATCH', 'route' => ['plan.update.details', $plan['id']], 'id' => 'plan-edit-form']) !!}
 
 		<div class="panel panel-default">
 			<div class="panel-heading">

@@ -118,6 +118,40 @@ table:not(.dashboard-table) tbody tr:hover {
     margin-bottom: 100px;
 }
 
+/*
+ * Animations
+ */
+
+#loadingSpinner {
+    position: relative;
+    margin: 0 auto;
+    top: -50%;
+    width: 200px;
+    height: 19px;
+    z-index: 9999;
+    background: #fff;
+}
+
+.progress {
+    position: relative;
+    top: 10px;
+    margin-bottom: 0px;
+}
+
+/*
+ * Others
+ */
+
+.trash, .cog {
+    position:absolute;
+    margin-top: 6px;
+    margin-right: 4px;
+    top:0;
+    right:0;
+    line-height: 12px;
+    color: #777777;
+}
+
 .nested-block {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
@@ -133,42 +167,13 @@ table:not(.dashboard-table) tbody tr:hover {
     position: relative;
 }
 
-/*
- * Others
- */
-
-#loadingSpinner {
-    position: relative;
-    margin: 0 auto;
-    top: -50%;
-    width: 200px;
-    height: 19px;
-    z-index: 9999;
-    background: #fff;
-}
-
 .activity-actions {
     margin: 0;
     padding: 0;
-    list-style-type: none;
-    text-align: left;
-}
-
-.activity-actions li {
-    display: inline;
 }
 
 .activity-link-actions {
     padding: 0px 10px;
-}
-
-.trash {
-    line-height: 12px;
-    margin-top: 6px;
-    margin-right: 4px;
-    position:absolute;
-    top:0;
-    right:0;
 }
 
 .respond legend {
@@ -185,8 +190,15 @@ table:not(.dashboard-table) tbody tr:hover {
     padding-right: 20px;
 }
 
-.progress {
-    position: relative;
-    top: 10px;
-    margin-bottom: 0px;
+.review-testers {
+    vertical-align: top;
+    display: inline-block;
+    width: 80px;
+}
+.review-testers img {
+    width: 32px;
+    height: 32px;
+}
+.review-testers .caption {
+    display: block;
 }

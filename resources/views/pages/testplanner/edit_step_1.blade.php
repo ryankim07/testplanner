@@ -1,6 +1,6 @@
 {{--
 |--------------------------------------------------------------------------
-| Step 1
+| Step 1 Edit
 |--------------------------------------------------------------------------
 --}}
 
@@ -10,7 +10,7 @@
 
 	<div class="col-xs-12 col-md-12 main" id="build-step-1-main">
 
-		{!! Form::open(['route' => 'plan.store', 'class' => '', 'id' => 'plan-build-form']) !!}
+		{!! Form::model($planData, ['method' => 'PATCH', 'route' => ['plan.update', $plan['id']], 'id' => 'plan-edit-form']) !!}
 
 		<div class="panel panel-primary">
 			<div class="panel-heading">
@@ -18,11 +18,6 @@
 					<div class="col-md-8">
 						<h4>Step 1 of 3 - Start building plan</h4>
 					</div>
-                    <div class="col-md-4">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="width: 15%">15%</div>
-                        </div>
-                    </div>
 				</div>
 			</div>
 			<div class="panel-body">
@@ -31,10 +26,7 @@
 
 				{!! Form::hidden('creator_id', $userId) !!}
 
-				@include('pages/testplanner/partials/plan', [
-					'userId'      => $userId,
-					'description' => null
-				])
+				@include('pages/testplanner/partials/plan'])
 
 			</div>
 		</div>
@@ -45,6 +37,8 @@
             'class'		    => 'btn-success btn-lg',
 			'id'			=> 'continue-btn'
 		])
+
+		@include('pages/main/partials/back_link')
 
 		{!! Form::close() !!}
 
@@ -65,6 +59,5 @@
 			});
 		});
 	</script>
-
 
 @stop

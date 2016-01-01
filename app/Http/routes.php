@@ -100,6 +100,8 @@ Route::get('plan/search', 'PlansController@search');
 Route::post('plan/search', ['as' => 'plan.search', 'uses' => 'PlansController@search']);
 Route::post('plan/save-user-response', ['as' => 'plan.save.user.response', 'uses' => 'PlansController@saveUserResponse']);
 Route::post('plan/save', ['as' => 'plan.save', 'uses' => 'PlansController@save']);
+Route::patch('plan/update-plan-details/{id}', ['as' => 'plan.update.details', 'uses' => 'PlansController@updatePlansDetails']);
+Route::put('plan/update-plan-details/{id}', ['as' => 'plan.update.details', 'uses' => 'PlansController@updatePlansDetails']);
 Route::resource('plan', 'PlansController');
 
 
@@ -127,6 +129,6 @@ Route::get('tester/build', [
     'as'         => 'tester.build',
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator'],
-    'uses'       => 'TesterController@build'
+    'uses'       => 'TestersController@build'
 ]);
-Route::resource('browser-tester', 'TesterController');
+Route::resource('browser-tester', 'TestersController');

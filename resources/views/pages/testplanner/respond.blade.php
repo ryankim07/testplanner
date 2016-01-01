@@ -13,7 +13,7 @@
 
     <div class="col-xs-12 col-md-12 respond main" id="respond-main">
 
-        {!! Form::open(['route' => 'plan.save.user.response', 'class' => 'enroll-form', 'id' => 'plan-user-response-form']) !!}
+        {!! Form::open(['route' => 'plan.save.user.response', 'id' => 'plan-user-response-form']) !!}
         {!! Form::hidden('plan', json_encode($plan)) !!}
         {!! Form::hidden('ticket_resp_id', $plan['ticket_resp_id']) !!}
 

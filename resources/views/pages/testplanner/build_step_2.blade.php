@@ -10,7 +10,7 @@
 
     <div class="col-xs-12 col-md-12 main" id="build-step-2-main">
 
-        {!! Form::open(['route' => 'ticket.store', 'class' => '', 'id' => 'ticket-build-form']) !!}
+        {!! Form::open(['route' => 'ticket.store', 'id' => 'ticket-build-form']) !!}
 
         <div class="panel panel-primary">
             <div class="panel-heading">

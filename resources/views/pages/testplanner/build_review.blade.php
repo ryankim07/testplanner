@@ -10,7 +10,7 @@
 
     <div class="col-xs-12 col-md-12 main" id="review-main">
 
-        {!! Form::open(['action' => ['PlansController@save'], 'class' => '', 'id' => 'plan-review-form']) !!}
+        {!! Form::open(['action' => ['PlansController@save'], 'id' => 'plan-review-form']) !!}
 
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -30,30 +30,31 @@
                 @include('errors.list')
 
                 <div class="row nested-block">
-                    <h5>Plan Description</h5>
+                    <legend>Plan Description</legend>
+                    <a href="{!! URL::route('plan.edit', [$plan['id']]) !!}" class="cog"><span class="glyphicon glyphicon-cog"></span></a>
                     <ul class="list-unstyled">
-                        <li>{!! $plan['description'] !!}</li>
+                        <li><h5>{!! $plan['description'] !!}</h5></li>
                     </ul>
                 </div>
-
-                <div class="row nested-block">
-                    <h5>Tickets</h5>
-                    @foreach($tickets as $ticket)
+                @foreach($tickets as $ticket)
+                    <div class="row nested-block">
+                        <legend>Ticket</legend>
+                        <a href="#" class="cog"><span class="glyphicon glyphicon-cog"></span></a>
                         <ul class="list-unstyled">
-                            <li>Description: {!! $ticket['description'] !!}</li>
-                            <li>Objective: {!! $ticket['objective'] !!}</li>
-                            <li>Test Steps: {!! nl2br($ticket['test_steps']) !!}</li>
+                            <li><h4><span class="label label-default">Description</span></h4><h5>{!! $ticket['description'] !!}</h5></li>
+                            <li><h4><span class="label label-primary">Objective</span></h4><h5>{!! $ticket['objective'] !!}</h5></li>
+                            <li><h4><span class="label label-info">Test Steps</span></h4><h5>{!! nl2br($ticket['test_steps']) !!}</h5></li>
                         </ul>
-                    @endforeach
-                </div>
-
+                    </div>
+                @endforeach
                 <div class="row nested-block">
-                    <h5>Browser Testers</h5>
-                    <ul class="list-unstyled">
-                        @foreach($testers as $tester)
-                            <li>{!! Html::image('images/' . $tester['browser'] . '.png', 'Chrome', ['width' => 32, 'height' => 32]) !!}  {!! $tester['first_name'] !!}</li>
-                        @endforeach
-                    </ul>
+                    <legend>Browser Testers</legend>
+                    <a href="#" class="cog"><span class="glyphicon glyphicon-cog"></span></a>
+                    @foreach($testers as $tester)
+                    <div class="text-center review-testers">
+                        {!! Html::image('images/' . $tester['browser'] . '.png', 'Chrome') !!}<h5><span class="caption">{!! $tester['first_name'] !!}</span></h5>
+                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>

@@ -141,7 +141,7 @@
 
         <div class="col-xs-12 col-md-6">
 
-            {!! Form::open(['route' => 'dashboard.comment.save', 'class' => 'enroll-form', 'id' => 'activity-stream-form']) !!}
+            {!! Form::open(['route' => 'dashboard.comment.save', 'id' => 'activity-stream-form']) !!}
 
             <div class="panel panel-primary">
                 <div class="panel-heading">Activity Stream</div>
@@ -160,9 +160,9 @@
                                         </div>
                                     @endforeach
                                     <div class="form-group">
-                                        <ul class="activity-actions">
+                                        <ul class="activity-actions list-unstyled list-inline text-left">
                                             <li><span class="glyphicon glyphicon-time"></span> {!! $log['created_at'] !!}</li>
-                                            <li class="activity-link-actions"><span class="glyphicon glyphicon-tag"></span> <a href="#" class="activity-comment-link">Comment</a></li>
+                                            <li class="activity-link-actions"><span class="glyphicon glyphicon-comment"></span> <a href="#" class="activity-comment-link">Comment</a></li>
                                         </ul>
                                     </div>
                                     <div class="form-group activity-comment-content">

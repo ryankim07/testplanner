@@ -8,7 +8,7 @@
 --}}
 
 
-{!! Form::open(['route' => 'plan.search', 'class' => 'form-horizontal', 'role' => 'search']) !!}
+    {!! Form::open(['route' => 'plan.search', 'role' => 'search']) !!}
 
     <div class="panel panel-default">
         <div class="panel-heading">
