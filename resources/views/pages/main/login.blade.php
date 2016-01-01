@@ -27,27 +27,23 @@
                         {!! Form::email('email', old('email'), ['class' => 'form-control input-sm', 'id' => 'email']) !!}
                     </div>
                 </div>
-
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
                         {!! Form::label('password', 'Password') !!}
                         {!! Form::password('password', ['class' => 'form-control input-sm', 'id' => 'password']) !!}
                     </div>
                 </div>
-
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
                         {!! Form::submit('Login', ['class' => 'btn btn-primary', 'id' => 'continue-btn']) !!}
                     </div>
                 </div>
-
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
                         {!! Form::checkbox('remember', 1, false, ['class' => '', 'aria-required' => 'true', 'id' => 'remember']) !!}
                         {!! Form::label('Remember me') !!}
                     </div>
                 </div>
-
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
                         {!! Html::linkRoute('password.email', 'Forgot Your Password?') !!}

@@ -1,9 +1,9 @@
 {{--
 |--------------------------------------------------------------------------
-| Admin registrations list
+| Admin plans list
 |--------------------------------------------------------------------------
 |
-| This template is used when showing all registrations.
+| This template is used when showing all plans.
 |
 --}}
 
@@ -25,24 +25,19 @@
                 </div>
             </div>
             <div class="panel-body">
-
                 @if(count($totalPlans) > 0)
-
                     <div class="row table-options">
                         <div class="pull-right">
                             {!! Form::button('Search', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
                         </div>
                     </div>
-
                     <div class="table-responsive">
                         <table class="table table-striped table-hover table-bordered">
 
                             @include('pages.main.partials.table_header', $columns)
 
                             <tbody>
-
                             @foreach($plans as $plan)
-
                                 <tr class="toggler" data-url="{!! URL::route('plan.view', $plan->id) !!}">
                                     <td>{!! $plan->description !!}</td>
                                     <td>{!! $plan->first_name !!}</td>
@@ -50,20 +45,15 @@
                                     <td>{!! Utils::dateConverter($plan->created_at) !!}</td>
                                     <td>{!! Utils::dateConverter($plan->updated_at) !!}</td>
                                 </tr>
-
                             @endforeach
-
                             </tbody>
                         </table>
 
                         {!! $plans->appends($link)->render() !!}
 
                     </div>
-
                 @else
-
                     <p>Records not found.</p>
-
                 @endif
 
             </div>

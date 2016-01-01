@@ -7,4 +7,4 @@
 |
 --}}
 
-<div id="copyright text-right">© Copyright 2015 mophie</div>
+    <div id="copyright text-right">© Copyright 2015 mophie</div>

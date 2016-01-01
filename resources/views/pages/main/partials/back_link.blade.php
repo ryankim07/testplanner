@@ -7,6 +7,6 @@
 |
 --}}
 
-<div class="back-nav">
-    <a href="{!! URL::previous() !!}">Go Back</a>
-</div>
+    <div class="back-nav">
+        <a href="{!! URL::previous() !!}">Go Back</a>
+    </div>

@@ -28,14 +28,12 @@
 				])
 
 				<div class="page-header"></div>
-
-				@foreach($plan['tickets'] as $ticket)
-					@include('pages/testplanner/partials/tickets', [
-						'ticket' => $ticket,
-						'mode'   => 'edit'
-					])
-				@endforeach
-
+					@foreach($plan['tickets'] as $ticket)
+						@include('pages/testplanner/partials/tickets', [
+							'ticket' => $ticket,
+							'mode'   => 'edit'
+						])
+					@endforeach
 				<div class="page-header"></div>
 
 				<div class="row">

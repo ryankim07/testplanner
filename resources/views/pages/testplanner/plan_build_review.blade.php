@@ -39,26 +39,20 @@
                 <div class="row nested-block">
                     <h5>Tickets</h5>
                     @foreach($tickets as $ticket)
-
                         <ul class="list-unstyled">
                             <li>Description: {!! $ticket['description'] !!}</li>
                             <li>Objective: {!! $ticket['objective'] !!}</li>
                             <li>Test Steps: {!! nl2br($ticket['test_steps']) !!}</li>
                         </ul>
-
                     @endforeach
                 </div>
 
                 <div class="row nested-block">
                     <h5>Browser Testers</h5>
                     <ul class="list-unstyled">
-
                         @foreach($testers as $tester)
-
                             <li>{!! Html::image('images/' . $tester['browser'] . '.png', 'Chrome', ['width' => 32, 'height' => 32]) !!}  {!! $tester['first_name'] !!}</li>
-
                         @endforeach
-
                     </ul>
                 </div>
             </div>

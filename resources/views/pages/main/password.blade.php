@@ -18,7 +18,6 @@
                         {!! Form::email('email', old('email'), ['class' => 'form-control input-sm', 'id' => 'email']) !!}
                     </div>
                 </div>
-
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
                         {!! Form::submit('Send Password Reset Link', ['class' => 'btn btn-primary', 'id' => 'continue-btn']) !!}
