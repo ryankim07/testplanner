@@ -33,7 +33,11 @@
 
                 @include('errors.list')
 
-                @include('pages/testplanner/partials/tickets')
+                @if($mode == 'build')
+                    @include('pages/testplanner/partials/tickets')
+                @else
+                    @foreach($ticketsData as $ticket)
+                @endif
 
             </div>
         </div>

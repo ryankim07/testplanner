@@ -52,7 +52,7 @@ class TesterFormRequest extends Request
         $testers  = $this->request->get('tester');
         $messages = [];
 
-        if (!isset($messages)) {
+        if (!isset($testers)) {
             $messages['tester.0.required'] = 'At least one tester must be assigned';
         }
 

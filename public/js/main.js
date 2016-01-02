@@ -55,7 +55,7 @@ $(document).ready(function() {
                 "id": stringGen(5),
                 "description": $(this).find('.ticket-description').val(),
                 "objective": $(this).find('.objective').val(),
-                "test_steps": $(this).find('.test_steps').val()
+                "test_steps": $(this).find('.test-steps').val()
             });
         });
 

@@ -58,7 +58,7 @@ class TicketsController extends Controller
     public function edit()
     {
         // Get tickets session data
-        $ticketsData = Session::get('mophie_testplanner.tester');
+        $ticketsData = Session::get('mophie_testplanner.tickets');
 
         // Get Jira issues
         $jiraIssues    = $this->_Jira();
@@ -73,10 +73,24 @@ class TicketsController extends Controller
     /**
      * Update the specified resource in storage
      *
+     * @param TicketsFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(TicketsFormRequest $request)
+    {
+        // Save plan data to session
+        Session::put('mophie_testplanner.tickets', array_except($request->all(), ['_token', '_method']));
+
+        return redirect()->action('PlansController@review');
+    }
+
+    /**
+     * Update all the ticket details
+     *
      * @param $planId
      * @param Request $request
      */
-    public function update($planId, Request $request)
+    public function updateDetails($planId, Request $request)
     {
         $plan = Tickets::find($planId);
         $plan->update(['description' => $request->get('description')]);
