@@ -3,15 +3,27 @@ $(document).ready(function() {
     /**
      *  CREATING NEW TICKETS
      */
-    // Clone first
-    var ticketRow = $('.ticket-row').clone();
-
-    // Since there is only one ticket, hide remove button
+        // Since there is only one ticket, hide remove option
     $('.trash').hide();
 
     // Append new ticket rows
     $('#step-2-main').on('click', '#add-ticket-btn', function() {
-        ticketRow.insertAfter('.nested-block').last();
+        // Clone first block
+        var ticketRow = $('.ticket-row').first().clone();
+
+        // Clear all fields
+        var inputTypes = ticketRow.find('input[type=text], textarea').val('');
+        var inc = $('.ticket-row').length + 1;
+
+        // Increment array values
+        ticketRow.find('.ticket-description').attr('name', 'description[' + inc + ']');
+        ticketRow.find('.objective').attr('name', 'objective[' + inc + ']');
+        ticketRow.find('.test-steps').attr('name', 'test_steps[' + inc + ']');
+
+        // Add as new block after latest ticket row
+        ticketRow.insertAfter($('.ticket-row').last());
+
+        // Display remove option
         $('.trash').show();
     });
 
@@ -19,12 +31,12 @@ $(document).ready(function() {
     $('#step-2-main').on('click', '.trash', function(e) {
         e.preventDefault();
 
+        // Remove ticket row
         $(this).closest('.ticket-row').remove();
 
-        // Adjust button behavior whenever one element is visible
+        // Cannot remove all the rows, only one should be left over
         if ($('.ticket-row').length == 1) {
-            // After removing tickets, the only one left cannot show
-            // remove button
+            // The row that is left over, hide remove option
             $('.trash').hide();
 
             // Display back add ticket button
@@ -37,17 +49,13 @@ $(document).ready(function() {
     $('#step-2-main').on('click', '#continue-btn, #update-btn', function() {
         var tickets = [];
 
-        $('.ticket-row').each(function(i, items) {
-            var description = $(this).find('.ticket-description').val();
-            var objective   = $(this).find('.objective').val();
-            var testSteps   = $(this).find('.test_steps').val();
-
+        $('.ticket-row').each(function() {
             // Create ticket object
             tickets.push({
                 "id": stringGen(5),
-                "description": description,
-                "objective": objective,
-                "test_steps": testSteps
+                "description": $(this).find('.ticket-description').val(),
+                "objective": $(this).find('.objective').val(),
+                "test_steps": $(this).find('.test-steps').val()
             });
         });
 
@@ -63,7 +71,7 @@ $(document).ready(function() {
     /**
      * VIEW MAIN
      */
-    $('.browser_tester').each(function() {
+    $('.browser-tester').each(function() {
         var browser   = $(this);
         var browserId = browser.attr('id');
 
@@ -116,7 +124,7 @@ $(document).ready(function() {
     /**
      * DASHBOARD ACTIVITY STREAM COMMENTS
      */
-    // Hide initially
+        // Hide initially
     $('.activity-comment-content').hide();
 
     // Toggle comment to show or hide
@@ -167,7 +175,7 @@ $(document).ready(function() {
     /**
      * ADMIN
      */
-    // Show all or adminstrator plans
+        // Show all or adminstrator plans
     $('#view-all-plans-main').on('change', '#view-user', function() {
         var route   = $(this).data('url');
         var adminId = $(this).val();

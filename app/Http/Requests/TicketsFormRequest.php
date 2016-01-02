@@ -32,9 +32,15 @@ class TicketsFormRequest extends Request
 	 */
 	public function rules()
     {
-		return [
-			'tickets_obj' => 'required'
-        ];
+        $description = $this->request->get('description');
+        $description = array_filter($description);
+        $rules = [];
+
+        if (count($description) == 0) {
+            $rules['description.0'] = 'required';
+        }
+
+        return $rules;
     }
 
     /**
@@ -44,8 +50,14 @@ class TicketsFormRequest extends Request
      */
     public function messages()
     {
-        return [
-			'tickets_obj.required' => 'At least one ticket must be created'
-        ];
+        $description  = $this->request->get('description');
+        $description = array_filter($description);
+        $messages = [];
+
+        if (count($description) == 0) {
+            $messages['description.0.required'] = 'At least one ticket must be created';
+        }
+
+        return $messages;
 	}
 }

@@ -26,7 +26,7 @@ use Auth;
 class DashboardController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * DashboardController constructor.
      */
     public function __construct()
     {

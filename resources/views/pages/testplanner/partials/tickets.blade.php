@@ -16,7 +16,7 @@
             <div class="col-xs-12 col-md-8">
                 {!! Form::label('description',  'Description') !!}
                 <div class="input-group">
-                    {!! Form::text('description[]', null, ['class' => 'form-control input-sm ticket-description required']) !!}
+                    {!! Form::text('description[1]', null, ['class' => 'form-control input-sm ticket-description required']) !!}
                     <span class="input-group-btn">
 
                         @include('pages/main/partials/button', [
@@ -32,13 +32,13 @@
         <div class="form-group">
             <div class="col-xs-12 col-md-8">
                 {!! Form::label('objective', 'Objective') !!}
-                {!! Form::text('objective[]', null, ['class' => 'form-control input-sm objective required']) !!}
+                {!! Form::text('objective[1]', null, ['class' => 'form-control input-sm objective required']) !!}
             </div>
         </div>
         <div class="form-group">
             <div class="col-xs-12 col-md-8">
                 {!! Form::label('test_steps', 'Steps for test') !!}
-                {!! Form::textarea('test_steps[]', null, ['class' => 'form-control test_steps required', 'rows' => '10']) !!}
+                {!! Form::textarea('test_steps[1]', null, ['class' => 'form-control test-steps required', 'rows' => '10']) !!}
             </div>
         </div>
     </div>

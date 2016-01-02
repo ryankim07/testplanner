@@ -27,7 +27,7 @@ use App;
 class TestersController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * TestersController constructor.
      */
     public function __construct()
     {

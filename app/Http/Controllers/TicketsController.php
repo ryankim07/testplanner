@@ -24,7 +24,7 @@ use Session;
 class TicketsController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * TicketsController constructor.
      */
     public function __construct()
     {

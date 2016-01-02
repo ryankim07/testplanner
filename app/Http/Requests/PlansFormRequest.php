@@ -32,9 +32,7 @@ class PlansFormRequest extends Request
 	 */
 	public function rules()
     {
-        return [
-            'description' => 'required'
-        ];
+        return ['description' => 'required'];
     }
 
     /**
@@ -44,8 +42,6 @@ class PlansFormRequest extends Request
      */
     public function messages()
     {
-        return [
-            'description.required' => 'Description name is required'
-        ];
+        return ['description.required' => 'Description name is required'];
 	}
 }

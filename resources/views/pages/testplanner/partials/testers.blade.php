@@ -25,12 +25,12 @@
             @foreach($users as $user)
                 <tr>
                     <td>{!! $user['first_name'] !!}</td>
-                    <td class="text-center">{!! Form::radio('browser_tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',chrome',  null, ['class' => 'browser_tester', 'id' => 'browser_' . $user["id"] . '_chrome']) !!}</td>
-                    <td class="text-center">{!! Form::radio('browser_tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',firefox', null, ['class' => 'browser_tester', 'id' => 'browser_' . $user["id"] . '_firefox']) !!}</td>
-                    <td class="text-center">{!! Form::radio('browser_tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',ie',      null, ['class' => 'browser_tester', 'id' => 'browser_' . $user["id"] . '_ie']) !!}</td>
-                    <td class="text-center">{!! Form::radio('browser_tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',safari',  null, ['class' => 'browser_tester', 'id' => 'browser_' . $user["id"] . '_safari']) !!}</td>
-                    <td class="text-center">{!! Form::radio('browser_tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',ios',     null, ['class' => 'browser_tester', 'id' => 'browser_' . $user["id"] . '_ios']) !!}</td>
-                    <td class="text-center">{!! Form::radio('browser_tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',android', null, ['class' => 'browser_tester', 'id' => 'browser_' . $user["id"] . '_android']) !!}</td>
+                    <td class="text-center">{!! Form::radio('tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',chrome',  null, ['class' => 'browser-tester', 'id' => 'browser-' . $user["id"] . '_chrome']) !!}</td>
+                    <td class="text-center">{!! Form::radio('tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',firefox', null, ['class' => 'browser-tester', 'id' => 'browser-' . $user["id"] . '_firefox']) !!}</td>
+                    <td class="text-center">{!! Form::radio('tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',ie',      null, ['class' => 'browser-tester', 'id' => 'browser-' . $user["id"] . '_ie']) !!}</td>
+                    <td class="text-center">{!! Form::radio('tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',safari',  null, ['class' => 'browser-tester', 'id' => 'browser-' . $user["id"] . '_safari']) !!}</td>
+                    <td class="text-center">{!! Form::radio('tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',ios',     null, ['class' => 'browser-tester', 'id' => 'browser-' . $user["id"] . '_ios']) !!}</td>
+                    <td class="text-center">{!! Form::radio('tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',android', null, ['class' => 'browser-tester', 'id' => 'browser-' . $user["id"] . '_android']) !!}</td>
                 </tr>
             @endforeach
             </tbody>

@@ -42,7 +42,7 @@ class PlansController extends Controller
     const CONSTANT = 'constant value';
 
     /**
-     * Create a new controller instance.
+     * PlansController constructor.
      */
     public function __construct()
     {
@@ -278,12 +278,11 @@ class PlansController extends Controller
     }
 
     /**
-     * Finalize Plan setup
+     * Save plan build
      *
-     * @param ReviewFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void\
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
-    public function save(ReviewFormRequest $request)
+    public function save()
     {
         // Retrieve session data
         $planData    = Session::get('mophie_testplanner.plan');

@@ -32,8 +32,14 @@ class TesterFormRequest extends Request
 	 */
 	public function rules()
     {
-        return [
-        ];
+        $testers = $this->request->get('tester');
+        $rules   = [];
+
+        if (!isset($testers)) {
+            $rules['tester.0'] = 'required';
+        }
+
+        return $rules;
     }
 
     /**
@@ -43,7 +49,13 @@ class TesterFormRequest extends Request
      */
     public function messages()
     {
-        return [
-        ];
+        $testers  = $this->request->get('tester');
+        $messages = [];
+
+        if (!isset($messages)) {
+            $messages['tester.0.required'] = 'At least one tester must be assigned';
+        }
+
+        return $messages;
 	}
 }
