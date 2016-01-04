@@ -33,7 +33,8 @@ class User extends Model implements AuthenticatableContract,
         'last_name',
         'role_id',
         'email',
-        'password'
+        'password',
+        'active'
     ];
 
     /**
@@ -116,5 +117,19 @@ class User extends Model implements AuthenticatableContract,
         $info = User::find($userId);
 
         return $info->email;
+    }
+
+    /**
+     * Get all users
+     *
+     * @param $sortBy
+     * @param $order
+     * @return mixed
+     */
+    public static function getAllUsers($sortBy, $order)
+    {
+        $query = User::orderBy($sortBy, $order);
+
+        return $query;
     }
 }

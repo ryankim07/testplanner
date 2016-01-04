@@ -7,7 +7,6 @@
 |
 --}}
 
-
     {!! Form::open(['route' => 'plan.search', 'role' => 'search']) !!}
 
     <div class="panel panel-default">

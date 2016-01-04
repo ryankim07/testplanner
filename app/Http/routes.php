@@ -17,6 +17,7 @@
  *
  */
 Route::get('/', 'AuthController@getLogin');
+Route::get('auth/logout', ['as' => 'auth.logout', 'uses' => 'AuthController@getLogout']);
 Route::get('auth/login', ['as' => 'auth.login', 'uses' => 'AuthController@getLogin']);
 Route::post('auth/postLogin', ['as' => 'auth.post.login', 'uses' => 'AuthController@postLogin']);
 Route::get('auth/register', ['as' => 'auth.register','uses' => 'AuthController@getRegister']);
@@ -25,7 +26,27 @@ Route::get('password/getEmail', ['as' =>'password.email', 'uses' => 'PasswordCon
 Route::post('password/postEmail', ['as' => 'password.post.email', 'uses' => 'PasswordController@postEmail']);
 Route::get('password/getReset/{token}', ['as' =>'password.reset', 'uses' => 'PasswordController@getReset']);
 Route::post('password/postReset', ['as' => 'password.post.reset', 'uses' => 'PasswordController@postReset']);
-Route::get('auth/logout', ['as' => 'auth.logout', 'uses' => 'AuthController@getLogout']);
+
+
+/**
+ *
+ * Users
+ *
+ */
+Route::get('user/view{user_id}', [
+    'as'         => 'user.view',
+    'middleware' => 'roles',
+    'roles'      => ['root'],
+    'uses'       => 'UsersController@view'
+]);
+Route::get('users/all', [
+    'as'         => 'users.all',
+    'middleware' => 'roles',
+    'roles'      => ['root'],
+    'uses'       => 'UsersController@all']);
+Route::get('user/search', 'UsersController@search');
+Route::post('user/search', ['as' => 'user.search', 'uses' => 'UsersController@search']);
+
 
 /**
  *
@@ -37,13 +58,6 @@ Route::get('dashboard', [
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator', 'user'],
     'uses'       => 'DashboardController@index'
-]);
-
-Route::get('dashboard/view/{plan_id}/{user_id}', [
-    'as'         => 'dashboard.plan.view',
-    'middleware' => 'roles',
-    'roles'      => ['root', 'administrator', 'user'],
-    'uses'       => 'DashboardController@view'
 ]);
 
 Route::get('dashboard/view-all-admin', [

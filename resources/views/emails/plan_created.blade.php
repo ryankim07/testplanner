@@ -675,7 +675,7 @@ img{height:auto !important;}
 
                            <p><strong>Hi, {!! $first_name !!}!</strong></p>
                            
-                           <p>Click the link to be taken to the test plan: {!! $description !!}.</p>
+                           <p>Click the link to be taken to the test plan: {!! Html::linkRoute('plan.respond', $description, $id) !!}.</p>
 
                            </td>
                          </tr>

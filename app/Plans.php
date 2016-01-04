@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\DB;
 
 use App\Facades\Utils;
 use App\Facades\Jira;
-use App\Facades\Grid;
 
 use Auth;
 
@@ -66,7 +65,7 @@ class Plans extends Model
     {
         $query = DB::table('plans AS p')
             ->join('users AS u', 'u.id', '=', 'p.creator_id')
-            ->select('p.*', 'u.first_name', 'u.last_name');
+            ->select('p.*', 'u.first_name AS creator', 'u.last_name');
 
         if (!empty($userId)) {
             $query->where('p.creator_id', '=', $userId);
@@ -206,124 +205,6 @@ class Plans extends Model
         $results['tickets']  = unserialize($results['tickets']);
 
         return $results;
-    }
-
-    /**
-     * Prepare columns for header
-     *
-     * This function must be implemented whenever table is rendered
-     *
-     * @param $order
-     * @return mixed
-     */
-    public static function prepareColumns($order, $columnsToDisplay)
-    {
-        $columns['description'] = [
-            'type'       => 'text',
-            'colname'    => 'Description',
-            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => 'description',
-            'order'      => $order,
-            'filterable' => true,
-            'width'      => '100px'
-        ];
-
-        $columns['first_name'] = [
-            'type'       => 'text',
-            'colname'    => 'Creator',
-            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => 'first_name',
-            'order'      => $order,
-            'filterable' => true,
-            'width'      => '40px'
-        ];
-
-        $columns['status'] = [
-            'type'       => 'text',
-            'colname'    => 'Status',
-            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => 'status',
-            'order'      => $order,
-            'filterable' => true,
-            'width'      => '20px'
-        ];
-
-        $columns['created_at'] = [
-            'type'       => 'date',
-            'colname'    => 'Created',
-            'from_data'  => ['class' => 'form-control input-sm', 'id' => 'created_from'],
-            'to_data'    => ['class' => 'form-control input-sm', 'id' => 'created_to'],
-            'from_index' => 'created_from',
-            'to_index'   => 'created_to',
-            'sortable'   => 'created_at',
-            'order'      => $order,
-            'width'      => '60px'
-        ];
-
-        $columns['updated_at'] = [
-            'type'    => 'text',
-            'colname' => 'Updated',
-            'width'   => '60px'
-        ];
-
-        $columns['testers'] = [
-            'type'       => 'text',
-            'colname'    => 'Testers',
-            'data'       => ['class' => 'form-control'],
-            'sortable'   => '',
-            'order'      => '',
-            'filterable' => false,
-            'width'      => '30px'
-        ];
-
-        $columns['view'] = [
-            'type'       => 'text',
-            'colname'    => 'View',
-            'data'       => ['class' => 'form-control'],
-            'sortable'   => '',
-            'order'      => '',
-            'filterable' => false,
-            'width'      => '20px'
-        ];
-
-        foreach($columnsToDisplay as $column) {
-            $results = Grid::addColumn($column, $columns[$column]);
-        }
-
-        return $results;
-    }
-
-    /**
-     * Prepare table for view
-     *
-     * @param $order
-     * @param $columnToDisplay
-     * @param bool $showSort
-     * @param bool $showFilter
-     * @return mixed
-     */
-    public static function prepareTable($order, $columnToDisplay, $showSort = true, $showFilter = true)
-    {
-        $preparedColumns = self::prepareColumns($order, $columnToDisplay);
-
-        if (!$showSort || !$showFilter) {
-            foreach($preparedColumns as $column) {
-                if (!$showSort) {
-                    $column['sortable'] = null;
-                }
-
-                if (!$showFilter) {
-                    $column['filterable'] = false;
-                }
-
-                $columns[] = $column;
-            }
-        }
-
-        $table['columns']      = !$showSort || !$showFilter ? $columns : $preparedColumns;
-        $table['columns_link'] = 'PlansController@index';
-
-        return $table;
     }
 
     /**

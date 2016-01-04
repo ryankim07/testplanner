@@ -9,6 +9,7 @@ use App\Http\Requests\RegisterFormRequest;
 
 use App\User;
 use App\UserRole;
+use App\Tables;
 
 use Auth;
 
@@ -99,6 +100,7 @@ class AuthController extends Controller
             $this->user->last_name  = $request->last_name;
             $this->user->email      = $request->email;
             $this->user->password   = bcrypt($request->password);
+            $this->user->active     = 1;
             $this->user->save();
         }
 

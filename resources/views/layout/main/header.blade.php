@@ -37,6 +37,9 @@
                                 <ul class="dropdown-menu" role="menu">
                                     <li>{!! Html::linkRoute('auth.register', 'Add new user') !!}</li>
                                 </ul>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>{!! Html::linkRoute('users.all', 'View all users') !!}</li>
+                                </ul>
                             </li>
                         @endif
                     </ul>

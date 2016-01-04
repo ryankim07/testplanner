@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 use App\Facades\Utils;
+use App\Facades\Grid;
 
 use Config;
 
@@ -97,5 +98,164 @@ class Tables extends Model
         $results['link']       = array_except($searchTerms, ['_token', 'page']);
 
         return $results;
+    }
+
+    /**
+     * Prepare columns for header
+     *
+     * This function must be implemented whenever table is rendered
+     *
+     * @param $order
+     * @param $columnsToDisplay
+     * @return mixed
+     */
+    public static function prepareColumns($order, $columnsToDisplay)
+    {
+        $columns['first_name'] = [
+            'type'       => 'text',
+            'colname'    => 'First',
+            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
+            'sortable'   => 'first_name',
+            'order'      => $order,
+            'filterable' => true,
+            'width'      => '40px'
+        ];
+
+        $columns['last_name'] = [
+            'type'       => 'text',
+            'colname'    => 'Last',
+            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
+            'sortable'   => 'last_name',
+            'order'      => $order,
+            'filterable' => true,
+            'width'      => '40px'
+        ];
+
+        $columns['email'] = [
+            'type'       => 'text',
+            'colname'    => 'Email',
+            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
+            'sortable'   => 'email',
+            'order'      => $order,
+            'filterable' => true,
+            'width'      => '80px'
+        ];
+
+        $columns['active'] = [
+            'type'       => 'text',
+            'colname'    => 'Active',
+            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
+            'sortable'   => 'email',
+            'order'      => $order,
+            'filterable' => false,
+            'width'      => '10px'
+        ];
+
+        $columns['description'] = [
+            'type'       => 'text',
+            'colname'    => 'Description',
+            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
+            'sortable'   => 'description',
+            'order'      => $order,
+            'filterable' => true,
+            'width'      => '100px'
+        ];
+
+        $columns['creator'] = [
+            'type'       => 'text',
+            'colname'    => 'Admin',
+            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
+            'sortable'   => 'first_name',
+            'order'      => $order,
+            'filterable' => true,
+            'width'      => '40px'
+        ];
+
+        $columns['status'] = [
+            'type'       => 'text',
+            'colname'    => 'Status',
+            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
+            'sortable'   => 'status',
+            'order'      => $order,
+            'filterable' => true,
+            'width'      => '20px'
+        ];
+
+        $columns['created_at'] = [
+            'type'       => 'date',
+            'colname'    => 'Created',
+            'from_data'  => ['class' => 'form-control input-sm', 'id' => 'created_from'],
+            'to_data'    => ['class' => 'form-control input-sm', 'id' => 'created_to'],
+            'from_index' => 'created_from',
+            'to_index'   => 'created_to',
+            'sortable'   => 'created_at',
+            'order'      => $order,
+            'width'      => '60px'
+        ];
+
+        $columns['updated_at'] = [
+            'type'    => 'text',
+            'colname' => 'Updated',
+            'width'   => '60px'
+        ];
+
+        $columns['testers'] = [
+            'type'       => 'text',
+            'colname'    => 'Testers',
+            'data'       => ['class' => 'form-control'],
+            'sortable'   => '',
+            'order'      => '',
+            'filterable' => false,
+            'width'      => '30px'
+        ];
+
+        $columns['view'] = [
+            'type'       => 'text',
+            'colname'    => 'View',
+            'data'       => ['class' => 'form-control'],
+            'sortable'   => '',
+            'order'      => '',
+            'filterable' => false,
+            'width'      => '20px'
+        ];
+
+        foreach($columnsToDisplay as $column) {
+            $results = Grid::addColumn($column, $columns[$column]);
+        }
+
+        return $results;
+    }
+
+    /**
+     * Prepare table for view
+     *
+     * @param $order
+     * @param $columnToDisplay
+     * @param bool $showSort
+     * @param bool $showFilter
+     * @return mixed
+     */
+    public static function prepareTable($order, $columnToDisplay, $columnLink, $showSort = true, $showFilter = true)
+    {
+        $preparedColumns = self::prepareColumns($order, $columnToDisplay);
+
+        if (!$showSort || !$showFilter) {
+            foreach($preparedColumns as $column) {
+                if (!$showSort) {
+                    $column['sortable'] = null;
+                }
+
+                if (!$showFilter) {
+                    $column['filterable'] = false;
+                }
+
+                $columns[] = $column;
+            }
+        }
+
+        $table['columns']      = !$showSort || !$showFilter ? $columns : $preparedColumns;
+        $table['columns_link'] = $columnLink;
+
+        return $table;
     }
 }

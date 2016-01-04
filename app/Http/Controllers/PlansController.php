@@ -176,15 +176,15 @@ class PlansController extends Controller
     {
         $userRoles = Auth::user()->role()->get();
         $sorting   = Tables::sorting();
-        $table     = Plans::prepareTable($sorting['order'], [
+        $table     = Tables::prepareTable($sorting['order'], [
             'description',
-            'first_name',
+            'creator',
             'status',
             'created_at',
             'updated_at'
-        ]);
-        $query = '';
+        ], 'PlansController@index');
 
+        $query = '';
         foreach($userRoles as $role) {
             if ($role->name == "administrator") {
                 $query = Plans::getAllPlans($sorting['sortBy'], $sorting['order'], $userId);
