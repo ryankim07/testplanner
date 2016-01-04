@@ -34,71 +34,77 @@
 
                 @include('errors.list')
 
-                <div class="row nested-block">
-                    <div class="col-xs-12 col-md-6">
-                        <div class="form-group">
-                            <legend>People</legend>
-                            <p><span>Reporter: {!! $plan['reporter'] !!}</span></p>
-                            <p><span>Assignee: {!! $plan['assignee'] !!}</span></p>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-6">
-                        <div class="form-group">
-                            <legend>Dates</legend>
-                            <p><span>Created: {!! $plan['created_at'] !!}</span></p>
-                            <p><span>Updated: {!! $plan['updated_at'] !!}</span></p>
-                        </div>
-                    </div>
-                </div>
-                @foreach($plan['tickets'] as $ticket)
-                    <div class="row nested-block ticket-panel">
+                @if(empty($plan['ticket_resp_id']))
+                    <p>{!! $plan['assignee'] !!}, {!! config('testplanner.plan_non_user_response') !!}</p>
+                @else
+                    <div class="row nested-block">
                         <div class="col-xs-12 col-md-6">
                             <div class="form-group">
-                                <legend>Ticket</legend>
-                                <p class="ticket-description">{!! Html::link($ticket['description_url'], $ticket['description'], ['target' => '_blank', 'title' => 'Click to view issue in Jira']) !!}</p>
-                            </div>
-                            <div class="form-group">
-                                <legend>Objective</legend>
-                                <p><span>{!! $ticket['objective'] !!}</span></p>
-                            </div>
-                            <div class="form-group">
-                                <legend>Steps to test</legend>
-                                <p><span>{!! nl2br($ticket['test_steps']) !!}</span></p>
+                                <legend>People</legend>
+                                <p><span>Reporter: {!! $plan['reporter'] !!}</span></p>
+                                <p><span>Assignee: {!! $plan['assignee'] !!}</span></p>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-md-2">
+                        <div class="col-xs-12 col-md-6">
                             <div class="form-group">
-                                <legend>Status</legend>
-
-                                <?php
-                                if (isset($ticket['test_status'])) {
-                                    $passed = $ticket['test_status'] == 1 ? true : '';
-                                    $failed = $ticket['test_status'] == 0 ? true : '';
-                                }
-                                ?>
-
-                                <p><span>
-                                    @if($passed)
-                                        Passed
-                                    @elseif($failed)
-                                        Failed
-                                    @endif
-                                </span></p>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-md-4">
-                            <div class="form-group">
-                                <legend>Notes</legend>
-
-                                {!! isset($ticket['notes_response']) ? nl2br($ticket['notes_response']) : null !!}
-
+                                <legend>Dates</legend>
+                                <p><span>Created: {!! $plan['created_at'] !!}</span></p>
+                                <p><span>Updated: {!! $plan['updated_at'] !!}</span></p>
                             </div>
                         </div>
                     </div>
-                @endforeach
-            </div>
-        </div>
+                    @foreach($plan['tickets'] as $ticket)
+                        <div class="row nested-block ticket-panel">
+                            <div class="col-xs-12 col-md-6">
+                                <div class="form-group">
+                                    <legend>Ticket</legend>
+                                    <p class="ticket-description">{!! Html::link($ticket['description'], null, ['target' => '_blank', 'title' => 'Click to view issue in Jira']) !!}</p>
+                                </div>
+                                <div class="form-group">
+                                    <legend>Objective</legend>
+                                    <p><span>{!! $ticket['objective'] !!}</span></p>
+                                </div>
+                                <div class="form-group">
+                                    <legend>Steps to test</legend>
+                                    <p><span>{!! nl2br($ticket['test_steps']) !!}</span></p>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-2">
+                                <div class="form-group">
+                                    <legend>Status</legend>
 
+                                    <?php
+                                        $passed = '';
+                                        $failed = '';
+                                        if (isset($ticket['test_status'])) {
+                                            $passed = $ticket['test_status'] == 1 ? true : '';
+                                            $failed = $ticket['test_status'] == 0 ? true : '';
+                                        }
+                                    ?>
+
+                                    <p><span>
+                                        @if($passed)
+                                            Passed
+                                        @elseif($failed)
+                                            Failed
+                                        @endif
+                                    </span></p>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4">
+                                <div class="form-group">
+                                    <legend>Notes</legend>
+
+                                    {!! isset($ticket['notes_response']) ? nl2br($ticket['notes_response']) : null !!}
+
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                @endif
+            </div>
         {!! Form::close() !!}
 
     </div>

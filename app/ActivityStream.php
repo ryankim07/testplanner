@@ -101,39 +101,44 @@ class ActivityStream extends Model
      */
     public static function saveActivityStream($plan, $type, $status = null)
     {
-        $assigneeName = User::getUserFirstName($plan['creator_id']);
-        $userId       = $plan['creator_id'];
+        try {
+            $assigneeName = User::getUserFirstName($plan['creator_id']);
+            $userId       = $plan['creator_id'];
 
-        if ($type != 'plan') {
-            $assigneeName = $plan['assignee'];
-            $userId       = $plan['tester_id'];
-        }
+            if ($type != 'plan') {
+                $assigneeName = $plan['assignee'];
+                $userId       = $plan['tester_id'];
+            }
 
-        $planLink = link_to_route('plan.view.response', $plan['description'], [$plan['id'], $plan['tester_id']]);
-        $message  = '';
+            $planLink = link_to_route('plan.view.response', $plan['description'], [$plan['id'], $userId]);
+            $message  = '';
 
-        switch($type) {
-            case 'plan':
-                $message = 'created a new plan:';
-            break;
+            switch($type) {
+                case 'plan':
+                    $message = 'created a new plan:';
+                    break;
 
-            case 'ticket-response':
-                if ($status == 'incomplete') {
-                    $message = 'has updated tickets in';
-                } else if ($status == 'complete') {
-                    $message = 'resolved';
-                }
-            break;
-        }
+                case 'ticket-response':
+                    if ($status == 'incomplete') {
+                        $message = 'has updated tickets in';
+                    } else if ($status == 'complete') {
+                        $message = 'resolved';
+                    }
+                    break;
+            }
 
-        if ($status != 'new') {
-            $activity = $assigneeName . ' ' . $message . ' ' . $planLink;
+            if ($status != 'new') {
+                $activity = $assigneeName . ' ' . $message . ' ' . $planLink;
 
-            $comment = ActivityStream::create([
-                'plan_id'  => $plan['id'],
-                'user_id'  => $userId,
-                'activity' => $activity
-            ]);
+                $comment = ActivityStream::create([
+                    'plan_id'  => $plan['id'],
+                    'user_id'  => $userId,
+                    'activity' => $activity
+                ]);
+            }
+        } catch(\Exception $e) {
+            // Log to system
+            Utils::log($e->getMessage(), $plan);
         }
 
         return true;

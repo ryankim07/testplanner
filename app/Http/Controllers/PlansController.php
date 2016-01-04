@@ -234,8 +234,8 @@ class PlansController extends Controller
         $allTesters = Testers::getTestersByPlanId($planId);
 
         $browserTesters[''] = 'View other responses';
-        foreach ($allTesters as $tester) {
-            $browserTesters[$tester->id] = $tester->first_name;
+        foreach ($allTesters as $eachTester) {
+            $browserTesters[$eachTester->id] = $eachTester->first_name;
         }
 
         return view('pages.testplanner.view_response', [
@@ -318,7 +318,6 @@ class PlansController extends Controller
 
                     // Create object for email
                     $testersWithEmail[] = [
-                        'plan_desc'  => $plan->description,
                         'tester_id'  => $tester['id'],
                         'first_name' => $tester['first_name'],
                         'browser'    => $tester['browser'],
@@ -346,7 +345,7 @@ class PlansController extends Controller
             DB::rollback();
 
             // Log to system
-            //Utils::log($errorMsg, $mergedData);
+            Utils::log($errorMsg, array_merge($planData, $ticketsData, $testerData));
 
             // Delete session
             Session::forget('mophie_testplanner');
@@ -362,7 +361,10 @@ class PlansController extends Controller
         ActivityStream::saveActivityStream($planData, 'plan');
 
         // Mail all test browsers
-        Email::sendEmail('plan-created', array_merge(array('plan' => $planData), array('testers' => $testersWithEmail)));
+        Email::sendEmail('plan-created', array_merge($planData, array('testers' => $testersWithEmail)));
+
+        // Delete session
+        Session::forget('mophie_testplanner');
 
         return redirect('dashboard');
     }
@@ -444,10 +446,13 @@ class PlansController extends Controller
     private function _Jira()
     {
         // Get JIRA project versions
-        $results = Jira::getAllProjectVersions('ECOM');
+        $results  = Jira::getAllProjectVersions('ECOM');
+        $versions = [];
 
-        foreach($results as $version) {
-            $versions[] = 'Test Plan for build v' . $version['name'];
+        if (isset($results)) {
+            foreach($results as $version) {
+                $versions[] = 'Test Plan for build v' . $version['name'];
+            }
         }
 
         return $versions;

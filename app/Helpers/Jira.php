@@ -76,18 +76,21 @@ class Jira
         $data['query_url'] = $this->_jira_rest_url . '/search?jql=project=' . $project;
 
         // Connect to api and get results
-        $data = $this->_connect($data);
+        $data    = $this->_connect($data);
+        $results = [];
 
         // Return on a certain array structure
-        foreach($data->issues as $issue) {
-            $key = $issue->key;
-            $results[] = [
-                'key'     => $key,
-                'summary' => $issue->fields->summary
-            ];
-        }
+        if (isset($data)) {
+            foreach ($data->issues as $issue) {
+                $key = $issue->key;
+                $results[] = [
+                    'key' => $key,
+                    'summary' => $issue->fields->summary
+                ];
+            }
 
-        ksort($results, SORT_NUMERIC);
+            ksort($results, SORT_NUMERIC);
+        }
 
         return $results;
     }
@@ -104,14 +107,17 @@ class Jira
         $data['query_url'] = $this->_jira_rest_url . '/project/' . $project . '/versions';
 
         // Connect to api and get results
-        $data = $this->_connect($data);
+        $data    = $this->_connect($data);
+        $results = [];
 
         // Return on a certain array structure
-        foreach($data as $version) {
-            $results[] = ['name' => $version->name];
-        }
+        if (isset($data)) {
+            foreach ($data as $version) {
+                $results[] = ['name' => $version->name];
+            }
 
-        krsort($results, SORT_NUMERIC);
+            krsort($results, SORT_NUMERIC);
+        }
 
         return $results;
     }

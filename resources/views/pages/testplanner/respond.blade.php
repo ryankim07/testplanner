@@ -65,10 +65,13 @@
                             <div class="form-group">
                                 <legend>Status</legend>
                                 <?php
-                                if (isset($ticket['test_status'])) {
-                                    $passed = $ticket['test_status'] == 1 ? true : '';
-                                    $failed = $ticket['test_status'] == 0 ? true : '';
-                                }
+
+                                    $passed = '';
+                                    $failed = '';
+                                    if (isset($ticket['test_status'])) {
+                                        $passed = $ticket['test_status'] == 1 ? true : '';
+                                        $failed = $ticket['test_status'] == 0 ? true : '';
+                                    }
                                 ?>
 
                                 {!! Form::label('test_status_label', 'Passed', ['class' => 'radio-inline']) !!}

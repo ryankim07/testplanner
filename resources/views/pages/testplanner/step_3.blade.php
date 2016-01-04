@@ -60,4 +60,25 @@
 
     </div>
 
+    @if($mode == 'edit')
+        <script type="text/javascript">
+
+        $(document).ready(function() {
+            var testers = <?php echo $testersData; ?>
+
+            $('.browser-tester').each(function() {
+                var browser = $(this);
+                var browserId = browser.attr('id');
+
+                $.each(testers, function (i, testerBrowserId) {
+                    if (browserId == testerBrowserId) {
+                        browser.prop("checked", true);
+                    }
+                });
+            });
+        });
+
+        </script>
+    @endif
+
 @stop

@@ -1,86 +1,8 @@
 $(document).ready(function() {
 
     /**
-     *  CREATING NEW TICKETS
-     */
-        // Since there is only one ticket, hide remove option
-    $('.trash').hide();
-
-    // Append new ticket rows
-    $('#step-2-main').on('click', '#add-ticket-btn', function() {
-        // Clone first block
-        var ticketRow = $('.ticket-row').first().clone();
-
-        // Clear all fields
-        var inputTypes = ticketRow.find('input[type=text], textarea').val('');
-        var inc = $('.ticket-row').length + 1;
-
-        // Increment array values
-        ticketRow.find('.ticket-description').attr('name', 'description[' + inc + ']');
-        ticketRow.find('.objective').attr('name', 'objective[' + inc + ']');
-        ticketRow.find('.test-steps').attr('name', 'test_steps[' + inc + ']');
-
-        // Add as new block after latest ticket row
-        ticketRow.insertAfter($('.ticket-row').last());
-
-        // Display remove option
-        $('.trash').show();
-    });
-
-    // Remove tickets
-    $('#step-2-main').on('click', '.trash', function(e) {
-        e.preventDefault();
-
-        // Remove ticket row
-        $(this).closest('.ticket-row').remove();
-
-        // Cannot remove all the rows, only one should be left over
-        if ($('.ticket-row').length == 1) {
-            // The row that is left over, hide remove option
-            $('.trash').hide();
-
-            // Display back add ticket button
-            if ($('.ticket-row .add-ticket-btn').css('display') == 'none') {
-                $('.ticket-row .add-ticket-btn').show();
-            }
-        }
-    });
-
-    $('#step-2-main').on('click', '#continue-btn, #update-btn', function() {
-        var tickets = [];
-
-        $('.ticket-row').each(function() {
-            // Create ticket object
-            tickets.push({
-                "id": stringGen(5),
-                "description": $(this).find('.ticket-description').val(),
-                "objective": $(this).find('.objective').val(),
-                "test_steps": $(this).find('.test-steps').val()
-            });
-        });
-
-        // Create hidden field
-        var input = $("<input>")
-            .attr("type", "hidden")
-            .attr("name", "tickets_obj").val(JSON.stringify(tickets));
-
-        $('form').append($(input));
-    });
-
-
-    /**
      * VIEW MAIN
      */
-    $('.browser-tester').each(function() {
-        var browser   = $(this);
-        var browserId = browser.attr('id');
-
-        $.each(testers, function (i, testerBrowserId) {
-            if (browserId == testerBrowserId) {
-                browser.prop("checked", true);
-            }
-        });
-    });
 
 
     /**
@@ -143,7 +65,7 @@ $(document).ready(function() {
 
         $.ajax({
             method: "POST",
-            url: "{!! URL::to('dashboard/comment') !!}",
+            url: "{!! URL::to('dashboard/save-comment') !!}",
             data: {
                 "_token":  $('form').find('input[name=_token]').val(),
                 "id":      logId,
@@ -192,15 +114,5 @@ $(document).ready(function() {
     /**
      * UTILITY FUNCTIONS
      */
-    function stringGen(len)
-    {
-        var text = "";
 
-        var charset = "abcdefghijklmnopqrstuvwxyz0123456789";
-
-        for( var i=0; i < len; i++ )
-            text += charset.charAt(Math.floor(Math.random() * charset.length));
-
-        return text;
-    }
 });

@@ -152,6 +152,16 @@ table:not(.dashboard-table) tbody tr:hover {
     color: #777777;
 }
 
+#review-main .trash {
+    position:absolute;
+    margin-top: 6px;
+    margin-right: 25px;
+    top:0;
+    right:0;
+    line-height: 12px;
+    color: #777777;
+}
+
 .nested-block {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;

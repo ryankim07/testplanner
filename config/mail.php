@@ -134,10 +134,10 @@ return [
 
     'admin_system_subject'     => 'Test Planner System Error',
 
-    'plan_created_subject'     => 'Test Planner: New test plan has been assigned to you',
+    'plan_created_subject'     => 'New test plan has been assigned to you',
 
-    'ticket_responded_subject' => 'Test Planner: Response from user',
+    'ticket_responded_subject' => 'Response from user',
 
-    'email_error_subject'      => 'Test Planner: Confirmation email error',
+    'email_error_subject'      => 'Confirmation email error',
 
 ];

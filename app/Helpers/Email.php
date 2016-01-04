@@ -30,12 +30,12 @@ class Email
         // Type of email to be send out
         switch($type) {
             case 'plan-created':
-                $emailSubject = config('mail.plan_created_subject') . 'for ' . $data['plan_desc'];
+                $emailSubject = $data['description'] . ': ' . config('mail.plan_created_subject');
                 $emailType    = 'emails.plan_created';
             break;
 
             case 'ticket-responded':
-                $emailSubject = config('mail.ticket_responded_subject') . 'for ' . $data['plan_desc'];
+                $emailSubject =  $data['description'] . ': ' . config('mail.ticket_responded_subject');
                 $emailType    = 'emails.ticket_response';
                 break;
 
@@ -56,22 +56,22 @@ class Email
         try {
             switch($emailType) {
                 case 'emails.plan_created':
-                    // Multiple testers
                     if (count($data['testers']) > 1) {
+                        // Multiple testers
                         foreach ($data['testers'] as $tester) {
-                            Mail::send($emailType, array_merge($data['plan'], $tester), function ($message) use ($tester, $emailSubject) {
+                            Mail::send($emailType, array_merge($data, $tester), function ($message) use ($tester, $emailSubject) {
                                 $message->to($tester['email'], $tester['first_name'])
                                     ->subject($emailSubject);
                             });
                         }
+                    } else {
+                        // Single tester
+                        $tester = array_shift($data['testers']);
+                        Mail::send($emailType, array_merge($data, $tester), function ($message) use ($tester, $emailSubject) {
+                            $message->to($tester['email'], $tester['first_name'])
+                                ->subject($emailSubject);
+                        });
                     }
-
-                    // Single tester
-                    $tester = array_shift($data['testers']);
-                    Mail::send($emailType, array_merge($data['plan'], $tester), function ($message) use ($tester, $emailSubject) {
-                        $message->to($tester['email'], $tester['first_name'])
-                            ->subject($emailSubject);
-                    });
                     break;
 
                 case 'emails.ticket_response':

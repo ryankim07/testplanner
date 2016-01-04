@@ -181,7 +181,6 @@ class DashboardController extends Controller
     public function saveComment(Request $request)
     {
         $user = Auth::user();
-        $res  = array_except($request->all(), '_token');
 
         ActivityComments::saveActivityComment($res['id'], $user->id, $res['comment']);
 

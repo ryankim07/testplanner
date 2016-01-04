@@ -100,7 +100,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public static function getUserFirstName($userId)
     {
-        $info = User::find($userId)->first();
+        $info = User::find($userId);
 
         return $info->first_name;
     }
@@ -113,7 +113,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public static function getUserEmail($userId)
     {
-        $info = User::find($userId)->first();
+        $info = User::find($userId);
 
         return $info->email;
     }

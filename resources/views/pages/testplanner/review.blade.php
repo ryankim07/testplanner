@@ -37,8 +37,9 @@
                     </ul>
                 </div>
                 @foreach($tickets as $ticket)
-                    <div class="row nested-block">
-                        <legend>Ticket</legend>
+                    <div class="row nested-block ticket-row" id="{!! $ticket['id'] !!}">
+                        <legend>Tickets</legend>
+                        <a href="#" class="trash" data-id="{!! $ticket['id'] !!}"><span class="glyphicon glyphicon-trash"></span></a>
                         <a href="{!! URL::route('ticket.edit') !!}" class="cog"><span class="glyphicon glyphicon-cog"></span></a>
                         <ul class="list-unstyled">
                             <li><h4><span class="label label-default">Description</span></h4><h5>{!! $ticket['description'] !!}</h5></li>
@@ -51,9 +52,9 @@
                     <legend>Browser Testers</legend>
                     <a href="{!! URL::route('tester.edit') !!}" class="cog"><span class="glyphicon glyphicon-cog"></span></a>
                     @foreach($testers as $tester)
-                    <div class="text-center review-testers">
-                        {!! Html::image('images/' . $tester['browser'] . '.png', 'Chrome') !!}<h5><span class="caption">{!! $tester['first_name'] !!}</span></h5>
-                    </div>
+                        <div class="text-center review-testers">
+                            {!! Html::image('images/' . $tester['browser'] . '.png') !!}<h5><span class="caption">{!! $tester['first_name'] !!}</span></h5>
+                        </div>
                     @endforeach
                 </div>
             </div>
@@ -69,5 +70,45 @@
         {!! Form::close() !!}
 
     </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            if ($('.ticket-row').length == 1) {
+                $('.trash').hide();
+            }
+
+            // Remove tickets
+            $('#review-main').on('click', '.trash', function(e) {
+                e.preventDefault();
+
+                var ticketRow = $(this).closest('.ticket-row');
+                var ticketId = $(this).data('id');
+
+                $.when(
+                    $.ajax({
+                        method: "POST",
+                        url: "{!! URL::to('ticket/remove') !!}",
+                        data: {
+                            "_token":  $('form').find('input[name=_token]').val(),
+                            "ticketId": ticketId
+                        },
+                        success: function(resp) {
+                            // Remove ticket row
+                            if (resp == 'success') {
+                                $('#' + ticketId).remove();
+                            }
+                        }
+                    })
+                ).done(function(resp) {
+                });
+
+                // Cannot remove all the rows, only one should be left over
+                if ($('.ticket-row').length == 1) {
+                    // The row that is left over, hide remove option
+                    $('.trash').hide();
+                }
+            });
+        });
+    </script>
 
 @stop

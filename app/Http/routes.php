@@ -51,6 +51,7 @@ Route::get('dashboard/view-all-admin', [
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator', 'user'],
     'uses'       => 'DashboardController@viewAllAdmin']);
+
 Route::get('dashboard/view-all-assigned', [
     'as'         => 'dashboard.view.all.assigned',
     'middleware' => 'roles',
@@ -117,6 +118,14 @@ Route::get('ticket/build', [
     'uses'       => 'TicketsController@build'
 ]);
 Route::get('ticket/response', ['as' => 'plan.response', 'uses' => 'TicketsController@response']);
+
+Route::post('ticket/remove', [
+    'as'   => 'ticket.remove.ajax',
+    'middleware' => 'roles',
+    'roles'      => ['root', 'administrator'],
+    'uses' => 'TicketsController@removeAjax'
+]);
+
 Route::resource('ticket', 'TicketsController');
 
 

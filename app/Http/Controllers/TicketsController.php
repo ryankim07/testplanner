@@ -12,6 +12,8 @@
  */
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Requests\TicketsFormRequest;
 use PhpSpec\Exception\Exception;
 
@@ -44,9 +46,17 @@ class TicketsController extends Controller
         // Get Jira issues
         $jiraIssues = $this->_Jira();
 
+        $ticketsData[] = [
+            'id'          => '',
+            'description' => '',
+            'objective'   => '',
+            'test_steps'  => ''
+        ];
+
         return view('pages.testplanner.step_2', [
-            'mode'       => 'build',
-            'jiraIssues' => json_encode($jiraIssues)
+            'mode'        => 'build',
+            'ticketsData' => $ticketsData,
+            'jiraIssues'  => json_encode($jiraIssues)
         ]);
     }
 
@@ -61,11 +71,20 @@ class TicketsController extends Controller
         $ticketsData = Session::get('mophie_testplanner.tickets');
 
         // Get Jira issues
-        $jiraIssues    = $this->_Jira();
+        $jiraIssues = $this->_Jira();
+
+        foreach($ticketsData as $ticket) {
+            $results[] = [
+                'id'          => $ticket['id'],
+                'description' => $ticket['description'],
+                'objective'   => $ticket['objective'],
+                'test_steps'  => $ticket['test_steps']
+            ];
+        }
 
         return view('pages.testplanner.step_2', [
             'mode'        => 'edit',
-            'ticketsData' => $ticketsData,
+            'ticketsData' => $results,
             'jiraIssues'  => json_encode($jiraIssues)
         ]);
     }
@@ -78,10 +97,13 @@ class TicketsController extends Controller
      */
     public function update(TicketsFormRequest $request)
     {
-        // Save plan data to session
-        Session::put('mophie_testplanner.tickets', array_except($request->all(), ['_token', '_method']));
+        $res     = array_except($request->all(), '_token');
+        $tickets = json_decode($res['tickets_obj'], true);
 
-        return redirect()->action('PlansController@review');
+        // Save tickets data to session
+        Session::put('mophie_testplanner.tickets', $tickets);
+
+        return redirect('plan/review');
     }
 
     /**
@@ -107,10 +129,35 @@ class TicketsController extends Controller
         $res     = array_except($request->all(), '_token');
         $tickets = json_decode($res['tickets_obj'], true);
 
-        // Save case data to session
+        // Save tickets data to session
         Session::put('mophie_testplanner.tickets', $tickets);
 
         return redirect('tester/build');
+    }
+
+    /**
+     * Remove tickets from review page
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function removeAjax(Request $request)
+    {
+        $res = array_except($request->all(), '_token');
+
+        // Get tickets session data
+        $ticketsData = Session::get('mophie_testplanner.tickets');
+
+        foreach($ticketsData as $ticket) {
+            $modifiedData[$ticket['id']] = $ticket;
+        }
+
+        // Remove
+        unset($modifiedData[$res['ticketId']]);
+
+        // Save plan data to session
+        Session::put('mophie_testplanner.tickets', $modifiedData);
+
+        return response()->json('success');
     }
 
     /**
@@ -122,9 +169,12 @@ class TicketsController extends Controller
     {
         // Get JIRA issues
         $results = Jira::getAllIssues('ECOM');
+        $issues  = [];
 
-        foreach($results as $issue) {
-            $issues[] = $issue['key'] . ': ' . $issue['summary'];
+        if (isset($results)) {
+            foreach ($results as $issue) {
+                $issues[] = $issue['key'] . ': ' . $issue['summary'];
+            }
         }
 
         return $issues;
