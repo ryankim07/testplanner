@@ -36,9 +36,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Accounts <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>{!! Html::linkRoute('auth.register', 'Add new user') !!}</li>
-                                </ul>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>{!! Html::linkRoute('users.all', 'View all users') !!}</li>
+                                    <li>{!! Html::linkRoute('user.all', 'View all users') !!}</li>
                                 </ul>
                             </li>
                         @endif

@@ -7,7 +7,7 @@
  *
  * @author     Ryan Kim
  * @category   Mophie
- * @package    TestPlanner
+ * @package    Test Planner
  * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
@@ -149,6 +149,16 @@ class Tables extends Model
             'order'      => $order,
             'filterable' => false,
             'width'      => '10px'
+        ];
+
+        $columns['role_names'] = [
+            'type'       => 'text',
+            'colname'    => 'Roles',
+            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
+            'sortable'   => '',
+            'order'      => '',
+            'filterable' => false,
+            'width'      => '100px'
         ];
 
         $columns['description'] = [

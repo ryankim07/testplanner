@@ -26,6 +26,8 @@ return [
 
     'identical_role_msg'      => 'The role for the user you are trying to register already exists.',
 
+    'user_update_success_msg' => 'User info updated successfully.',
+
     'plan_build_error'        => 'Plan building cannot be done at the current moment.  Please try again later.',
 
     'plan_session_error'      => 'Session data is missing.',

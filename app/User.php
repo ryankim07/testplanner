@@ -1,6 +1,4 @@
-<?php
-
-namespace App;
+<?php namespace App;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +7,8 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+
+use Illuminate\Support\Facades\DB;
 
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
@@ -128,7 +128,18 @@ class User extends Model implements AuthenticatableContract,
      */
     public static function getAllUsers($sortBy, $order)
     {
-        $query = User::orderBy($sortBy, $order);
+        $sortBy = 'sub.' . $sortBy;
+
+        $sub = DB::table('user_role as ur')
+            ->join('users AS u', 'u.id', '=', 'ur.user_id')
+            ->join('roles AS r', 'r.id', '=', 'ur.role_id')
+            ->select('u.*', 'r.name AS role_names')
+            ->toSql();
+
+        $query = DB::table(DB::raw("($sub) AS sub"))
+            ->select('sub.*', DB::raw("GROUP_CONCAT(sub.role_names SEPARATOR ', ') AS role_names"))
+            ->groupBy('sub.id')
+            ->orderBy($sortBy, $order);
 
         return $query;
     }

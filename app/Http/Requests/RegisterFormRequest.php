@@ -33,8 +33,11 @@ class RegisterFormRequest extends Request {
 	public function rules()
 	{
         return [
-            'email'    => 'required|email',
-            'password' => 'required|confirmed|min:6',
+			'role'       => 'required',
+			'first_name' => 'required',
+			'last_name'  => 'required',
+            'email'      => 'required|email',
+            'password'   => 'required|confirmed|min:6',
         ];
 	}
 
@@ -46,11 +49,14 @@ class RegisterFormRequest extends Request {
     public function messages()
     {
         return [
-            'email.required'     => 'Email is required',
-            'email.email'        => 'Enter correct email address',
-            'password.required'  => 'Password is required',
-            'password.confirmed' => 'Password confirmation is required',
-            'password.min'       => 'Password must have a length of 6 characters'
+			'role.required'       => 'Role is required',
+			'first_name.required' => 'First name is required',
+			'last_name.required'  => 'Last name is required',
+            'email.required'      => 'Email is required',
+            'email.email'         => 'Enter correct email address',
+            'password.required'   => 'Password is required',
+            'password.confirmed'  => 'Password confirmation is required',
+            'password.min'        => 'Password must have a length of 6 characters'
         ];
     }
 }

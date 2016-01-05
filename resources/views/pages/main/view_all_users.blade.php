@@ -11,7 +11,7 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-12 main" id="view-all-admin-main">
+    <div class="col-xs-12 col-md-12" id="view-all-users-main">
 
         {!! Form::open(['route' => 'user.search', 'role' => 'search']) !!}
 
@@ -44,6 +44,7 @@
                                     <td>{!! $user->last_name !!}</td>
                                     <td>{!! $user->email !!}</td>
                                     <td>{!! isset($user->active) == true ? 'Yes' : 'No' !!}</td>
+                                    <td>{!! $user->role_names !!}</td>
                                     <td>{!! Utils::dateConverter($user->created_at) !!}</td>
                                     <td>{!! Utils::dateConverter($user->updated_at) !!}</td>
                                 </tr>
@@ -60,5 +61,45 @@
         {!! Form::close() !!}
 
     </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.toggler').on('click', function (e) {
+                e.preventDefault();
+
+                var currentClass = $('#view-all-users-main').attr('class');
+
+                if (currentClass != 'col-xs-12 col-md-8') {
+                    // Control width of both columns
+                    $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
+                    $('#viewer').toggleClass('col-md-0 col-md-4');
+                }
+
+                // Selecting rows on mobile
+                if (currentClass == 'col-xs-12 col-md-12') {
+                    $('#view-all-users-main').css({'z-index': '1000'});
+                }
+
+                $.when(
+                    $.ajax({
+                        method: "GET",
+                        url: $(this).data('url'),
+                        dataType: "json",
+                        success: function (resp) {
+                            $('#viewer').html(resp.viewBody);
+                        }
+                    })
+                ).done(function (resp) {
+                    // Close viewer
+                    $('.close-viewer').on('click', function (e) {
+                        e.preventDefault();
+                        $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
+                        $('#viewer').toggleClass('col-md-0 col-md-4');
+                        $('#viewer').empty();
+                    });
+                });
+            });
+        });
+    </script>
 
 @stop

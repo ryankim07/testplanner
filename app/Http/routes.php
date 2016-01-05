@@ -33,19 +33,21 @@ Route::post('password/postReset', ['as' => 'password.post.reset', 'uses' => 'Pas
  * Users
  *
  */
-Route::get('user/view{user_id}', [
+Route::get('user/view/{user_id}', [
     'as'         => 'user.view',
     'middleware' => 'roles',
     'roles'      => ['root'],
     'uses'       => 'UsersController@view'
 ]);
-Route::get('users/all', [
-    'as'         => 'users.all',
+Route::get('user/all', [
+    'as'         => 'user.all',
     'middleware' => 'roles',
     'roles'      => ['root'],
     'uses'       => 'UsersController@all']);
+
 Route::get('user/search', 'UsersController@search');
 Route::post('user/search', ['as' => 'user.search', 'uses' => 'UsersController@search']);
+Route::resource('user', 'UsersController');
 
 
 /**

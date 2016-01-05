@@ -41,16 +41,14 @@
 
         </head>
         <body class="@yield('body-class')">
+
         @include('layout.main.header')
 
         <div class="container-fluid">
             <div class="row-fluid">
                 @yield('content')
+                @include('layout.main.viewer')
             </div>
         </div>
-
-        <script type="text/javascript">
-            @yield ('scripts')
-        </script>
         </body>
     </html>
