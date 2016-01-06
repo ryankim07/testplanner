@@ -15,7 +15,7 @@
             <ul class="nav navbar-nav navbar-left">
                 @if(isset($options) && count($options) > 0)
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true" title="Options"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-bars fa-lg" aria-hidden="true" title="Options"></i></a>
                         <ul class="dropdown-menu" role="menu">
                             @foreach($options as $option)
                                 <li>{!! Html::linkRoute($option['url'], $option['link_name'], $option['params'], $option['attributes']) !!}</li>

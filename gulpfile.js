@@ -12,32 +12,28 @@ var elixir = require('laravel-elixir');
  */
 
 var elixir = require('laravel-elixir');
-
-var bowerDir = './resources/assets/vendor/';
-
-var lessPaths = [
-    bowerDir + "bootstrap/less",
-    bowerDir + "font-awesome/less",
-    bowerDir + "bootstrap-select/less"
-];
+var bowerDir = 'vendor/';
 
 elixir(function(mix) {
 
-    mix.less(['app.less'], 'public/css', { paths: lessPaths });
+    mix.sass('app.scss');
+
+    mix.styles([
+        "vendor/bootstrap/dist/css/bootstrap.min.css",
+        "vendor/bootstrap-select/dist/css/bootstrap-select.min.css",
+        "vendor/font-awesome/css/font-awesome.min.css"
+    ], 'public/css/app.css', 'resources/assets');
 
     mix.scripts([
-            'jquery/dist/jquery.min.js',
-            'jquery-ui/jquery-ui.min.js',
-            'moment/min/moment.min.js',
-            'bootstrap/dist/js/bootstrap.min.js',
-            'bootstrap-select/dist/js/bootstrap-select.min.js',
-            'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-            'dropzone/jquery.dropzone.min.js',
-        ], 'public/js/vendor.js', bowerDir
-    );
+        "vendor/jquery/dist/jquery.min.js",
+        "vendor/jquery-ui/jquery-ui.min.js",
+        "vendor/moment/min/moment.min.js",
+        "vendor/bootstrap/dist/js/bootstrap.min.js",
+        "vendor/bootstrap-select/dist/js/bootstrap-select.min.js",
+        "vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
+        "vendor/dropzone/jquery.dropzone.min.js"
+    ], "public/js/app.js", "resources/assets");
 
-    mix.copy('resources/assets/js/app.js', 'public/js/app.js')
-    mix.copy('resources/assets/js/main.js', 'public/js/main.js')
-    mix.copy(bowerDir + 'font-awesome/fonts', 'public/fonts');
-
+    mix.copy("resources/assets/vendor/font-awesome/fonts", "public/fonts");
+    mix.copy("resources/assets/js/main.js", "public/js/main.js")
 });

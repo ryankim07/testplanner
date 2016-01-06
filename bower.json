@@ -18,7 +18,7 @@
     "bootstrap-sass-official": "~3.3.4",
     "bootstrap-less": "~3.3.4",
     "bootstrap-select": "~1.7.2",
-    "font-awesome": "~4.3.0",
+    "font-awesome": "fontawesome#~4.5.0",
     "bootstrap": "~3.3.4",
     "foundation": "~5.3.3",
     "respond": "~1.4.2",
@@ -26,4 +26,3 @@
     "eonasdan-bootstrap-datetimepicker": "~4.17.37"
   }
 }
-

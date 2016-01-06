@@ -17,8 +17,9 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <div class="clearfix">
-                    <div class="pull-left">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <i class="fa fa-users fa-4x header-icon"></i>
                         <h3>All users <span class="badge">{!! $totalUsers !!}</span></h3>
                     </div>
                 </div>

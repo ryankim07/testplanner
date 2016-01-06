@@ -21,11 +21,11 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-md-10">
-                        {!! Html::image('images/plan.png', 'Plan', ['class' => 'plan-img', 'width' => 64, 'height' => 64]) !!}
+                    <div class="col-xs-10 col-md-10">
+                        <i class="fa fa-commenting fa-4x header-icon"></i>
                         <h3>{!! $plan['description'] !!}</h3>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-xs-2 col-md-2">
                         {!! Form::select('tester', $testers, null, ['class' => 'form-control input-sm', 'id' => 'view-tester', 'data-url' => route('plan.view.response', ['id' => null])]) !!}
                     </div>
                 </div>

@@ -10,7 +10,7 @@
 @if($errors->any())
     <div class="alert alert-danger" role="alert">
         @foreach($errors->all() as $error)
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"></i>
             <span class="sr-only">Error:</span>
             {!! $error !!}
         @endforeach
@@ -19,7 +19,7 @@
 
 @if(Session::has('flash_message'))
     <div class="alert alert-success" role="alert">
-        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+        <i class="fa fa-check-circle fa-lg" aria-hidden="true"></i>
         <span class="sr-only">Success:</span>
         {!! Session::get('flash_message') !!}
     </div>

@@ -21,7 +21,7 @@
         <div class="row ticket-row nested-block" id="{!! $id !!}">
             <div class="wrapper">
                 <legend>Ticket</legend>
-                <a href="#" class="trash"><span class="glyphicon glyphicon-trash"></span></a>
+                <a href="#" class="trash"><i class="fa fa-trash-o fa-lg"></i></a>
             </div>
             <div class="form-group">
                 <div class="col-xs-12 col-md-8">

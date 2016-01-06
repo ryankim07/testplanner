@@ -24,7 +24,7 @@
             <div class="col-xs-12 col-md-7">
                 @foreach($plans as $type => $plan)
                     <div class="row">
-                        <div class="panel panel-primary">
+                        <div class="panel panel-info">
                             <div class="panel-heading">
                                 @if($type == 'admin_created_plans')
                                     Assigned to others
@@ -99,7 +99,7 @@
                                                                 {!! Form::select('testers', $detail['testers'], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $detail['id'])]) !!}
                                                             @endif
                                                         </td>
-                                                        <td><a href="{!! URL::route('plan.view.response', [$detail['id'], $detail['user_id']]) !!}" class="view_tester_plan"><span class="glyphicon glyphicon-search"></span></a></td>
+                                                        <td><a href="{!! URL::route('plan.view.response', [$detail['id'], $detail['user_id']]) !!}" class="view_tester_plan"><i class="fa fa-search fa-lg"></i></a></td>
                                                     @endif
 
                                                 </tr>
@@ -125,7 +125,7 @@
         @else
             <div class="col-xs-12 col-md-7">
                 <div class="row">
-                    <div class="panel panel-primary">
+                    <div class="panel panel-info">
                         <div class="panel-heading">
                             <span>Plans</span>
                         </div>
@@ -143,7 +143,7 @@
 
             {!! Form::open(['route' => 'dashboard.comment.save', 'class' => 'form-horizontal', 'id' => 'activity-stream-form']) !!}
 
-            <div class="panel panel-primary">
+            <div class="panel panel-info">
                 <div class="panel-heading">Activity Stream</div>
                 <div class="panel-body">
                     @if(!empty($activities))
@@ -161,8 +161,8 @@
                                     @endforeach
                                     <div class="row">
                                         <ul class="list-unstyled list-inline text-left">
-                                            <li><span class="glyphicon glyphicon-time"></span> {!! $log['created_at'] !!}</li>
-                                            <li><span class="glyphicon glyphicon-comment"></span> <a href="#" class="activity-comment-link">Comment</a></li>
+                                            <li><i class="fa fa-clock-o fa-lg"></i> {!! $log['created_at'] !!}</li>
+                                            <li><i class="fa fa-comment fa-lg"></i> <a href="#" class="activity-comment-link">Comment</a></li>
                                         </ul>
                                     </div>
                                     <div class="row activity-comment-content">

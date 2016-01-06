@@ -45,8 +45,8 @@
                             <div class='input-group date col-md-8' id='{!! $filter['attr']['index'] !!}'>
                                 {!! Form::text($filter['attr']['index'], null, $filter['attr']['data']) !!}
                                 <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
+                                        <i class="fa fa-calendar fa-lg"></i>
+                                </span>
                             </div>
                         </div>
                     @endforeach

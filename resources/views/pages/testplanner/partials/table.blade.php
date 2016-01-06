@@ -48,7 +48,7 @@
                                 <td>{!! Utils::dateConverter($plan->updated_at) !!}</td>
                                 @if($table_type == 'view_all_admin')
                                     <td>{!! Form::select('tester', $testers[$plan->id], null, ['class' => 'form-control input-sm tester']) !!}</td>
-                                    <td><a href="{!! URL::route('plan.view.response', [$plan->id]) !!}" class="view-tester-plan"><span class="glyphicon glyphicon-search"></span></a></td>
+                                    <td><a href="{!! URL::route('plan.view.response', [$plan->id]) !!}" class="view-tester-plan"><i class="fa fa-search fa-lg"></i></a></td>
                                 @endif
                             </tr>
                         @endforeach

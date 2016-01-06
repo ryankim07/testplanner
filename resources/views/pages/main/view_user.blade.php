@@ -12,11 +12,12 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <div class="clearfix">
-                <div class="pull-left">
-                    <h3>View User</h3>
+            <div class="row">
+                <div class="col-xs-10 col-md-10">
+                    <i class="fa fa-user fa-4x header-icon"></i>
+                    <h3>{!! $user->first_name !!}</h3>
                 </div>
-                <div class="pull-right">
+                <div class="col-xs-2 col-md-2">
                     <button type="button" class="close close-viewer" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
             </div>
@@ -64,10 +65,10 @@
                     $('.alert').empty();
 
                     if (response.type == 'success') {
-                        $('.alert').attr('class', 'alert alert-success').html('<span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span><span class="sr-only">Success:</span> ' + response.msg).show();
+                        $('.alert').attr('class', 'alert alert-success').html('<i class="fa fa-check-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Success:</span> ' + response.msg).show();
                     } else {
                         $.each(response.msg, function(key, item) {
-                            msgs += '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> ' + item + '<br/>';
+                            msgs += '<i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Error:</span> ' + item + '<br/>';
                         });
 
                         $('.alert').attr('class', 'alert alert-danger').html(msgs).show();

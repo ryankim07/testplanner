@@ -14,7 +14,7 @@
         @else
             {!! Form::model($testersData, ['method' => 'PATCH', 'route' => ['tester.update'], 'id' => 'tester-edit-form']) !!}
         @endif
-        <div class="panel panel-primary">
+        <div class="panel panel-info">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-md-8">
