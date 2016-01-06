@@ -130,9 +130,9 @@ class User extends Model implements AuthenticatableContract,
     {
         $sortBy = 'sub.' . $sortBy;
 
-        $sub = DB::table('user_role as ur')
-            ->join('users AS u', 'u.id', '=', 'ur.user_id')
-            ->join('roles AS r', 'r.id', '=', 'ur.role_id')
+        $sub = DB::table('users as u')
+            ->leftJoin('user_role AS ur', 'ur.user_id', '=', 'u.id')
+            ->leftJoin('roles AS r', 'r.id', '=', 'ur.role_id')
             ->select('u.*', 'r.name AS role_names')
             ->toSql();
 

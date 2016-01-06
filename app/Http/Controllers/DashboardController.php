@@ -184,6 +184,6 @@ class DashboardController extends Controller
 
         ActivityComments::saveActivityComment($res['id'], $user->id, $res['comment']);
 
-        return response()->json(["status" => "sucess"]);
+        return response()->json(["status" => "success"]);
     }
 }

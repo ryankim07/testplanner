@@ -46,7 +46,7 @@
                 'id'			=> 'continue-btn'
             ])
         @else
-            @include('pages/main/partials/update_back_button', [
+            @include('pages/main/partials/update_back_cancel_button', [
                 'direction'     => 'pull-right',
                 'class'		    => 'btn-success btn-lg',
                 'updateBtnText' => 'Update',

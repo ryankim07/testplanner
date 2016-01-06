@@ -105,6 +105,7 @@
 
                 @endif
             </div>
+
         {!! Form::close() !!}
 
     </div>

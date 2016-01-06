@@ -8,16 +8,18 @@
 --}}
 
     <div class="form-group">
-        <div class="clearfix">
-            <div class="{!! $direction !!}">
+        <div class="col-xs-12 col-md-8">
+            <div class="clearfix">
+                <div class="{!! $direction !!}">
 
-                <?php
-                    $class = !isset($class) ? '' : $class;
-                    $id    = !isset($id) ? '' : $id;
-                ?>
+                    <?php
+                        $class = !isset($class) ? '' : $class;
+                        $id    = !isset($id) ? '' : $id;
+                    ?>
 
-                {!! Form::button($btnText, ['class' => 'btn ' . ' ' . $class, 'id' => $id]) !!}
+                    {!! Form::button($btnText, ['class' => 'btn ' . ' ' . $class, 'id' => $id]) !!}
 
+                </div>
             </div>
         </div>
     </div>

@@ -9,7 +9,8 @@
 
     <div class="col-xs-12 col-md-12" id="view-user-main">
 
-        {!! Form::model($user, ['method' => 'PATCH', 'route' => ['user.update', $user->id], 'class' => 'user-form-update']) !!}
+        {!! Form::open(['route' => 'user.update', 'id' => 'user-form-update']) !!}
+        {!! Form::hidden('user_id', $user->id) !!}
 
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -24,57 +25,20 @@
             </div>
             <div class="panel-body">
 
-                @include('errors.list')
+                <div class="alert" role="alert"></div>
 
-                <div class="form-group">
-                    <div class="col-xs-12 col-md-8">
-                        {!! Form::label('active_label', 'Active') !!}
-                        {!! Form::select('active', [1 => 'Yes', 0 => 'No'], $user->active, ['class' => 'form-control input-sm', 'id' => 'active']) !!}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-md-8">
-                        {!! Form::label('assign_role_label', 'Role') !!}
-                        {!! Form::select('assign_role', $rolesOptions, $rolesSelectedOptions, ['class' => 'form-control input-sm', 'id' => 'role', 'multiple' => 'multiple']) !!}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-md-8">
-                        {!! Form::label('first_name_label', 'First Name') !!}
-                        {!! Form::text('first_name', old('name'), ['class' => 'form-control input-sm', 'id' => 'first-name']) !!}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-md-8">
-                        {!! Form::label('last_name_label', 'Last Name') !!}
-                        {!! Form::text('last_name', old('name'), ['class' => 'form-control input-sm', 'id' => 'last-name']) !!}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-md-8">
-                        {!! Form::label('email_label', 'E-Mail Address') !!}
-                        {!! Form::email('email', old('email'), ['class' => 'form-control input-sm', 'id' => 'email']) !!}
-                    </div>
-                </div>
+                @include('pages/main/partials/user_info', [
+                    'column'               => 'col-md-8',
+                    'user'                 => $user,
+                    'rolesOptions'         => $rolesOptions,
+                    'rolesSelectedOptions' => ''
+                ])
 
-                <div class="form-group">
-                    <div class="col-xs-12 col-md-8">
-                        {!! Form::label('password_label', 'Password') !!}
-                        {!! Form::password('password', ['class' => 'form-control input-sm', 'id' => 'password']) !!}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-md-8">
-                        {!! Form::label('password_confirmation_label', 'Confirm Password') !!}
-                        {!! Form::password('password_confirmation', ['class' => 'form-control input-sm', 'id' => 'password-confirmation']) !!}
-                    </div>
-                </div>
-
-                @include('pages/main/partials/submit_button', [
-                    'submitBtnText' => 'Update',
-                    'direction'     => 'pull-left',
-                    'class'		    => 'btn-success',
-                    'id'			=> 'update-btn'
+                @include('pages/main/partials/button', [
+                    'btnText'   => 'Update',
+                    'direction' => 'pull-left',
+                    'class'     => 'btn btn-success btn-sm',
+                    'id'        => 'update-btn'
                 ])
 
             </div>
@@ -83,3 +47,37 @@
         {!! Form::close() !!}
 
     </div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            $('.alert').hide();
+
+            $('#view-user-main').on('click', '#update-btn', function() {
+                var newRoles = $("#current_roles").val() || [];
+
+                $.ajax({
+                    method: "POST",
+                    url: "{!! URL::to('user/update') !!}",
+                    data: $("#user-form-update").serialize() + '&new_roles=' + newRoles,
+                    dataType: "json"
+                }).done(function (response) {
+                    var msgs = '';
+
+                    $('.alert').attr('class', 'alert');
+                    $('.alert').empty();
+
+                    if (response.type == 'success') {
+                        $('.alert').attr('class', 'alert alert-success').html('<span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span><span class="sr-only">Success:</span> ' + response.msg).show();
+                    } else {
+                        $.each(response.msg, function(key, item) {
+                            msgs += '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> ' + item + '<br/>';
+                        });
+
+                        $('.alert').attr('class', 'alert alert-danger').html(msgs).show();
+                    }
+                });
+            });
+        });
+
+    </script>

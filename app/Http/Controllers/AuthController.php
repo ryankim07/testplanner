@@ -9,6 +9,7 @@ use App\Http\Requests\RegisterFormRequest;
 
 use App\User;
 use App\UserRole;
+use App\Role;
 use App\Tables;
 
 use Auth;
@@ -42,7 +43,7 @@ class AuthController extends Controller
             return redirect('dashboard');
         }
 
-        return view('pages.main.login', ['formAction' => 'auth.post.login']);
+        return view('pages.main.login');
     }
 
     /**
@@ -81,7 +82,16 @@ class AuthController extends Controller
      */
     public function getRegister()
     {
-        return view('pages.main.register');
+        $allRoles  = Role::all();
+
+        foreach($allRoles as $eachRole) {
+            $rolesOptions[$eachRole->id] = ucfirst($eachRole->name);
+        }
+
+        return view('pages.main.register', [
+            'rolesOptions'         => $rolesOptions,
+            'rolesSelectedOptions' => ''
+        ]);
     }
 
     /**

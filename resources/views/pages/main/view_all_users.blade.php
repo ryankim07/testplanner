@@ -63,6 +63,7 @@
     </div>
 
     <script type="text/javascript">
+
         $(document).ready(function() {
             $('.toggler').on('click', function (e) {
                 e.preventDefault();
@@ -100,6 +101,7 @@
                 });
             });
         });
+
     </script>
 
 @stop

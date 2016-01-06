@@ -109,5 +109,4 @@ $(document).ready(function() {
     /**
      * UTILITY FUNCTIONS
      */
-
 });

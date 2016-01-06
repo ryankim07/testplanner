@@ -47,7 +47,13 @@ Route::get('user/all', [
 
 Route::get('user/search', 'UsersController@search');
 Route::post('user/search', ['as' => 'user.search', 'uses' => 'UsersController@search']);
-Route::resource('user', 'UsersController');
+
+Route::post('user/update', [
+    'as'         => 'user.update',
+    'middleware' => 'roles',
+    'roles'      => ['root'],
+    'uses'       => 'UsersController@update'
+]);
 
 
 /**

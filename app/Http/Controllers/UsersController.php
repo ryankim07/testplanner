@@ -19,6 +19,9 @@ use App\Http\Requests\RegisterFormRequest;
 use App\User;
 use App\Tables;
 use App\Role;
+use App\UserRole;
+
+use Validator;
 
 class UsersController extends Controller
 {
@@ -47,7 +50,7 @@ class UsersController extends Controller
 
             foreach($userRoles as $eachUserRole) {
                 if ($eachUserRole->id == $eachRole->id) {
-                    $selected[] = $eachUserRole->id;
+                    $rolesSelected[] = $eachUserRole->id;
                 }
             }
         }
@@ -56,32 +59,78 @@ class UsersController extends Controller
             'mode'                 => 'view',
             'user'                 => $user,
             'rolesOptions'         => $rolesOptions,
-            'rolesSelectedOptions' => $selected
+            'rolesSelectedOptions' => isset($rolesSelected) ? $rolesSelected : ''
         ])->render();
 
-        return response()->json(["viewBody"  => $viewHtml]);
+        return response()->json(["viewBody" => $viewHtml]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param $userId
-     * @param RegisterFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update($userId, RegisterFormRequest $request)
+    public function update(Request $request)
     {
-        $res  = array_except($request->all(), '_token');
+        $userId = $request->get('user_id');
+
+        // Custom validator
+        $validator = Validator::make(array_except($request->all(), '_token'), [
+            'current_roles' => 'required',
+            'first_name'    => 'required',
+            'last_name'     => 'required',
+            'email'         => 'required|email',
+            'password'      => 'required|confirmed|min:6'
+        ], [
+            'current_roles.required' => 'Role is required',
+            'first_name.required'    => 'First name is required',
+            'last_name.required'     => 'Last name is required',
+            'email.required'         => 'Email is required',
+            'email.email'            => 'Enter correct email address',
+            'password.required'      => 'Password is required',
+            'password.confirmed'     => 'Password confirmation is required',
+            'password.min'           => 'Password must have a length of 6 characters'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'type' => 'error',
+                'msg'  => $validator->errors()->all()
+            ]);
+        }
+
+        // Update user info
         $user = User::find($userId);
         $user->update([
             'first_name' => $request->get('first_name'),
             'last_name'  => $request->get('last_name'),
             'email'      => $request->get('email'),
             'active'     => $request->get('active'),
+            'password'   => bcrypt($request->get('password'))
         ]);
 
-        return redirect()->action('UsersController@all')
-            ->with('flash_message', config('testplanner.user_update_success_msg'));
+        // Remove all existing roles for user
+        if (isset($userId)) {
+            UserRole::where('user_id', $userId)->delete();
+        }
+
+        // Update user roles
+        $newRoles = explode(',', $request->get('new_roles'));
+
+        if (count($newRoles) > 0) {
+            foreach($newRoles as $key => $value) {
+                UserRole::create([
+                    'user_id' => $userId,
+                    'role_id' => $value
+                ]);
+            }
+        }
+
+        return response()->json([
+            'type' => 'success',
+            'msg'  => config('testplanner.user_update_success_msg')
+        ]);
     }
 
     /**

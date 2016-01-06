@@ -18,7 +18,9 @@
                         $backBtnId   = !isset($backBtnId) ? '' : $backBtnId;
                     ?>
 
-                    {!! Form::submit($backBtnText, ['class' => 'btn ' . $class, 'id' => $backBtnId]) !!}
+                    @if(!empty($backBtnText))
+                        {!! Form::submit($backBtnText, ['class' => 'btn ' . $class, 'id' => $backBtnId]) !!}
+                    @endif
                     {!! Form::submit($updateBtnText, ['class' => 'btn ' . $class, 'id' => $updateBtnId]) !!}
 
                 </div>
