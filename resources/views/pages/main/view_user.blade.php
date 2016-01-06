@@ -7,46 +7,42 @@
 |
 --}}
 
-    <div class="col-xs-12 col-md-12" id="view-user-main">
+    {!! Form::open(['route' => 'user.update', 'class' => 'form-horizontal', 'id' => 'user-form-update']) !!}
+    {!! Form::hidden('user_id', $user->id) !!}
 
-        {!! Form::open(['route' => 'user.update', 'id' => 'user-form-update']) !!}
-        {!! Form::hidden('user_id', $user->id) !!}
-
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="clearfix">
-                    <div class="pull-left">
-                        <h3>View User</h3>
-                    </div>
-                    <div class="pull-right">
-                        <button type="button" class="close close-viewer" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="clearfix">
+                <div class="pull-left">
+                    <h3>View User</h3>
+                </div>
+                <div class="pull-right">
+                    <button type="button" class="close close-viewer" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
             </div>
-            <div class="panel-body">
-
-                <div class="alert" role="alert"></div>
-
-                @include('pages/main/partials/user_info', [
-                    'column'               => 'col-md-8',
-                    'user'                 => $user,
-                    'rolesOptions'         => $rolesOptions,
-                    'rolesSelectedOptions' => ''
-                ])
-
-                @include('pages/main/partials/button', [
-                    'btnText'   => 'Update',
-                    'direction' => 'pull-left',
-                    'class'     => 'btn btn-success btn-sm',
-                    'id'        => 'update-btn'
-                ])
-
-            </div>
         </div>
+        <div class="panel-body">
 
-        {!! Form::close() !!}
+            <div class="alert" role="alert"></div>
 
+            @include('pages/main/partials/user_info', [
+                'column'               => 'col-md-8',
+                'user'                 => $user,
+                'rolesOptions'         => $rolesOptions,
+                'rolesSelectedOptions' => $rolesSelectedOptions
+            ])
+
+            @include('pages/main/partials/button', [
+                'btnText'   => 'Update',
+                'direction' => 'pull-left',
+                'class'     => 'btn btn-success btn-sm',
+                'id'        => 'update-btn'
+            ])
+
+        </div>
     </div>
+
+    {!! Form::close() !!}
 
     <script type="text/javascript">
 

@@ -23,13 +23,13 @@
 
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
-                        {!! Form::label('email', 'E-Mail Address / Username') !!}
+                        {!! Form::label('email_label', 'E-Mail Address / Username') !!}
                         {!! Form::email('email', old('email'), ['class' => 'form-control input-sm', 'id' => 'email']) !!}
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
-                        {!! Form::label('password', 'Password') !!}
+                        {!! Form::label('password_label', 'Password') !!}
                         {!! Form::password('password', ['class' => 'form-control input-sm', 'id' => 'password']) !!}
                     </div>
                 </div>

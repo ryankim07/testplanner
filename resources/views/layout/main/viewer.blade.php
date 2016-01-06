@@ -7,4 +7,4 @@
 |
 --}}
 
-<div class="col-xs-0 col-md-0" id="viewer"></div>
+<div class="col-xs-0 col-md-0" id="viewer-main"></div>

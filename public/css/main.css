@@ -177,21 +177,13 @@ table:not(.dashboard-table) tbody tr:hover {
     position: relative;
 }
 
-.activity-actions {
-    margin: 0;
-    padding: 0;
+#dashboard-main .nested-block {
+    padding: 10px 10px 10px 10px;
 }
 
-.activity-link-actions {
-    padding: 0px 10px;
-}
 
 .respond legend {
     font-size: 18.5px;
-}
-
-.comment-btn {
-    margin-top: 10px;
 }
 
 .plan-img {

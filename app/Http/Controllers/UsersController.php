@@ -59,7 +59,7 @@ class UsersController extends Controller
             'mode'                 => 'view',
             'user'                 => $user,
             'rolesOptions'         => $rolesOptions,
-            'rolesSelectedOptions' => isset($rolesSelected) ? $rolesSelected : ''
+            'rolesSelectedOptions' => count($rolesSelected) > 0 ? $rolesSelected : ''
         ])->render();
 
         return response()->json(["viewBody" => $viewHtml]);

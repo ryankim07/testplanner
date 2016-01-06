@@ -1,11 +1,6 @@
 $(document).ready(function() {
 
     /**
-     * VIEW MAIN
-     */
-
-
-    /**
      * RESPONDING TO TICKET
      */
     $('#respond-btn').on('click', function() {
@@ -44,9 +39,17 @@ $(document).ready(function() {
 
 
     /**
-     * DASHBOARD ACTIVITY STREAM COMMENTS
+     * DASHBOARD
      */
-        // Hide initially
+    // Change viewer id link
+    $('#dashboard-main').on('change', '.testers', function() {
+        var selectedTesterId = $(this).val();
+        var route = $(this).data('url') + '/' + selectedTesterId;
+
+        $(this).closest('td').next('td').find('.view_tester_plan').prop('href', route);
+    });
+
+    // Hide initially
     $('.activity-comment-content').hide();
 
     // Toggle comment to show or hide
@@ -83,6 +86,11 @@ $(document).ready(function() {
         parent.find('.activity-comment-content').hide();
     });
 
+
+    /**
+     * ADMIN
+     */
+
     // View all admin
     $('#view-all-admin-main').on('click', '.view-tester-plan', function(e) {
         e.preventDefault();
@@ -94,10 +102,7 @@ $(document).ready(function() {
         window.location.href = url + '/' + tester;
     });
 
-    /**
-     * ADMIN
-     */
-        // Show all or adminstrator plans
+    // Show all or adminstrator plans
     $('#view-all-plans-main').on('change', '#view-user', function() {
         var route   = $(this).data('url');
         var adminId = $(this).val();
@@ -114,5 +119,4 @@ $(document).ready(function() {
     /**
      * UTILITY FUNCTIONS
      */
-
 });

@@ -65,7 +65,7 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
-            $('.toggler').on('click', function (e) {
+            $('#view-all-users-main').on('click', '.toggler', function(e) {
                 e.preventDefault();
 
                 var currentClass = $('#view-all-users-main').attr('class');
@@ -73,7 +73,7 @@
                 if (currentClass != 'col-xs-12 col-md-8') {
                     // Control width of both columns
                     $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
-                    $('#viewer').toggleClass('col-md-0 col-md-4');
+                    $('#viewer-main').toggleClass('col-md-0 col-md-4');
                 }
 
                 // Selecting rows on mobile
@@ -87,7 +87,7 @@
                         url: $(this).data('url'),
                         dataType: "json",
                         success: function (resp) {
-                            $('#viewer').html(resp.viewBody);
+                            $('#viewer-main').html(resp.viewBody);
                         }
                     })
                 ).done(function (resp) {
@@ -95,8 +95,8 @@
                     $('.close-viewer').on('click', function (e) {
                         e.preventDefault();
                         $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
-                        $('#viewer').toggleClass('col-md-0 col-md-4');
-                        $('#viewer').empty();
+                        $('#viewer-main').toggleClass('col-md-0 col-md-4');
+                        $('#viewer-main').empty();
                     });
                 });
             });

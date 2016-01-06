@@ -24,19 +24,19 @@
                 <input type="hidden" name="token" value="{{ $token }}">
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
-                        {!! Form::label('email', 'E-Mail Address') !!}
+                        {!! Form::label('email_label', 'E-Mail Address') !!}
                         {!! Form::email('email', old('email'), ['class' => 'form-control input-sm', 'id' => 'email']) !!}
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
-                        {!! Form::label('password', 'Password') !!}
+                        {!! Form::label('password_label', 'Password') !!}
                         {!! Form::password('password', ['class' => 'form-control input-sm', 'id' => 'password']) !!}
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
-                        {!! Form::label('password_confirmation', 'Confirm Password') !!}
+                        {!! Form::label('password_confirmation_label', 'Confirm Password') !!}
                         {!! Form::password('password_confirmation', ['class' => 'form-control input-sm', 'id' => 'password_confirmation']) !!}
                     </div>
                 </div>

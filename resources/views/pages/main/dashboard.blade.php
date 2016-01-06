@@ -21,7 +21,7 @@
         <!-- ASSIGNED OR ADMIN CREATED PLANS -->
 
         @if(!empty($plans))
-            <div class="col-xs-12 col-md-6">
+            <div class="col-xs-12 col-md-7">
                 @foreach($plans as $type => $plan)
                     <div class="row">
                         <div class="panel panel-primary">
@@ -89,14 +89,14 @@
                                                                 }
                                                             ?>
 
-                                                            <span class="label {!! $trLabel !!}">{!! $detail['ticket_response_status'] !!}</span>
+                                                            <span class="label {!! $trLabel !!}">{!! isset($detail['ticket_response_status']) ? $detail['ticket_response_status'] : 'new' !!}</span>
                                                         @endif
                                                     </td>
                                                     <td>{!! Utils::dateConverter($detail['created_at']) !!}</td>
                                                     @if($type == 'admin_created_plans')
                                                         <td>
                                                             @if($detail['status'] != 'completed')
-                                                                {!! Form::select('testers', $detail['testers'], null, ['class' => 'form-control input-sm tester']) !!}
+                                                                {!! Form::select('testers', $detail['testers'], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $detail['id'])]) !!}
                                                             @endif
                                                         </td>
                                                         <td><a href="{!! URL::route('plan.view.response', [$detail['id'], $detail['user_id']]) !!}" class="view_tester_plan"><span class="glyphicon glyphicon-search"></span></a></td>
@@ -123,7 +123,7 @@
                 @endforeach
             </div>
         @else
-            <div class="col-xs-12 col-md-6">
+            <div class="col-xs-12 col-md-7">
                 <div class="row">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
@@ -139,9 +139,9 @@
 
         <!-- ACTIVITY STREAM -->
 
-        <div class="col-xs-12 col-md-6">
+        <div class="col-xs-12 col-md-5">
 
-            {!! Form::open(['route' => 'dashboard.comment.save', 'id' => 'activity-stream-form']) !!}
+            {!! Form::open(['route' => 'dashboard.comment.save', 'class' => 'form-horizontal', 'id' => 'activity-stream-form']) !!}
 
             <div class="panel panel-primary">
                 <div class="panel-heading">Activity Stream</div>
@@ -149,9 +149,9 @@
                     @if(!empty($activities))
                         @foreach($activities as $log)
                             <div class="row activity-log nested-block">
-                                <div class="col-xs-2 col-md-2"><img src="images/mophie-user.jpeg" alt="mophie-user" width="40" height="40"></div>
+                                <div class="col-xs-2 col-md-2"><img src="images/mophie-user.jpeg" alt="mophie-user" class="thumbnail" width="40" height="40"></div>
                                 <div class="col-xs-10 col-md-10">
-                                    <div class="form-group">{!! $log['activity'] !!}</div>
+                                    <div class="row">{!! $log['activity'] !!}</div>
                                     @foreach($log['comments'] as $eachComment)
                                         <div class="form-group">
                                             <div class="col-md-12 col-md-offset-0">
@@ -159,16 +159,23 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                    <div class="form-group">
-                                        <ul class="activity-actions list-unstyled list-inline text-left">
+                                    <div class="row">
+                                        <ul class="list-unstyled list-inline text-left">
                                             <li><span class="glyphicon glyphicon-time"></span> {!! $log['created_at'] !!}</li>
-                                            <li class="activity-link-actions"><span class="glyphicon glyphicon-comment"></span> <a href="#" class="activity-comment-link">Comment</a></li>
+                                            <li><span class="glyphicon glyphicon-comment"></span> <a href="#" class="activity-comment-link">Comment</a></li>
                                         </ul>
                                     </div>
-                                    <div class="form-group activity-comment-content">
-                                        {!! Form::textarea('activity_comment', null, ['class' => 'form-control', 'rows' => '4']) !!}
-                                        <div class="comment-btn">
-                                            <input type="button" name="add_comment" class="btn btn-primary btn-sm activity-comment-add" value="Add"> <input type="button" name="cancel_comment" class="btn btn-primary btn-sm activity-comment-cancel" value="Cancel">
+                                    <div class="row activity-comment-content">
+                                        <div class="form-group">
+                                            <div class="col-xs-8 col-md-8">
+                                                {!! Form::textarea('activity_comment', null, ['class' => 'form-control', 'rows' => '4']) !!}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-xs-8 col-md-8">
+                                                {!! Form::button('Add', ['class' => 'btn btn-primary btn-sm activity-comment-add']) !!}
+                                                {!! Form::button('Cancel', ['class' => 'btn btn-primary btn-sm activity-comment-cancel']) !!}
+                                            </div>
                                         </div>
                                     </div>
 
