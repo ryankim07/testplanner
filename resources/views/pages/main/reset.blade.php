@@ -15,7 +15,7 @@
 
         {!! Form::open(['route' => 'password.post.reset', 'class' => 'form-horizontal', 'id' => 'password-reset-form']) !!}
 
-        <div class="panel panel-primary">
+        <div class="panel panel-primary col-md-8">
             <div class="panel-body">
                 <h3 class="sub-header">Reset Password</h3>
 

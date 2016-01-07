@@ -1,7 +1,9 @@
 $(document).ready(function() {
 
     /**
+     *
      * RESPONDING TO TICKET
+     *
      */
     $('#respond-btn').on('click', function() {
         var tickets = [];
@@ -25,7 +27,9 @@ $(document).ready(function() {
 
 
     /**
+     *
      * VIEW RESPONSE DROPDOWN VIEWER FOR A CERTAIN USER
+     *
      */
     $('#view-response-main').on('change', '#view-tester', function() {
         var route  = $(this).data('url');
@@ -39,7 +43,9 @@ $(document).ready(function() {
 
 
     /**
+     *
      * DASHBOARD
+     *
      */
     // Change viewer id link
     $('#dashboard-main').on('change', '.testers', function() {
@@ -88,9 +94,10 @@ $(document).ready(function() {
 
 
     /**
-     * ADMIN
+     *
+     * VIEW ALL ADMIN PLANS
+     *
      */
-
     // View all admin
     $('#view-all-admin-main').on('click', '.view-tester-plan', function(e) {
         e.preventDefault();
@@ -117,6 +124,44 @@ $(document).ready(function() {
 
 
     /**
-     * UTILITY FUNCTIONS
+     *
+     * USER ACCOUNTS
+     *
      */
+    // Display all user accounts
+    $('#view-all-users-main').on('click', '.toggler', function(e) {
+        e.preventDefault();
+
+        var currentClass = $('#view-all-users-main').attr('class');
+
+        if (currentClass != 'col-xs-12 col-md-8') {
+            // Control width of both columns
+            $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
+            $('#viewer-main').toggleClass('col-md-0 col-md-4');
+        }
+
+        // Selecting rows on mobile
+        if (currentClass == 'col-xs-12 col-md-12') {
+            $('#view-all-users-main').css({'z-index': '1000'});
+        }
+
+        $.when(
+            $.ajax({
+                method: "GET",
+                url: $(this).data('url'),
+                dataType: "json",
+                success: function (resp) {
+                    $('#viewer-main').html(resp.viewBody);
+                }
+            })
+        ).done(function (resp) {
+            // Close viewer
+            $('.close-viewer').on('click', function (e) {
+                e.preventDefault();
+                $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
+                $('#viewer-main').toggleClass('col-md-0 col-md-4');
+                $('#viewer-main').empty();
+            });
+        });
+    });
 });

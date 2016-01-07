@@ -82,13 +82,15 @@
                                         }
                                     ?>
 
-                                    <p><span>
+                                    <p>
+                                        <span>
                                         @if($passed)
                                             Passed
                                         @elseif($failed)
                                             Failed
                                         @endif
-                                    </span></p>
+                                        </span>
+                                    </p>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-md-4">

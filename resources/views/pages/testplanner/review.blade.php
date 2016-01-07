@@ -10,7 +10,7 @@
 
     <div class="col-xs-12 col-md-12 main" id="review-main">
 
-        {!! Form::open(['action' => ['PlansController@save'], 'id' => 'plan-review-form']) !!}
+        {!! Form::open(['route' => 'plan.dsbr', 'id' => 'plan-review-form']) !!}
 
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -31,7 +31,7 @@
 
                 <div class="row nested-block">
                     <legend>Plan Description</legend>
-                    <a href="{!! URL::route('plan.edit') !!}" class="cog"><i class="fa fa-cogs fa-lg"></i></a>
+                    <a href="{!! URL::route('plan.edit') !!}" class="cog"><i class="fa fa-cog fa-lg"></i></a>
                     <ul class="list-unstyled">
                         <li><h5>{!! $plan['description'] !!}</h5></li>
                     </ul>
@@ -39,8 +39,8 @@
                 @foreach($tickets as $ticket)
                     <div class="row nested-block ticket-row" id="{!! $ticket['id'] !!}">
                         <legend>Tickets</legend>
-                        <a href="#" class="trash" data-id="{!! $ticket['id'] !!}"><i class="fa fa-trash-o fa-lg"></i></span></a>
-                        <a href="{!! URL::route('ticket.edit') !!}" class="cog"><i class="fa fa-cogs fa-lg"></i></a>
+                        <a href="#" class="trash" data-id="{!! $ticket['id'] !!}"><i class="fa fa-trash-o fa-lg"></i></a>
+                        <a href="{!! URL::route('ticket.edit') !!}" class="cog"><i class="fa fa-cog fa-lg"></i></a>
                         <ul class="list-unstyled">
                             <li><h4><span class="label label-default">Description</span></h4><h5>{!! $ticket['description'] !!}</h5></li>
                             <li><h4><span class="label label-primary">Objective</span></h4><h5>{!! $ticket['objective'] !!}</h5></li>
@@ -50,7 +50,7 @@
                 @endforeach
                 <div class="row nested-block">
                     <legend>Browser Testers</legend>
-                    <a href="{!! URL::route('tester.edit') !!}" class="cog"><i class="fa fa-cogs fa-lg"></i></a>
+                    <a href="{!! URL::route('tester.edit') !!}" class="cog"><i class="fa fa-cog fa-lg"></i></a>
                     @foreach($testers as $tester)
                         <div class="text-center review-testers">
                             {!! Html::image('images/' . $tester['browser'] . '.png') !!}<h5><span class="caption">{!! $tester['first_name'] !!}</span></h5>

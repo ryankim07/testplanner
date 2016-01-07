@@ -20,8 +20,21 @@ Route::get('/', 'AuthController@getLogin');
 Route::get('auth/logout', ['as' => 'auth.logout', 'uses' => 'AuthController@getLogout']);
 Route::get('auth/login', ['as' => 'auth.login', 'uses' => 'AuthController@getLogin']);
 Route::post('auth/postLogin', ['as' => 'auth.post.login', 'uses' => 'AuthController@postLogin']);
-Route::get('auth/register', ['as' => 'auth.register','uses' => 'AuthController@getRegister']);
-Route::post('auth/postRegister', ['as' => 'auth.post.register', 'uses' => 'AuthController@postRegister']);
+
+Route::get('auth/register', [
+    'as'         => 'auth.register',
+    'middleware' => 'roles',
+    'roles'      => ['root'],
+    'uses'       => 'AuthController@getRegister'
+]);
+
+Route::post('auth/postRegister', [
+    'as'         => 'auth.post.register',
+    'middleware' => 'roles',
+    'roles'      => ['root'],
+    'uses'       => 'AuthController@postRegister'
+]);
+
 Route::get('password/getEmail', ['as' =>'password.email', 'uses' => 'PasswordController@getEmail']);
 Route::post('password/postEmail', ['as' => 'password.post.email', 'uses' => 'PasswordController@postEmail']);
 Route::get('password/getReset/{token}', ['as' =>'password.reset', 'uses' => 'PasswordController@getReset']);
@@ -61,39 +74,17 @@ Route::post('user/update', [
  * Dashboard
  *
  */
-Route::get('dashboard', [
-    'as'         => 'dashboard',
-    'middleware' => 'roles',
-    'roles'      => ['root', 'administrator', 'user'],
-    'uses'       => 'DashboardController@index'
-]);
+Route::get('dashboard', ['as'  => 'dashboard', 'uses' => 'DashboardController@index']);
 
 Route::get('dashboard/view-all-admin', [
     'as'         => 'dashboard.view.all.admin',
     'middleware' => 'roles',
-    'roles'      => ['root', 'administrator', 'user'],
+    'roles'      => ['root', 'administrator'],
     'uses'       => 'DashboardController@viewAllAdmin']);
 
-Route::get('dashboard/view-all-assigned', [
-    'as'         => 'dashboard.view.all.assigned',
-    'middleware' => 'roles',
-    'roles'      => ['root', 'administrator', 'user'],
-    'uses'       => 'DashboardController@viewAllAssigned'
-]);
-
-Route::post('dashboard/save', [
-    'as'         => 'dashboard.plan.save',
-    'middleware' => 'roles',
-    'roles'      => ['root', 'administrator', 'user'],
-    'uses'       => 'DashboardController@save'
-]);
-
-Route::post('dashboard/save-comment', [
-    'as'         => 'dashboard.comment.save',
-    'middleware' => 'roles',
-    'roles'      => ['root', 'administrator', 'user'],
-    'uses'       => 'DashboardController@saveComment'
-]);
+Route::get('dashboard/view-all-assigned', ['as' => 'dashboard.view.all.assigned', 'uses' => 'DashboardController@viewAllAssigned']);
+Route::post('dashboard/save', ['as' => 'dashboard.plan.save', 'uses' => 'DashboardController@save']);
+Route::post('dashboard/save-comment', ['as' => 'dashboard.comment.save', 'uses' => 'DashboardController@saveComment']);
 
 
 /**
@@ -103,6 +94,8 @@ Route::post('dashboard/save-comment', [
  */
 Route::get('plan/view/{id}', ['as' => 'plan.view', 'uses' => 'PlansController@view']);
 Route::get('plan/view-response/{plan_id}/{user_id}', ['as' => 'plan.view.response', 'uses' => 'PlansController@viewResponse']);
+Route::get('plan/respond/{plan_id}', ['as' => 'plan.respond', 'uses' => 'PlansController@respond']);
+
 Route::get('plan/build', [
     'as'         => 'plan.build',
     'middleware' => 'roles',
@@ -110,19 +103,29 @@ Route::get('plan/build', [
     'uses'       => 'PlansController@build'
 ]);
 
-Route::get('plan/respond/{plan_id}', [
-    'as'         => 'plan.respond',
+Route::get('plan/review', [
+    'as'         => 'plan.review',
     'middleware' => 'roles',
-    'roles'      => ['root', 'administrator', 'user'],
-    'uses'       => 'PlansController@respond'
+    'roles'      => ['root', 'administrator'],
+    'uses'       => 'PlansController@review'
+]);
+Route::get('plan/all/{id}', [
+    'as'         => 'plan.view.all',
+    'middleware' => 'roles',
+    'roles'      => ['root', 'administrator'],
+    'uses'       => 'PlansController@viewAllPlans'
 ]);
 
-Route::get('plan/review', ['as' => 'plan.review', 'uses' => 'PlansController@review']);
-Route::get('plan/all/{id}', ['as' => 'plan.view.all', 'uses' => 'PlansController@viewAllPlans']);
+Route::post('plan/save', [
+    'as'         => 'plan.save',
+    'middleware' => 'roles',
+    'roles'      => ['root', 'administrator'],
+    'uses'       => 'PlansController@save']);
+
 Route::get('plan/search', 'PlansController@search');
 Route::post('plan/search', ['as' => 'plan.search', 'uses' => 'PlansController@search']);
 Route::post('plan/save-user-response', ['as' => 'plan.save.user.response', 'uses' => 'PlansController@saveUserResponse']);
-Route::post('plan/save', ['as' => 'plan.save', 'uses' => 'PlansController@save']);
+
 Route::patch('plan/update-plan-details/{id}', ['as' => 'plan.update.details', 'uses' => 'PlansController@updatePlansDetails']);
 Route::put('plan/update-plan-details/{id}', ['as' => 'plan.update.details', 'uses' => 'PlansController@updatePlansDetails']);
 Route::resource('plan', 'PlansController');

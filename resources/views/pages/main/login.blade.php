@@ -15,7 +15,7 @@
 
         {!! Form::open(['route' => 'auth.post.login', 'class' => 'form-horizontal', 'id' => 'auth-login-form']) !!}
 
-        <div class="panel panel-primary">
+        <div class="panel panel-primary col-md-8">
             <div class="panel-body">
                 <h3 class="sub-header">Login</h3>
 

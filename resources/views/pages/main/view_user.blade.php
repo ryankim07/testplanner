@@ -10,7 +10,7 @@
     {!! Form::open(['route' => 'user.update', 'class' => 'form-horizontal', 'id' => 'user-form-update']) !!}
     {!! Form::hidden('user_id', $user->id) !!}
 
-    <div class="panel panel-default">
+    <div class="panel panel-default" id="view-user-main">
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-10 col-md-10">

@@ -555,42 +555,6 @@ img{height:auto !important;}
 
 <!--start 100% wrapper (white background) -->
 <table width="100%" id="mainStructure" border="0" cellspacing="0" cellpadding="0" style="background-color:#f9f9f9;">
-   <!-- SUB-HEADER -->
-  <tbody>
-  <tr>
-    <td align="center" valign="top" class="fix-box">
-      
-          <!-- start logo footer and address -->  
-          <table width="600" align="center" border="0" cellspacing="0" cellpadding="0" class="container">
-            <tbody><tr>
-              <td valign="top">
-
-                <!--start icon socail navigation -->  
-                <table border="0" align="center" cellpadding="0" cellspacing="0" class="container">
-                  <tbody><tr>
-                    <td valign="top" align="left">
-
-                      <table border="0" align="left" cellpadding="0" cellspacing="0" class="container" style="font-family: century gothic, Helvetica, sans-serif; font-size:22px; font-weight: 100;">
-                        <tbody><tr>
-                            <td valign="top" style="font-size: 10px; line-height: 22px; font-family:Proxima nova, Lato, Open Sans, Arial, Helvetica, Tahoma, sans-serif; color:#C0C0C0; font-weight:300; text-align:center; ">
-                                <p>Thank you for your registration and continued support.</p>                          
-                            </td>
-                        </tr>
-                      </tbody></table>
-
-                    </td>
-                  </tr>
-                </tbody></table>
-                <!--end icon socail navigation --> 
-              </td>
-            </tr>
-          </tbody></table>
-          <!-- end logo footer and address --> 
-
-
-    </td>
-  </tr>
-   <!--END SUB-HEADER-->
    
    <!-- NAVIGATION LOGO -->
   <tbody>
@@ -675,7 +639,7 @@ img{height:auto !important;}
 
                            <p><strong>Hi, {!! $first_name !!}!</strong></p>
                            
-                           <p>Click the link to be taken to the test plan: {!! Html::linkRoute('plan.respond', $description, $id) !!}.</p>
+                           <p>A new plan has been created for testing.  Click the link to be taken to the test plan: {!! Html::linkRoute('plan.respond', $description, $id) !!}.</p>
 
                            </td>
                          </tr>

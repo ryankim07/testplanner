@@ -6,7 +6,7 @@
 
         {!! Form::open(['route' => 'password.post.email', 'files' => true, 'class' => 'form-horizontal', 'id' => 'admin-password-send-form']) !!}
 
-        <div class="panel panel-primary">
+        <div class="panel panel-primary col-md-8">
             <div class="panel-body">
                 <h3 class="sub-header">Forgotten Password</h3>
 

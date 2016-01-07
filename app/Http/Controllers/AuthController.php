@@ -56,7 +56,7 @@ class AuthController extends Controller
     {
         if ($this->auth->attempt($request->only('email', 'password')))
         {
-            return redirect('dashboard');
+            return redirect()->intended('dashboard');
         }
 
         return redirect('auth/login')
