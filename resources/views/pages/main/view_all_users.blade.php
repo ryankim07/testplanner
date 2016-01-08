@@ -11,7 +11,7 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-12 main" id="view-all-users-main">
+    <div class="col-xs-12 col-md-12" id="view-all-users-main">
 
         {!! Form::open(['route' => 'user.search', 'role' => 'search']) !!}
 

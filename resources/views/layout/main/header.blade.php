@@ -31,6 +31,12 @@
                                 <li>{!! Html::linkRoute('dashboard.view.all.assigned', 'Assigned Plans', []) !!}</li>
                             </ul>
                         </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Activity <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>{!! Html::linkRoute('activity.all', 'View all') !!}</li>
+                            </ul>
+                        </li>
                         @if(Auth::user()->hasRole(['root']))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Accounts <span class="caret"></span></a>

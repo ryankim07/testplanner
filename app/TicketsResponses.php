@@ -57,37 +57,77 @@ class TicketsResponses extends Model
      */
     public static function saveTicketResponse($planData)
     {
-        $completed    = 0;
-        $incompleted  = 0;
+        $completed  = 0;
+        $progress   = 0;
+        $incomplete = 0;
         $totalTickets = count($planData['tickets_responses']);
 
         foreach($planData['tickets_responses'] as $ticket) {
             if (!isset($ticket['test_status'])) {
-                $incompleted += 1;
+                $incomplete += 1;
             } else {
                 $completed += 1;
             }
         }
 
-        if ($incompleted == $totalTickets) {
+        if ($incomplete == $totalTickets) {
             $ticketStatus = 'new';
+        } elseif ($completed == $totalTickets) {
+            $ticketStatus = 'complete';
         } else {
-            $ticketStatus = 'incomplete';
+            $ticketStatus = 'progress';
         }
 
-        if ($completed == $totalTickets) {
-            $ticketStatus = 'complete';
+        if ($planData['ticket_status'] == 'complete') {
+            $ticketStatus = 'update';
         }
 
         // Create or update ticket response
-        TicketsResponses::updateOrCreate([
-            'id' => $planData['ticket_resp_id']], [
-                'plan_id'   => $planData['id'],
-                'tester_id' => $planData['tester_id'],
-                'responses' => serialize($planData['tickets_responses']),
-                'status'    => $ticketStatus
-            ]
-        );
+        if ($ticketStatus != 'new') {
+            // Start transaction
+            DB::beginTransaction();
+
+            try {
+                TicketsResponses::updateOrCreate([
+                    'id' => $planData['ticket_resp_id']], [
+                        'plan_id'   => $planData['id'],
+                        'tester_id' => $planData['tester_id'],
+                        'responses' => serialize($planData['tickets_responses']),
+                        'status'    => $ticketStatus
+                    ]
+                );
+
+            } catch (\Exception $e) {
+                $errorMsg = $e->getMessage();
+                $redirect = true;
+            } catch (ValidationException $e) {
+                $errorMsg = $e->getErrors();
+                $redirect = true;
+            } catch (QueryException $e) {
+                $errorMsg = $e->getErrors();
+                $redirect = true;
+            } catch (ModelNotFoundException $e) {
+                $errorMsg = $e->getErrors();
+                $redirect = true;
+            }
+
+            // Commit all changes
+            DB::commit();
+
+            // Redirect if errors
+            if ($redirect) {
+                // Rollback
+                DB::rollback();
+
+                // Log to system
+                Utils::log($errorMsg, $planData);
+
+                return redirect()->action('PlansController@respond')
+                    ->withInput()
+                    ->withErrors(array('message' => config('testplanner.plan_response_error')));
+            }
+
+        }
 
         return $ticketStatus;
     }

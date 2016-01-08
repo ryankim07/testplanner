@@ -11,7 +11,7 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-4 main" id="reset-main">
+    <div class="col-xs-12 col-md-6 main" id="reset-main">
 
         {!! Form::open(['route' => 'password.post.reset', 'class' => 'form-horizontal', 'id' => 'password-reset-form']) !!}
 

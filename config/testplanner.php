@@ -28,9 +28,14 @@ return [
 
     'user_update_success_msg' => 'User info updated successfully.',
 
+    'new_plan_msg'            => 'created a new plan,',
+
     'plan_build_error'        => 'Plan building cannot be done at the current moment.  Please try again later.',
 
     'plan_session_error'      => 'Session data is missing.',
 
-    'plan_non_user_response'  => 'hasn\'t submitted his response yet.'
+    'plan_non_user_response'  => 'hasn\'t submitted his response yet.',
+
+    'plan_response_error'     => 'There seems to be a problem processing your response. Please try again later.'
+
 ];

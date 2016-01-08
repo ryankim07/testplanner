@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-4 main" id="password-main">
+    <div class="col-xs-12 col-md-6 main" id="password-main">
 
         {!! Form::open(['route' => 'password.post.email', 'files' => true, 'class' => 'form-horizontal', 'id' => 'admin-password-send-form']) !!}
 

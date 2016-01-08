@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\DB;
 use App\Facades\Utils;
 use App\Facades\Jira;
 
+use App\Tickets;
+use App\Testers;
+
 use Auth;
 
 class Plans extends Model
@@ -174,9 +177,12 @@ class Plans extends Model
 
             unset($results['tickets']);
 
-            $results['created_at'] = Utils::dateAndTimeConverter($ticketsResponses->created_at);
-            $results['updated_at'] = Utils::dateAndTimeConverter($ticketsResponses->updated_at);
-            $results['tickets']    = $newResults;
+            $results['created_at']    = Utils::dateAndTimeConverter($results['created_at']);
+            $results['updated_at']    = Utils::dateAndTimeConverter($results['updated_at']);
+            $results['ticket_status'] = $ticketsResponses->status;
+            $results['tickets']       = $newResults;
+        } else {
+            $results['ticket_status'] = '';
         }
 
         return $results;
@@ -205,6 +211,86 @@ class Plans extends Model
         $results['tickets']  = unserialize($results['tickets']);
 
         return $results;
+    }
+
+    /**
+     * Save new created plan
+     *
+     * @param $planData
+     * @param $ticketsData
+     * @param $testerData
+     * @return $this|array
+     */
+    public static function savePlan($planData, $ticketsData, $testerData)
+    {
+        // Start transaction
+        DB::beginTransaction();
+
+        // Start plan creation
+        try {
+            // Save new plan build
+            $plan = Plans::create($planData);
+            $planId = $plan->id;
+            $planData['id'] = $planId;
+
+            if (isset($plan->id)) {
+                // Save new tickets
+                Tickets::create([
+                    'plan_id' => $planId,
+                    'tickets' => serialize($ticketsData)
+                ]);
+
+                // Save new testers
+                foreach($testerData as $tester) {
+                    Testers::create([
+                        'plan_id'   => $planId,
+                        'tester_id' => $tester['id'],
+                        'browser'   => $tester['browser']
+                    ]);
+
+                    // Create object for email
+                    $testersWithEmail[] = [
+                        'tester_id'  => $tester['id'],
+                        'first_name' => $tester['first_name'],
+                        'browser'    => $tester['browser'],
+                        'email'      => User::getUserEmail($tester['id'])
+                    ];
+                }
+            }
+        } catch (\Exception $e) {
+            $errorMsg = $e->getMessage();
+            $redirect = true;
+        } catch (ValidationException $e) {
+            $errorMsg = $e->getErrors();
+            $redirect = true;
+        } catch (QueryException $e) {
+            $errorMsg = $e->getErrors();
+            $redirect = true;
+        } catch (ModelNotFoundException $e) {
+            $errorMsg = $e->getErrors();
+            $redirect = true;
+        }
+
+        // Redirect if errors
+        if ($redirect) {
+            // Rollback
+            DB::rollback();
+
+            // Log to system
+            Utils::log($errorMsg, array_merge($planData, $ticketsData, $testerData));
+
+            // Delete session
+            Session::forget('mophie_testplanner');
+
+            return redirect()->action('PlansController@build')
+                ->withInput()
+                ->withErrors(array('message' => config('testplanner.plan_build_error')));
+        }
+
+        // Commit all changes
+        DB::commit();
+
+        return $testersWithEmail;
     }
 
     /**

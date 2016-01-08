@@ -115,11 +115,11 @@ class ActivityStream extends Model
 
             switch($type) {
                 case 'plan':
-                    $message = 'created a new plan:';
+                    $message = config('testplanner.new_plan_msg');
                     break;
 
                 case 'ticket-response':
-                    if ($status == 'incomplete') {
+                    if ($status == 'progress' || $status == 'update') {
                         $message = 'has updated tickets in';
                     } else if ($status == 'complete') {
                         $message = 'resolved';

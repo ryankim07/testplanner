@@ -5,7 +5,7 @@ $(document).ready(function() {
      * RESPONDING TO TICKET
      *
      */
-    $('#respond-btn').on('click', function() {
+    $('#respond-main').on('click', '#respond-btn', function() {
         var tickets = [];
 
         $('.ticket-panel').each(function() {

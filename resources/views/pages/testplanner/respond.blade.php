@@ -13,72 +13,85 @@
 
     <div class="col-xs-12 col-md-12 main" id="respond-main">
 
-        {!! Form::open(['route' => 'plan.save.user.response', 'id' => 'plan-user-response-form']) !!}
+        {!! Form::open(['route' => 'plan.save.user.response', 'class' => 'form-horizontal', 'id' => 'plan-user-response-form']) !!}
         {!! Form::hidden('plan', json_encode($plan)) !!}
         {!! Form::hidden('ticket_resp_id', $plan['ticket_resp_id']) !!}
 
         <div class="panel panel-info">
             <div class="panel-heading">
-                <div class="clearfix">
-                    <div class="pull-left"><h3>{!! $plan['description'] !!}</h3></div>
+                <div class="row">
+                    <div class="col-xs-10 col-md-10">
+                        <i class="fa fa-pencil-square-o fa-4x header-icon"></i>
+                        <h3>Respond - {!! $plan['description'] !!}</h3>
+                    </div>
                 </div>
             </div>
             <div class="panel-body">
                 @include('errors.list')
 
-                <fieldset class="fieldset">
+                <div class="row nested-block">
                     <legend>Plan Details</legend>
-                    <div class="col-xs-12 col-md-6">
+                    <div class="col-xs-12 col-md-4">
                         <div class="form-group">
-                            <legend>People</legend>
-                            <p><span>Reporter: {!! $plan['reporter'] !!}</span></p>
-                            <p><span>Assignee: {!! $plan['assignee'] !!}</span></p>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-6">
-                        <div class="form-group">
-                            <legend>Dates</legend>
-                            <p><span>Created: {!! $plan['created_at'] !!}</span></p>
-                            <p><span>Updated: {!! $plan['updated_at'] !!}</span></p>
-                        </div>
-                    </div>
-                </fieldset>
+                            <p>Reporter: <strong>{!! $plan['reporter'] !!}</strong></p>
+                            <p>Assignee: <strong>{!! $plan['assignee'] !!}</strong></p>
+                            <p>Status:
 
-                <?php $i = 1; ?>
+                                <?php
+                                    if($plan['ticket_status'] == 'complete') {
+                                        $trLabel = 'label-default';
+                                    } else if($plan['ticket_status'] == 'progress') {
+                                        $trLabel = 'label-warning';
+                                    } else {
+                                        $trLabel = 'label-success';
+                                    }
+                                ?>
+
+                                <span class="label {!! $trLabel !!}">{!! $plan['ticket_status'] !!}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-8">
+                        <div class="form-group">
+                            <p>Created: <strong>{!! $plan['created_at'] !!}</strong></p>
+                            <p>Updated: <strong>{!! $plan['updated_at'] !!}</strong></p>
+                        </div>
+                    </div>
+                </div>
                 @foreach($plan['tickets'] as $ticket)
                     <div class="row nested-block ticket-panel">
+                        <legend>Ticket - {!! Html::link(isset($ticket['description_url']) ? $ticket['description_url'] : '#', $ticket['description'], ['target' => '_blank', 'title' => 'Click to view issue in Jira']) !!}</legend>
                         <div class="col-xs-12 col-md-6">
                             <div class="form-group">
-                                <legend>Ticket</legend>
-                                <span class="ticket-description">{!! $ticket['description'] !!}</span>
-                            </div>
-                            <div class="form-group">
                                 <legend>Objective</legend>
-                                <span>{!! $ticket['objective'] !!}</span>
+                                    <p><span>{!! $ticket['objective'] !!}</span></p>
                             </div>
                             <div class="form-group">
                                 <legend>Steps to test</legend>
-                                <span>{!! nl2br($ticket['test_steps']) !!}</span>
+                                    <p><span>{!! nl2br($ticket['test_steps']) !!}</span></p>
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-2">
-                            <div class="form-group">
-                                <legend>Status</legend>
+                            <legend>Status</legend>
+                            <div class="radio">
                                 <?php
+                                    $passed = '';
+                                    $failed = '';
 
-                                $passed = '';
-                                $failed = '';
-                                if (isset($ticket['test_status'])) {
-                                    $passed = $ticket['test_status'] == 1 ? true : '';
-                                    $failed = $ticket['test_status'] == 0 ? true : '';
-                                }
+                                    if (isset($ticket['test_status'])) {
+                                        $passed = $ticket['test_status'] == 1 ? true : '';
+                                        $failed = $ticket['test_status'] == 0 ? true : '';
+                                    }
                                 ?>
 
-                                {!! Form::label('test_status_label', 'Passed', ['class' => 'radio-inline']) !!}
-                                {!! Form::radio('test_status_' . $i, 1, $passed, ['class' => 'test_status']) !!}
+                                <label>
+                                    {!! Form::radio('test_status[' . $ticket["id"] . ']', 1, $passed, ['class' => 'test_status']) !!}
+                                    Passed
+                                </label>
+                                <label>
+                                    {!! Form::radio('test_status[' . $ticket["id"] . ']', 0, $failed, ['class' => 'test_status']) !!}
+                                    Failed
+                                </label>
 
-                                {!! Form::label('test_status_label', 'Failed', ['class' => 'radio-inline']) !!}
-                                {!! Form::radio('test_status_' . $i, 0, $failed, ['class' => 'test_status']) !!}
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-4">
@@ -92,10 +105,7 @@
                         </div>
                         {!! Form::hidden('ticket_id', $ticket['id'], ['class' => 'ticket-id']) !!}
                     </div>
-
-                    <?php $i++; ?>
                 @endforeach
-
             </div>
         </div>
 
@@ -109,5 +119,24 @@
         {!! Form::close() !!}
 
     </div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            var totalResponses = 0;
+            $('#respond-main .ticket-panel').each(function() {
+                var notesResponse = $(this).find('.notes-response');
+
+                if (notesResponse.val() != '') {
+                    totalResponses++;
+                }
+            });
+
+            if (totalResponses > 0) {
+                $('#respond-btn').prop('value', 'Update Response')
+            }
+        });
+
+    </script>
 
 @stop

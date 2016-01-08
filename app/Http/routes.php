@@ -74,7 +74,7 @@ Route::post('user/update', [
  * Dashboard
  *
  */
-Route::get('dashboard', ['as'  => 'dashboard', 'uses' => 'DashboardController@index']);
+Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'DashboardController@index']);
 
 Route::get('dashboard/view-all-admin', [
     'as'         => 'dashboard.view.all.admin',
@@ -83,8 +83,15 @@ Route::get('dashboard/view-all-admin', [
     'uses'       => 'DashboardController@viewAllAdmin']);
 
 Route::get('dashboard/view-all-assigned', ['as' => 'dashboard.view.all.assigned', 'uses' => 'DashboardController@viewAllAssigned']);
-Route::post('dashboard/save', ['as' => 'dashboard.plan.save', 'uses' => 'DashboardController@save']);
-Route::post('dashboard/save-comment', ['as' => 'dashboard.comment.save', 'uses' => 'DashboardController@saveComment']);
+
+
+/**
+ *
+ * Activity Stream
+ *
+ */
+Route::get('activity/view-all', ['as' => 'activity.all', 'uses' => 'ActivityStreamController@all']);
+Route::post('activity/save-comment', ['as' => 'activity.comment.save', 'uses' => 'ActivityStreamController@saveComment']);
 
 
 /**
@@ -93,7 +100,7 @@ Route::post('dashboard/save-comment', ['as' => 'dashboard.comment.save', 'uses' 
  *
  */
 Route::get('plan/view/{id}', ['as' => 'plan.view', 'uses' => 'PlansController@view']);
-Route::get('plan/view-response/{plan_id}/{user_id}', ['as' => 'plan.view.response', 'uses' => 'PlansController@viewResponse']);
+Route::get('plan/response/{plan_id}/{user_id}', ['as' => 'plan.view.response', 'uses' => 'PlansController@response']);
 Route::get('plan/respond/{plan_id}', ['as' => 'plan.respond', 'uses' => 'PlansController@respond']);
 
 Route::get('plan/build', [

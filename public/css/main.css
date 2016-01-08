@@ -48,7 +48,7 @@ body {
     margin-top: 0;
 }
 
-legend {
+/*legend {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
@@ -64,7 +64,7 @@ legend {
     margin-bottom: 21px;
     padding: 0;
     width: 100%;
-}
+}*/
 
 /*
  * Panel

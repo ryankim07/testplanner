@@ -11,7 +11,7 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-4 main" id="login-main">
+    <div class="col-xs-12 col-md-6 main" id="login-main">
 
         {!! Form::open(['route' => 'auth.post.login', 'class' => 'form-horizontal', 'id' => 'auth-login-form']) !!}
 

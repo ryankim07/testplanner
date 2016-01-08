@@ -27,7 +27,6 @@ use App\Facades\Email;
 use App\Facades\Jira;
 
 use App\Plans;
-use App\Tickets;
 use App\Testers;
 use App\TicketsResponses;
 use App\ActivityStream;
@@ -228,9 +227,12 @@ class PlansController extends Controller
      * @param $userId
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
-    public function viewResponse($planId, $userId)
+    public function response($planId, $userId)
     {
-        $plan       = Plans::getPlanResponses($planId, $userId);
+        // Get all plan by ID and user ID
+        $plan = Plans::getPlanResponses($planId, $userId);
+
+        // Show other users that might have submitted responses
         $allTesters = Testers::getTestersByPlanId($planId);
 
         $browserTesters[''] = 'View other responses';
@@ -246,7 +248,7 @@ class PlansController extends Controller
     }
 
     /**
-     * Display or edit plan
+     * Respond to the plan
      *
      * @param $planId
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
@@ -291,71 +293,8 @@ class PlansController extends Controller
         $redirect    = false;
         $errorMsg    = '';
 
-        // Start transaction
-        DB::beginTransaction();
-
-        // Start plan creation
-        try {
-            // Save new plan build
-            $plan = Plans::create($planData);
-            $planId = $plan->id;
-            $planData['id'] = $planId;
-
-            if (isset($plan->id)) {
-                // Save new tickets
-                Tickets::create([
-                    'plan_id' => $planId,
-                    'tickets' => serialize($ticketsData)
-                ]);
-
-                // Save new testers
-                foreach($testerData as $tester) {
-                    Testers::create([
-                        'plan_id'   => $planId,
-                        'tester_id' => $tester['id'],
-                        'browser'   => $tester['browser']
-                    ]);
-
-                    // Create object for email
-                    $testersWithEmail[] = [
-                        'tester_id'  => $tester['id'],
-                        'first_name' => $tester['first_name'],
-                        'browser'    => $tester['browser'],
-                        'email'      => User::getUserEmail($tester['id'])
-                    ];
-                }
-            }
-        } catch (\Exception $e) {
-            $errorMsg = $e->getMessage();
-            $redirect = true;
-        } catch (ValidationException $e) {
-            $errorMsg = $e->getErrors();
-            $redirect = true;
-        } catch (QueryException $e) {
-            $errorMsg = $e->getErrors();
-            $redirect = true;
-        } catch (ModelNotFoundException $e) {
-            $errorMsg = $e->getErrors();
-            $redirect = true;
-        }
-
-        // Redirect if errors
-        if ($redirect) {
-            // Rollback
-            DB::rollback();
-
-            // Log to system
-            Utils::log($errorMsg, array_merge($planData, $ticketsData, $testerData));
-
-            // Delete session
-            Session::forget('mophie_testplanner');
-
-            return redirect()->action('PlansController@build')
-                ->with('flash_message', config('testplanner.plan_build_error'));
-        }
-
-        // Commit all changes
-        DB::commit();
+        // Save plan
+        $results = Plans::savePlan($planData, $ticketsData, $testerData);
 
         // Log to activity stream
         ActivityStream::saveActivityStream($planData, 'plan');
@@ -377,46 +316,14 @@ class PlansController extends Controller
      */
     public function saveUserResponse(UserResponseFormRequest $request)
     {
-        $res      = array_except($request->all(), '_token');
-        $planData = json_decode($res['plan'], true);
-        $tickets  = json_decode($res['tickets_obj'], true);
+        $planData = json_decode($request->get('plan'), true);
+        $tickets  = json_decode($request->get('tickets_obj'), true);
         $planData['tickets_responses'] = $tickets;
+        $redirect = false;
+        $errorMsg = '';
 
-        // Start transaction
-        DB::beginTransaction();
-
-        try {
-            // Save ticket response
-            $response = TicketsResponses::saveTicketResponse($planData);
-
-        } catch (\Exception $e) {
-            $errorMsg = $e->getMessage();
-            $redirect = true;
-        } catch (ValidationException $e) {
-            $errorMsg = $e->getErrors();
-            $redirect = true;
-        } catch (QueryException $e) {
-            $errorMsg = $e->getErrors();
-            $redirect = true;
-        } catch (ModelNotFoundException $e) {
-            $errorMsg = $e->getErrors();
-            $redirect = true;
-        }
-
-        // Commit all changes
-        DB::commit();
-
-        // Redirect if errors
-        /*if ($redirect) {
-            // Rollback
-            DB::rollback();
-
-            // Log to system
-            Utils::log($errorMsg, $mergedData);
-
-            return redirect()->action('PlansController@index')->withInput()
-       ->withErrors(array('message' => 'Login field is required.'));
-        }*/
+        // Save ticket response
+        $response = TicketsResponses::saveTicketResponse($planData);
 
         // Log activity
         ActivityStream::saveActivityStream($planData, 'ticket-response', $response);
@@ -433,6 +340,9 @@ class PlansController extends Controller
                 'ticket_status'     => $ticketStatus,
                 'tickets'           => serialize($tickets))
             ]);
+
+        Email::sendEmail('plan-created', array_merge($planData, array('testers' => $testersWithEmail)));
+
         }*/
 
         return redirect('dashboard');

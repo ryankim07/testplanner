@@ -67,9 +67,9 @@
                                                         @if($type == 'admin_created_plans')
 
                                                             <?php
-                                                                if($detail['status'] == 'completed') {
+                                                                if($detail['status'] == 'complete') {
                                                                     $label = 'label-default';
-                                                                } else if($detail['status'] == 'pending') {
+                                                                } else if($detail['status'] == 'progress') {
                                                                     $label = 'label-warning';
                                                                 } else {
                                                                     $label = 'label-success';
@@ -80,9 +80,9 @@
                                                         @else
 
                                                             <?php
-                                                                if($detail['ticket_response_status'] == 'completed') {
+                                                                if($detail['ticket_response_status'] == 'complete') {
                                                                     $trLabel = 'label-default';
-                                                                } else if($detail['ticket_response_status'] == 'pending') {
+                                                                } else if($detail['ticket_response_status'] == 'progress') {
                                                                     $trLabel = 'label-warning';
                                                                 } else {
                                                                     $trLabel = 'label-success';
@@ -108,11 +108,13 @@
                                         </table>
                                     </div>
                                     <div class="form-group">
-                                        @if($type == 'admin_created_plans')
-                                            {!! Html::linkRoute('dashboard.view.all.admin', 'View more') !!}
-                                        @else
-                                            {!! Html::linkRoute('dashboard.view.all.assigned', 'View more') !!}
-                                        @endif
+                                        <div class="pull-right">
+                                            @if($type == 'admin_created_plans')
+                                                {!! Html::linkRoute('dashboard.view.all.admin', 'View more') !!}
+                                            @else
+                                                {!! Html::linkRoute('dashboard.view.all.assigned', 'View more') !!}
+                                            @endif
+                                        </div>
                                     </div>
                                 @else
                                     <p><span>No records found.</span></p>
@@ -141,7 +143,7 @@
 
         <div class="col-xs-12 col-md-5">
 
-            {!! Form::open(['route' => 'dashboard.comment.save', 'class' => 'form-horizontal', 'id' => 'activity-stream-form']) !!}
+            {!! Form::open(['route' => 'activity.comment.save', 'class' => 'form-horizontal', 'id' => 'activity-stream-form']) !!}
 
             <div class="panel panel-info">
                 <div class="panel-heading">Activity Stream</div>
@@ -149,7 +151,7 @@
                     @if(!empty($activities))
                         @foreach($activities as $log)
                             <div class="row activity-log nested-block">
-                                <div class="col-xs-2 col-md-2"><img src="images/mophie-user.jpeg" alt="mophie-user" class="thumbnail" width="40" height="40"></div>
+                                <div class="col-xs-2 col-md-2"><img src="images/mophie-user.jpeg" alt="mophie-user" class="" width="40" height="40"></div>
                                 <div class="col-xs-10 col-md-10">
                                     <div class="row">{!! $log['activity'] !!}</div>
                                     @foreach($log['comments'] as $eachComment)

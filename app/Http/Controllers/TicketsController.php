@@ -97,8 +97,7 @@ class TicketsController extends Controller
      */
     public function update(TicketsFormRequest $request)
     {
-        $res     = array_except($request->all(), '_token');
-        $tickets = json_decode($res['tickets_obj'], true);
+        $tickets = json_decode($request->get('tickets_obj'), true);
 
         // Save tickets data to session
         Session::put('mophie_testplanner.tickets', $tickets);
@@ -126,8 +125,7 @@ class TicketsController extends Controller
      */
     public function store(TicketsFormRequest $request)
     {
-        $res     = array_except($request->all(), '_token');
-        $tickets = json_decode($res['tickets_obj'], true);
+        $tickets = json_decode($request->get('tickets_obj'), true);
 
         // Save tickets data to session
         Session::put('mophie_testplanner.tickets', $tickets);
@@ -142,8 +140,6 @@ class TicketsController extends Controller
      */
     public function removeAjax(Request $request)
     {
-        $res = array_except($request->all(), '_token');
-
         // Get tickets session data
         $ticketsData = Session::get('mophie_testplanner.tickets');
 
@@ -152,7 +148,7 @@ class TicketsController extends Controller
         }
 
         // Remove
-        unset($modifiedData[$res['ticketId']]);
+        unset($modifiedData[$request->get('ticketId')]);
 
         // Save plan data to session
         Session::put('mophie_testplanner.tickets', $modifiedData);

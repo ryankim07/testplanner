@@ -171,19 +171,4 @@ class DashboardController extends Controller
             'link'        => ''
         ]);
     }
-
-    /**
-     * Create comment in activity stream
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function saveComment(Request $request)
-    {
-        $user = Auth::user();
-
-        ActivityComments::saveActivityComment($res['id'], $user->id, $res['comment']);
-
-        return response()->json(["status" => "success"]);
-    }
 }
