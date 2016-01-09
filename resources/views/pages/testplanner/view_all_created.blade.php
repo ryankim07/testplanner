@@ -1,9 +1,9 @@
 {{--
 |--------------------------------------------------------------------------
-| Testers assigned plan list
+| Admin assigned plan list
 |--------------------------------------------------------------------------
 |
-| This template is used when showing all assigned plans to testers.
+| This template is used when showing all plans assigned to admin.
 |
 --}}
 
@@ -11,16 +11,21 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-12 main" id="view-all-assigned-main">
+    <div class="col-xs-12 col-md-12 main" id="view-all-created-main">
 
-        {!! Form::open(['route' => 'plan.search', 'role' => 'search']) !!}
+        {!! Form::open(['route' => 'plan.search', 'class' => 'form-horizontal', 'role' => 'search']) !!}
 
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="clearfix">
                     <div class="pull-left">
-                        <h3>Plans assigned to me  <span class="badge">{!! $totalPlans !!}</span></h3>
+                        <h3>Plans <span class="badge">{!! $totalPlans !!}</span></h3>
                     </div>
+                    @if($role == "root")
+                        <div class="pull-right">
+                            {!! Form::select('admin', $adminsList, $userId, ['class' => 'form-control input-sm', 'id' => 'admin', 'data-url' => route('plan.view.all.created', ['id' => null])]) !!}
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="panel-body">
@@ -37,23 +42,21 @@
 
                             <tbody>
                             @foreach($plans as $plan)
-                                <tr class="toggler" data-url="{!! URL::route('plan.respond', $plan->id) !!}">
-                                    <td>
-                                        {!! Html::linkRoute('plan.respond', $plan->description, [$plan->id]) !!}
-                                    </td>
+                                <tr class="toggler" data-url="{!! URL::route('plan.view', $plan->id) !!}">
+                                    <td>{!! $plan->description !!}</td>
                                     <td>{!! $plan->full_name !!}</td>
 
                                     <?php
-                                        if($plan->ticket_response_status == 'complete') {
+                                        if($plan->status == 'complete') {
                                             $trLabel = 'label-default';
-                                        } else if($plan->ticket_response_status == 'progress') {
+                                        } else if($plan->status  == 'progress') {
                                             $trLabel = 'label-warning';
                                         } else {
                                             $trLabel = 'label-success';
                                         }
                                     ?>
 
-                                    <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->ticket_response_status !!}</span</td>
+                                    <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->status !!}</span</td>
                                     <td>{!! Utils::dateConverter($plan->created_at) !!}</td>
                                     <td>{!! Utils::dateConverter($plan->updated_at) !!}</td>
                                 </tr>
@@ -73,5 +76,23 @@
         {!! Form::close() !!}
 
     </div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            // View or edit single plan
+            $('#view-all-created-main').on('click', '.toggler', function() {
+                window.location.href = $(this).data('url');
+            });
+
+            $('#view-all-created-main').on('change', '#admin', function() {
+                var route   = $(this).data('url');
+                var adminId = $(this).val();
+
+                window.location.href =  route + '/' + adminId;
+            });
+        });
+
+    </script>
 
 @stop

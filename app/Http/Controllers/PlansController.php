@@ -128,7 +128,7 @@ class PlansController extends Controller
     }
 
     /**
-     * View plan
+     * View plan for editing
      *
      * @param $id
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
@@ -166,16 +166,17 @@ class PlansController extends Controller
     }
 
     /**
-     * Show all plans or plans created by an administrator
+     * Show all plans created by administrator/s
      *
      * @param $userId
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
-    public function viewAllPlans($userId)
+    public function viewAllCreated($userId)
     {
-        $userRoles = Auth::user()->role()->get();
-        $sorting   = Tables::sorting();
-        $table     = Tables::prepareTable($sorting['order'], [
+        $user    = Auth::user();
+        $roles   = $user->role()->get();
+        $sorting = Tables::sorting();
+        $table   = Tables::prepareTable($sorting['order'], [
             'description',
             'creator',
             'status',
@@ -183,18 +184,107 @@ class PlansController extends Controller
             'updated_at'
         ], 'PlansController@index');
 
-        $query = '';
-        foreach($userRoles as $role) {
-            if ($role->name == "administrator") {
-                $query = Plans::getAllPlans($sorting['sortBy'], $sorting['order'], $userId);
+        // If user has root privileges, get all the plans that were created.
+        // Otherwise just get the plans created with administrator privilege.
+        foreach($roles as $role) {
+            $roleName = $role->name;
+            if ($roleName == "root") {
+                break;
+            }
+
+            if ($roleName == "administrator") {
+                $userId = $user->id;
                 break;
             }
         }
 
-        return view('pages.testplanner.view_all_admin', [
-            'userId'      => isset($userId) ? $userId : 0,
+        $query = Plans::getAllPlans($sorting['sortBy'], $sorting['order'], $userId);
+
+        // Administrators who created plans
+        $admins = User::getAllUsersByRole($roleName);
+
+        $adminsList[0] = 'All';
+        foreach($admins as $admin) {
+            $adminsList[$admin->id] = $admin->first_name;
+        }
+
+        return view('pages.testplanner.view_all_created', [
+            'userId'      => $userId,
+            'role'        => $roleName,
             'plans'       => isset($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
             'totalPlans'  => isset($query) ? Plans::count() : 0,
+            'columns'     => $table['columns'],
+            'columnsLink' => $table['columns_link'],
+            'link'        => '',
+            'adminsList'  => isset($adminsList) ? $adminsList : ''
+        ]);
+    }
+
+    /**
+     * Show all assigned plans created by other administrators
+     * that needs to be tested by logged user
+     *
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function viewAllAssigned()
+    {
+        $user    = Auth::user();
+        $sorting = Tables::sorting();
+        $table   = Tables::prepareTable($sorting['order'], [
+            'description',
+            'full_name',
+            'status',
+            'created_at',
+            'updated_at'
+        ], 'PlansController@index');
+
+        $query = Plans::getAllAssigned($user->id, $sorting['sortBy'], $sorting['order']);
+
+        return view('pages.testplanner.view_all_assigned', [
+            'plans'       => !empty($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
+            'totalPlans'  => !empty($query) ? Plans::count() : 0,
+            'columns'     => $table['columns'],
+            'columnsLink' => $table['columns_link'],
+            'link'        => ''
+        ]);
+    }
+
+    /**
+     * Display all plans that were tested
+     *
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function viewAllResponses()
+    {
+        $user    = Auth::user();
+        $sorting = Tables::sorting();
+        $table   = Tables::prepareTable($sorting['order'], [
+            'description',
+            'full_name',
+            'status',
+            'created_at',
+            'updated_at',
+            'testers',
+            'view'
+        ], 'PlansController@index');
+
+        $query = Plans::getAllResponses($user->id, $sorting['sortBy'], $sorting['order']);
+        $browserTesters = [];
+
+        foreach ($query->get() as $plan) {
+            $allTesters = Testers::getTestersByPlanId($plan->id);
+
+            foreach ($allTesters as $tester) {
+                $tmp[$tester->id] = $tester->first_name;
+            }
+
+            $browserTesters[$plan->id] = $tmp;
+        }
+
+        return view('pages.testplanner.view_all_responses', [
+            'plans'       => !empty($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
+            'totalPlans'  => !empty($query) ? Plans::count() : 0,
+            'testers'     => $browserTesters,
             'columns'     => $table['columns'],
             'columnsLink' => $table['columns_link'],
             'link'        => ''
@@ -230,7 +320,7 @@ class PlansController extends Controller
     public function response($planId, $userId)
     {
         // Get all plan by ID and user ID
-        $plan = Plans::getPlanResponses($planId, $userId);
+        $plan = Plans::getTesterPlanResponse($planId, $userId);
 
         // Show other users that might have submitted responses
         $allTesters = Testers::getTestersByPlanId($planId);
@@ -256,7 +346,7 @@ class PlansController extends Controller
     public function respond($planId)
     {
         $user = Auth::user();
-        $plan = Plans::getPlanResponses($planId, $user->id);
+        $plan = Plans::getTesterPlanResponse($planId, $user->id);
 
         return view('pages.testplanner.respond', ['plan' => $plan]);
     }

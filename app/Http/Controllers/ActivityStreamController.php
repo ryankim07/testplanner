@@ -27,26 +27,31 @@ class ActivityStreamController extends Controller
         $this->middleware('auth');
     }
 
+    public function index()
+    {
+
+    }
+
     public function all()
     {
         $sorting = Tables::sorting();
         $table   = Tables::prepareTable($sorting['order'], [
-            'description',
-            'creator',
-            'status',
-            'created_at',
-            'updated_at'
+            'activity',
+            'created_at'
         ], 'ActivityStreamController@index');
 
-        $query = ActivityStream::all();
-
         return view('pages.testplanner.view_all_activities', [
-            'activities'  => isset($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
-            'totalPlans'  => isset($query) ? ActivityStream::count() : 0,
-            'columns'     => $table['columns'],
-            'columnsLink' => $table['columns_link'],
-            'link'        => ''
+            'activities'      => ActivityStream::paginate(config('testplanner.pagination_count')),
+            'totalActivities' => ActivityStream::count(),
+            'columns'         => $table['columns'],
+            'columnsLink'     => $table['columns_link'],
+            'link'            => ''
         ]);
+    }
+
+    public function search()
+    {
+
     }
 
     /**

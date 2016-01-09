@@ -27,9 +27,9 @@
                         <div class="panel panel-info">
                             <div class="panel-heading">
                                 @if($type == 'admin_created_plans')
-                                    Assigned to others
+                                    Plans assigned to others
                                 @else
-                                    Assigned to me
+                                    Plans assigned to me
                                 @endif
                             </div>
                             <div class="panel-body">
@@ -40,7 +40,7 @@
                                             <tr>
                                                 <th>Description</th>
                                                 @if($type != 'admin_created_plans')
-                                                    <th>Creator</th>
+                                                    <th>Admin</th>
                                                 @endif
                                                 <th>Status</th>
                                                 <th>Created</th>
@@ -52,7 +52,7 @@
                                             </thead>
                                             <tbody>
                                             @foreach($plan as $detail)
-                                                <tr>
+                                                <tr class="{!! $type !!}_rows">
                                                     <td>
                                                         @if($type == 'admin_created_plans')
                                                             {!! $detail['description'] !!}
@@ -61,7 +61,7 @@
                                                         @endif
                                                     </td>
                                                     @if($type != 'admin_created_plans')
-                                                        <td>{!! $detail['creator'] !!}</td>
+                                                        <td>{!! $detail['full_name'] !!}</td>
                                                     @endif
                                                     <td>
                                                         @if($type == 'admin_created_plans')
@@ -95,11 +95,9 @@
                                                     <td>{!! Utils::dateConverter($detail['created_at']) !!}</td>
                                                     @if($type == 'admin_created_plans')
                                                         <td>
-                                                            @if($detail['status'] != 'completed')
-                                                                {!! Form::select('testers', $detail['testers'], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $detail['id'])]) !!}
-                                                            @endif
+                                                            {!! Form::select('testers', $detail['testers'], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $detail['id'])]) !!}
                                                         </td>
-                                                        <td><a href="{!! URL::route('plan.view.response', [$detail['id'], $detail['user_id']]) !!}" class="view_tester_plan"><i class="fa fa-search fa-lg"></i></a></td>
+                                                        <td><a href="#" class="plan-link"><i class="fa fa-search fa-lg"></i></a></td>
                                                     @endif
 
                                                 </tr>
@@ -110,9 +108,9 @@
                                     <div class="form-group">
                                         <div class="pull-right">
                                             @if($type == 'admin_created_plans')
-                                                {!! Html::linkRoute('dashboard.view.all.admin', 'View more') !!}
+                                                {!! Html::linkRoute('plan.view.all.responses', 'View more') !!}
                                             @else
-                                                {!! Html::linkRoute('dashboard.view.all.assigned', 'View more') !!}
+                                                {!! Html::linkRoute('plan.view.all.assigned', 'View more') !!}
                                             @endif
                                         </div>
                                     </div>

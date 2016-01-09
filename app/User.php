@@ -143,4 +143,16 @@ class User extends Model implements AuthenticatableContract,
 
         return $query;
     }
+
+    public static function getAllUsersByRole($role)
+    {
+        $query = DB::table('users as u')
+            ->leftJoin('user_role AS ur', 'ur.user_id', '=', 'u.id')
+            ->leftJoin('roles AS r', 'r.id', '=', 'ur.role_id')
+            ->select('u.*')
+            ->where('r.name', '=', $role)
+            ->get();
+
+        return $query;
+    }
 }

@@ -13,7 +13,7 @@
 
     <div class="col-xs-12 col-md-12 main" id="view-response-main">
 
-        {!! Form::open(['route' => 'plan.view.response', 'id' => 'plan-user-response-form']) !!}
+        {!! Form::open(['route' => 'plan.view.response', 'class' => 'form-horizontal', 'id' => 'plan-user-response-form']) !!}
         {!! Form::hidden('plan', json_encode($plan)) !!}
         {!! Form::hidden('plan_id', $plan['id'], ['id' => 'plan_id']) !!}
         {!! Form::hidden('ticket_resp_id', $plan['ticket_resp_id']) !!}
@@ -41,7 +41,7 @@
                         <legend>Plan Details</legend>
                         <div class="col-xs-12 col-md-4">
                             <div class="form-group">
-                                <p>Reporter: <strong>{!! $plan['reporter'] !!}</strong></p>
+                                <p>Admin: <strong>{!! $plan['reporter'] !!}</strong></p>
                                 <p>Assignee: <strong>{!! $plan['assignee'] !!}</strong></p>
                                 <p>Status:
 

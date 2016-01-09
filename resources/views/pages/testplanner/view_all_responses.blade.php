@@ -1,9 +1,9 @@
 {{--
 |--------------------------------------------------------------------------
-| Testers assigned plan list
+| Admin assigned plan list
 |--------------------------------------------------------------------------
 |
-| This template is used when showing all assigned plans to testers.
+| This template is used when showing all plans assigned to admin.
 |
 --}}
 
@@ -11,15 +11,15 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-12 main" id="view-all-assigned-main">
+    <div class="col-xs-12 col-md-12 main" id="view-all-responses-main">
 
-        {!! Form::open(['route' => 'plan.search', 'role' => 'search']) !!}
+        {!! Form::open(['route' => 'plan.search', 'class' => 'form-horizontal', 'role' => 'search']) !!}
 
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="clearfix">
                     <div class="pull-left">
-                        <h3>Plans assigned to me  <span class="badge">{!! $totalPlans !!}</span></h3>
+                        <h3>Plans assigned to others <span class="badge">{!! $totalPlans !!}</span></h3>
                     </div>
                 </div>
             </div>
@@ -37,25 +37,25 @@
 
                             <tbody>
                             @foreach($plans as $plan)
-                                <tr class="toggler" data-url="{!! URL::route('plan.respond', $plan->id) !!}">
-                                    <td>
-                                        {!! Html::linkRoute('plan.respond', $plan->description, [$plan->id]) !!}
-                                    </td>
+                                <tr class="plan-row">
+                                    <td>{!! $plan->description !!}</td>
                                     <td>{!! $plan->full_name !!}</td>
 
                                     <?php
-                                        if($plan->ticket_response_status == 'complete') {
+                                        if($plan->status == 'complete') {
                                             $trLabel = 'label-default';
-                                        } else if($plan->ticket_response_status == 'progress') {
+                                        } else if($plan->status  == 'progress') {
                                             $trLabel = 'label-warning';
                                         } else {
                                             $trLabel = 'label-success';
                                         }
                                     ?>
 
-                                    <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->ticket_response_status !!}</span</td>
+                                    <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->status !!}</span</td>
                                     <td>{!! Utils::dateConverter($plan->created_at) !!}</td>
                                     <td>{!! Utils::dateConverter($plan->updated_at) !!}</td>
+                                    <td>{!! Form::select('testers', $testers[$plan->id], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $plan->id)]) !!}</td>
+                                    <td><a href="#" class="plan-link"><i class="fa fa-search fa-lg"></i></a></td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -73,5 +73,25 @@
         {!! Form::close() !!}
 
     </div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            $('#view-all-responses-main .plan-row').each(function() {
+                var testerId = $(this).find('.testers option:nth-child(1)').val();
+                var route    = $(this).find('.testers').data('url') + '/' + testerId;
+                var link     = $(this).find('.plan-link').prop('href', route);
+            });
+
+            // Change viewer id link
+            $('#view-all-responses-main').on('change', '.testers', function() {
+                var selectedTesterId = $(this).val();
+                var route = $(this).data('url') + '/' + selectedTesterId;
+
+                $(this).closest('td').next('td').find('.plan-link').prop('href', route);
+            });
+        });
+
+    </script>
 
 @stop

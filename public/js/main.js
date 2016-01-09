@@ -47,12 +47,18 @@ $(document).ready(function() {
      * DASHBOARD
      *
      */
+    $('#dashboard-main .admin_created_plans_rows').each(function() {
+        var testerId = $(this).find('.testers option:nth-child(1)').val();
+        var route = $(this).find('.testers').data('url') + '/' + testerId;
+        var link = $(this).find('.plan-link').prop('href', route);
+    });
+
     // Change viewer id link
     $('#dashboard-main').on('change', '.testers', function() {
         var selectedTesterId = $(this).val();
         var route = $(this).data('url') + '/' + selectedTesterId;
 
-        $(this).closest('td').next('td').find('.view_tester_plan').prop('href', route);
+        $(this).closest('td').next('td').find('.plan-link').prop('href', route);
     });
 
     // Hide initially
@@ -109,16 +115,7 @@ $(document).ready(function() {
         window.location.href = url + '/' + tester;
     });
 
-    // Show all or adminstrator plans
-    $('#view-all-plans-main').on('change', '#view-user', function() {
-        var route   = $(this).data('url');
-        var adminId = $(this).val();
-
-        window.location.href =  route + '/' + adminId;
-    });
-
-    // View or edit single plan
-    $('#view-all-plans-main').on('click', '.toggler', function() {
+    $('#view-all-assigned-main').on('click', '.toggler', function() {
         window.location.href = $(this).data('url');
     });
 

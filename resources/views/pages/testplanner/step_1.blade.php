@@ -10,9 +10,9 @@
 
 	<div class="col-xs-12 col-md-12 main" id="step-1-main">
         @if($mode == 'build')
-		    {!! Form::open(['route' => 'plan.store', 'id' => 'plan-build-form']) !!}
+		    {!! Form::open(['route' => 'plan.store', 'class' => 'form-horizontal', 'id' => 'plan-build-form']) !!}
         @else
-			{!! Form::model($planData, ['method' => 'PATCH', 'route' => ['plan.update'], 'id' => 'plan-edit-form']) !!}
+			{!! Form::model($planData, ['method' => 'PATCH', 'route' => ['plan.update'], 'class' => 'form-horizontal', 'id' => 'plan-edit-form']) !!}
 	    @endif
 		<div class="panel panel-primary">
 			<div class="panel-heading">

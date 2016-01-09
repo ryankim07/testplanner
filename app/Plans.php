@@ -20,8 +20,6 @@ use App\Facades\Jira;
 use App\Tickets;
 use App\Testers;
 
-use Auth;
-
 class Plans extends Model
 {
     /**
@@ -68,7 +66,7 @@ class Plans extends Model
     {
         $query = DB::table('plans AS p')
             ->join('users AS u', 'u.id', '=', 'p.creator_id')
-            ->select('p.*', 'u.first_name AS creator', 'u.last_name');
+            ->select('p.*', DB::raw('CONCAT(u.first_name, " ", u.last_name) AS full_name'));
 
         if (!empty($userId)) {
             $query->where('p.creator_id', '=', $userId);
@@ -80,21 +78,17 @@ class Plans extends Model
     }
 
     /**
-     * Get all plans created by admin
+     * Get all plans responses created by admin
      *
-     * @param $roleId
-     * @param $from
-     * @return array
+     * @param $userId
+     * @param $sortBy
+     * @param $order
+     * @param null $from
+     * @return mixed
      */
-    public static function getAdminCreatedPlansResponses($roleId, $sortBy, $order, $from = null)
+    public static function getAllResponses($userId, $sortBy, $order, $from = null)
     {
-        $user = UserRole::where('role_id', '=', $roleId)->first();
-
-        $query = DB::table('plans AS p')
-            ->join('users AS u', 'u.id', '=', 'p.creator_id')
-            ->select('p.*', 'u.id AS user_id', 'u.first_name AS creator')
-            ->where('p.creator_id', '=', $user->user_id)
-            ->orderBy($sortBy, $order);
+        $query = Plans::getAllPlans($sortBy, $order, $userId);
 
         if ($from == 'dashboard') {
             $query->take(5);
@@ -111,16 +105,14 @@ class Plans extends Model
      * @param null $from
      * @return array
      */
-    public static function getPlansAssignedResponses($sortBy, $order, $from = null)
+    public static function getAllAssigned($userId, $sortBy, $order, $from = null)
     {
-        $user  = Auth::user();
-
         $query = DB::table('plans AS p')
             ->join('testers AS t', 'p.id', '=', 't.plan_id')
             ->join('users AS u', 'u.id', '=', 'p.creator_id')
             ->leftJoin('tickets_responses AS tr', 'p.id', '=', 'tr.plan_id')
-            ->select('p.*', 't.tester_id', 'u.first_name AS creator', 't.browser', 'tr.status AS ticket_response_status')
-            ->where('t.tester_id', '=', $user->id)
+            ->select('p.*', 't.tester_id', DB::raw('CONCAT(u.first_name, " ", u.last_name) AS full_name'), 't.browser', 'tr.status AS ticket_response_status')
+            ->where('t.tester_id', '=', $userId)
             ->where('p.status', '=', 'new')
             ->orWhere('p.status', '=', 'incomplete')
             ->orderBy($sortBy, $order);
@@ -139,7 +131,7 @@ class Plans extends Model
      * @param $userId
      * @return array|mixed
      */
-    public static function getPlanResponses($planId, $userId)
+    public static function getTesterPlanResponse($planId, $userId)
     {
         $results          = Plans::renderPlan($planId, $userId);
         $ticketsResponses = TicketsResponses::where('plan_id', '=', $planId)

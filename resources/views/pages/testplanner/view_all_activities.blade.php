@@ -13,13 +13,13 @@
 
     <div class="col-xs-12 col-md-12 main" id="view-all-admin-main">
 
-        {!! Form::open(['route' => 'activity.search', 'role' => 'search']) !!}
+        {!! Form::open(['route' => 'activity.search', 'class' => 'form-horizontal', 'role' => 'search']) !!}
 
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="clearfix">
                     <div class="pull-left">
-                        <h3>{!! $header !!} <span class="badge">{!! $totalActivities !!}</span></h3>
+                        <h3>Activity Streams <span class="badge">{!! $totalActivities !!}</span></h3>
                     </div>
                 </div>
             </div>

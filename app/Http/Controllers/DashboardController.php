@@ -42,10 +42,11 @@ class DashboardController extends Controller
     public function index()
     {
         // Get user's role
-        $userRoles = Auth::user()->role()->get();
+        $user  = Auth::user();
+        $roles = $user->role()->get();
 
-        // Get assigned plans
-        $assignedResponses = Plans::getPlansAssignedResponses('created_at', 'DESC', 'dashboard');
+        // Get assigned plans from others
+        $assignedResponses = Plans::getAllAssigned($user->id, 'created_at', 'DESC', 'dashboard');
 
         if (isset($assignedResponses)) {
             $results = array();
@@ -56,10 +57,10 @@ class DashboardController extends Controller
             $plans['plans_assigned'] = $results;
         }
 
-        // Display administrator dashboard
-        foreach($userRoles as $role) {
+        // Display administrator created plans
+        foreach($roles as $role) {
             if ($role->name == "administrator") {
-                $adminCreated = Plans::getAdminCreatedPlansResponses($role->id, 'created_at', 'DESC', 'dashboard');
+                $adminCreated = Plans::getAllResponses($user->id, 'created_at', 'DESC', 'dashboard');
                 $allAdmin     = array();
 
                 foreach ($adminCreated->get() as $plan) {
@@ -86,89 +87,6 @@ class DashboardController extends Controller
         return view('pages.main.dashboard', [
             'activities' => $activityStream,
             'plans'      => isset($plans) ? array_filter($plans) : ''
-        ]);
-    }
-
-    /**
-     * Display all assigned plans created by other administrators
-     *
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
-     */
-    public function viewAllAssigned()
-    {
-        $userRoles = Auth::user()->role()->get();
-        $sorting   = Tables::sorting();
-        $table     = Tables::prepareTable($sorting['order'], [
-            'description',
-            'creator',
-            'status',
-            'created_at',
-            'updated_at'
-        ], 'PlansController@index');
-
-        $query = '';
-        foreach($userRoles as $role) {
-            if ($role->name == "administrator") {
-                $query = Plans::getPlansAssignedResponses($sorting['sortBy'], $sorting['order']);
-                break;
-            }
-        }
-
-        return view('pages.testplanner.view_all_assigned', [
-            'plans'       => !empty($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
-            'totalPlans'  => !empty($query) ? Plans::count() : 0,
-            'columns'     => $table['columns'],
-            'columnsLink' => $table['columns_link'],
-            'link'        => ''
-        ]);
-    }
-
-    /**
-     * Display all plans created by the administrator
-     *
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
-     */
-    public function viewAllAdmin()
-    {
-        $userRoles = Auth::user()->role()->get();
-        $sorting   = Tables::sorting();
-        $table     = Tables::prepareTable($sorting['order'], [
-            'description',
-            'creator',
-            'status',
-            'created_at',
-            'updated_at',
-            'testers',
-            'view'
-        ], 'PlansController@index');
-
-        $query = '';
-        foreach($userRoles as $role) {
-            if ($role->name == "administrator") {
-                $query = Plans::getAdminCreatedPlansResponses($role->id, $sorting['sortBy'], $sorting['order']);
-                $browserTesters  = array();
-
-                foreach ($query->get() as $plan) {
-                    $allTesters = Testers::getTestersByPlanId($plan->id);
-
-                    foreach ($allTesters as $tester) {
-                         $tmp[$tester->id] = $tester->first_name;
-                    }
-
-                    $browserTesters[$plan->id] = $tmp;
-                }
-
-                break;
-            }
-        }
-
-        return view('pages.testplanner.view_all_admin', [
-            'plans'       => !empty($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
-            'totalPlans'  => !empty($query) ? Plans::count() : 0,
-            'testers'     => $browserTesters,
-            'columns'     => $table['columns'],
-            'columnsLink' => $table['columns_link'],
-            'link'        => ''
         ]);
     }
 }

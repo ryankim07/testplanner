@@ -33,7 +33,7 @@
                     <legend>Plan Details</legend>
                     <div class="col-xs-12 col-md-4">
                         <div class="form-group">
-                            <p>Reporter: <strong>{!! $plan['reporter'] !!}</strong></p>
+                            <p>Admin: <strong>{!! $plan['reporter'] !!}</strong></p>
                             <p>Assignee: <strong>{!! $plan['assignee'] !!}</strong></p>
                             <p>Status:
 

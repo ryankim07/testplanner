@@ -53,7 +53,7 @@ Route::get('user/view/{user_id}', [
     'uses'       => 'UsersController@view'
 ]);
 Route::get('user/all', [
-    'as'         => 'user.all',
+    'as'         => 'user.view.all',
     'middleware' => 'roles',
     'roles'      => ['root'],
     'uses'       => 'UsersController@all']);
@@ -76,21 +76,16 @@ Route::post('user/update', [
  */
 Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'DashboardController@index']);
 
-Route::get('dashboard/view-all-admin', [
-    'as'         => 'dashboard.view.all.admin',
-    'middleware' => 'roles',
-    'roles'      => ['root', 'administrator'],
-    'uses'       => 'DashboardController@viewAllAdmin']);
-
-Route::get('dashboard/view-all-assigned', ['as' => 'dashboard.view.all.assigned', 'uses' => 'DashboardController@viewAllAssigned']);
-
 
 /**
  *
  * Activity Stream
  *
  */
-Route::get('activity/view-all', ['as' => 'activity.all', 'uses' => 'ActivityStreamController@all']);
+Route::get('activity', ['as' => 'activity', 'uses' => 'ActivityStreamController@index']);
+Route::get('activity/view-all', ['as' => 'activity.view.all', 'uses' => 'ActivityStreamController@all']);
+Route::get('activity/search', 'ActivityStreamController@search');
+Route::post('activity/search', ['as' => 'activity.search', 'uses' => 'ActivityStreamController@search']);
 Route::post('activity/save-comment', ['as' => 'activity.comment.save', 'uses' => 'ActivityStreamController@saveComment']);
 
 
@@ -116,12 +111,20 @@ Route::get('plan/review', [
     'roles'      => ['root', 'administrator'],
     'uses'       => 'PlansController@review'
 ]);
-Route::get('plan/all/{id}', [
-    'as'         => 'plan.view.all',
+Route::get('plan/view-all-created/{id}', [
+    'as'         => 'plan.view.all.created',
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator'],
-    'uses'       => 'PlansController@viewAllPlans'
+    'uses'       => 'PlansController@viewAllCreated'
 ]);
+
+Route::get('plan/view-all-responses', [
+    'as'         => 'plan.view.all.responses',
+    'middleware' => 'roles',
+    'roles'      => ['root', 'administrator'],
+    'uses'       => 'PlansController@viewAllResponses']);
+
+Route::get('plan/view-all-assigned', ['as' => 'plan.view.all.assigned', 'uses' => 'PlansController@viewAllAssigned']);
 
 Route::post('plan/save', [
     'as'         => 'plan.save',

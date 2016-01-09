@@ -29,6 +29,8 @@
                 @include('errors.list')
 
                 @include('pages/main/partials/user_info', [
+                    'activeColumn'         => 'col-md-2',
+                    'roleColumn'           => 'col-md-2',
                     'column'               => 'col-md-4',
                     'user'                 => '',
                     'rolesOptions'         => $rolesOptions,

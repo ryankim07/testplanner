@@ -131,6 +131,16 @@ class Tables extends Model
             'width'      => '40px'
         ];
 
+        $columns['full_name'] = [
+            'type'       => 'text',
+            'colname'    => 'Name',
+            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
+            'sortable'   => 'full_name',
+            'order'      => $order,
+            'filterable' => true,
+            'width'      => '80px'
+        ];
+
         $columns['email'] = [
             'type'       => 'text',
             'colname'    => 'Email',
@@ -188,7 +198,14 @@ class Tables extends Model
             'sortable'   => 'status',
             'order'      => $order,
             'filterable' => true,
-            'width'      => '20px'
+            'width'      => '10px'
+        ];
+
+        $columns['activity'] = [
+            'type'       => 'text',
+            'colname'    => 'Activity',
+            'filterable' => true,
+            'width'      => '100px'
         ];
 
         $columns['created_at'] = [

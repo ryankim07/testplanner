@@ -5,13 +5,13 @@
 --}}
 
     <div class="form-group">
-        <div class="col-xs-12 {!! $column !!}">
+        <div class="col-xs-12 {!! $activeColumn !!}">
             {!! Form::label('active_label', 'Active') !!}
             {!! Form::select('active', [1 => 'Yes', 0 => 'No'], $user ? $user->active : null, ['class' => 'form-control input-sm', 'id' => 'active']) !!}
         </div>
     </div>
     <div class="form-group">
-        <div class="col-xs-12 {!! $column !!}">
+        <div class="col-xs-12 {!! $roleColumn !!}">
             {!! Form::label('current_roles_label', 'Role') !!}
             {!! Form::select('current_roles', $rolesOptions, $rolesSelectedOptions, ['class' => 'form-control input-sm', 'id' => 'current_roles', 'multiple']) !!}
         </div>

@@ -10,7 +10,7 @@
 
     <div class="col-xs-12 col-md-12 main" id="review-main">
 
-        {!! Form::open(['route' => 'plan.dsbr', 'id' => 'plan-review-form']) !!}
+        {!! Form::open(['route' => 'plan.save', 'class' => 'form-horizontal', 'id' => 'plan-review-form']) !!}
 
         <div class="panel panel-primary">
             <div class="panel-heading">
