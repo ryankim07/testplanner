@@ -21,8 +21,8 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-10 col-md-10">
-                        <i class="fa fa-pencil-square-o fa-4x header-icon"></i>
-                        <h3>Respond - {!! $plan['description'] !!}</h3>
+                        <i class="fa fa-pencil-square-o fa-3x header-icon"></i>
+                        <h4>Respond - {!! $plan['description'] !!}</h4>
                     </div>
                 </div>
             </div>

@@ -11,33 +11,44 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-6 main" id="reset-main">
+    <div class="col-xs-12 col-md-4 col-md-offset-4 main" id="reset-main">
 
         {!! Form::open(['route' => 'password.post.reset', 'class' => 'form-horizontal', 'id' => 'password-reset-form']) !!}
+        {!! Form::hidden('token', $token) !!}
 
-        <div class="panel panel-primary col-md-8">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h4>Reset Password</h4>
+            </div>
             <div class="panel-body">
-                <h3 class="sub-header">Reset Password</h3>
 
                 @include('errors.list')
 
-                <input type="hidden" name="token" value="{{ $token }}">
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
                         {!! Form::label('email_label', 'E-Mail Address') !!}
-                        {!! Form::email('email', old('email'), ['class' => 'form-control input-sm', 'id' => 'email']) !!}
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
+                            {!! Form::email('email', old('email'), ['class' => 'form-control input-sm', 'id' => 'email']) !!}
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
                         {!! Form::label('password_label', 'Password') !!}
-                        {!! Form::password('password', ['class' => 'form-control input-sm', 'id' => 'password']) !!}
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1"><i class="fa fa-key"></i></span>
+                            {!! Form::password('password', ['class' => 'form-control input-sm', 'id' => 'password']) !!}
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-md-8">
                         {!! Form::label('password_confirmation_label', 'Confirm Password') !!}
-                        {!! Form::password('password_confirmation', ['class' => 'form-control input-sm', 'id' => 'password_confirmation']) !!}
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1"><i class="fa fa-key"></i></span>
+                            {!! Form::password('password_confirmation', ['class' => 'form-control input-sm', 'id' => 'password_confirmation']) !!}
+                        </div>
                     </div>
                 </div>
 

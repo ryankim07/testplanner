@@ -19,7 +19,7 @@
             <div class="panel-heading">
                 <div class="clearfix">
                     <div class="pull-left">
-                        <h3>Plans <span class="badge">{!! $totalPlans !!}</span></h3>
+                        <h4>Plans <span class="badge">{!! $totalPlans !!}</span></h4>
                     </div>
                     @if($role == "root")
                         <div class="pull-right">

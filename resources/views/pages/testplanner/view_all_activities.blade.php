@@ -19,7 +19,7 @@
             <div class="panel-heading">
                 <div class="clearfix">
                     <div class="pull-left">
-                        <h3>Activity Streams <span class="badge">{!! $totalActivities !!}</span></h3>
+                        <h4>Activity Streams <span class="badge">{!! $totalActivities !!}</span></h4>
                     </div>
                 </div>
             </div>

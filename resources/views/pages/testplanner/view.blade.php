@@ -15,7 +15,9 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<div class="clearfix">
-					<div class="pull-left"><h3>Edit plan - {!! $plan['description'] !!}</h3></div>
+					<div class="pull-left">
+						<h4>Edit plan - {!! $plan['description'] !!}</h4>
+					</div>
 				</div>
 			</div>
 			<div class="panel-body">

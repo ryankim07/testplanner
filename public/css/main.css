@@ -36,12 +36,6 @@ body {
         padding-right: 0px;
         padding-left: 0px;
     }
-
-    #login-main, #password-main, #reset-main {
-        left: 35%;
-        padding-right: 0px;
-        padding-left: 0px;
-    }
 }
 
 .main .page-header {

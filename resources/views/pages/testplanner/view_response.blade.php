@@ -22,8 +22,8 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-10 col-md-10">
-                        <i class="fa fa-commenting fa-4x header-icon"></i>
-                        <h3>View Response - {!! $plan['description'] !!}</h3>
+                        <i class="fa fa-commenting fa-3x header-icon"></i>
+                        <h4>View Response - {!! $plan['description'] !!}</h4>
                     </div>
                     <div class="col-xs-2 col-md-2">
                         {!! Form::select('tester', $testers, null, ['class' => 'form-control input-sm', 'id' => 'view-tester', 'data-url' => route('plan.view.response', ['id' => null])]) !!}

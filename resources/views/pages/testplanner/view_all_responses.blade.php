@@ -19,7 +19,7 @@
             <div class="panel-heading">
                 <div class="clearfix">
                     <div class="pull-left">
-                        <h3>Plans assigned to others <span class="badge">{!! $totalPlans !!}</span></h3>
+                        <h4>Plans assigned to others <span class="badge">{!! $totalPlans !!}</span></h4>
                     </div>
                 </div>
             </div>

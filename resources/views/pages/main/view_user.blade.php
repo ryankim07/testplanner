@@ -14,8 +14,8 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-10 col-md-10">
-                    <i class="fa fa-user fa-4x header-icon"></i>
-                    <h3>{!! $user->first_name !!}</h3>
+                    <i class="fa fa-user fa-3x header-icon"></i>
+                    <h4>{!! $user->first_name !!}</h4>
                 </div>
                 <div class="col-xs-2 col-md-2">
                     <button type="button" class="close close-viewer" aria-label="Close"><span aria-hidden="true">&times;</span></button>

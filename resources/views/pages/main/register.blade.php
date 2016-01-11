@@ -15,12 +15,12 @@
 
         {!! Form::open(['route' => 'auth.post.register', 'class' => 'form-horizontal', 'id' => 'admin-register-form']) !!}
 
-        <div class="panel panel-default">
+        <div class="panel panel-info">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
-                        <i class="fa fa-user-plus fa-4x header-icon"></i>
-                        <h3>Add new user</h3>
+                        <i class="fa fa-user-plus fa-3x header-icon"></i>
+                        <h4>Add new user</h4>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                 @include('pages/main/partials/submit_button', [
                     'submitBtnText' => 'Save',
                     'direction'     => 'pull-left',
-                    'class'		    => 'btn-success',
+                    'class'		    => 'btn-primary',
                     'id'			=> 'save-btn'
                 ])
 
