@@ -18,7 +18,7 @@
         {!! Form::hidden('plan_id', $plan['id'], ['id' => 'plan_id']) !!}
         {!! Form::hidden('ticket_resp_id', $plan['ticket_resp_id']) !!}
 
-        <div class="panel panel-info">
+        <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-10 col-md-10">

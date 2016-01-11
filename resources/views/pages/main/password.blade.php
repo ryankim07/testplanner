@@ -6,7 +6,7 @@
 
         {!! Form::open(['route' => 'password.post.email', 'files' => true, 'class' => 'form-horizontal', 'id' => 'admin-password-send-form']) !!}
 
-        <div class="panel panel-info">
+        <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>Forgotten Password</h4>
             </div>
@@ -27,7 +27,7 @@
                 @include('pages/main/partials/submit_button', [
                     'submitBtnText' => 'Send Password Reset',
                     'direction'     => 'pull-left',
-                    'class'		    => 'btn-primary',
+                    'class'		    => 'btn-custom btn-sm',
                     'id'			=> 'send-btn'
                 ])
 

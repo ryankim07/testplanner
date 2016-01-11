@@ -33,7 +33,7 @@
                             @include('pages/main/partials/button', [
                                 'btnText'   => 'Clear',
                                 'direction' => 'pull-left',
-                                'class'     => 'btn-default btn-sm clear-btn'
+                                'class'     => 'btn-info btn-sm clear-btn'
                             ])
 
                         </span>
@@ -56,8 +56,8 @@
     @endforeach
 
     @include('pages/main/partials/button', [
-         'btnText'   => 'Add another ticket',
+         'btnText'  => 'Add another ticket',
         'direction' => 'pull-left',
-        'class'     => 'btn-primary',
+        'class'     => 'btn-info btn-sm',
         'id'        => 'add-ticket-btn'
     ])

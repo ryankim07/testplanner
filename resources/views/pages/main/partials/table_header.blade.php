@@ -16,7 +16,7 @@
     <thead>
     <tr>
         @foreach($columns as $column)
-            <th>
+            <th class="{!! $column['header_align'] !!}">
                 @if ($column['sortable'])
                     {!! Html::linkAction($columnsLink, $column['colname'], [
                         'sortBy' => $column['sortable'],

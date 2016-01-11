@@ -12,7 +12,7 @@
 
         {!! Form::open(['route' => 'plan.save', 'class' => 'form-horizontal', 'id' => 'plan-review-form']) !!}
 
-        <div class="panel panel-primary">
+        <div class="panel panel-info">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-md-8">
@@ -20,7 +20,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="progress">
-                            <div class="progress-bar progress-bar-success progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">Completed</div>
+                            <div class="progress-bar progress-bar-primary progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">Completed</div>
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
         @include('pages/main/partials/submit_button', [
             'submitBtnText' => 'Finalize',
             'direction'     => 'pull-right',
-            'class'		    => 'btn-success btn-lg',
+            'class'		    => 'btn-primary',
             'id'            => 'continue-btn'
         ])
 

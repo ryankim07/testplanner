@@ -17,17 +17,14 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <div class="clearfix">
-                    <div class="pull-left">
-                        <h4>Plans assigned to others <span class="badge">{!! $totalPlans !!}</span></h4>
-                    </div>
-                </div>
+                <h4>Plans assigned to others <span class="badge">{!! $totalPlans !!}</span></h4>
+            </div>
             </div>
             <div class="panel-body">
                 @if($totalPlans > 0)
                     <div class="row table-options">
                         <div class="pull-right">
-                            {!! Form::button('Search', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
+                            {!! Form::button('Search', ['class' => 'btn btn-custom btn-sm', 'type' => 'submit']) !!}
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -55,7 +52,7 @@
                                     <td>{!! Utils::dateConverter($plan->created_at) !!}</td>
                                     <td>{!! Utils::dateConverter($plan->updated_at) !!}</td>
                                     <td>{!! Form::select('testers', $testers[$plan->id], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $plan->id)]) !!}</td>
-                                    <td><a href="#" class="plan-link"><i class="fa fa-search fa-lg"></i></a></td>
+                                    <td class="text-center"><a href="#" class="plan-link"><i class="fa fa-search fa-lg"></i></a></td>
                                 </tr>
                             @endforeach
                             </tbody>

@@ -64,7 +64,7 @@ class ActivityStreamController extends Controller
     {
         $user = Auth::user();
 
-        ActivityComments::saveActivityComment($res['id'], $user->id, $res['comment']);
+        ActivityComments::saveActivityComment($request->get('id'), $user->id, $request->get('comment'));
 
         return response()->json(["status" => "success"]);
     }

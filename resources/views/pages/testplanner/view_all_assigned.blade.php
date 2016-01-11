@@ -17,17 +17,13 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <div class="clearfix">
-                    <div class="pull-left">
-                        <h4>Plans assigned to me  <span class="badge">{!! $totalPlans !!}</span></h4>
-                    </div>
-                </div>
+                <h4>Plans assigned to me  <span class="badge">{!! $totalPlans !!}</span></h4>
             </div>
             <div class="panel-body">
                 @if($totalPlans > 0)
                     <div class="row table-options">
                         <div class="pull-right">
-                            {!! Form::button('Search', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
+                            {!! Form::button('Search', ['class' => 'btn btn-custom btn-sm', 'type' => 'submit']) !!}
                         </div>
                     </div>
                     <div class="table-responsive">

@@ -157,7 +157,6 @@ class Tables extends Model
             'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
             'sortable'   => 'email',
             'order'      => $order,
-            'filterable' => false,
             'width'      => '10px'
         ];
 
@@ -217,33 +216,30 @@ class Tables extends Model
             'to_index'   => 'created_to',
             'sortable'   => 'created_at',
             'order'      => $order,
-            'width'      => '60px'
+            'width'      => '40px'
         ];
 
         $columns['updated_at'] = [
-            'type'    => 'text',
-            'colname' => 'Updated',
-            'width'   => '60px'
+            'type'     => 'text',
+            'colname'  => 'Updated',
+            'width'    => '40px'
         ];
 
         $columns['testers'] = [
             'type'       => 'text',
             'colname'    => 'Testers',
             'data'       => ['class' => 'form-control'],
-            'sortable'   => '',
             'order'      => '',
-            'filterable' => false,
             'width'      => '30px'
         ];
 
         $columns['view'] = [
-            'type'       => 'text',
-            'colname'    => 'View',
-            'data'       => ['class' => 'form-control'],
-            'sortable'   => '',
-            'order'      => '',
-            'filterable' => false,
-            'width'      => '20px'
+            'type'         => 'text',
+            'colname'      => 'View',
+            'data'         => ['class' => 'form-control'],
+            'order'        => '',
+            'width'        => '10px',
+            'header_align' => 'center'
         ];
 
         foreach($columnsToDisplay as $column) {
@@ -262,25 +258,27 @@ class Tables extends Model
      * @param bool $showFilter
      * @return mixed
      */
-    public static function prepareTable($order, $columnToDisplay, $columnLink, $showSort = true, $showFilter = true)
+    public static function prepareTable($order, $columnToDisplay, $columnLink)
     {
         $preparedColumns = self::prepareColumns($order, $columnToDisplay);
 
-        if (!$showSort || !$showFilter) {
-            foreach($preparedColumns as $column) {
-                if (!$showSort) {
-                    $column['sortable'] = null;
-                }
-
-                if (!$showFilter) {
-                    $column['filterable'] = false;
-                }
-
-                $columns[] = $column;
+        foreach($preparedColumns as $column) {
+            if (!isset($column['sortable'])) {
+                $column['sortable'] = null;
             }
+
+            if (!isset($column['filterable'])) {
+                $column['filterable'] = false;
+            }
+
+            if (!isset($column['headera_align'])) {
+                $column['header_align'] = 'left';
+            }
+
+            $columns[] = $column;
         }
 
-        $table['columns']      = !$showSort || !$showFilter ? $columns : $preparedColumns;
+        $table['columns']      = $columns;
         $table['columns_link'] = $columnLink;
 
         return $table;

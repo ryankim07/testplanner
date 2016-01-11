@@ -32,7 +32,7 @@
                 @if($totalPlans > 0)
                     <div class="row table-options">
                         <div class="pull-right">
-                            {!! Form::button('Search', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
+                            {!! Form::button('Search', ['class' => 'btn btn-custom btn-sm', 'type' => 'submit']) !!}
                         </div>
                     </div>
                     <div class="table-responsive">

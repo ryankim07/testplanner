@@ -38,7 +38,7 @@
             @include('pages/main/partials/button', [
                 'btnText'   => 'Update',
                 'direction' => 'pull-left',
-                'class'     => 'btn btn-success btn-sm',
+                'class'     => 'btn btn-custom btn-sm',
                 'id'        => 'update-btn'
             ])
 

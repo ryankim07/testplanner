@@ -16,7 +16,7 @@
         {!! Form::open(['route' => 'password.post.reset', 'class' => 'form-horizontal', 'id' => 'password-reset-form']) !!}
         {!! Form::hidden('token', $token) !!}
 
-        <div class="panel panel-info">
+        <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>Reset Password</h4>
             </div>
@@ -55,7 +55,7 @@
                 @include('pages/main/partials/submit_button', [
                     'submitBtnText' => 'Reset Password',
                     'direction'     => 'pull-left',
-                    'class'		    => 'btn-primary',
+                    'class'		    => 'btn-custom btn-sm',
                     'id'			=> 'reset-btn'
                 ])
 

@@ -12,13 +12,10 @@
 
 		{!! Form::model($plan, ['method' => 'PATCH', 'route' => ['plan.update.details', $plan['id']], 'class' => 'form-horizontal', 'id' => 'plan-edit-form']) !!}
 
-		<div class="panel panel-default">
+		<div class="panel panel-info">
 			<div class="panel-heading">
-				<div class="clearfix">
-					<div class="pull-left">
-						<h4>Edit plan - {!! $plan['description'] !!}</h4>
-					</div>
-				</div>
+				<h4>Edit plan - {!! $plan['description'] !!}</h4>
+			</div>
 			</div>
 			<div class="panel-body">
 

@@ -198,3 +198,11 @@ table:not(.dashboard-table) tbody tr:hover {
 .review-testers .caption {
     display: block;
 }
+
+/*
+ * BUTTONS
+ */
+.btn-custom {
+    background: #808080;
+    color: #ffffff;
+}

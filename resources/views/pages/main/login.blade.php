@@ -15,7 +15,7 @@
 
         {!! Form::open(['route' => 'auth.post.login', 'class' => 'form-horizontal', 'id' => 'auth-login-form']) !!}
 
-        <div class="panel panel-info">
+        <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>Login</h4>
             </div>
@@ -46,7 +46,7 @@
                 @include('pages/main/partials/submit_button', [
                     'submitBtnText' => 'Login',
                     'direction'     => 'pull-left',
-                    'class'		    => 'btn-primary',
+                    'class'		    => 'btn-custom btn-sm',
                     'id'			=> 'login-btn'
                 ])
 

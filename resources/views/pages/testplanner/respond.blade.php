@@ -17,7 +17,7 @@
         {!! Form::hidden('plan', json_encode($plan)) !!}
         {!! Form::hidden('ticket_resp_id', $plan['ticket_resp_id']) !!}
 
-        <div class="panel panel-info">
+        <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-10 col-md-10">
@@ -112,7 +112,7 @@
         @include('pages/main/partials/submit_button', [
             'submitBtnText' => 'Submit Response',
             'direction'     => 'pull-left',
-            'class'		    => 'btn-primary',
+            'class'		    => 'btn-custom',
             'id'			=> 'respond-btn'
         ])
 
