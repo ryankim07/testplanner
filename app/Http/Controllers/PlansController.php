@@ -108,12 +108,12 @@ class PlansController extends Controller
     }
 
     /**
-     * Update all the plan details
+     * Update built plan details
      *
      * @param $planId
      * @param Request $request
      */
-    public function updatePlanDetails($planId, Request $request)
+    public function updateBuiltPlan($planId, Request $request)
     {
         $plan = Plans::find($planId);
         $plan->update(['description' => $request->get('description')]);
@@ -153,6 +153,8 @@ class PlansController extends Controller
             'plan' => [
                 'id'           => $plan->id,
                 'description'  => $plan->description,
+                'started_at'   => $plan->started_at,
+                'expired_at'   => $plan->expired_at,
                 'tickets_html' => $ticketsHtml,
                 'testers'      => $testers
             ]
@@ -376,18 +378,19 @@ class PlansController extends Controller
         $testerData  = Session::get('mophie_testplanner.testers');
 
         // Save plan
-        $testersWithEmail = Plans::savePlan($planData, $ticketsData, $testerData);
+        $results = Plans::savePlan($planData, $ticketsData, $testerData);
+        $planData['id'] = $results['plan_id'];
 
         // Log to activity stream
         ActivityStream::saveActivityStream($planData, 'plan');
 
         // Mail all test browsers
-        Email::sendEmail('plan-created', array_merge($planData, array('testers' => $testersWithEmail)));
+        Email::sendEmail('plan-created', array_merge($planData, array('testers' => $results['testers'])));
 
         // Delete session
         Session::forget('mophie_testplanner');
 
-        return redirect('dashboard');
+        return redirect('dashboard')->with('flash_message', config('testplanner.new_plan_build_msg'));
     }
 
     /**

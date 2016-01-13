@@ -135,12 +135,13 @@ class TicketsController extends Controller
         // Mail all test browsers
         /*Email::sendEmail('ticket-response', [
                 'ticket_resp_id'    => $resp['ticket_resp_id'],
+                'plan_id            => $planData['id'],
                 'plan_desc'         => $planData['description'],
                 'tester_id'         => $planData['tester_id'],
+                'creator_first_name => $planData['reporter'],
                 'tester_first_name' => $planData['assignee'],
-                'email'             => $user->email,
-                'ticket_status'     => $ticketStatus,
-                'tickets'           => serialize($tickets))
+                'email'             => User::getUserEmail($plan['creator_id'])
+                'ticket_status'     => $response
         ]);*/
 
         return redirect('dashboard');

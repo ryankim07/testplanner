@@ -64,8 +64,8 @@ class Plans extends Model
 
         static::creating(function($content)
         {
-            $content->started_at = date('Y-m-d 00:00:00', strtotime($content->started_at));
-            $content->expired_at = date('Y-m-d 00:00:00', strtotime($content->expired_at));
+            $content->started_at = date('Y-m-d h:i:s', strtotime($content->started_at));
+            $content->expired_at = date('Y-m-d 23:59:59', strtotime($content->expired_at));
         });
     }
 
@@ -300,7 +300,12 @@ class Plans extends Model
         // Commit all changes
         DB::commit();
 
-        return $testersWithEmail;
+        $results = [
+            'plan_id' => $plan->id,
+            'testers' => $testersWithEmail
+        ];
+
+        return $results;
     }
 
     /**

@@ -38,6 +38,7 @@
                         <li>Expires on: <strong>{!! $plan['expired_at'] !!}</strong></li>
                     </ul>
                 </div>
+                <div class="page-header"></div>
                 @foreach($tickets as $ticket)
                     <div class="row nested-block ticket-row" id="{!! $ticket['id'] !!}">
                         <legend>Tickets</legend>
@@ -50,6 +51,7 @@
                         </ul>
                     </div>
                 @endforeach
+                <div class="page-header"></div>
                 <div class="row nested-block">
                     <legend>Browser Testers</legend>
                     <a href="{!! URL::route('tester.edit', $plan['creator_id']) !!}" class="cog"><i class="fa fa-cog fa-lg"></i></a>

@@ -30,6 +30,8 @@ return [
 
     'new_plan_msg'            => 'created a new plan,',
 
+    'new_plan_build_msg'      => 'New plan successfully created.',
+
     'plan_build_error'        => 'Plan building cannot be done at the current moment.  Please try again later.',
 
     'plan_session_error'      => 'Session data is missing.',

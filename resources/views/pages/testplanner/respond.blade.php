@@ -20,19 +20,17 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-xs-10 col-md-10">
+                    <div class="col-xs-10 col-md-8">
                         <i class="fa fa-pencil-square-o fa-3x header-icon"></i>
                         <h4>Respond - {!! $plan['description'] !!}</h4>
                     </div>
                 </div>
             </div>
             <div class="panel-body">
-                @include('errors.list')
 
-                @if(empty($plan['ticket_resp_id']))
-                    <p>{!! $plan['assignee'] !!}, {!! config('testplanner.plan_non_user_response') !!}</p>
-                @else
-                    @include('pages/testplanner/partials/response_respond_details')
+                @include('errors.list')
+                @include('pages/testplanner/partials/response_respond_details')
+
                 @foreach($plan['tickets'] as $ticket)
                     <div class="row nested-block ticket-panel">
                         <legend>Ticket - {!! Html::link(isset($ticket['description_url']) ? $ticket['description_url'] : '#', $ticket['description'], ['target' => '_blank', 'title' => 'Click to view issue in Jira']) !!}</legend>
@@ -83,7 +81,6 @@
                     </div>
                 @endforeach
             </div>
-            @endif
         </div>
 
         @include('pages/main/partials/submit_button', [

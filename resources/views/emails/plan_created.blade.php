@@ -620,7 +620,7 @@ img{height:auto !important;}
                    <!-- start text content --> 
                    <tbody><tr>
                      <td valign="top">
-                       <table border="0" cellspacing="0" cellpadding="0" align="center">
+                       <table border="0" cellspacing="0" cellpadding="0" align="left">
                          
                          <!--start space height -->                      
                           <tbody><tr>

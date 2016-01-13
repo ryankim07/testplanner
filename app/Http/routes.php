@@ -135,8 +135,8 @@ Route::post('plan/save', [
 Route::get('plan/search', 'PlansController@search');
 Route::post('plan/search', ['as' => 'plan.search', 'uses' => 'PlansController@search']);
 
-Route::patch('plan/update-plan-details/{id}', ['as' => 'plan.update.details', 'uses' => 'PlansController@updatePlansDetails']);
-Route::put('plan/update-plan-details/{id}', ['as' => 'plan.update.details', 'uses' => 'PlansController@updatePlansDetails']);
+Route::patch('plan/update-built-plan/{id}', ['as' => 'plan.built.update', 'uses' => 'PlansController@updateBuiltPlan']);
+Route::put('plan/update-built-plan/{id}', ['as' => 'plan.built.update', 'uses' => 'PlansController@updateBuiltPlan']);
 Route::resource('plan', 'PlansController');
 
 

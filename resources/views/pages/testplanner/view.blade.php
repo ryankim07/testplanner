@@ -10,7 +10,7 @@
 
 	<div class="col-xs-12 col-md-12 main" id="view-main">
 
-		{!! Form::model($plan, ['method' => 'PATCH', 'action' => ['PlansController@updatePlansDetails', $plan['id']], 'class' => 'form-horizontal', 'id' => 'plan-edit-form']) !!}
+		{!! Form::model($plan, ['method' => 'PATCH', 'action' => ['PlansController@updateBuiltPlan', $plan['id']], 'class' => 'form-horizontal', 'id' => 'plan-edit-form']) !!}
 
 		<div class="panel panel-info">
 			<div class="panel-heading">
@@ -26,8 +26,7 @@
 				@include('errors.list')
 
 				@include('pages/testplanner/partials/plan', [
-					'description' => $plan['description'],
-					'mode'        => 'edit'
+					'mode' => 'edit'
 				])
 
 				<div class="page-header"></div>
