@@ -76,8 +76,21 @@
 				});
 			});
 
-			$('#step-1-main').on('click', '.clear-btn', function () {
-				$('#plan-description').val('');
+			clearInputField('step-1-main', 'clear-btn', 'plan-description', '');
+
+			$('#started_at').datetimepicker({
+				format: "MM/DD/YYYY"
+			});
+			$('#expired_at').datetimepicker({
+				format: "MM/DD/YYYY"
+			});
+
+			$("#started_at").on("dp.change", function (e) {
+				$('#expired_at').data("DateTimePicker").minDate(e.date);
+			});
+
+			$("#expired_at").on("dp.change", function (e) {
+				$('#started_at').data("DateTimePicker").maxDate(e.date);
 			});
 		});
 	</script>

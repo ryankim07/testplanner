@@ -101,7 +101,7 @@
          */
         function continueOrUpdate()
         {
-            $(formId).on('click', continueBtnId, updateBtnId, function() {
+            $(formId).on('click', "" + continueBtnId + ", " + updateBtnId + "", function() {
                 var tickets = [];
 
                 $(formId + ' ' + ticketRowClass).each(function() {
@@ -136,9 +136,7 @@
                 });
             });
 
-            $(formId).on('click', clearBtnClass, function () {
-                $(config.ticketDescClass).val('');
-            });
+            clearInputField(config.formIdName, config.clearBtnName, '', config.ticketDescName);
         }
 
         /**
@@ -165,107 +163,123 @@
 
 
     /**
-     *
-     * RESPONDING TO TICKET
-     *
+     * Responding to ticket
      */
-    $('#respond-main').on('click', '#respond-btn', function() {
-        var tickets = [];
+    function loadRespondJs()
+    {
+        var totalResponses = 0;
+        $('#respond-main .ticket-panel').each(function() {
+            var notesResponse = $(this).find('.notes-response');
 
-        $('.ticket-panel').each(function() {
-            // Create ticket object
-            tickets.push({
-                "id": $(this).find('.ticket-id').val(),
-                "test_status": $(this).find('input[type="radio"]:checked').val(),
-                "notes_response": $(this).find('.notes-response').val()
+            if (notesResponse.val() != '') {
+                totalResponses++;
+            }
+        });
+
+        if (totalResponses > 0) {
+            $('#respond-btn').prop('value', 'Update Response')
+        }
+
+        $('#respond-main').on('click', '#respond-btn', function() {
+            var tickets = [];
+
+            $('.ticket-panel').each(function() {
+                // Create ticket object
+                tickets.push({
+                    "id": $(this).find('.ticket-id').val(),
+                    "test_status": $(this).find('input[type="radio"]:checked').val(),
+                    "notes_response": $(this).find('.notes-response').val()
+                });
+            });
+
+            // Create hidden field
+            var input = $("<input>")
+                .attr("type", "hidden")
+                .attr("name", "tickets_obj").val(JSON.stringify(tickets));
+
+            $('form').append($(input));
+        });
+    }
+
+
+    /**
+     * View response dropdown viewer for a certain user
+     */
+    function loadResponseJs()
+    {
+        $('#view-response-main').on('change', '#view-tester', function () {
+            var route = $(this).data('url');
+            var userId = $(this).val();
+            var planId = $('#plan_id').val();
+
+            if (userId != '') {
+                window.location.href = route + '/' + planId + "/" + userId;
+            }
+        });
+    }
+
+
+    /**
+     * Dashboard
+     */
+    function loadDashboardJs()
+    {
+        // Hide initially
+        $('.activity-comment-content').hide();
+
+
+        $('#dashboard-main .admin_created_plans_rows').each(function() {
+            var testerId = $(this).find('.testers option:nth-child(1)').val();
+            var route = $(this).find('.testers').data('url') + '/' + testerId;
+            var link = $(this).find('.plan-link').prop('href', route);
+        });
+
+        // Change viewer id link
+        $('#dashboard-main').on('change', '.testers', function() {
+            var selectedTesterId = $(this).val();
+            var route = $(this).data('url') + '/' + selectedTesterId;
+
+            $(this).closest('td').next('td').find('.plan-link').prop('href', route);
+        });
+
+        // Toggle comment to show or hide
+        $('#dashboard-main').on('click', '.activity-comment-link', function(e) {
+            e.preventDefault();
+            var parent = $(this).parentsUntil('.activity-log');
+
+            parent.find('.activity-comment-content').toggle();
+        });
+
+        // Add comment
+        $('#dashboard-main').on('click', '.activity-comment-add', function() {
+            var parent  = $(this).parentsUntil('.activity-log');
+            var logId   = parent.find('.log_id').val();
+            var comment = parent.find('.activity-comment').val();
+
+            $.ajax({
+                method: "POST",
+                url: "{!! URL::to('dashboard/save-comment') !!}",
+                data: {
+                    "_token":  $('form').find('input[name=_token]').val(),
+                    "id":      logId,
+                    "comment": comment
+                },
+                dataType: "json"
+            }).done(function(msg) {
+                location.reload();
             });
         });
-
-        // Create hidden field
-        var input = $("<input>")
-            .attr("type", "hidden")
-            .attr("name", "tickets_obj").val(JSON.stringify(tickets));
-
-        $('form').append($(input));
-    });
-
-
-    /**
-     *
-     * VIEW RESPONSE DROPDOWN VIEWER FOR A CERTAIN USER
-     *
-     */
-    $('#view-response-main').on('change', '#view-tester', function() {
-        var route  = $(this).data('url');
-        var userId = $(this).val();
-        var planId = $('#plan_id').val();
-
-        if (userId != '') {
-            window.location.href = route + '/' + planId + "/" + userId;
-        }
-    });
-
-
-    /**
-     *
-     * DASHBOARD
-     *
-     */
-    $('#dashboard-main .admin_created_plans_rows').each(function() {
-        var testerId = $(this).find('.testers option:nth-child(1)').val();
-        var route = $(this).find('.testers').data('url') + '/' + testerId;
-        var link = $(this).find('.plan-link').prop('href', route);
-    });
-
-// Change viewer id link
-    $('#dashboard-main').on('change', '.testers', function() {
-        var selectedTesterId = $(this).val();
-        var route = $(this).data('url') + '/' + selectedTesterId;
-
-        $(this).closest('td').next('td').find('.plan-link').prop('href', route);
-    });
-
-// Hide initially
-    $('.activity-comment-content').hide();
-
-// Toggle comment to show or hide
-    $('#dashboard-main').on('click', '.activity-comment-link', function(e) {
-        e.preventDefault();
-        var parent = $(this).parentsUntil('.activity-log');
-
-        parent.find('.activity-comment-content').toggle();
-    });
-
-// Add comment
-    $('#dashboard-main').on('click', '.activity-comment-add', function() {
-        var parent  = $(this).parentsUntil('.activity-log');
-        var logId   = parent.find('.log_id').val();
-        var comment = parent.find('.activity-comment').val();
-
-        $.ajax({
-            method: "POST",
-            url: "{!! URL::to('dashboard/save-comment') !!}",
-            data: {
-                "_token":  $('form').find('input[name=_token]').val(),
-                "id":      logId,
-                "comment": comment
-            },
-            dataType: "json"
-        }).done(function(msg) {
-            location.reload();
+        // Cancel comment
+        $('#dashboard-main').on('click', '.activity-comment-cancel', function() {
+            var parent = $(this).parentsUntil('.activity-log');
+            parent.find('.activity-comment-content').hide();
         });
-    });
-
-// Cancel comment
-    $('#dashboard-main').on('click', '.activity-comment-cancel', function() {
-        var parent = $(this).parentsUntil('.activity-log');
-        parent.find('.activity-comment-content').hide();
-    });
+    }
 
 
     /**
      *
-     * VIEW ALL ADMIN PLANS
+     * View all admin plans
      *
      */
         // View all admin
@@ -285,46 +299,77 @@
 
 
     /**
-     *
-     * USER ACCOUNTS
-     *
+     * User accounts
      */
-        // Display all user accounts
-    $('#view-all-users-main').on('click', '.toggler', function(e) {
-        e.preventDefault();
+    function loadUsersJs()
+    {
+        $('.alert').hide();
 
-        var currentClass = $('#view-all-users-main').attr('class');
+        $('#view-user-main').on('click', '#update-btn', function () {
+            var newRoles = $("#current_roles").val() || [];
 
-        if (currentClass != 'col-xs-12 col-md-8') {
-            // Control width of both columns
-            $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
-            $('#viewer-main').toggleClass('col-md-0 col-md-4');
-        }
-
-        // Selecting rows on mobile
-        if (currentClass == 'col-xs-12 col-md-12') {
-            $('#view-all-users-main').css({'z-index': '1000'});
-        }
-
-        $.when(
             $.ajax({
-                method: "GET",
-                url: $(this).data('url'),
-                dataType: "json",
-                success: function (resp) {
-                    $('#viewer-main').html(resp.viewBody);
+                method: "POST",
+                url: "{!! URL::to('user/update') !!}",
+                data: $("#user-form-update").serialize() + '&new_roles=' + newRoles,
+                dataType: "json"
+            }).done(function (response) {
+                var msgs = '';
+
+                $('.alert').attr('class', 'alert');
+                $('.alert').empty();
+
+                if (response.type == 'success') {
+                    $('.alert').attr('class', 'alert alert-success').html('<i class="fa fa-check-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Success:</span> ' + response.msg).show();
+                } else {
+                    $.each(response.msg, function (key, item) {
+                        msgs += '<i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Error:</span> ' + item + '<br/>';
+                    });
+
+                    $('.alert').attr('class', 'alert alert-danger').html(msgs).show();
                 }
-            })
-        ).done(function (resp) {
-            // Close viewer
-            $('.close-viewer').on('click', function (e) {
-                e.preventDefault();
-                $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
-                $('#viewer-main').toggleClass('col-md-0 col-md-4');
-                $('#viewer-main').empty();
             });
         });
-    });
+    }
+
+    function loadAllUsersJs()
+    {
+        $('#view-all-users-main').on('click', '.toggler', function (e) {
+            e.preventDefault();
+
+            var currentClass = $('#view-all-users-main').attr('class');
+
+            if (currentClass != 'col-xs-12 col-md-8') {
+                // Control width of both columns
+                $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
+                $('#viewer-main').toggleClass('col-md-0 col-md-4');
+            }
+
+            // Selecting rows on mobile
+            if (currentClass == 'col-xs-12 col-md-12') {
+                $('#view-all-users-main').css({'z-index': '1000'});
+            }
+
+            $.when(
+                $.ajax({
+                    method: "GET",
+                    url: $(this).data('url'),
+                    dataType: "json",
+                    success: function (resp) {
+                        $('#viewer-main').html(resp.viewBody);
+                    }
+                })
+            ).done(function (resp) {
+                // Close viewer
+                $('.close-viewer').on('click', function (e) {
+                    e.preventDefault();
+                    $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
+                    $('#viewer-main').toggleClass('col-md-0 col-md-4');
+                    $('#viewer-main').empty();
+                });
+            });
+        });
+    }
 
     /**
      * Pre check all the radio buttons for browser testers
@@ -332,7 +377,8 @@
      *
      * @param testers
      */
-    function preSelectBrowserTesters(testers) {
+    function preSelectBrowserTesters(testers)
+    {
         $('.browser-tester').each(function () {
             var browser = $(this);
             var browserId = browser.attr('id');
@@ -342,6 +388,24 @@
                     browser.prop("checked", true);
                 }
             });
+        });
+    }
+
+    /**
+     * Clear input type field on button click
+     *
+     * @param formIdName
+     * @param buttonClassName
+     * @param inputTextIdName
+     */
+    function clearInputField(formIdName, buttonClassName, inputTextIdName, inputTextClassName)
+    {
+        $('#' + formIdName).on('click', buttonClassName, function () {
+            if (inputTextIdName != '') {
+                $('#' + inputTextIdName).val('');
+            } else {
+                $('.' + inputTextClassName).val('');
+            }
         });
     }
 

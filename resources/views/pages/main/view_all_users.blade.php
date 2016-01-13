@@ -63,5 +63,14 @@
 
     </div>
 
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            // All users functionalities
+            loadAllUsersJs();
+        });
+
+    </script>
+
     @include('layout.main.viewer')
 @stop

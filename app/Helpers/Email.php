@@ -34,8 +34,8 @@ class Email
                 $emailType    = 'emails.plan_created';
             break;
 
-            case 'ticket-responded':
-                $emailSubject =  $data['description'] . ': ' . config('mail.ticket_responded_subject');
+            case 'ticket-response':
+                $emailSubject =  $data['description'] . ': ' . config('mail.ticket_response_subject');
                 $emailType    = 'emails.ticket_response';
                 break;
 

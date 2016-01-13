@@ -71,7 +71,8 @@ class TestPlannerSession
                 if (!isset($session['plan']) ||
                     !isset($session['tickets']) ||
                     !isset($session['testers'])) {
-                    return redirect('plan.build')->withInput()
+                    return redirect('/plan/build')
+                        ->withInput()
                         ->withErrors(array('message' => config('testplanner.plan_session_error')));
                 }
             break;

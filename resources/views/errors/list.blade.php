@@ -12,7 +12,7 @@
         @foreach($errors->all() as $error)
             <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"></i>
             <span class="sr-only">Error:</span>
-            {!! $error !!}
+            {!! $error !!}<br/>
         @endforeach
     </div>
 @endif

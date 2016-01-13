@@ -13,12 +13,18 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
+use PhpSpec\Exception\Exception;
 
 use App\Facades\Utils;
 use App\Facades\Jira;
 
 use App\Tickets;
 use App\Testers;
+
+use Session;
 
 class Plans extends Model
 {
@@ -37,7 +43,9 @@ class Plans extends Model
     protected $fillable = [
         'description',
         'creator_id',
-        'status'
+        'status',
+        'started_at',
+        'expired_at'
     ];
 
     /**
@@ -52,6 +60,13 @@ class Plans extends Model
      */
     public static function boot()
     {
+        parent::boot();
+
+        static::creating(function($content)
+        {
+            $content->started_at = date('Y-m-d 00:00:00', strtotime($content->started_at));
+            $content->expired_at = date('Y-m-d 00:00:00', strtotime($content->expired_at));
+        });
     }
 
     /**

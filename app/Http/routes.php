@@ -134,7 +134,6 @@ Route::post('plan/save', [
 
 Route::get('plan/search', 'PlansController@search');
 Route::post('plan/search', ['as' => 'plan.search', 'uses' => 'PlansController@search']);
-Route::post('plan/save-user-response', ['as' => 'plan.save.user.response', 'uses' => 'PlansController@saveUserResponse']);
 
 Route::patch('plan/update-plan-details/{id}', ['as' => 'plan.update.details', 'uses' => 'PlansController@updatePlansDetails']);
 Route::put('plan/update-plan-details/{id}', ['as' => 'plan.update.details', 'uses' => 'PlansController@updatePlansDetails']);
@@ -153,12 +152,12 @@ Route::get('ticket/build', [
     'uses'       => 'TicketsController@build'
 ]);
 Route::get('ticket/response', ['as' => 'plan.response', 'uses' => 'TicketsController@response']);
-
+Route::post('ticket/save-ticket-response', ['as' => 'ticket.save.response', 'uses' => 'TicketsController@save']);
 Route::post('ticket/remove', [
-    'as'   => 'ticket.remove.ajax',
+    'as'         => 'ticket.remove.ajax',
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator'],
-    'uses' => 'TicketsController@removeAjax'
+    'uses'       => 'TicketsController@removeAjax'
 ]);
 
 Route::resource('ticket', 'TicketsController');

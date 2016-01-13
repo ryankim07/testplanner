@@ -50,33 +50,8 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
-            $('.alert').hide();
-
-            $('#view-user-main').on('click', '#update-btn', function() {
-                var newRoles = $("#current_roles").val() || [];
-
-                $.ajax({
-                    method: "POST",
-                    url: "{!! URL::to('user/update') !!}",
-                    data: $("#user-form-update").serialize() + '&new_roles=' + newRoles,
-                    dataType: "json"
-                }).done(function (response) {
-                    var msgs = '';
-
-                    $('.alert').attr('class', 'alert');
-                    $('.alert').empty();
-
-                    if (response.type == 'success') {
-                        $('.alert').attr('class', 'alert alert-success').html('<i class="fa fa-check-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Success:</span> ' + response.msg).show();
-                    } else {
-                        $.each(response.msg, function(key, item) {
-                            msgs += '<i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Error:</span> ' + item + '<br/>';
-                        });
-
-                        $('.alert').attr('class', 'alert alert-danger').html(msgs).show();
-                    }
-                });
-            });
+            // User functionalities
+            loadUsersJs();
         });
 
     </script>

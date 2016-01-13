@@ -20,10 +20,6 @@
     <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
-  <component name="VagrantProjectSettings">
-    <option name="instanceFolder" value="$PROJECT_DIR$/../../ecom-vm" />
-    <option name="provider" value="" />
-  </component>
   <component name="masterDetails">
     <states>
       <state key="ScopeChooserConfigurable.UI">

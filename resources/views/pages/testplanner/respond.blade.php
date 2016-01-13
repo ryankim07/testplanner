@@ -13,7 +13,7 @@
 
     <div class="col-xs-12 col-md-12 main" id="respond-main">
 
-        {!! Form::open(['route' => 'plan.save.user.response', 'class' => 'form-horizontal', 'id' => 'plan-user-response-form']) !!}
+        {!! Form::open(['route' => 'ticket.save.response', 'class' => 'form-horizontal', 'id' => 'ticket-response-form']) !!}
         {!! Form::hidden('plan', json_encode($plan)) !!}
         {!! Form::hidden('ticket_resp_id', $plan['ticket_resp_id']) !!}
 
@@ -29,34 +29,10 @@
             <div class="panel-body">
                 @include('errors.list')
 
-                <div class="row nested-block">
-                    <legend>Plan Details</legend>
-                    <div class="col-xs-12 col-md-4">
-                        <div class="form-group">
-                            <p>Admin: <strong>{!! $plan['reporter'] !!}</strong></p>
-                            <p>Assignee: <strong>{!! $plan['assignee'] !!}</strong></p>
-                            <p>Status:
-
-                                <?php
-                                    if($plan['ticket_status'] == 'complete') {
-                                        $trLabel = 'label-default';
-                                    } else if($plan['ticket_status'] == 'progress') {
-                                        $trLabel = 'label-warning';
-                                    } else {
-                                        $trLabel = 'label-success';
-                                    }
-                                ?>
-
-                                <span class="label {!! $trLabel !!}">{!! $plan['ticket_status'] !!}</span>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-8">
-                        <div class="form-group">
-                            <p>Created: <strong>{!! $plan['created_at'] !!}</strong></p>
-                            <p>Updated: <strong>{!! $plan['updated_at'] !!}</strong></p>
-                        </div>
-                    </div>
-                </div>
+                @if(empty($plan['ticket_resp_id']))
+                    <p>{!! $plan['assignee'] !!}, {!! config('testplanner.plan_non_user_response') !!}</p>
+                @else
+                    @include('pages/testplanner/partials/response_respond_details')
                 @foreach($plan['tickets'] as $ticket)
                     <div class="row nested-block ticket-panel">
                         <legend>Ticket - {!! Html::link(isset($ticket['description_url']) ? $ticket['description_url'] : '#', $ticket['description'], ['target' => '_blank', 'title' => 'Click to view issue in Jira']) !!}</legend>
@@ -107,6 +83,7 @@
                     </div>
                 @endforeach
             </div>
+            @endif
         </div>
 
         @include('pages/main/partials/submit_button', [
@@ -123,18 +100,8 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
-            var totalResponses = 0;
-            $('#respond-main .ticket-panel').each(function() {
-                var notesResponse = $(this).find('.notes-response');
-
-                if (notesResponse.val() != '') {
-                    totalResponses++;
-                }
-            });
-
-            if (totalResponses > 0) {
-                $('#respond-btn').prop('value', 'Update Response')
-            }
+            // Respond functionalities
+            loadRespondJs();
         });
 
     </script>

@@ -30,10 +30,12 @@
                 @include('errors.list')
 
                 <div class="row nested-block">
-                    <legend>Plan Description</legend>
+                    <legend>Plan Details</legend>
                     <a href="{!! URL::route('plan.edit', $plan['creator_id']) !!}" class="cog"><i class="fa fa-cog fa-lg"></i></a>
                     <ul class="list-unstyled">
-                        <li><h5>{!! $plan['description'] !!}</h5></li>
+                        <li>Description: <strong>{!! $plan['description'] !!}</strong></li>
+                        <li>Starts on: <strong>{!! $plan['started_at'] !!}</strong></li>
+                        <li>Expires on: <strong>{!! $plan['expired_at'] !!}</strong></li>
                     </ul>
                 </div>
                 @foreach($tickets as $ticket)
@@ -53,7 +55,7 @@
                     <a href="{!! URL::route('tester.edit', $plan['creator_id']) !!}" class="cog"><i class="fa fa-cog fa-lg"></i></a>
                     @foreach($testers as $tester)
                         <div class="text-center review-testers">
-                            {!! Html::image('images/' . $tester['browser'] . '.png') !!}<h5><span class="caption">{!! $tester['first_name'] !!}</span></h5>
+                            {!! Html::image('images/' . $tester['browser'] . '.png', 'Browser', ['class' => 'browser-img']) !!}<h5><span class="caption">{!! $tester['first_name'] !!}</span></h5>
                         </div>
                     @endforeach
                 </div>

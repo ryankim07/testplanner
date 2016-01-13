@@ -139,27 +139,6 @@ table:not(.dashboard-table) tbody tr:hover {
 /*
  * Others
  */
-
-.trash, .cog {
-    position:absolute;
-    margin-top: 8px;
-    margin-right: 6px;
-    top:0;
-    right:0;
-    line-height: 12px;
-    color: #777777;
-}
-
-#review-main .trash {
-    position:absolute;
-    margin-top: 6px;
-    margin-right: 25px;
-    top:0;
-    right:0;
-    line-height: 12px;
-    color: #777777;
-}
-
 .nested-block {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
@@ -184,22 +163,47 @@ table:not(.dashboard-table) tbody tr:hover {
     font-size: 18.5px;
 }
 
-.header-icon {
-    float:left;
-    min-width: 54px;
-}
-
 .review-testers {
     vertical-align: top;
     display: inline-block;
     width: 80px;
 }
-.review-testers img {
-    width: 32px;
-    height: 32px;
-}
+
 .review-testers .caption {
     display: block;
+}
+
+/*
+ * IMAGES
+ */
+.trash, .cog {
+    position:absolute;
+    margin-top: 8px;
+    margin-right: 6px;
+    top:0;
+    right:0;
+    line-height: 12px;
+    color: #777777;
+}
+
+#review-main .trash {
+    position:absolute;
+    margin-top: 6px;
+    margin-right: 25px;
+    top:0;
+    right:0;
+    line-height: 12px;
+    color: #777777;
+}
+
+.header-icon {
+    float:left;
+    min-width: 54px;
+}
+
+#review-main .browser-img, #respond-main #browser-img, #view-response-main #browser-img {
+    width: 32px;
+    height: 32px;
 }
 
 /*

@@ -21,7 +21,8 @@ elixir(function(mix) {
     mix.styles([
         "vendor/bootstrap/dist/css/bootstrap.min.css",
         "vendor/bootstrap-select/dist/css/bootstrap-select.min.css",
-        "vendor/font-awesome/css/font-awesome.min.css"
+        "vendor/font-awesome/css/font-awesome.min.css",
+        "vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"
     ], 'public/css/app.css', 'resources/assets');
 
     mix.scripts([

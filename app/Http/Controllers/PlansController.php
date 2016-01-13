@@ -14,21 +14,13 @@
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Requests\PlansFormRequest;
-use App\Http\Requests\ReviewFormRequest;
-use App\Http\Requests\UserResponseFormRequest;
-use Illuminate\Contracts\Validation\ValidationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
-use PhpSpec\Exception\Exception;
 
 use App\Facades\Email;
 use App\Facades\Jira;
 
 use App\Plans;
 use App\Testers;
-use App\TicketsResponses;
 use App\ActivityStream;
 use App\User;
 use App\Tables;
@@ -180,7 +172,7 @@ class PlansController extends Controller
         $sorting = Tables::sorting();
         $table   = Tables::prepareTable($sorting['order'], [
             'description',
-            'creator',
+            'admin',
             'status',
             'created_at',
             'updated_at'
@@ -234,7 +226,7 @@ class PlansController extends Controller
         $sorting = Tables::sorting();
         $table   = Tables::prepareTable($sorting['order'], [
             'description',
-            'full_name',
+            'admin',
             'status',
             'created_at',
             'updated_at'
@@ -262,7 +254,7 @@ class PlansController extends Controller
         $sorting = Tables::sorting();
         $table   = Tables::prepareTable($sorting['order'], [
             'description',
-            'full_name',
+            'admin',
             'status',
             'created_at',
             'updated_at',
@@ -384,7 +376,7 @@ class PlansController extends Controller
         $testerData  = Session::get('mophie_testplanner.testers');
 
         // Save plan
-        $results = Plans::savePlan($planData, $ticketsData, $testerData);
+        $testersWithEmail = Plans::savePlan($planData, $ticketsData, $testerData);
 
         // Log to activity stream
         ActivityStream::saveActivityStream($planData, 'plan');
@@ -394,44 +386,6 @@ class PlansController extends Controller
 
         // Delete session
         Session::forget('mophie_testplanner');
-
-        return redirect('dashboard');
-    }
-
-    /**
-     * Save user's plan response
-     *
-     * @param UserResponseFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
-     */
-    public function saveUserResponse(UserResponseFormRequest $request)
-    {
-        $planData = json_decode($request->get('plan'), true);
-        $tickets  = json_decode($request->get('tickets_obj'), true);
-        $planData['tickets_responses'] = $tickets;
-
-        // Save ticket response
-        $response = TicketsResponses::saveTicketResponse($planData);
-
-        // Log activity
-        ActivityStream::saveActivityStream($planData, 'ticket-response', $response);
-
-        // Mail all test browsers
-        /*if ($planStatus == 'complete') {
-            // Create object for email
-            Email::sendEmail('ticket-responded', [
-                'ticket_resp_id'    => $resp['ticket_resp_id'],
-                'plan_desc'         => $planData['description'],
-                'tester_id'         => $planData['tester_id'],
-                'tester_first_name' => $planData['assignee'],
-                'email'             => $user->email,
-                'ticket_status'     => $ticketStatus,
-                'tickets'           => serialize($tickets))
-            ]);
-
-        Email::sendEmail('plan-created', array_merge($planData, array('testers' => $testersWithEmail)));
-
-        }*/
 
         return redirect('dashboard');
     }

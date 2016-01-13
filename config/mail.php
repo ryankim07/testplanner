@@ -132,12 +132,12 @@ return [
     |
     */
 
-    'admin_system_subject'     => 'Test Planner System Error',
+    'admin_system_subject'    => 'Test Planner System Error',
 
-    'plan_created_subject'     => 'New test plan has been assigned to you',
+    'plan_created_subject'    => 'New test plan has been assigned to you',
 
-    'ticket_responded_subject' => 'Response from user',
+    'ticket_response_subject' => 'Response from tester',
 
-    'email_error_subject'      => 'Confirmation email error',
+    'email_error_subject'     => 'Confirmation email error',
 
 ];

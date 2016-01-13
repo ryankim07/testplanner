@@ -131,11 +131,11 @@ class Tables extends Model
             'width'      => '40px'
         ];
 
-        $columns['full_name'] = [
+        $columns['admin'] = [
             'type'       => 'text',
             'colname'    => 'Name',
             'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => 'full_name',
+            'sortable'   => 'admin',
             'order'      => $order,
             'filterable' => true,
             'width'      => '80px'
@@ -178,16 +178,6 @@ class Tables extends Model
             'order'      => $order,
             'filterable' => true,
             'width'      => '100px'
-        ];
-
-        $columns['creator'] = [
-            'type'       => 'text',
-            'colname'    => 'Admin',
-            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => 'first_name',
-            'order'      => $order,
-            'filterable' => true,
-            'width'      => '40px'
         ];
 
         $columns['status'] = [

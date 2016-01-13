@@ -37,35 +37,8 @@
                 @if(empty($plan['ticket_resp_id']))
                     <p>{!! $plan['assignee'] !!}, {!! config('testplanner.plan_non_user_response') !!}</p>
                 @else
-                    <div class="row nested-block">
-                        <legend>Plan Details</legend>
-                        <div class="col-xs-12 col-md-4">
-                            <div class="form-group">
-                                <p>Admin: <strong>{!! $plan['reporter'] !!}</strong></p>
-                                <p>Assignee: <strong>{!! $plan['assignee'] !!}</strong></p>
-                                <p>Status:
+                    @include('pages/testplanner/partials/response_respond_details')
 
-                                    <?php
-                                        if($plan['ticket_status'] == 'complete') {
-                                            $trLabel = 'label-default';
-                                        } else if($plan['ticket_status'] == 'progress') {
-                                            $trLabel = 'label-warning';
-                                        } else {
-                                            $trLabel = 'label-success';
-                                        }
-                                    ?>
-
-                                    <span class="label {!! $trLabel !!}">{!! $plan['ticket_status'] !!}</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-md-8">
-                            <div class="form-group">
-                                <p>Created: <strong>{!! $plan['created_at'] !!}</strong></p>
-                                <p>Updated: <strong>{!! $plan['updated_at'] !!}</strong></p>
-                            </div>
-                        </div>
-                    </div>
                     @foreach($plan['tickets'] as $ticket)
                         <div class="row nested-block ticket-panel">
                             <legend>Ticket - {!! Html::link($ticket['description_url'], $ticket['description'], ['target' => '_blank', 'title' => 'Click to view issue in Jira']) !!}</legend>
@@ -111,12 +84,20 @@
                             </div>
                         </div>
                     @endforeach
-                </div>
                 @endif
             </div>
 
         {!! Form::close() !!}
 
     </div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            // Response functionalities
+            loadResponseJs();
+        });
+
+    </script>
 
 @stop

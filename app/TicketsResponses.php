@@ -12,6 +12,13 @@
  */
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
+use PhpSpec\Exception\Exception;
+
+use App\Facades\Utils;
 
 class TicketsResponses extends Model
 {
@@ -50,12 +57,12 @@ class TicketsResponses extends Model
     }
 
     /**
-     * Save user's ticket responses
+     * Save tester's ticket responses
      *
      * @param $planData
      * @return string
      */
-    public static function saveTicketResponse($planData)
+    public static function saveResponse($planData)
     {
         $completed    = 0;
         $progress     = 0;

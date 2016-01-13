@@ -70,7 +70,7 @@
              *  CREATING NEW TICKETS
              */
             var ticketBuilder = new TicketBuilder({
-                mode: 'build',
+                mode: '<?php echo $plan['mode'] ?>',
                 formIdName: 'step-2-main',
                 ticketRowName: 'ticket-row',
                 ticketDescName: 'ticket-description',

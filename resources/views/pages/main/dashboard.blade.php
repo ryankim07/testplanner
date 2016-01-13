@@ -195,4 +195,13 @@
         </div>
     </div>
 
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            // Dashboard functionalities
+            loadDashboardJs();
+        });
+
+    </script>
+
 @stop
