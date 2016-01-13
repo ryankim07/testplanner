@@ -10,12 +10,16 @@
 
 	<div class="col-xs-12 col-md-12 main" id="view-main">
 
-		{!! Form::model($plan, ['method' => 'PATCH', 'route' => ['plan.update.details', $plan['id']], 'class' => 'form-horizontal', 'id' => 'plan-edit-form']) !!}
+		{!! Form::model($plan, ['method' => 'PATCH', 'action' => ['PlansController@updatePlansDetails', $plan['id']], 'class' => 'form-horizontal', 'id' => 'plan-edit-form']) !!}
 
 		<div class="panel panel-info">
 			<div class="panel-heading">
-				<h4>Edit plan - {!! $plan['description'] !!}</h4>
-			</div>
+				<div class="row">
+					<div class="col-xs-10 col-md-10">
+						<i class="fa fa-pencil-square-o fa-3x header-icon"></i>
+						<h4>Edit plan - {!! $plan['description'] !!}</h4>
+					</div>
+				</div>
 			</div>
 			<div class="panel-body">
 
@@ -27,34 +31,22 @@
 				])
 
 				<div class="page-header"></div>
-					@foreach($plan['tickets'] as $ticket)
-						@include('pages/testplanner/partials/tickets', [
-							'ticket' => $ticket,
-							'mode'   => 'edit'
-						])
-					@endforeach
+					{!! $plan['tickets_html'] !!}
 				<div class="page-header"></div>
 
-				<div class="row">
-					<div class="col-md-12">
-						{!! Form::label('testers', 'Testers') !!}
-					</div>
-				</div>
-
 				@include('pages/testplanner/partials/testers', [
-					'users' => $plan['testers'],
-					'mode'  => 'edit'
+					'testers' => $plan['testers'],
+					'mode'    => 'edit'
 				])
 
-				@include('pages/main/partials/submit_button', [
-					'submitBtnText' => 'Update',
-					'css'           => 'col-xs-4 col-md-4',
-					'id'			=> 'update-tickets-btn'
-				])
-
-				@include('pages/main/partials/back_link')
 			</div>
 		</div>
+
+		@include('pages/main/partials/submit_button', [
+            'submitBtnText' => 'Update',
+            'css'           => 'col-xs-4 col-md-4',
+            'id'			=> 'update-tickets-btn'
+        ])
 
 		{!! Form::close() !!}
 
@@ -62,14 +54,17 @@
 
 	<script type="text/javascript">
 
-		<?php
-			foreach($plan['testers'] as $tester) {
-				$testers[] = 'browser_' . $tester['id'] . '_' . $tester['browser'];
-			}
+		$(document).ready(function() {
+			<?php
+				foreach($plan['testers'] as $tester) {
+					$testers[] = 'tester-' . $tester['id'] . '-' . $tester['browser'];
+				}
 
-			echo 'var testers = ' . json_encode($testers);
-		?>
+				echo 'var testers = ' . json_encode($testers);
+			?>
+
+			preSelectBrowserTesters(testers);
+		});
 
 	</script>
-
 @stop

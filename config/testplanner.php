@@ -20,7 +20,7 @@ return [
 
     'pagination_count'        => 50,
 
-    'credentials_problem_msg' => 'The credentials you entered did not match our records. Try again?',
+    'credentials_problem_msg' => 'The credentials you entered did not match our records.',
 
     'unauthorized_msg'        => 'You are not authorized to access this resource.',
 

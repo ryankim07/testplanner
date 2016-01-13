@@ -60,7 +60,8 @@ class AuthController extends Controller
         }
 
         return redirect('auth/login')
-            ->with('flash_message', config('testplanner.admin_credentials_problem_msg'));
+            ->withInput()
+            ->withErrors(array('message' => config('testplanner.credentials_problem_msg')));
     }
 
     /**

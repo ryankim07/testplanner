@@ -136,17 +136,19 @@ class PlansController extends Controller
     public function view($id)
     {
         $plan       = Plans::find($id);
-        $allTickets = $plan->tickets()->get();
+        $tickets    = unserialize($plan->tickets()->first()->tickets);
         $allTesters = $plan->testers()->get();
 
-        foreach($allTickets as $ticket) {
-            $ticketDetails = unserialize($ticket->tickets);
-
-            foreach($ticketDetails as $detail) {
-                $tickets[$ticket->id] = $detail;
-            }
+        // Render tickets
+        $ticketsHtml = '';
+        foreach($tickets as $ticket) {
+            $ticketsHtml .= view('pages/testplanner/partials/tickets', [
+                'mode'   => 'edit',
+                'ticket' => $ticket
+            ])->render();
         }
 
+        // Testers
         foreach($allTesters as $tester) {
             $testers[$tester->id] = [
                 'id'         => $tester->tester_id,
@@ -156,11 +158,11 @@ class PlansController extends Controller
         }
 
         return view('pages.testplanner.view', [
-            'plan'    => [
-                'id'          => $plan->id,
-                'description' => $plan->description,
-                'tickets'     => $tickets,
-                'testers'     => $testers
+            'plan' => [
+                'id'           => $plan->id,
+                'description'  => $plan->description,
+                'tickets_html' => $ticketsHtml,
+                'testers'      => $testers
             ]
         ]);
     }
@@ -380,8 +382,6 @@ class PlansController extends Controller
         $planData    = Session::get('mophie_testplanner.plan');
         $ticketsData = Session::get('mophie_testplanner.tickets');
         $testerData  = Session::get('mophie_testplanner.testers');
-        $redirect    = false;
-        $errorMsg    = '';
 
         // Save plan
         $results = Plans::savePlan($planData, $ticketsData, $testerData);
@@ -409,8 +409,6 @@ class PlansController extends Controller
         $planData = json_decode($request->get('plan'), true);
         $tickets  = json_decode($request->get('tickets_obj'), true);
         $planData['tickets_responses'] = $tickets;
-        $redirect = false;
-        $errorMsg = '';
 
         // Save ticket response
         $response = TicketsResponses::saveTicketResponse($planData);

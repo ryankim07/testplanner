@@ -46,7 +46,6 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 @yield('content')
-                @include('layout.main.viewer')
             </div>
         </div>
         </body>

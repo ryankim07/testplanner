@@ -12,7 +12,7 @@
         @if($mode == 'build')
 		    {!! Form::open(['route' => 'plan.store', 'class' => 'form-horizontal', 'id' => 'plan-build-form']) !!}
         @else
-			{!! Form::model($planData, ['method' => 'PATCH', 'route' => ['plan.update'], 'class' => 'form-horizontal', 'id' => 'plan-edit-form']) !!}
+			{!! Form::model($planData, ['method' => 'PATCH', 'action' => ['PlansController@update'], 'class' => 'form-horizontal', 'id' => 'plan-edit-form']) !!}
 	    @endif
 		<div class="panel panel-info">
 			<div class="panel-heading">

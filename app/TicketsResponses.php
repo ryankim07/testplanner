@@ -57,11 +57,14 @@ class TicketsResponses extends Model
      */
     public static function saveTicketResponse($planData)
     {
-        $completed  = 0;
-        $progress   = 0;
-        $incomplete = 0;
+        $completed    = 0;
+        $progress     = 0;
+        $incomplete   = 0;
         $totalTickets = count($planData['tickets_responses']);
+        $redirect     = false;
+        $errorMsg     = '';
 
+        // Determine ticket status
         foreach($planData['tickets_responses'] as $ticket) {
             if (!isset($ticket['test_status'])) {
                 $incomplete += 1;

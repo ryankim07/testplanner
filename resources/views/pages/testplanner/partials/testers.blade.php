@@ -3,7 +3,7 @@
 | Testers form partial
 |--------------------------------------------------------------------------
 |
-| This partial is used when showing or editing the testers form.
+| This partial is used when showing or editing the testers input fields.
 |
 --}}
 
@@ -22,15 +22,15 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($users as $user)
+            @foreach($testers as $tester)
                 <tr>
-                    <td>{!! $user['first_name'] !!}</td>
-                    <td class="text-center">{!! Form::radio('tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',chrome',  null, ['class' => 'browser-tester', 'id' => 'tester-' . $user["id"] . '-chrome']) !!}</td>
-                    <td class="text-center">{!! Form::radio('tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',firefox', null, ['class' => 'browser-tester', 'id' => 'tester-' . $user["id"] . '-firefox']) !!}</td>
-                    <td class="text-center">{!! Form::radio('tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',ie',      null, ['class' => 'browser-tester', 'id' => 'tester-' . $user["id"] . '-ie']) !!}</td>
-                    <td class="text-center">{!! Form::radio('tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',safari',  null, ['class' => 'browser-tester', 'id' => 'tester-' . $user["id"] . '-safari']) !!}</td>
-                    <td class="text-center">{!! Form::radio('tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',apple',   null, ['class' => 'browser-tester', 'id' => 'tester-' . $user["id"] . '-apple']) !!}</td>
-                    <td class="text-center">{!! Form::radio('tester[' . $user["id"] . ']', $user["id"] . ',' . $user["first_name"] . ',android', null, ['class' => 'browser-tester', 'id' => 'tester-' . $user["id"] . '-android']) !!}</td>
+                    <td>{!! $tester['first_name'] !!}</td>
+                    <td class="text-center">{!! Form::radio('tester[' . $tester["id"] . ']', $tester["id"] . ',' . $tester["first_name"] . ',chrome',  null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester["id"] . '-chrome']) !!}</td>
+                    <td class="text-center">{!! Form::radio('tester[' . $tester["id"] . ']', $tester["id"] . ',' . $tester["first_name"] . ',firefox', null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester["id"] . '-firefox']) !!}</td>
+                    <td class="text-center">{!! Form::radio('tester[' . $tester["id"] . ']', $tester["id"] . ',' . $tester["first_name"] . ',ie',      null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester["id"] . '-ie']) !!}</td>
+                    <td class="text-center">{!! Form::radio('tester[' . $tester["id"] . ']', $tester["id"] . ',' . $tester["first_name"] . ',safari',  null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester["id"] . '-safari']) !!}</td>
+                    <td class="text-center">{!! Form::radio('tester[' . $tester["id"] . ']', $tester["id"] . ',' . $tester["first_name"] . ',apple',   null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester["id"] . '-apple']) !!}</td>
+                    <td class="text-center">{!! Form::radio('tester[' . $tester["id"] . ']', $tester["id"] . ',' . $tester["first_name"] . ',android', null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester["id"] . '-android']) !!}</td>
                 </tr>
             @endforeach
             </tbody>

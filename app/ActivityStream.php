@@ -18,6 +18,8 @@ use App\Facades\Utils;
 
 use App\User;
 
+use Auth;
+
 class ActivityStream extends Model
 {
     /**
@@ -65,7 +67,8 @@ class ActivityStream extends Model
 
         if (count($logs) > 0) {
             foreach($logs as $log) {
-               $createdAt = Utils::timeDifference($log->created_at);
+                $createdAt = Utils::timeDifference($log->created_at);
+                $activity  = !Auth::user()->hasRole(['root', 'administrator']) ? strip_tags($log->activity) : $log->activity;
 
                 $activityComments = ActivityStream::find($log->id)->comments()->get();
                 $comments = array();
@@ -81,7 +84,7 @@ class ActivityStream extends Model
 
                 $results[$log->id] = array(
                     'id'         => $log->id,
-                    'activity'   => $log->activity,
+                    'activity'   => $activity,
                     'comments'   => $comments,
                     'created_at' => $createdAt
                 );

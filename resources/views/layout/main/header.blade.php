@@ -28,7 +28,7 @@
                                     <li>{!! Html::linkRoute('plan.build', 'Build') !!}</li>
                                     <li>{!! Html::linkRoute('plan.view.all.created', 'View/Edit', 0) !!}</li>
                                 @endif
-                                <li>{!! Html::linkRoute('plan.view.all.assigned', 'Test', []) !!}</li>
+                                <li>{!! Html::linkRoute('plan.view.all.assigned', 'Test Plan', []) !!}</li>
                             </ul>
                         </li>
                         @if(Auth::user()->hasRole(['root']))

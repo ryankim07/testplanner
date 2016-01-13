@@ -46,17 +46,22 @@ class TicketsController extends Controller
         // Get Jira issues
         $jiraIssues = $this->_Jira();
 
-        $ticketsData[] = [
-            'id'          => '',
-            'description' => '',
-            'objective'   => '',
-            'test_steps'  => ''
-        ];
+        $ticketsHtml = view('pages/testplanner/partials/tickets', [
+            'mode'     => 'create',
+            'ticket[]' => [
+                'id'          => '',
+                'description' => '',
+                'objective'   => '',
+                'test_steps'  => ''
+            ]
+        ])->render();
 
         return view('pages.testplanner.step_2', [
-            'mode'        => 'build',
-            'ticketsData' => $ticketsData,
-            'jiraIssues'  => json_encode($jiraIssues)
+            'plan' => [
+                'mode'          => 'build',
+                'tickets_html'  => $ticketsHtml,
+                'jira_issues'   => json_encode($jiraIssues)
+            ]
         ]);
     }
 
@@ -70,22 +75,23 @@ class TicketsController extends Controller
         // Get tickets session data
         $ticketsData = Session::get('mophie_testplanner.tickets');
 
+        $ticketsHtml = '';
+        foreach($ticketsData as $ticket) {
+            $ticketsHtml .= view('pages/testplanner/partials/tickets', [
+                'mode'   => 'edit',
+                'ticket' => $ticket
+            ])->render();
+        }
+
         // Get Jira issues
         $jiraIssues = $this->_Jira();
 
-        foreach($ticketsData as $ticket) {
-            $results[] = [
-                'id'          => $ticket['id'],
-                'description' => $ticket['description'],
-                'objective'   => $ticket['objective'],
-                'test_steps'  => $ticket['test_steps']
-            ];
-        }
-
         return view('pages.testplanner.step_2', [
-            'mode'        => 'edit',
-            'ticketsData' => $results,
-            'jiraIssues'  => json_encode($jiraIssues)
+            'plan' => [
+                'mode'         => 'edit',
+                'tickets_html' => $ticketsHtml,
+                'jira_issues'  => json_encode($jiraIssues)
+            ]
         ]);
     }
 

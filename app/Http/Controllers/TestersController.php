@@ -54,8 +54,8 @@ class TestersController extends Controller
         $users = User::all();
 
         return view('pages.testplanner.step_3', [
-            'mode'  => 'build',
-            'users' => $users
+            'mode'    => 'build',
+            'testers' => $users
         ]);
     }
 
@@ -79,7 +79,7 @@ class TestersController extends Controller
         return view('pages.testplanner.step_3', [
             'mode'        => 'edit',
             'testersData' => json_encode($results),
-            'users'       => $users
+            'testers'     => $users
         ]);
     }
 

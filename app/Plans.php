@@ -215,6 +215,9 @@ class Plans extends Model
      */
     public static function savePlan($planData, $ticketsData, $testerData)
     {
+        $redirect = false;
+        $errorMsg = '';
+
         // Start transaction
         DB::beginTransaction();
 

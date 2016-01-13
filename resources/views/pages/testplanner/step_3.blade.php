@@ -12,12 +12,12 @@
         @if($mode == 'build')
             {!! Form::open(['route' => 'tester.store', 'class' => 'form-horizontal', 'id' => 'tester-build-form']) !!}
         @else
-            {!! Form::model($testersData, ['method' => 'PATCH', 'route' => ['tester.update'], 'class' => 'form-horizontal', 'id' => 'tester-edit-form']) !!}
+            {!! Form::model($testersData, ['method' => 'PATCH', 'action' => ['TestersController@update'], 'class' => 'form-horizontal', 'id' => 'tester-edit-form']) !!}
         @endif
         <div class="panel panel-info">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-xs-12 col-md-8">
                         <h4>Step 3 of 3 - {!! $mode == 'build' ? 'Assign testers' : 'Edit testers' !!}</h4>
                     </div>
                     @if($mode == 'build')
@@ -66,16 +66,7 @@
         $(document).ready(function() {
             var testers = <?php echo $testersData; ?>
 
-            $('.browser-tester').each(function() {
-                var browser = $(this);
-                var browserId = browser.attr('id');
-
-                $.each(testers, function (i, testerBrowserId) {
-                    if (browserId == testerBrowserId) {
-                        browser.prop("checked", true);
-                    }
-                });
-            });
+            preSelectBrowserTesters(testers);
         });
 
         </script>

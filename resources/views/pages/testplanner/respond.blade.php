@@ -100,7 +100,7 @@
 
                                 <?php $notesResponse = isset($ticket['notes_response']) ? $ticket['notes_response'] : null; ?>
 
-                                {!! Form::textarea('notes_response', $notesResponse, ['class' => 'form-control notes-response', 'rows' => '15']) !!}
+                                {!! Form::textarea('notes_response', $notesResponse, ['class' => 'form-control notes-response', 'rows' => '10']) !!}
                             </div>
                         </div>
                         {!! Form::hidden('ticket_id', $ticket['id'], ['class' => 'ticket-id']) !!}

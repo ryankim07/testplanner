@@ -10,7 +10,7 @@
     <div class="form-group">
         <div class="col-xs-12 col-md-12">
             <div class="clearfix">
-                <div class="{!! $direction !!}">
+                <div class="{!! isset($direction) ? $direction : 'pull-left' !!}">
 
                     <?php
                         $class = !isset($class) ? '' : $class;
