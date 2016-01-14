@@ -33,9 +33,9 @@
 
                             <tbody>
                             @foreach($plans as $plan)
-                                <tr class="toggler" data-url="{!! URL::route('plan.respond', $plan->id) !!}">
+                                <tr class="plan-row">
                                     <td>
-                                        {!! Html::linkRoute('plan.respond', $plan->description, [$plan->id]) !!}
+                                        {!! $plan->description !!}
                                     </td>
                                     <td>{!! $plan->full_name !!}</td>
 
@@ -49,9 +49,10 @@
                                         }
                                     ?>
 
-                                    <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->ticket_response_status !!}</span</td>
+                                    <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->ticket_response_status !!}</span></td>
                                     <td>{!! Utils::dateConverter($plan->created_at) !!}</td>
                                     <td>{!! Utils::dateConverter($plan->updated_at) !!}</td>
+                                    <td class="text-center"><a href="{!! URL::route('plan.respond', $plan->id) !!}"><i class="fa fa-pencil fa-lg"></i></a></td>
                                 </tr>
                             @endforeach
                             </tbody>

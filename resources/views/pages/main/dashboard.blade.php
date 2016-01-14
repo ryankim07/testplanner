@@ -42,62 +42,60 @@
                                                 @if($type != 'admin_created_plans')
                                                     <th>Admin</th>
                                                 @endif
-                                                <th>Status</th>
+                                                <th class="text-center">Status</th>
                                                 <th>Created</th>
                                                 @if($type == 'admin_created_plans')
                                                     <th>Testers</th>
-                                                    <th>View</th>
+                                                    <th class="text-center">View</th>
+                                                @else
+                                                    <th class="text-center">Respond</th>
                                                 @endif
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($plan as $detail)
+                                            @foreach($plan as $attr)
                                                 <tr class="{!! $type !!}_rows">
-                                                    <td>
-                                                        @if($type == 'admin_created_plans')
-                                                            {!! $detail['description'] !!}
-                                                        @else
-                                                            {!! Html::linkRoute('plan.respond', $detail['description'], [$detail['id']]) !!}
-                                                        @endif
-                                                    </td>
+                                                    <td>{!! $attr['description'] !!}</td>
                                                     @if($type != 'admin_created_plans')
-                                                        <td>{!! $detail['full_name'] !!}</td>
+                                                        <td>{!! $attr['full_name'] !!}</td>
                                                     @endif
-                                                    <td>
+                                                    <td class="text-center">
                                                         @if($type == 'admin_created_plans')
 
                                                             <?php
-                                                                if($detail['status'] == 'complete') {
+                                                                if($attr['status'] == 'complete') {
                                                                     $label = 'label-default';
-                                                                } else if($detail['status'] == 'progress') {
+                                                                } else if($attr['status'] == 'progress') {
                                                                     $label = 'label-warning';
                                                                 } else {
                                                                     $label = 'label-success';
                                                                 }
                                                             ?>
 
-                                                            <span class="label {!! $label !!}">{!! $detail['status'] !!}</span>
+                                                            <span class="label {!! $label !!}">{!! $attr['status'] !!}</span>
                                                         @else
 
                                                             <?php
-                                                                if($detail['ticket_response_status'] == 'complete') {
+                                                                if($attr['ticket_response_status'] == 'complete') {
                                                                     $trLabel = 'label-default';
-                                                                } else if($detail['ticket_response_status'] == 'progress') {
+                                                                } else if($attr['ticket_response_status'] == 'progress') {
                                                                     $trLabel = 'label-warning';
                                                                 } else {
                                                                     $trLabel = 'label-success';
                                                                 }
                                                             ?>
 
-                                                            <span class="label {!! $trLabel !!}">{!! isset($detail['ticket_response_status']) ? $detail['ticket_response_status'] : 'new' !!}</span>
+                                                            <span class="label {!! $trLabel !!}">{!! isset($attr['ticket_response_status']) ? $attr['ticket_response_status'] : 'new' !!}</span>
                                                         @endif
                                                     </td>
-                                                    <td>{!! Utils::dateConverter($detail['created_at']) !!}</td>
+                                                    <td>{!! Utils::dateConverter($attr['created_at']) !!}</td>
                                                     @if($type == 'admin_created_plans')
                                                         <td>
-                                                            {!! Form::select('testers', $detail['testers'], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $detail['id'])]) !!}
+                                                            {!! Form::select('testers', $attr['testers'], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $attr['id'])]) !!}
                                                         </td>
-                                                        <td><a href="#" class="plan-link"><i class="fa fa-search fa-lg"></i></a></td>
+                                                        <td class="text-center"><a href="#" class="plan-link"><i class="fa fa-search fa-lg"></i></a></td>
+                                                    @else
+                                                        <td class="text-center"><a href="{!! URL::route('plan.respond', $attr['id']) !!}"><i class="fa fa-pencil fa-lg"></i></a></td>
                                                     @endif
 
                                                 </tr>

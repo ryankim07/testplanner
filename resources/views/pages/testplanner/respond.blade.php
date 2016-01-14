@@ -83,12 +83,14 @@
             </div>
         </div>
 
-        @include('pages/main/partials/submit_button', [
-            'submitBtnText' => 'Submit Response',
-            'direction'     => 'pull-left',
-            'class'		    => 'btn-custom',
-            'id'			=> 'respond-btn'
-        ])
+        @include('pages/main/partials/double_submit_buttons', [
+                'direction'     => 'pull-left',
+                'class'		    => 'btn-custom',
+                'updateBtnText' => 'Submit Response',
+                'updateBtnId'	=> 'respond-btn',
+                'backBtnText'   => 'Cancel',
+                'backBtnId'		=> 'back-btn'
+            ])
 
         {!! Form::close() !!}
 

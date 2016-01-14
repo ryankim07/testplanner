@@ -232,6 +232,15 @@ class Tables extends Model
             'header_align' => 'center'
         ];
 
+        $columns['respond'] = [
+            'type'         => 'text',
+            'colname'      => 'Respond',
+            'data'         => ['class' => 'form-control'],
+            'order'        => '',
+            'width'        => '10px',
+            'header_align' => 'center'
+        ];
+
         foreach($columnsToDisplay as $column) {
             $results = Grid::addColumn($column, $columns[$column]);
         }

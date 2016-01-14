@@ -244,7 +244,8 @@ class PlansController extends Controller
             'admin',
             'status',
             'created_at',
-            'updated_at'
+            'updated_at',
+            'respond'
         ], 'PlansController@index');
 
         $query = Plans::getAllAssigned($user->id, $sorting['sortBy'], $sorting['order']);

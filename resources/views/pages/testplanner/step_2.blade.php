@@ -49,7 +49,7 @@
                 'id'			=> 'continue-btn'
             ])
         @else
-            @include('pages/main/partials/update_back_cancel_button', [
+            @include('pages/main/partials/double_submit_buttons', [
                 'direction'     => 'pull-right',
                 'class'		    => 'btn-primary',
                 'updateBtnText' => 'Update',

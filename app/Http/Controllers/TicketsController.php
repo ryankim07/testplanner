@@ -127,7 +127,6 @@ class TicketsController extends Controller
         $planData = json_decode($request->get('plan'), true);
         $tickets  = json_decode($request->get('tickets_obj'), true);
         $planData['tickets_responses'] = $tickets;
-        $msg = '';
 
         // Save ticket response
         $response = TicketsResponses::saveResponse($planData);
@@ -147,10 +146,10 @@ class TicketsController extends Controller
                 'ticket_status' => $response
             ]);
 
-            $msg = config('testplanner.plan_response_success_msg');
+            return redirect('dashboard')->with('flash_message', config('testplanner.plan_response_success_msg'));
         }
 
-        return redirect('dashboard')->with('flash_message', $msg);
+        return redirect('dashboard');
     }
 
     /**

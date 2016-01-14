@@ -152,7 +152,9 @@ function TicketBuilder(config) {
  */
 function loadRespondJs()
 {
+    // If there are responded tickets, change button label for update
     var totalResponses = 0;
+
     $('#respond-main .ticket-panel').each(function() {
         var notesResponse = $(this).find('.notes-response');
 
@@ -163,6 +165,12 @@ function loadRespondJs()
 
     if (totalResponses > 0) {
         $('#respond-btn').prop('value', 'Update Response')
+    } else if (totalResponses == 0) {
+        $('#respond-btn').prop('disabled', true);
+
+        $('#respond-main').on('focus', '.notes-response', function() {
+            $('#respond-btn').prop('disabled', false);
+        });
     }
 
     $('#respond-main').on('click', '#respond-btn', function() {
