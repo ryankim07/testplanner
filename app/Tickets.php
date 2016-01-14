@@ -47,6 +47,21 @@ class Tickets extends Model
     }
 
     /**
+     * Update tickets from built plan
+     *
+     * @param $planId
+     * @param $tickets
+     * @return bool
+     */
+    public static function updateBuiltPlanTickets($planId, $tickets)
+    {
+        $plan = Tickets::where('plan_id', '=', $planId);
+        $plan->update(['tickets' => $tickets]);
+
+        return true;
+    }
+
+    /**
      * Only one task belongs to a case
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

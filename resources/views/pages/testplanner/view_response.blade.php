@@ -35,7 +35,7 @@
                 @include('errors.list')
 
                 @if(empty($plan['ticket_resp_id']))
-                    <p>{!! $plan['assignee'] !!}, {!! config('testplanner.plan_non_user_response') !!}</p>
+                    <p>{!! $plan['assignee'] !!}, {!! config('testplanner.plan_non_user_response_msg') !!}</p>
                 @else
                     @include('pages/testplanner/partials/response_respond_details')
 

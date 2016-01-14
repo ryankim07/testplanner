@@ -100,12 +100,11 @@ class TicketsResponses extends Model
             try {
                 TicketsResponses::updateOrCreate([
                     'id' => $planData['ticket_resp_id']], [
-                        'plan_id'   => $planData['id'],
-                        'tester_id' => $planData['tester_id'],
-                        'responses' => serialize($planData['tickets_responses']),
-                        'status'    => $ticketStatus
-                    ]
-                );
+                    'plan_id'   => $planData['id'],
+                    'tester_id' => $planData['tester_id'],
+                    'responses' => serialize($planData['tickets_responses']),
+                    'status'    => $ticketStatus
+                ]);
 
             } catch (\Exception $e) {
                 $errorMsg = $e->getMessage();
@@ -134,7 +133,7 @@ class TicketsResponses extends Model
 
                 return redirect()->action('PlansController@respond')
                     ->withInput()
-                    ->withErrors(array('message' => config('testplanner.plan_response_error')));
+                    ->withErrors(array('message' => config('testplanner.plan_response_error_msg')));
             }
 
         }

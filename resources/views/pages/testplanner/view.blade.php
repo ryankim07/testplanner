@@ -54,6 +54,30 @@
 	<script type="text/javascript">
 
 		$(document).ready(function() {
+			jiraVersions('view-main', 'plan-description', <?php echo $plan['jira_versions']; ?>);
+			jiraIssues('view-main', 'ticket-description', <?php echo $plan['jira_issues']; ?>);
+			planStartExpireDates();
+
+			/**
+			 *  Creating new tickets
+			 */
+			var ticketBuilder = new TicketBuilder({
+				mode: 'edit',
+				formIdName: 'view-main',
+				ticketRowName: 'ticket-row',
+				ticketDescName: 'ticket-description',
+				objectiveName: 'objective',
+				testStepsName: 'test-steps',
+				ticketsObjName: 'tickets_obj',
+				addBtnName: 'add-ticket-btn',
+				removeBtnName: 'trash',
+				continueBtnName:'continue-btn',
+				updateBtnName: 'update-btn'
+			});
+
+			// Load ticket builder
+			ticketBuilder.load();
+
 			<?php
 				foreach($plan['testers'] as $tester) {
 					$testers[] = 'tester-' . $tester['id'] . '-' . $tester['browser'];

@@ -10,34 +10,38 @@ return [
 	|
     */
 
-    'admin_name'              => 'Ryan Kim',
+    'admin_name'                 => 'Ryan Kim',
 
-    'admin_email'             => 'ryan.kim@mophie.com',
+    'admin_email'                => 'ryan.kim@mophie.com',
 
-    'jira_domain'             => 'https://mophie.atlassian.net',
+    'jira_domain'                => 'https://mophie.atlassian.net',
 
-    'jira_rest_url'           => 'https://mophie.atlassian.net/rest/api/2',
+    'jira_rest_url'              => 'https://mophie.atlassian.net/rest/api/2',
 
-    'pagination_count'        => 50,
+    'pagination_count'           => 50,
 
-    'credentials_problem_msg' => 'The credentials you entered did not match our records.',
+    'credentials_problem_msg'    => 'The credentials you entered did not match our records.',
 
-    'unauthorized_msg'        => 'You are not authorized to access this resource.',
+    'unauthorized_msg'           => 'You are not authorized to access this resource.',
 
-    'identical_role_msg'      => 'The role for the user you are trying to register already exists.',
+    'identical_role_msg'         => 'The role for the user you are trying to register already exists.',
 
-    'user_update_success_msg' => 'User info updated successfully.',
+    'user_update_success_msg'    => 'User info updated successfully.',
 
-    'new_plan_msg'            => 'created a new plan,',
+    'new_plan_msg'               => 'created a new plan,',
 
-    'new_plan_build_msg'      => 'New plan successfully created.',
+    'new_plan_build_msg'         => 'New plan successfully created.',
 
-    'plan_build_error'        => 'Plan building cannot be done at the current moment.  Please try again later.',
+    'plan_build_error_msg'       => 'Plan building cannot be done at the current moment.  Please try again later.',
 
-    'plan_session_error'      => 'Session data is missing.',
+    'plan_built_update_msg'      => 'Plan details has been updated successfully.',
 
-    'plan_non_user_response'  => 'hasn\'t submitted his response yet.',
+    'plan_session_error_msg'     => 'Session data is missing.',
 
-    'plan_response_error'     => 'There seems to be a problem processing your response. Please try again later.'
+    'plan_non_user_response_msg' => 'hasn\'t submitted his response yet.',
+
+    'plan_response_success_msg'  => 'Your plan has been posted successfully',
+
+    'plan_response_error_msg'    => 'There seems to be a problem processing your response. Please try again later.'
 
 ];

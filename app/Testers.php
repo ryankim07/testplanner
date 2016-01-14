@@ -66,6 +66,23 @@ class Testers extends Model
     }
 
     /**
+     * Update tester from built plan
+     *
+     * @param $planId
+     * @param $testerId
+     * @param $browser
+     * @return bool
+     */
+    public static function updateBuiltTesters($planId, $testerId, $browser)
+    {
+        $plan = Tickets::where('plan_id', '=', $planId)
+            ->where('tester_id', '=', $testerId);
+        $plan->update(['browser' => $browser]);
+
+        return true;
+    }
+
+    /**
      * Only one task belongs to a case
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

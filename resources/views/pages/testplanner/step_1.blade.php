@@ -67,32 +67,12 @@
 	</div>
 
 	<script type="text/javascript">
+
 		$(document).ready(function() {
-			var versions = <?php echo $versions; ?>
-
-            $('#step-1-main').on('focus', '#plan-description', function () {
-				$(this).autocomplete({
-					source: versions
-				});
-			});
-
-			clearInputField('step-1-main', 'clear-btn', 'plan-description', '');
-
-			$('#started_at').datetimepicker({
-				format: "MM/DD/YYYY"
-			});
-			$('#expired_at').datetimepicker({
-				format: "MM/DD/YYYY"
-			});
-
-			$("#started_at").on("dp.change", function (e) {
-				$('#expired_at').data("DateTimePicker").minDate(e.date);
-			});
-
-			$("#expired_at").on("dp.change", function (e) {
-				$('#started_at').data("DateTimePicker").maxDate(e.date);
-			});
+			jiraVersions('step-1-main', 'plan-description', <?php echo $jira_versions; ?>);
+			planStartExpireDates();
 		});
+
 	</script>
 
 @stop

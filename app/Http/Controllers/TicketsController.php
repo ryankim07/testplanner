@@ -18,7 +18,7 @@ use App\Http\Requests\TicketsFormRequest;
 use App\Http\Requests\UserResponseFormRequest;
 use PhpSpec\Exception\Exception;
 
-use App\Facades\Jira;
+use App\Facades\Utils;
 
 use App\Tickets;
 use App\TicketsResponses;
@@ -47,7 +47,7 @@ class TicketsController extends Controller
     public function build()
     {
         // Get Jira issues
-        $jiraIssues = $this->_Jira();
+        $jiraIssues = Utils::jiraIssues();
 
         $ticketsHtml = view('pages/testplanner/partials/tickets', [
             'mode'     => 'create',
@@ -87,7 +87,7 @@ class TicketsController extends Controller
         }
 
         // Get Jira issues
-        $jiraIssues = $this->_Jira();
+        $jiraIssues = Utils::jiraIssues();
 
         return view('pages.testplanner.step_2', [
             'plan' => [
@@ -133,30 +133,17 @@ class TicketsController extends Controller
         ActivityStream::saveActivityStream($planData, 'ticket-response', $response);
 
         // Mail all test browsers
-        /*Email::sendEmail('ticket-response', [
-                'ticket_resp_id'    => $resp['ticket_resp_id'],
-                'plan_id            => $planData['id'],
-                'plan_desc'         => $planData['description'],
-                'tester_id'         => $planData['tester_id'],
-                'creator_first_name => $planData['reporter'],
-                'tester_first_name' => $planData['assignee'],
-                'email'             => User::getUserEmail($plan['creator_id'])
-                'ticket_status'     => $response
-        ]);*/
+        Email::sendEmail('ticket-response', [
+            'plan_id'            => $planData['id'],
+            'plan_desc'          => $planData['description'],
+            'tester_id'          => $planData['tester_id'],
+            'creator_first_name' => $planData['reporter'],
+            'tester_first_name'  => $planData['assignee'],
+            'email'              => User::getUserEmail($planData['creator_id']),
+            'ticket_status'      => $response
+        ]);
 
-        return redirect('dashboard');
-    }
-
-    /**
-     * Update all the ticket details
-     *
-     * @param $planId
-     * @param Request $request
-     */
-    public function updateDetails($planId, Request $request)
-    {
-        $plan = Tickets::find($planId);
-        $plan->update(['description' => $request->get('description')]);
+        return redirect('dashboard')->with('flash_message', config('testplanner.plan_response_success_msg'));
     }
 
     /**
@@ -196,25 +183,5 @@ class TicketsController extends Controller
         Session::put('mophie_testplanner.tickets', $modifiedData);
 
         return response()->json('success');
-    }
-
-    /**
-     * Use Jira API
-     *
-     * @return array
-     */
-    private function _Jira()
-    {
-        // Get JIRA issues
-        $results = Jira::getAllIssues('ECOM');
-        $issues  = [];
-
-        if (isset($results)) {
-            foreach ($results as $issue) {
-                $issues[] = $issue['key'] . ': ' . $issue['summary'];
-            }
-        }
-
-        return $issues;
     }
 }

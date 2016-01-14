@@ -16,8 +16,8 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Requests\PlansFormRequest;
 
+use App\Facades\Utils;
 use App\Facades\Email;
-use App\Facades\Jira;
 
 use App\Plans;
 use App\Testers;
@@ -64,12 +64,12 @@ class PlansController extends Controller
         $user = Auth::user();
 
         // Get Jira versions
-        $versions = $this->_Jira();
+        $jiraVersions = Utils::jiraVersions();
 
         return view('pages.testplanner.step_1', [
             'mode'     => 'build',
             'userId'   => $user->id,
-            'versions' => json_encode($versions)
+            'jira_versions' => json_encode($jiraVersions)
         ]);
     }
 
@@ -84,12 +84,12 @@ class PlansController extends Controller
         $planData = Session::get('mophie_testplanner.plan');
 
         // Get Jira versions
-        $versions = $this->_Jira();
+        $jiraVersions = Utils::jiraVersions();
 
         return view('pages.testplanner.step_1', [
             'mode'     => 'edit',
             'planData' => $planData,
-            'versions' => json_encode($versions)
+            'jira_versions' => json_encode($jiraVersions)
         ]);
     }
 
@@ -108,15 +108,19 @@ class PlansController extends Controller
     }
 
     /**
-     * Update built plan details
+     * Update built plan
      *
      * @param $planId
      * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function updateBuiltPlan($planId, Request $request)
     {
-        $plan = Plans::find($planId);
-        $plan->update(['description' => $request->get('description')]);
+        Plans::updateBuiltPlanDetails($planId, $request);
+        Tickets::updateBuiltTickets($planId, $request->get('tickets'));
+        Testers::updateBuiltTesters($planId, $request->get('tester_id'), $request->get('browser'));
+
+        return redirect('dashboard')->with('flash_message', config('testplanner.plan_built_update_msg'));
     }
 
     /**
@@ -149,14 +153,22 @@ class PlansController extends Controller
             ];
         }
 
+        // Get Jira versions
+        $jiraVersions = Utils::jiraVersions();
+
+        // Get Jira issues
+        $jiraIssues = Utils::jiraIssues();
+
         return view('pages.testplanner.view', [
             'plan' => [
-                'id'           => $plan->id,
-                'description'  => $plan->description,
-                'started_at'   => $plan->started_at,
-                'expired_at'   => $plan->expired_at,
-                'tickets_html' => $ticketsHtml,
-                'testers'      => $testers
+                'id'            => $plan->id,
+                'description'   => $plan->description,
+                'started_at'    => Utils::dateConverter($plan->started_at),
+                'expired_at'    => Utils::dateConverter($plan->expired_at),
+                'tickets_html'  => $ticketsHtml,
+                'testers'       => $testers,
+                'jira_versions' => json_encode($jiraVersions),
+                'jira_issues'   => json_encode($jiraIssues)
             ]
         ]);
     }
@@ -391,25 +403,5 @@ class PlansController extends Controller
         Session::forget('mophie_testplanner');
 
         return redirect('dashboard')->with('flash_message', config('testplanner.new_plan_build_msg'));
-    }
-
-    /**
-     * Use Jira API
-     *
-     * @return array
-     */
-    private function _Jira()
-    {
-        // Get JIRA project versions
-        $results  = Jira::getAllProjectVersions('ECOM');
-        $versions = [];
-
-        if (isset($results)) {
-            foreach($results as $version) {
-                $versions[] = 'Test Plan for build v' . $version['name'];
-            }
-        }
-
-        return $versions;
     }
 }

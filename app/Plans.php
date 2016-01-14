@@ -221,6 +221,25 @@ class Plans extends Model
     }
 
     /**
+     * Update built plan details
+     *
+     * @param $planId
+     * @param $request
+     * @return bool
+     */
+    public static function updateBuiltPlanDetails($planId, $request)
+    {
+        $plan = Plans::find($planId);
+        $plan->update([
+            'description' => $request->get('description'),
+            'started_at'  => $request->get('started_at'),
+            'expired_at'  => $request->get('expired_at')
+        ]);
+
+        return true;
+    }
+
+    /**
      * Save new created plan
      *
      * @param $planData
@@ -294,7 +313,7 @@ class Plans extends Model
 
             return redirect()->action('PlansController@build')
                 ->withInput()
-                ->withErrors(array('message' => config('testplanner.plan_build_error')));
+                ->withErrors(array('message' => config('testplanner.plan_build_error_msg')));
         }
 
         // Commit all changes

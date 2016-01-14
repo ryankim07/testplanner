@@ -28,7 +28,7 @@
         </div>
         <div class="form-group">
             <div class="col-xs-12 col-md-2">
-                {!! Form::label('start_label', 'Test Start Date:') !!}
+                {!! Form::label('start_at_label', 'Test Start Date:') !!}
                 <div class="input-group date" id="started_at">
                     {!! Form::text('started_at', null, ['class' => 'form-control input-sm required']) !!}
                     <span class="input-group-addon">
@@ -39,7 +39,7 @@
         </div>
         <div class="form-group">
             <div class="col-xs-12 col-md-2">
-                {!! Form::label('expiration_label', 'Test Expiration Date:') !!}
+                {!! Form::label('expiration_at_label', 'Test Expiration Date:') !!}
                 <div class="input-group date" id="expired_at">
                     {!! Form::text('expired_at', null, ['class' => 'form-control input-sm required']) !!}
                     <span class="input-group-addon">

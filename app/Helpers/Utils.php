@@ -11,6 +11,8 @@
  * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
+use App\Facades\Jira;
+
 use Lang;
 use Log;
 
@@ -265,5 +267,45 @@ class Utils
         $msg    = $header . $errorMsg . "\n\n" . print_r($data, true);
 
         Log::notice($msg);
+    }
+
+    /**
+     * Use Jira API
+     *
+     * @return array
+     */
+    public function jiraVersions()
+    {
+        // Get JIRA project versions
+        $results  = Jira::getAllProjectVersions('ECOM');
+        $versions = [];
+
+        if (isset($results)) {
+            foreach($results as $version) {
+                $versions[] = 'Test Plan for build v' . $version['name'];
+            }
+        }
+
+        return $versions;
+    }
+
+    /**
+     * Use Jira API
+     *
+     * @return array
+     */
+    public function jiraIssues()
+    {
+        // Get JIRA issues
+        $results = Jira::getAllIssues('ECOM');
+        $issues  = [];
+
+        if (isset($results)) {
+            foreach ($results as $issue) {
+                $issues[] = $issue['key'] . ': ' . $issue['summary'];
+            }
+        }
+
+        return $issues;
     }
 }

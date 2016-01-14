@@ -66,9 +66,10 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
-            /**
-             *  CREATING NEW TICKETS
-             */
+            // Jira issues
+            jiraIssues('step-2-main', 'ticket-description', <?php echo $plan['jira_issues']; ?>);
+
+            // Create new tickets
             var ticketBuilder = new TicketBuilder({
                 mode: '<?php echo $plan['mode'] ?>',
                 formIdName: 'step-2-main',
@@ -80,9 +81,7 @@
                 addBtnName: 'add-ticket-btn',
                 removeBtnName: 'trash',
                 continueBtnName:'continue-btn',
-                updateBtnName: 'update-btn',
-                clearBtnName: 'clear-btn',
-                jira: <?php echo $plan['jira_issues']; ?>
+                updateBtnName: 'update-btn'
             });
 
             // Load ticket builder

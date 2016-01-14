@@ -33,7 +33,7 @@
                 }
                 ?>
 
-                <span class="label {!! $trLabel !!}">{!! strtoupper($plan['ticket_status']) !!}</span>
+                <span class="label {!! $trLabel !!}">{!! empty($plan['ticket_status']) ? 'NEW' : strtoupper($plan['ticket_status']) !!}</span>
             </p>
             <p>Browser: {!! Html::image('images/' . $plan['browser'] . '.png', 'Browser', ['id' => 'browser-img']) !!}</p>
         </div>
