@@ -63,11 +63,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{!! Auth::user()->first_name !!} <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                @if(Auth::user()->hasRole(['root', 'administrator']))
-                                    <li>{!! Html::linkRoute('auth.logout', 'Logout') !!}</li>
-                                @elseif (Auth::user()->hasRole(['user']))
-                                    <li>{!! Html::linkRoute('auth.logout', 'Logout') !!}</li>
-                                @endif
+                                <li>{!! Html::linkRoute('auth.logout', 'Logout') !!}</li>
                             </ul>
                         </li>
                     @endif

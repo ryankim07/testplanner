@@ -101,14 +101,15 @@ function TicketBuilder(config) {
      */
     function continueOrUpdate()
     {
-        $(formId).on('click', continueBtnId, updateBtnId, function() {
+        var buttons = continueBtnId + ', ' + updateBtnId;
+        $(formId).on('click', buttons, function() {
             var tickets = [];
 
             $(formId + ' ' + ticketRowClass).each(function() {
                 // Create ticket object
                 tickets.push({
                     "id": $(this).attr('id'),
-                    "description": $(this).find(ticketDescClass).val(),
+                    "desc": $(this).find(ticketDescClass).val(),
                     "objective": $(this).find(objectiveClass).val(),
                     "test_steps": $(this).find(testStepsClass).val()
                 });
@@ -131,7 +132,7 @@ function TicketBuilder(config) {
         var index = stringGen(5);
 
         obj.attr('id', index);
-        obj.find(ticketDescClass).attr('name', 'description["' + index + '"]');
+        obj.find(ticketDescClass).attr('name', 'desc["' + index + '"]');
         obj.find(objectiveClass).attr('name', 'objective["' + index + '"]');
         obj.find(testStepsClass).attr('name', 'test_steps["' + index + '"]');
 
@@ -422,7 +423,11 @@ function jiraIssues(formId, ticketDescClass, issues)
         });
     });
 
-    clearInputField(formId, '', ticketDescClass);
+    $('#' + formId).on('click', '.clear-btn', function () {
+        var parent = $(this).closest('.ticket-row');
+        var ticketDesc = parent.find('.' + ticketDescClass);
+        ticketDesc.val('');
+    });
 }
 
 /**

@@ -19,7 +19,9 @@ use App\Http\Requests\UserResponseFormRequest;
 use PhpSpec\Exception\Exception;
 
 use App\Facades\Utils;
+use App\Facades\Email;
 
+use App\User;
 use App\Tickets;
 use App\TicketsResponses;
 use App\ActivityStream;
@@ -52,10 +54,10 @@ class TicketsController extends Controller
         $ticketsHtml = view('pages/testplanner/partials/tickets', [
             'mode'     => 'create',
             'ticket[]' => [
-                'id'          => '',
-                'description' => '',
-                'objective'   => '',
-                'test_steps'  => ''
+                'id'         => '',
+                'desc'       => '',
+                'objective'  => '',
+                'test_steps' => ''
             ]
         ])->render();
 
@@ -125,25 +127,30 @@ class TicketsController extends Controller
         $planData = json_decode($request->get('plan'), true);
         $tickets  = json_decode($request->get('tickets_obj'), true);
         $planData['tickets_responses'] = $tickets;
+        $msg = '';
 
         // Save ticket response
         $response = TicketsResponses::saveResponse($planData);
 
-        // Log activity
-        ActivityStream::saveActivityStream($planData, 'ticket-response', $response);
+        if ($response != 'new') {
+            // Log activity
+            ActivityStream::saveActivityStream($planData, 'ticket-response', $response);
 
-        // Mail all test browsers
-        Email::sendEmail('ticket-response', [
-            'plan_id'            => $planData['id'],
-            'plan_desc'          => $planData['description'],
-            'tester_id'          => $planData['tester_id'],
-            'creator_first_name' => $planData['reporter'],
-            'tester_first_name'  => $planData['assignee'],
-            'email'              => User::getUserEmail($planData['creator_id']),
-            'ticket_status'      => $response
-        ]);
+            // Mail all test browsers
+            Email::sendEmail('ticket-response', [
+                'plan_id' => $planData['id'],
+                'plan_desc' => $planData['description'],
+                'tester_id' => $planData['tester_id'],
+                'creator_first_name' => $planData['reporter'],
+                'tester_first_name' => $planData['assignee'],
+                'email' => User::getUserEmail($planData['creator_id']),
+                'ticket_status' => $response
+            ]);
 
-        return redirect('dashboard')->with('flash_message', config('testplanner.plan_response_success_msg'));
+            $msg = config('testplanner.plan_response_success_msg');
+        }
+
+        return redirect('dashboard')->with('flash_message', $msg);
     }
 
     /**

@@ -163,7 +163,7 @@ class Plans extends Model
 
                 foreach($responses as $response) {
                     if ($ticket['id'] == $response['id']) {
-                        $ticketDesc = $ticket['description'];
+                        $ticketDesc = $ticket['desc'];
                         list($project, $summary) = explode(':', $ticketDesc);
 
                         if (preg_match('/^ECOM-\d/', $project)) {
@@ -171,7 +171,7 @@ class Plans extends Model
                         }
                         $newResults[$ticket['id']] = array(
                             'id'              => $ticket['id'],
-                            'description'     => $ticket['description'],
+                            'desc'            => $ticket['desc'],
                             'description_url' => $descUrl,
                             'objective'       => $ticket['objective'],
                             'test_steps'      => $ticket['test_steps'],

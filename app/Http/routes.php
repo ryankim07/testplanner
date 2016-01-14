@@ -125,6 +125,7 @@ Route::get('plan/view-all-responses', [
     'uses'       => 'PlansController@viewAllResponses']);
 
 Route::get('plan/view-all-assigned', ['as' => 'plan.view.all.assigned', 'uses' => 'PlansController@viewAllAssigned']);
+Route::get('plan/edit', ['as' => 'plan.edit', 'uses' => 'PlansController@edit']);
 
 Route::post('plan/save', [
     'as'         => 'plan.save',
@@ -137,7 +138,7 @@ Route::post('plan/search', ['as' => 'plan.search', 'uses' => 'PlansController@se
 
 Route::patch('plan/update-built-plan/{id}', ['as' => 'plan.built.update', 'uses' => 'PlansController@updateBuiltPlan']);
 Route::put('plan/update-built-plan/{id}', ['as' => 'plan.built.update', 'uses' => 'PlansController@updateBuiltPlan']);
-Route::resource('plan', 'PlansController');
+Route::resource('plan', 'PlansController', ['except' => ['edit']]);
 
 
 /**
@@ -152,6 +153,7 @@ Route::get('ticket/build', [
     'uses'       => 'TicketsController@build'
 ]);
 Route::get('ticket/response', ['as' => 'plan.response', 'uses' => 'TicketsController@response']);
+Route::get('ticket/edit', ['as' => 'ticket.edit', 'uses' => 'TicketsController@edit']);
 Route::post('ticket/save-ticket-response', ['as' => 'ticket.save.response', 'uses' => 'TicketsController@save']);
 Route::post('ticket/remove', [
     'as'         => 'ticket.remove.ajax',
@@ -160,7 +162,8 @@ Route::post('ticket/remove', [
     'uses'       => 'TicketsController@removeAjax'
 ]);
 
-Route::resource('ticket', 'TicketsController');
+Route::resource('ticket', 'TicketsController', ['except' => ['edit']]);
+
 
 
 /**
@@ -174,4 +177,5 @@ Route::get('tester/build', [
     'roles'      => ['root', 'administrator'],
     'uses'       => 'TestersController@build'
 ]);
-Route::resource('tester', 'TestersController');
+Route::get('tester/edit', ['as' => 'tester.edit', 'uses' => 'TestersController@edit']);
+Route::resource('tester', 'TestersController', ['except' => ['edit']]);

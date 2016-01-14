@@ -18,8 +18,8 @@
                     <div class="col-xs-12 col-md-10">
                         {!! Form::label('email_label', 'E-Mail Address / Username') !!}
                         <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon1"><i class="fa fa-key"></i></span>
                             {!! Form::email('email', old('email'), ['class' => 'form-control input-sm', 'id' => 'email']) !!}
+                            <span class="input-group-addon" id="basic-addon1"><i class="fa fa-key"></i></span>
                         </div>
                     </div>
                 </div>

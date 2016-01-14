@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Requests\PlansFormRequest;
+use App\Http\Requests\PlanUpdateFormRequest;
 
 use App\Facades\Utils;
 use App\Facades\Email;
@@ -114,7 +115,7 @@ class PlansController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateBuiltPlan($planId, Request $request)
+    public function updateBuiltPlan($planId, PlanUpdateFormRequest $request)
     {
         Plans::updateBuiltPlanDetails($planId, $request);
         Tickets::updateBuiltTickets($planId, $request->get('tickets'));

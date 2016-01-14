@@ -30,12 +30,12 @@ class Email
         // Type of email to be send out
         switch($type) {
             case 'plan-created':
-                $emailSubject = $data['description'] . ': ' . config('mail.plan_created_subject');
+                $emailSubject = config('mail.plan_created_subject') . ' - ' . $data['description'];
                 $emailType    = 'emails.plan_created';
             break;
 
             case 'ticket-response':
-                $emailSubject =  $data['description'] . ': ' . config('mail.ticket_response_subject');
+                $emailSubject =  config('mail.ticket_response_subject') . ' - ' . $data['description'];
                 $emailType    = 'emails.ticket_response';
                 break;
 

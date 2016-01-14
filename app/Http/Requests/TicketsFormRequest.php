@@ -32,12 +32,12 @@ class TicketsFormRequest extends Request
 	 */
 	public function rules()
     {
-        $description = $this->request->get('description');
-        $description = array_filter($description);
+        $desc = $this->request->get('desc');
+        $desc = array_filter($desc);
         $rules = [];
 
-        if (count($description) == 0) {
-            $rules['description.0'] = 'required';
+        if (count($desc) == 0) {
+            $rules['desc.0'] = 'required';
         }
 
         return $rules;
@@ -50,12 +50,12 @@ class TicketsFormRequest extends Request
      */
     public function messages()
     {
-        $description  = $this->request->get('description');
-        $description = array_filter($description);
+        $desc  = $this->request->get('desc');
+        $desc = array_filter($desc);
         $messages = [];
 
-        if (count($description) == 0) {
-            $messages['description.0.required'] = 'At least one ticket must be created';
+        if (count($desc) == 0) {
+            $messages['desc.0.required'] = 'At least one ticket must be created';
         }
 
         return $messages;

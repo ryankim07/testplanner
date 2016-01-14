@@ -9,8 +9,8 @@
 
 <?php
     $id           = !isset($ticket['id']) ? '' : $ticket['id'];
-    $descName     = $mode == 'edit' ? "description['" . $id . "']" : 'description[]';
-    $descVal      = $mode == 'edit' ? $ticket['description'] : null;
+    $descName     = $mode == 'edit' ? "desc['" . $id . "']" : 'desc[]';
+    $descVal      = $mode == 'edit' ? $ticket['desc'] : null;
     $objName      = $mode == 'edit' ? "objective['" . $id . "']" : 'objective[]';
     $objVal       = $mode == 'edit' ? $ticket['objective'] : null;
     $testStepName = $mode == 'edit' ? "test_steps['" . $id . "']" : 'test_steps[]';

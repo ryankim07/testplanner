@@ -33,7 +33,7 @@
 
                 @foreach($plan['tickets'] as $ticket)
                     <div class="row nested-block ticket-panel">
-                        <legend>Ticket - {!! Html::link(isset($ticket['description_url']) ? $ticket['description_url'] : '#', $ticket['description'], ['target' => '_blank', 'title' => 'Click to view issue in Jira']) !!}</legend>
+                        <legend>Ticket - {!! Html::link(isset($ticket['description_url']) ? $ticket['description_url'] : '#', $ticket['desc'], ['target' => '_blank', 'title' => 'Click to view issue in Jira']) !!}</legend>
                         <div class="col-xs-12 col-md-6">
                             <div class="form-group">
                                 <legend>Objective</legend>
