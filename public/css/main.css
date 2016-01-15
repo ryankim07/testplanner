@@ -201,6 +201,10 @@ table:not(.dashboard-table) tbody tr:hover {
     min-width: 54px;
 }
 
+#view-all-created-main .header-icon {
+    min-width: 64px;
+}
+
 #review-main .browser-img, #respond-main #browser-img, #view-response-main #browser-img {
     width: 32px;
     height: 32px;
@@ -209,7 +213,7 @@ table:not(.dashboard-table) tbody tr:hover {
 /*
  * BUTTONS
  */
-.btn-custom {
-    background: #808080;
-    color: #ffffff;
+.btn-custom, .panel-custom {
+    background: #d4d5d9;
+    color: #FFFFFF;
 }

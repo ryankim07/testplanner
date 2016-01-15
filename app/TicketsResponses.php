@@ -98,7 +98,7 @@ class TicketsResponses extends Model
             DB::beginTransaction();
 
             try {
-                TicketsResponses::updateOrCreate([
+                self::updateOrCreate([
                     'id' => $planData['ticket_resp_id']], [
                     'plan_id'   => $planData['id'],
                     'tester_id' => $planData['tester_id'],

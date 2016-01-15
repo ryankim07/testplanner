@@ -1,9 +1,9 @@
 {{--
 |--------------------------------------------------------------------------
-| Admin assigned plan list
+| Created list
 |--------------------------------------------------------------------------
 |
-| This template is used when showing all plans assigned to admin.
+| This template is used when showing all plans built by admin.
 |
 --}}
 
@@ -17,14 +17,15 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <div class="clearfix">
-                    <div class="pull-left">
+                <div class="row">
+                    <div class="col-xs-10 col-md-10">
+                        <i class="fa fa-cubes fa-3x header-icon"></i>
                         <h4>Plans <span class="badge">{!! $totalPlans !!}</span></h4>
                     </div>
                     @if($role == "root")
-                        <div class="pull-right">
-                            {!! Form::select('admin', $adminsList, $userId, ['class' => 'form-control input-sm', 'id' => 'admin', 'data-url' => route('plan.view.all.created', ['id' => null])]) !!}
-                        </div>
+                    <div class="col-xs-2 col-md-2">
+                        {!! Form::select('admin', $adminsList, $userId, ['class' => 'form-control input-sm', 'id' => 'admin', 'data-url' => route('plan.view.all.created', ['id' => null])]) !!}
+                    </div>
                     @endif
                 </div>
             </div>
@@ -42,7 +43,7 @@
 
                             <tbody>
                             @foreach($plans as $plan)
-                                <tr class="toggler" data-url="{!! URL::route('plan.view', $plan->id) !!}">
+                                <tr class="plan-row">
                                     <td>{!! $plan->description !!}</td>
                                     <td>{!! $plan->full_name !!}</td>
 
@@ -59,6 +60,7 @@
                                     <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->status !!}</span></td>
                                     <td>{!! Utils::dateConverter($plan->created_at) !!}</td>
                                     <td>{!! Utils::dateConverter($plan->updated_at) !!}</td>
+                                    <td class="text-center"><a href="{!! URL::route('plan.view', $plan->id) !!}"><i class="fa fa-pencil-square-o fa-lg"></i></a></td>
                                 </tr>
                             @endforeach
                             </tbody>

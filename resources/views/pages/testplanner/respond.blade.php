@@ -21,7 +21,7 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-10 col-md-8">
-                        <i class="fa fa-pencil-square-o fa-3x header-icon"></i>
+                        <i class="fa fa-commenting-o fa-3x header-icon"></i>
                         <h4>Respond - {!! $plan['description'] !!}</h4>
                     </div>
                 </div>

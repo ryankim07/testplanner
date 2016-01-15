@@ -1,9 +1,10 @@
 {{--
 |--------------------------------------------------------------------------
-| Testers assigned plan list
+| Assigned list
 |--------------------------------------------------------------------------
 |
-| This template is used when showing all assigned plans to testers.
+| This template is used when showing all assigned plans by other admins
+| and current viewer needs to respond.
 |
 --}}
 
@@ -17,7 +18,12 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4>Plans assigned to me  <span class="badge">{!! $totalPlans !!}</span></h4>
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <i class="fa fa-commenting-o fa-3x header-icon"></i>
+                        <h4>Plans assigned to me  <span class="badge">{!! $totalPlans !!}</span></h4>
+                    </div>
+                </div>
             </div>
             <div class="panel-body">
                 @if($totalPlans > 0)
@@ -52,7 +58,7 @@
                                     <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->ticket_response_status !!}</span></td>
                                     <td>{!! Utils::dateConverter($plan->created_at) !!}</td>
                                     <td>{!! Utils::dateConverter($plan->updated_at) !!}</td>
-                                    <td class="text-center"><a href="{!! URL::route('plan.respond', $plan->id) !!}"><i class="fa fa-pencil fa-lg"></i></a></td>
+                                    <td class="text-center"><a href="{!! URL::route('plan.respond', $plan->id) !!}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
                                 </tr>
                             @endforeach
                             </tbody>

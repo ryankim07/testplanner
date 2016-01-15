@@ -111,7 +111,7 @@ Route::get('plan/review', [
     'roles'      => ['root', 'administrator'],
     'uses'       => 'PlansController@review'
 ]);
-Route::get('plan/view-all-created/{id}', [
+Route::get('plan/view-all-created', [
     'as'         => 'plan.view.all.created',
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator'],

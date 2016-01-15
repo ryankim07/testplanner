@@ -55,7 +55,7 @@ class Tickets extends Model
      */
     public static function updateBuiltPlanTickets($planId, $tickets)
     {
-        $plan = Tickets::where('plan_id', '=', $planId);
+        $plan = self::where('plan_id', '=', $planId);
         $plan->update(['tickets' => $tickets]);
 
         return true;

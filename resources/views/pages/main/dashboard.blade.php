@@ -95,7 +95,7 @@
                                                         </td>
                                                         <td class="text-center"><a href="#" class="plan-link"><i class="fa fa-search fa-lg"></i></a></td>
                                                     @else
-                                                        <td class="text-center"><a href="{!! URL::route('plan.respond', $attr['id']) !!}"><i class="fa fa-pencil fa-lg"></i></a></td>
+                                                        <td class="text-center"><a href="{!! URL::route('plan.respond', $attr['id']) !!}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
                                                     @endif
 
                                                 </tr>
@@ -160,7 +160,7 @@
                                     <div class="row">
                                         <ul class="list-unstyled list-inline text-left">
                                             <li><i class="fa fa-clock-o fa-lg"></i> {!! $log['created_at'] !!}</li>
-                                            <li><i class="fa fa-comment fa-lg"></i> <a href="#" class="activity-comment-link">Comment</a></li>
+                                            <li><i class="fa fa-commenting-o fa-lg"></i> <a href="#" class="activity-comment-link">Comment</a></li>
                                         </ul>
                                     </div>
                                     <div class="row activity-comment-content">

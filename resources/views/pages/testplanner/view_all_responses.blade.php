@@ -1,9 +1,9 @@
 {{--
 |--------------------------------------------------------------------------
-| Admin assigned plan list
+| Responses list
 |--------------------------------------------------------------------------
 |
-| This template is used when showing all plans assigned to admin.
+| This template is used when showing all responses by testers.
 |
 --}}
 
@@ -17,8 +17,12 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4>Plans assigned to others <span class="badge">{!! $totalPlans !!}</span></h4>
-            </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <i class="fa fa-comments fa-3x header-icon"></i>
+                        <h4>Plans assigned to others <span class="badge">{!! $totalPlans !!}</span></h4>
+                    </div>
+                </div>
             </div>
             <div class="panel-body">
                 @if($totalPlans > 0)
@@ -52,7 +56,7 @@
                                     <td>{!! Utils::dateConverter($plan->created_at) !!}</td>
                                     <td>{!! Utils::dateConverter($plan->updated_at) !!}</td>
                                     <td>{!! Form::select('testers', $testers[$plan->id], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $plan->id)]) !!}</td>
-                                    <td class="text-center"><a href="#" class="plan-link"><i class="fa fa-search fa-lg"></i></a></td>
+                                    <td class="text-center"><a href="#" class="plan-link"><i class="fa fa-comments fa-lg"></i></a></td>
                                 </tr>
                             @endforeach
                             </tbody>

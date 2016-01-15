@@ -61,7 +61,7 @@ class ActivityStream extends Model
      */
     public static function getActivityStream()
     {
-        $logs = ActivityStream::orderBy('created_at', 'DESC')->take(50)->get();
+        $logs = self::orderBy('created_at', 'DESC')->take(50)->get();
 
         $results = '';
 
@@ -70,7 +70,7 @@ class ActivityStream extends Model
                 $createdAt = Utils::timeDifference($log->created_at);
                 $activity  = !Auth::user()->hasRole(['root', 'administrator']) ? strip_tags($log->activity) : $log->activity;
 
-                $activityComments = ActivityStream::find($log->id)->comments()->get();
+                $activityComments = self::find($log->id)->comments()->get();
                 $comments = array();
 
                 foreach($activityComments as $eachComment) {
@@ -133,7 +133,7 @@ class ActivityStream extends Model
             if ($status != 'new') {
                 $activity = $assigneeName . ' ' . $message . ' ' . $planLink;
 
-                $comment = ActivityStream::create([
+                $comment = self::create([
                     'plan_id'  => $plan['id'],
                     'user_id'  => $userId,
                     'activity' => $activity

@@ -58,7 +58,7 @@ class ActivityComments extends Model
      */
     public static function saveActivityComment($asId, $userId, $comment)
     {
-        ActivityComments::create([
+        self::create([
             'as_id'   => $asId,
             'user_id' => $userId,
             'comment' => $comment

@@ -26,16 +26,16 @@
                             <ul class="dropdown-menu" role="menu">
                                 @if(Auth::user()->hasRole(['root', 'administrator']))
                                     <li>{!! Html::linkRoute('plan.build', 'Build') !!}</li>
-                                    <li>{!! Html::linkRoute('plan.view.all.created', 'View/Edit', 0) !!}</li>
+                                    <li>{!! Html::linkRoute('plan.view.all.created', 'View/Edit') !!}</li>
                                 @endif
-                                <li>{!! Html::linkRoute('plan.view.all.assigned', 'Respond', []) !!}</li>
+                                <li>{!! Html::linkRoute('plan.view.all.assigned', 'Respond') !!}</li>
                             </ul>
                         </li>
                         @if(Auth::user()->hasRole(['root']))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Testers <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li>{!! Html::linkRoute('plan.view.all.responses', 'Responses', 0) !!}</li>
+                                    <li>{!! Html::linkRoute('plan.view.all.responses', 'Responses') !!}</li>
                                 </ul>
                             </li>
                         @endif

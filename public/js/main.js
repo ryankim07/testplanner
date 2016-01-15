@@ -118,7 +118,7 @@ function TicketBuilder(config) {
             // Create hidden field
             var input = $("<input>")
                 .attr("type", "hidden")
-                .attr("name", config.ticketsObjName).val(JSON.stringify(tickets));
+                .attr("name", 'tickets_obj').val(JSON.stringify(tickets));
 
             $('form').append($(input));
         });

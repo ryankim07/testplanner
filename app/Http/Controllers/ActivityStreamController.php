@@ -34,8 +34,7 @@ class ActivityStreamController extends Controller
 
     public function all()
     {
-        $sorting = Tables::sorting();
-        $table   = Tables::prepareTable($sorting['order'], [
+        $table = Tables::prepare('order', [
             'activity',
             'created_at'
         ], 'ActivityStreamController@index');

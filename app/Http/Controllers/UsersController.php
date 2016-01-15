@@ -140,8 +140,7 @@ class UsersController extends Controller
      */
     public function all()
     {
-        $sorting = Tables::sorting();
-        $table   = Tables::prepareTable($sorting['order'], [
+        $table = Tables::prepare('order', [
             'first_name',
             'last_name',
             'email',
@@ -151,7 +150,7 @@ class UsersController extends Controller
             'updated_at'
         ], 'UsersController@view');
 
-        $query = User::getAllUsers($sorting['sortBy'], $sorting['order']);
+        $query = User::getAllUsers($table['sorting']['sortBy'], $table['sorting']['order']);
 
         return view('pages.main.view_all_users', [
             'users'       => isset($query) ? $query->paginate(config('testplanner.pagination_count')) : '',

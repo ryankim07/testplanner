@@ -101,183 +101,20 @@ class Tables extends Model
     }
 
     /**
-     * Prepare columns for header
-     *
-     * This function must be implemented whenever table is rendered
-     *
-     * @param $order
-     * @param $columnsToDisplay
-     * @return mixed
-     */
-    public static function prepareColumns($order, $columnsToDisplay)
-    {
-        $columns['first_name'] = [
-            'type'       => 'text',
-            'colname'    => 'First',
-            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => 'first_name',
-            'order'      => $order,
-            'filterable' => true,
-            'width'      => '40px'
-        ];
-
-        $columns['last_name'] = [
-            'type'       => 'text',
-            'colname'    => 'Last',
-            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => 'last_name',
-            'order'      => $order,
-            'filterable' => true,
-            'width'      => '40px'
-        ];
-
-        $columns['admin'] = [
-            'type'       => 'text',
-            'colname'    => 'Name',
-            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => 'admin',
-            'order'      => $order,
-            'filterable' => true,
-            'width'      => '80px'
-        ];
-
-        $columns['email'] = [
-            'type'       => 'text',
-            'colname'    => 'Email',
-            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => 'email',
-            'order'      => $order,
-            'filterable' => true,
-            'width'      => '80px'
-        ];
-
-        $columns['active'] = [
-            'type'       => 'text',
-            'colname'    => 'Active',
-            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => 'email',
-            'order'      => $order,
-            'width'      => '10px'
-        ];
-
-        $columns['role_names'] = [
-            'type'       => 'text',
-            'colname'    => 'Roles',
-            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => '',
-            'order'      => '',
-            'filterable' => false,
-            'width'      => '100px'
-        ];
-
-        $columns['description'] = [
-            'type'       => 'text',
-            'colname'    => 'Description',
-            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => 'description',
-            'order'      => $order,
-            'filterable' => true,
-            'width'      => '100px'
-        ];
-
-        $columns['status'] = [
-            'type'       => 'text',
-            'colname'    => 'Status',
-            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => 'status',
-            'order'      => $order,
-            'filterable' => true,
-            'width'      => '10px'
-        ];
-
-        $columns['activity'] = [
-            'type'       => 'text',
-            'colname'    => 'Activity',
-            'filterable' => true,
-            'width'      => '100px'
-        ];
-
-        $columns['created_at'] = [
-            'type'       => 'date',
-            'colname'    => 'Created',
-            'from_data'  => ['class' => 'form-control input-sm', 'id' => 'created_from'],
-            'to_data'    => ['class' => 'form-control input-sm', 'id' => 'created_to'],
-            'from_index' => 'created_from',
-            'to_index'   => 'created_to',
-            'sortable'   => 'created_at',
-            'order'      => $order,
-            'width'      => '40px'
-        ];
-
-        $columns['updated_at'] = [
-            'type'     => 'text',
-            'colname'  => 'Updated',
-            'width'    => '40px'
-        ];
-
-        $columns['testers'] = [
-            'type'       => 'text',
-            'colname'    => 'Testers',
-            'data'       => ['class' => 'form-control'],
-            'order'      => '',
-            'width'      => '30px'
-        ];
-
-        $columns['view'] = [
-            'type'         => 'text',
-            'colname'      => 'View',
-            'data'         => ['class' => 'form-control'],
-            'order'        => '',
-            'width'        => '10px',
-            'header_align' => 'center'
-        ];
-
-        $columns['respond'] = [
-            'type'         => 'text',
-            'colname'      => 'Respond',
-            'data'         => ['class' => 'form-control'],
-            'order'        => '',
-            'width'        => '10px',
-            'header_align' => 'center'
-        ];
-
-        foreach($columnsToDisplay as $column) {
-            $results = Grid::addColumn($column, $columns[$column]);
-        }
-
-        return $results;
-    }
-
-    /**
      * Prepare table for view
      *
-     * @param $order
+     * @param $type
      * @param $columnToDisplay
-     * @param bool $showSort
-     * @param bool $showFilter
+     * @param $columnLink
      * @return mixed
      */
-    public static function prepareTable($order, $columnToDisplay, $columnLink)
+    public static function prepare($type, $columnToDisplay, $columnLink)
     {
-        $preparedColumns = self::prepareColumns($order, $columnToDisplay);
+        $sorting         = self::sorting();
+        $preparedColumns = Grid::prepareColumns($sorting[$type], $columnToDisplay);
 
-        foreach($preparedColumns as $column) {
-            if (!isset($column['sortable'])) {
-                $column['sortable'] = null;
-            }
-
-            if (!isset($column['filterable'])) {
-                $column['filterable'] = false;
-            }
-
-            if (!isset($column['headera_align'])) {
-                $column['header_align'] = 'left';
-            }
-
-            $columns[] = $column;
-        }
-
-        $table['columns']      = $columns;
+        $table['sorting']      = $sorting;
+        $table['columns']      = $preparedColumns;
         $table['columns_link'] = $columnLink;
 
         return $table;

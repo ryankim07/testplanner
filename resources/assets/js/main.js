@@ -118,7 +118,7 @@ function TicketBuilder(config) {
             // Create hidden field
             var input = $("<input>")
                 .attr("type", "hidden")
-                .attr("name", config.ticketsObjName).val(JSON.stringify(tickets));
+                .attr("name", 'tickets_obj').val(JSON.stringify(tickets));
 
             $('form').append($(input));
         });
@@ -152,8 +152,6 @@ function TicketBuilder(config) {
  */
 function loadRespondJs()
 {
-    $('#respond-btn').hide();
-
     // If there are responded tickets, change button label for update
     var totalResponses = 0;
 
@@ -168,8 +166,10 @@ function loadRespondJs()
     if (totalResponses > 0) {
         $('#respond-btn').prop('value', 'Update Response')
     } else if (totalResponses == 0) {
+        $('#respond-btn').prop('disabled', true);
+
         $('#respond-main').on('focus', '.notes-response', function() {
-            $('#respond-btn').show();
+            $('#respond-btn').prop('disabled', false);
         });
     }
 

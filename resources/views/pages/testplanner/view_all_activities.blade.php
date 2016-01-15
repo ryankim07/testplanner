@@ -17,7 +17,12 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4>Activity Streams <span class="badge">{!! $totalActivities !!}</span></h4>
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <i class="fa fa-clipboard fa-3x header-icon"></i>
+                        <h4>Activity Streams <span class="badge">{!! $totalActivities !!}</span></h4>
+                    </div>
+                </div>
             </div>
             <div class="panel-body">
                 @if($totalActivities > 0)

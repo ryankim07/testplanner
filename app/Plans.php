@@ -103,7 +103,7 @@ class Plans extends Model
      */
     public static function getAllResponses($userId, $sortBy, $order, $from = null)
     {
-        $query = Plans::getAllPlans($sortBy, $order, $userId);
+        $query = self::getAllPlans($sortBy, $order, $userId);
 
         if ($from == 'dashboard') {
             $query->take(5);
@@ -148,7 +148,7 @@ class Plans extends Model
      */
     public static function getTesterPlanResponse($planId, $userId)
     {
-        $results          = Plans::renderPlan($planId, $userId);
+        $results          = self::renderPlan($planId, $userId);
         $ticketsResponses = TicketsResponses::where('plan_id', '=', $planId)
             ->where('tester_id', '=', $userId)
             ->first();
@@ -229,7 +229,7 @@ class Plans extends Model
      */
     public static function updateBuiltPlanDetails($planId, $request)
     {
-        $plan = Plans::find($planId);
+        $plan = self::find($planId);
         $plan->update([
             'description' => $request->get('description'),
             'started_at'  => $request->get('started_at'),
@@ -258,7 +258,7 @@ class Plans extends Model
         // Start plan creation
         try {
             // Save new plan build
-            $plan = Plans::create($planData);
+            $plan = self::create($planData);
             $planId = $plan->id;
             $planData['id'] = $planId;
 

@@ -12,7 +12,7 @@
 
 		{!! Form::model($plan, ['method' => 'PATCH', 'action' => ['PlansController@updateBuiltPlan', $plan['id']], 'class' => 'form-horizontal', 'id' => 'plan-edit-form']) !!}
 
-		<div class="panel panel-info">
+		<div class="panel panel-default">
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-xs-10 col-md-10">
@@ -44,7 +44,8 @@
 		@include('pages/main/partials/submit_button', [
             'submitBtnText' => 'Update',
             'css'           => 'col-xs-4 col-md-4',
-            'id'			=> 'update-tickets-btn'
+            'class'			=> 'btn-custom',
+            'id'			=> 'update-plan-btn'
         ])
 
 		{!! Form::close() !!}
