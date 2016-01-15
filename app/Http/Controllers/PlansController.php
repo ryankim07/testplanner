@@ -21,6 +21,7 @@ use App\Facades\Utils;
 use App\Facades\Email;
 
 use App\Plans;
+use App\Tickets;
 use App\Testers;
 use App\ActivityStream;
 use App\User;
@@ -118,10 +119,10 @@ class PlansController extends Controller
     public function updateBuiltPlan($planId, PlanUpdateFormRequest $request)
     {
         Plans::updateBuiltPlanDetails($planId, $request);
-        Tickets::updateBuiltTickets($planId, $request->get('tickets'));
-        Testers::updateBuiltTesters($planId, $request->get('tester_id'), $request->get('browser'));
+        Tickets::updateBuiltTickets($planId, $request->get('tickets_obj'));
+        Testers::updateBuiltTesters($planId, $request->get('tester'), $request->get('browser'));
 
-        return redirect('dashboard')->with('flash_message', config('testplanner.plan_built_update_msg'));
+        return redirect('dashboard')->with('flash_message', $request->get('description') . ' ' . config('testplanner.plan_built_update_msg'));
     }
 
     /**

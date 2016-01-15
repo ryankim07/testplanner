@@ -34,7 +34,7 @@ return [
 
     'plan_build_error_msg'       => 'Plan building cannot be done at the current moment.  Please try again later.',
 
-    'plan_built_update_msg'      => 'Plan details has been updated successfully.',
+    'plan_built_update_msg'      => ', plan details has been updated successfully.',
 
     'plan_session_error_msg'     => 'Session data is missing.',
 

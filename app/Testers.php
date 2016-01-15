@@ -69,15 +69,18 @@ class Testers extends Model
      * Update tester from built plan
      *
      * @param $planId
-     * @param $testerId
-     * @param $browser
+     * @param $testers
      * @return bool
      */
-    public static function updateBuiltTesters($planId, $testerId, $browser)
+    public static function updateBuiltTesters($planId, $testers)
     {
-        $plan = Tickets::where('plan_id', '=', $planId)
-            ->where('tester_id', '=', $testerId);
-        $plan->update(['browser' => $browser]);
+        foreach($testers as $eachTester) {
+            list($id, $name, $browser) = explode(',', $eachTester);
+
+            $tester = Testers::where('plan_id', '=', $planId)
+                ->where('tester_id', '=', $id);
+            $tester->update(['browser' => $browser]);
+        }
 
         return true;
     }

@@ -45,7 +45,7 @@
             'submitBtnText' => 'Update',
             'css'           => 'col-xs-4 col-md-4',
             'class'			=> 'btn-custom',
-            'id'			=> 'update-plan-btn'
+            'id'			=> 'update-btn'
         ])
 
 		{!! Form::close() !!}

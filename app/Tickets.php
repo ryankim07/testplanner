@@ -53,10 +53,11 @@ class Tickets extends Model
      * @param $tickets
      * @return bool
      */
-    public static function updateBuiltPlanTickets($planId, $tickets)
+    public static function updateBuiltTickets($planId, $tickets)
     {
-        $plan = self::where('plan_id', '=', $planId);
-        $plan->update(['tickets' => $tickets]);
+        $tickets = json_decode($tickets, true);
+        $ticket  = self::where('plan_id', '=', $planId);
+        $ticket->update(['tickets' => serialize($tickets)]);
 
         return true;
     }
