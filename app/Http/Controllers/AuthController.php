@@ -54,7 +54,13 @@ class AuthController extends Controller
      */
     public function postLogin(LoginFormRequest $request)
     {
-        if ($this->auth->attempt($request->only('email', 'password')))
+        if ($this->auth->validate(['email' => $request->email, 'password' => $request->password, 'active' => 0])) {
+            return redirect($this->loginPath())
+                ->withInput($request->only('email', 'remember'))
+                ->withErrors(array('message' => config('testplanner.acct_inactive_msg')));
+        }
+
+        if ($this->auth->attempt($request->only('email', 'password', 'active')))
         {
             return redirect()->intended('dashboard');
         }
@@ -120,7 +126,7 @@ class AuthController extends Controller
 
         $roleExists = false;
         foreach($roles as $role) {
-            if ($role->role_id == $request->assign_role) {
+            if ($role->role_id == $request->role) {
                 $roleExists = true;
                 break;
             }
@@ -133,18 +139,9 @@ class AuthController extends Controller
 
         $newRole = UserRole::create([
             'user_id' => $user->id,
-            'role_id' => $request->assign_role
+            'role_id' => $request->role
         ]);
 
-        //Email
-        if (isset($newRole->id)) {
-            /*Email::sendEmail('registration', [
-                'user_id'    => $user->id,
-                'first_name' => $request->first_name,
-                'email'      => $request->email
-            ]);*/
-        }
-
-        return redirect('dashboard');
+        return redirect('dashboard')->with('flash_message', config('testplanner.new_user_added_msg'));;
     }
 }

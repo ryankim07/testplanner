@@ -55,16 +55,16 @@ function TicketBuilder(config) {
     {
         $(formId).on('click', addBtnId, function() {
             // Clone first block
-            var clonedRow = $(ticketRowClass).first().clone();
+            var clonedField = $(ticketRowClass).first().clone();
 
             // Clear all fields
-            var inputTypes = clonedRow.find('input[type=text], textarea').val('');
+            var inputTypes = clonedField.find('input[type=text], textarea').val('');
 
             // Increment index
-            changeCreateTicketInputIndex(clonedRow);
+            changeCreateTicketInputIndex(clonedField);
 
             // Add as new block after latest ticket row
-            clonedRow.insertAfter($(ticketRowClass).last());
+            clonedField.insertAfter($(ticketRowClass).last());
 
             // Display remove option
             $(removeBtnClass).show();
@@ -215,7 +215,7 @@ function loadResponseJs()
 /**
  * Dashboard
  */
-function loadDashboardJs()
+function loadDashboardJs(url)
 {
     // Hide initially
     $('.activity-comment-content').hide();
@@ -245,26 +245,28 @@ function loadDashboardJs()
 
     // Add comment
     $('#dashboard-main').on('click', '.activity-comment-add', function() {
-        var parent  = $(this).parentsUntil('.activity-log');
-        var logId   = parent.find('.log_id').val();
-        var comment = parent.find('.activity-comment').val();
+        var parent = $(this).parentsUntil('.activity-stream');
 
         $.ajax({
             method: "POST",
-            url: "{!! URL::to('dashboard/save-comment') !!}",
+            url: url,
             data: {
                 "_token":  $('form').find('input[name=_token]').val(),
-                "id":      logId,
-                "comment": comment
+                "as_id": parent.find('.as_id').val(),
+                "comment": parent.find('.activity-comment').val()
             },
             dataType: "json"
-        }).done(function(msg) {
-            location.reload();
+        }).done(function(res) {
+            var lastCommentLine = parent.find($('.comment-line').last());
+
+            lastCommentLine.after('<li class="comment-line"><em>' + res.comment + ' (commented by ' + res.commentator + ' on ' + res.created_at + ')</em></li>');
+            parent.find('.activity-comment-content').hide();
         });
     });
+
     // Cancel comment
     $('#dashboard-main').on('click', '.activity-comment-cancel', function() {
-        var parent = $(this).parentsUntil('.activity-log');
+        var parent = $(this).parentsUntil('.activity-stream');
         parent.find('.activity-comment-content').hide();
     });
 }
@@ -294,16 +296,16 @@ $('#view-all-assigned-main').on('click', '.toggler', function() {
 /**
  * User accounts
  */
-function loadUsersJs()
+function loadUsersJs(url)
 {
     $('.alert').hide();
 
     $('#view-user-main').on('click', '#update-btn', function () {
-        var newRoles = $("#current_roles").val() || [];
+        var newRoles = $("#role").val() || [];
 
         $.ajax({
             method: "POST",
-            url: "{!! URL::to('user/update') !!}",
+            url: url,
             data: $("#user-form-update").serialize() + '&new_roles=' + newRoles,
             dataType: "json"
         }).done(function (response) {

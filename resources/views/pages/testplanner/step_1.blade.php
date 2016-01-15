@@ -18,6 +18,7 @@
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-md-8">
+						<i class="fa fa-cogs fa-3x header-icon"></i>
 						<h4>Step 1 of 3 - {!! $mode == 'build' ? 'Start building plan' : 'Edit plan' !!}</h4>
 					</div>
 					@if($mode == 'build')

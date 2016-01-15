@@ -51,7 +51,7 @@
 
         $(document).ready(function() {
             // User functionalities
-            loadUsersJs();
+            loadUsersJs('{!! URL::to('user/update') !!}'');
         });
 
     </script>

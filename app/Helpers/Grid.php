@@ -93,13 +93,14 @@ class Grid
         ];
 
         $columns['status'] = [
-            'type'       => 'text',
-            'colname'    => 'Status',
-            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => 'status',
-            'order'      => $order,
-            'filterable' => true,
-            'width'      => '10px'
+            'type'         => 'text',
+            'colname'      => 'Status',
+            'data'         => ['class' => 'form-control input-sm', 'id' => 'search-term'],
+            'sortable'     => 'status',
+            'order'        => $order,
+            'filterable'   => true,
+            'width'        => '10px',
+            'header_align' => 'text-center'
         ];
 
         $columns['activity'] = [

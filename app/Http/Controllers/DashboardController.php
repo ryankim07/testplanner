@@ -51,7 +51,7 @@ class DashboardController extends Controller
         if (isset($assignedResponses)) {
             $results = array();
             foreach($assignedResponses->get() as $plan) {
-                $results[] = get_object_vars($plan);
+                $results[] = $plan->toArray();
             }
 
             $plans['plans_assigned'] = $results;
@@ -81,7 +81,7 @@ class DashboardController extends Controller
         }
 
         // Get activity stream
-        $activityStream = ActivityStream::getActivityStream();
+        $activityStream = ActivityStream::getActivityStream($user->id);
 
         // Return view
         return view('pages.main.dashboard', [

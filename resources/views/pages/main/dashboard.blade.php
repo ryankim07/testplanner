@@ -144,29 +144,33 @@
             <div class="panel panel-info">
                 <div class="panel-heading">Activity Stream</div>
                 <div class="panel-body">
-                    @if(!empty($activities))
-                        @foreach($activities as $log)
-                            <div class="row activity-log nested-block">
+                    @if(empty($activities))
+                        <p><span>There are no activities at the current moment.</span></p>
+                    @else
+                        @foreach($activities as $stream)
+                            <div class="row activity-stream nested-block">
                                 <div class="col-xs-2 col-md-2"><img src="images/mophie-user.jpeg" alt="mophie-user" class="" width="40" height="40"></div>
                                 <div class="col-xs-10 col-md-10">
-                                    <div class="row">{!! $log['activity'] !!}</div>
-                                    @foreach($log['comments'] as $eachComment)
-                                        <div class="form-group">
-                                            <div class="col-md-12 col-md-offset-0">
-                                                <em>{!! $eachComment['comment'] !!} (comment by {!! $eachComment['commentator'] !!} on {!! $eachComment['created_at'] !!})</em>
-                                            </div>
-                                        </div>
-                                    @endforeach
                                     <div class="row">
-                                        <ul class="list-unstyled list-inline text-left">
-                                            <li><i class="fa fa-clock-o fa-lg"></i> {!! $log['created_at'] !!}</li>
+                                        {!! $stream['activity'] !!}
+                                    </div>
+                                    <div class="row">
+                                        <ul class="list-styled">
+                                            @foreach($stream['comments'] as $eachComment)
+                                                <li class="comment-line"><em>{!! $eachComment['comment'] !!} (comment by {!! $eachComment['commentator'] !!} on {!! $eachComment['created_at'] !!})</em></li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    <div class="row">
+                                        <ul class="list-inline">
+                                            <li><i class="fa fa-clock-o fa-lg"></i> {!! $stream['created_at'] !!}</li>
                                             <li><i class="fa fa-commenting-o fa-lg"></i> <a href="#" class="activity-comment-link">Comment</a></li>
                                         </ul>
                                     </div>
                                     <div class="row activity-comment-content">
                                         <div class="form-group">
                                             <div class="col-xs-8 col-md-8">
-                                                {!! Form::textarea('activity_comment', null, ['class' => 'form-control', 'rows' => '4']) !!}
+                                                {!! Form::textarea('activity_comment', null, ['class' => 'form-control activity-comment', 'rows' => '4']) !!}
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -177,13 +181,11 @@
                                         </div>
                                     </div>
 
-                                    {!! Form::hidden('log_id', $log['id'], ['class' => 'log_id']) !!}
+                                    {!! Form::hidden('as_id', $stream['id'], ['class' => 'as_id']) !!}
 
                                 </div>
                             </div>
                         @endforeach
-                    @else
-                        <p><span>There are no activities at the current moment.</span></p>
                     @endif
                 </div>
             </div>
@@ -197,7 +199,7 @@
 
         $(document).ready(function() {
             // Dashboard functionalities
-            loadDashboardJs();
+            loadDashboardJs('{!! URL::to('activity/save-comment') !!}');
         });
 
     </script>

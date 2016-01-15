@@ -20,6 +20,10 @@ return [
 
     'pagination_count'           => 50,
 
+    'new_user_added_msg'         => 'New user successfully registered.',
+
+    'acct_inactive_msg'          => 'Your account is inactive.  Please contact the administrator.',
+
     'credentials_problem_msg'    => 'The credentials you entered did not match our records.',
 
     'unauthorized_msg'           => 'You are not authorized to access this resource.',

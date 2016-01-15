@@ -158,6 +158,9 @@ table:not(.dashboard-table) tbody tr:hover {
     padding: 10px 10px 10px 10px;
 }
 
+#dashboard-main .comment-line {
+    font-size: 12px;
+}
 
 .respond legend {
     font-size: 18.5px;
@@ -176,7 +179,7 @@ table:not(.dashboard-table) tbody tr:hover {
 /*
  * IMAGES
  */
-.trash, .cog {
+.trash, .pencil {
     position:absolute;
     margin-top: 8px;
     margin-right: 6px;
@@ -214,6 +217,6 @@ table:not(.dashboard-table) tbody tr:hover {
  * BUTTONS
  */
 .btn-custom, .panel-custom {
-    background: #d4d5d9;
+    background: #777777;
     color: #FFFFFF;
 }

@@ -32,7 +32,7 @@
                         @include('pages/main/partials/button', [
                             'btnText'   => 'Clear',
                             'direction' => 'pull-left',
-                            'class'     => 'btn-info btn-sm clear-btn'
+                            'class'     => 'btn-primary btn-sm clear-btn'
                         ])
 
                     </span>

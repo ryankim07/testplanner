@@ -77,13 +77,13 @@ class UsersController extends Controller
 
         // Custom validator
         $validator = Validator::make(array_except($request->all(), '_token'), [
-            'current_roles' => 'required',
+            'role' => 'required',
             'first_name'    => 'required',
             'last_name'     => 'required',
             'email'         => 'required|email',
             'password'      => 'required|confirmed|min:6'
         ], [
-            'current_roles.required' => 'Role is required',
+            'role.required' => 'Role is required',
             'first_name.required'    => 'First name is required',
             'last_name.required'     => 'Last name is required',
             'email.required'         => 'Email is required',

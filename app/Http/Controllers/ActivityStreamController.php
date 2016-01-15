@@ -13,9 +13,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
+use App\Facades\Utils;
+
+use App\User;
 use App\ActivityStream;
 use App\ActivityComments;
 use App\Tables;
+
+use Auth;
 
 class ActivityStreamController extends Controller
 {
@@ -61,10 +66,13 @@ class ActivityStreamController extends Controller
      */
     public function saveComment(Request $request)
     {
-        $user = Auth::user();
+        $results = ActivityComments::saveActivityComment($request->get('as_id'), Auth::user()->id, $request->get('comment'));
 
-        ActivityComments::saveActivityComment($request->get('id'), $user->id, $request->get('comment'));
-
-        return response()->json(["status" => "success"]);
+        return response()->json([
+            "status"      => "success",
+            "commentator" => User::getUserFirstName(Auth::user()->id),
+            "comment"     => $results->comment,
+            "created_at"  => Utils::dateConverter($results->created_at)
+        ]);
     }
 }

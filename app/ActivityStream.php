@@ -57,20 +57,20 @@ class ActivityStream extends Model
     /**
      * Get activity logs
      *
+     * @param $userId
      * @return string
      */
-    public static function getActivityStream()
+    public static function getActivityStream($userId)
     {
-        $logs = self::orderBy('created_at', 'DESC')->take(50)->get();
+        $streams = self::orderBy('created_at', 'DESC')->take(50)->get();
 
         $results = '';
+        if (count($streams) > 0) {
+            foreach($streams as $stream) {
+                $createdAt = Utils::timeDifference($stream->created_at);
+                $activity  = Auth::user()->id == $stream->user_id ? $stream->activity : '<strong>' . strip_tags($stream->activity) . '</strong>';
 
-        if (count($logs) > 0) {
-            foreach($logs as $log) {
-                $createdAt = Utils::timeDifference($log->created_at);
-                $activity  = !Auth::user()->hasRole(['root', 'administrator']) ? strip_tags($log->activity) : $log->activity;
-
-                $activityComments = self::find($log->id)->comments()->get();
+                $activityComments = self::find($stream->id)->comments()->get();
                 $comments = array();
 
                 foreach($activityComments as $eachComment) {
@@ -82,8 +82,8 @@ class ActivityStream extends Model
                     );
                 }
 
-                $results[$log->id] = array(
-                    'id'         => $log->id,
+                $results[$stream->id] = array(
+                    'id'         => $stream->id,
                     'activity'   => $activity,
                     'comments'   => $comments,
                     'created_at' => $createdAt

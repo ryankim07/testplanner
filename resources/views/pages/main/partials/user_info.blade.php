@@ -12,8 +12,8 @@
     </div>
     <div class="form-group">
         <div class="col-xs-12 {!! $roleColumn !!}">
-            {!! Form::label('current_roles_label', 'Role') !!}
-            {!! Form::select('current_roles', $rolesOptions, $rolesSelectedOptions, ['class' => 'form-control input-sm', 'id' => 'current_roles', 'multiple']) !!}
+            {!! Form::label('role_label', 'Role') !!}
+            {!! Form::select('role', $rolesOptions, $rolesSelectedOptions, ['class' => 'form-control input-sm', 'id' => 'role', 'multiple']) !!}
         </div>
     </div>
     <div class="form-group">
