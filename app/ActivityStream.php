@@ -68,7 +68,8 @@ class ActivityStream extends Model
         if (count($streams) > 0) {
             foreach($streams as $stream) {
                 $createdAt = Utils::timeDifference($stream->created_at);
-                $activity  = Auth::user()->id == $stream->user_id ? $stream->activity : '<strong>' . strip_tags($stream->activity) . '</strong>';
+                $activity  = (Auth::user()->hasRole(['root'])) || (Auth::user()->id == $stream->user_id) ? $stream->activity :
+                    '<strong>' . strip_tags($stream->activity) . '</strong>';
 
                 $activityComments = self::find($stream->id)->comments()->get();
                 $comments = array();

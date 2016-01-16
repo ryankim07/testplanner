@@ -93,7 +93,7 @@
                                                         <td>
                                                             {!! Form::select('testers', $attr['testers'], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $attr['id'])]) !!}
                                                         </td>
-                                                        <td class="text-center"><a href="#" class="plan-link"><i class="fa fa-search fa-lg"></i></a></td>
+                                                        <td class="text-center"><a href="#" class="plan-link"><i class="fa fa-comments fa-lg"></i></a></td>
                                                     @else
                                                         <td class="text-center"><a href="{!! URL::route('plan.respond', $attr['id']) !!}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
                                                     @endif
@@ -154,10 +154,10 @@
                                     <div class="row">
                                         {!! $stream['activity'] !!}
                                     </div>
-                                    <div class="row">
+                                    <div class="row activity-comment-line-block">
                                         <ul class="list-styled">
                                             @foreach($stream['comments'] as $eachComment)
-                                                <li class="comment-line"><em>{!! $eachComment['comment'] !!} (comment by {!! $eachComment['commentator'] !!} on {!! $eachComment['created_at'] !!})</em></li>
+                                                <li class="activity-comment-line"><em>{!! $eachComment['comment'] !!} (commented by {!! $eachComment['commentator'] !!} on {!! $eachComment['created_at'] !!})</em></li>
                                             @endforeach
                                         </ul>
                                     </div>
@@ -167,7 +167,7 @@
                                             <li><i class="fa fa-commenting-o fa-lg"></i> <a href="#" class="activity-comment-link">Comment</a></li>
                                         </ul>
                                     </div>
-                                    <div class="row activity-comment-content">
+                                    <div class="row activity-comment-area">
                                         <div class="form-group">
                                             <div class="col-xs-8 col-md-8">
                                                 {!! Form::textarea('activity_comment', null, ['class' => 'form-control activity-comment', 'rows' => '4']) !!}

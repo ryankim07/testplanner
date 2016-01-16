@@ -3,6 +3,27 @@
  */
 
 /**
+ *
+ * View all admin plans
+ *
+ */
+    // View all admin
+$('#view-all-admin-main').on('click', '.view-tester-plan', function(e) {
+    e.preventDefault();
+
+    var parent = $(this).closest('tr');
+    var tester = parent.find('.tester').val();
+    var url    = $(this).attr('href');
+
+    window.location.href = url + '/' + tester;
+});
+
+$('#view-all-assigned-main').on('click', '.toggler', function() {
+    window.location.href = $(this).data('url');
+});
+
+
+/**
  * Test Planner dynamic ticket builder
  *
  * @param config
@@ -148,6 +169,96 @@ function TicketBuilder(config) {
 
 
 /**
+ * Dashboard
+ */
+function loadDashboardJs(url)
+{
+    // Hide initially
+    $('.activity-comment-area').hide();
+
+    // Disable all buttons for adding comment
+    $('#dashboard-main .activity-comment-add').prop('disabled', true);
+
+
+    // Prepare link
+    $('#dashboard-main .admin_created_plans_rows').each(function() {
+        var testerId = $(this).find('.testers option:nth-child(1)').val();
+        var route = $(this).find('.testers').data('url') + '/' + testerId;
+        var link = $(this).find('.plan-link').prop('href', route);
+    });
+
+    // Change viewer id link
+    $('#dashboard-main').on('change', '.testers', function() {
+        var selectedTesterId = $(this).val();
+        var route = $(this).data('url') + '/' + selectedTesterId;
+
+        $(this).closest('td').next('td').find('.plan-link').prop('href', route);
+    });
+
+    // Toggle comment to show or hide
+    $('#dashboard-main').on('click', '.activity-comment-link', function(e) {
+        e.preventDefault();
+        var parent = $(this).parentsUntil('.activity-stream');
+
+        parent.find('.activity-comment-area').toggle();
+    });
+
+    // Detect keypress on comment area and activate button
+    $('#dashboard-main').on('focus, keypress', '.activity-comment', function() {
+        var parent = $(this).parentsUntil('.activity-stream');
+        parent.find('.activity-comment-add').prop('disabled', false);
+    });
+
+    // If comment is blank, deactivate button
+    $('#dashboard-main').on('blur', '.activity-comment', function() {
+        var parent = $(this).parentsUntil('.activity-stream');
+        var comment = $(this).val();
+
+        if (comment.length == 0) {
+            parent.find('.activity-comment-add').prop('disabled', true);
+        }
+    });
+
+    // Add comment
+    $('#dashboard-main').on('click', '.activity-comment-add', function() {
+        var parent  = $(this).parentsUntil('.activity-stream');
+        var comment = parent.find('.activity-comment').val();
+
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: {
+                "_token":  $('form').find('input[name=_token]').val(),
+                "as_id": parent.find('.as_id').val(),
+                "comment": comment
+            },
+            dataType: "json"
+        }).done(function(res) {
+            var lastCommentLine = parent.find($('.activity-comment-line').last());
+            var newCommentLine  = $('<li class="activity-comment-line"><em>' + res.comment + ' (commented by ' + res.commentator + ' on ' + res.created_at + ')</em></li>');
+
+            // If this is a 1st comment, appending needs to take place right after ul
+            if (lastCommentLine.length == 0) {
+                $('.activity-comment-line-block ul').append(newCommentLine);
+            } else {
+                lastCommentLine.after(newCommentLine);
+            }
+
+            // Clear comment textarea and hide block
+            parent.find('.activity-comment').val('');
+            parent.find('.activity-comment-area').hide();
+        });
+    });
+
+    // Cancel comment
+    $('#dashboard-main').on('click', '.activity-comment-cancel', function() {
+        var parent = $(this).parentsUntil('.activity-stream');
+        parent.find('.activity-comment-area').hide();
+    });
+}
+
+
+/**
  * Responding to ticket
  */
 function loadRespondJs()
@@ -210,86 +321,6 @@ function loadResponseJs()
         }
     });
 }
-
-
-/**
- * Dashboard
- */
-function loadDashboardJs(url)
-{
-    // Hide initially
-    $('.activity-comment-content').hide();
-
-
-    $('#dashboard-main .admin_created_plans_rows').each(function() {
-        var testerId = $(this).find('.testers option:nth-child(1)').val();
-        var route = $(this).find('.testers').data('url') + '/' + testerId;
-        var link = $(this).find('.plan-link').prop('href', route);
-    });
-
-    // Change viewer id link
-    $('#dashboard-main').on('change', '.testers', function() {
-        var selectedTesterId = $(this).val();
-        var route = $(this).data('url') + '/' + selectedTesterId;
-
-        $(this).closest('td').next('td').find('.plan-link').prop('href', route);
-    });
-
-    // Toggle comment to show or hide
-    $('#dashboard-main').on('click', '.activity-comment-link', function(e) {
-        e.preventDefault();
-        var parent = $(this).parentsUntil('.activity-log');
-
-        parent.find('.activity-comment-content').toggle();
-    });
-
-    // Add comment
-    $('#dashboard-main').on('click', '.activity-comment-add', function() {
-        var parent = $(this).parentsUntil('.activity-stream');
-
-        $.ajax({
-            method: "POST",
-            url: url,
-            data: {
-                "_token":  $('form').find('input[name=_token]').val(),
-                "as_id": parent.find('.as_id').val(),
-                "comment": parent.find('.activity-comment').val()
-            },
-            dataType: "json"
-        }).done(function(res) {
-            var lastCommentLine = parent.find($('.comment-line').last());
-
-            lastCommentLine.after('<li class="comment-line"><em>' + res.comment + ' (commented by ' + res.commentator + ' on ' + res.created_at + ')</em></li>')
-        });
-    });
-
-    // Cancel comment
-    $('#dashboard-main').on('click', '.activity-comment-cancel', function() {
-        var parent = $(this).parentsUntil('.activity-stream');
-        parent.find('.activity-comment-content').hide();
-    });
-}
-
-
-/**
- *
- * View all admin plans
- *
- */
-    // View all admin
-$('#view-all-admin-main').on('click', '.view-tester-plan', function(e) {
-    e.preventDefault();
-
-    var parent = $(this).closest('tr');
-    var tester = parent.find('.tester').val();
-    var url    = $(this).attr('href');
-
-    window.location.href = url + '/' + tester;
-});
-
-$('#view-all-assigned-main').on('click', '.toggler', function() {
-    window.location.href = $(this).data('url');
-});
 
 
 /**
@@ -373,7 +404,7 @@ function loadAllUsersJs()
  */
 function preSelectBrowserTesters(testers)
 {
-    $('.browser-tester').each(function () {
+    $('.browser-tester').each(function (testers) {
         var browser = $(this);
         var browserId = browser.attr('id');
 

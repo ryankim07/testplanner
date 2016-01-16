@@ -51,7 +51,7 @@ class DashboardController extends Controller
         if (isset($assignedResponses)) {
             $results = array();
             foreach($assignedResponses->get() as $plan) {
-                $results[] = $plan->toArray();
+                $results[] = get_object_vars($plan);
             }
 
             $plans['plans_assigned'] = $results;
@@ -70,9 +70,9 @@ class DashboardController extends Controller
                         $browserTester[$tester->id] = $tester->first_name;
                     }
 
-                    $plan = get_object_vars($plan);
+                    $plan            = get_object_vars($plan);
                     $plan['testers'] = $browserTester;
-                    $allAdmin[] = $plan;
+                    $allAdmin[]      = $plan;
                 }
 
                 $plans['admin_created_plans'] = $allAdmin;

@@ -60,7 +60,7 @@ class AuthController extends Controller
                 ->withErrors(array('message' => config('testplanner.acct_inactive_msg')));
         }
 
-        if ($this->auth->attempt($request->only('email', 'password', 'active')))
+        if ($this->auth->attempt($request->only('email', 'password')))
         {
             return redirect()->intended('dashboard');
         }

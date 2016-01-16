@@ -136,6 +136,7 @@ class PlansController extends Controller
         $plan       = Plans::find($id);
         $tickets    = unserialize($plan->tickets()->first()->tickets);
         $allTesters = $plan->testers()->get();
+        $users      = User::all();
 
         // Render tickets
         $ticketsHtml = '';
@@ -148,11 +149,7 @@ class PlansController extends Controller
 
         // Testers
         foreach($allTesters as $tester) {
-            $testers[$tester->id] = [
-                'id'         => $tester->tester_id,
-                'first_name' => User::getUserFirstName($tester->tester_id),
-                'browser'    => $tester->browser
-            ];
+            $testers[$tester->id] = 'tester-' . $tester->tester_id . '-' . $tester->browser;
         }
 
         // Get Jira versions
@@ -168,6 +165,7 @@ class PlansController extends Controller
                 'started_at'    => Utils::dateConverter($plan->started_at),
                 'expired_at'    => Utils::dateConverter($plan->expired_at),
                 'tickets_html'  => $ticketsHtml,
+                'users'         => $users,
                 'testers'       => $testers,
                 'jira_versions' => json_encode($jiraVersions),
                 'jira_issues'   => json_encode($jiraIssues)
