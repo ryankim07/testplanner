@@ -51,7 +51,7 @@
                 ])
 
                 <div class="form-group">
-                    <div class="col-xs-12 col-md-4">
+                    <div class="col-xs-12 col-md-6">
                         {!! Form::checkbox('remember', 1, false, ['class' => '', 'aria-required' => 'true', 'id' => 'remember']) !!}
                         {!! Form::label('Remember me') !!}
                     </div>

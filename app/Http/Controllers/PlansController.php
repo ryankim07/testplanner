@@ -148,8 +148,9 @@ class PlansController extends Controller
         }
 
         // Testers
+        $testers = [];
         foreach($allTesters as $tester) {
-            $testers[$tester->id] = 'tester-' . $tester->tester_id . '-' . $tester->browser;
+            $testers[$tester->id] = 'tester-' . $tester->user_id . '-' . $tester->browser;
         }
 
         // Get Jira versions
@@ -166,7 +167,7 @@ class PlansController extends Controller
                 'expired_at'    => Utils::dateConverter($plan->expired_at),
                 'tickets_html'  => $ticketsHtml,
                 'users'         => $users,
-                'testers'       => $testers,
+                'testers'       => json_encode($testers),
                 'jira_versions' => json_encode($jiraVersions),
                 'jira_issues'   => json_encode($jiraIssues)
             ]

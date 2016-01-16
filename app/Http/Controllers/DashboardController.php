@@ -49,7 +49,7 @@ class DashboardController extends Controller
         $assignedResponses = Plans::getAllAssigned($user->id, 'created_at', 'DESC', 'dashboard');
 
         if (isset($assignedResponses)) {
-            $results = array();
+            $results = [];
             foreach($assignedResponses->get() as $plan) {
                 $results[] = get_object_vars($plan);
             }
@@ -58,6 +58,8 @@ class DashboardController extends Controller
         }
 
         // Display administrator created plans
+        $browserTester = [];
+        $allAdmin = [];
         foreach($roles as $role) {
             if ($role->name == "administrator") {
                 $adminCreated = Plans::getAllResponses($user->id, 'created_at', 'DESC', 'dashboard');

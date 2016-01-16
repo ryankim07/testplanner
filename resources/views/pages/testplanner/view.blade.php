@@ -41,11 +41,13 @@
 			</div>
 		</div>
 
-		@include('pages/main/partials/submit_button', [
-            'submitBtnText' => 'Update',
-            'css'           => 'col-xs-4 col-md-4',
-            'class'			=> 'btn-custom',
-            'id'			=> 'update-btn'
+		@include('pages/main/partials/double_submit_buttons', [
+			'direction'     => 'pull-right',
+            'class'		    => 'btn-primary btn-custom',
+            'updateBtnText' => 'Update',
+            'updateBtnId'	=> 'update-btn',
+            'backBtnText'   => 'Go Back',
+            'backBtnId'		=> 'back-btn'
         ])
 
 		{!! Form::close() !!}
@@ -81,7 +83,7 @@
 			ticketBuilder.load();
 
 			// Preselect testers radion input
-			preSelectBrowserTesters('<?php echo json_encode($plan['testers']) ?>');
+			preSelectBrowserTesters(<?php echo $plan['testers']; ?>);
 		});
 
 	</script>

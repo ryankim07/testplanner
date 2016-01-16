@@ -100,10 +100,10 @@ class TicketsResponses extends Model
             try {
                 self::updateOrCreate([
                     'id' => $planData['ticket_resp_id']], [
-                    'plan_id'   => $planData['id'],
-                    'tester_id' => $planData['tester_id'],
-                    'responses' => serialize($planData['tickets_responses']),
-                    'status'    => $ticketStatus
+                        'plan_id'   => $planData['id'],
+                        'tester_id' => $planData['tester_id'],
+                        'responses' => serialize($planData['tickets_responses']),
+                        'status'    => $ticketStatus
                 ]);
 
             } catch (\Exception $e) {

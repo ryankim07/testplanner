@@ -17,8 +17,8 @@ class CreateTestersTable extends Migration
             $table->increments('id');
             $table->integer('plan_id')->unsigned();
             $table->foreign('plan_id')->references('id')->on('plans');
-            $table->integer('tester_id')->unsigned();
-            $table->foreign('tester_id')->references('id')->on('users');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->string('browser', 20);
             $table->timestamps();
         });

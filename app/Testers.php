@@ -30,7 +30,7 @@ class Testers extends Model
      */
     protected $fillable = [
         'plan_id',
-        'tester_id',
+        'user_id',
         'browser'
     ];
 
@@ -57,7 +57,7 @@ class Testers extends Model
     public static function getTestersByPlanId($planId)
     {
         $allTesters = DB::table('testers AS t')
-            ->join('users AS u', 'u.id', '=', 't.tester_id')
+            ->join('users AS u', 'u.id', '=', 't.user_id')
             ->select('u.id', 'u.first_name')
             ->where('t.plan_id', '=', $planId)
             ->get();
@@ -75,11 +75,23 @@ class Testers extends Model
     public static function updateBuiltTesters($planId, $testers)
     {
         foreach($testers as $eachTester) {
-            list($id, $name, $browser) = explode(',', $eachTester);
+            list($testerId, $name, $browser) = explode(',', $eachTester);
 
-            $tester = Testers::where('plan_id', '=', $planId)
-                ->where('tester_id', '=', $id);
-            $tester->update(['browser' => $browser]);
+            $id = '';
+            $query = Testers::where('plan_id', '=', $planId)
+                ->where('user_id', '=', $testerId)
+                ->first();
+
+            if (isset($query->id)) {
+                $id = $query->id;
+            }
+
+            self::updateOrCreate([
+                'id' => $id], [
+                    'plan_id' => $planId,
+                    'user_id' => $testerId,
+                    'browser' => $browser
+            ]);
         }
 
         return true;

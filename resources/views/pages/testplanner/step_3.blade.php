@@ -66,7 +66,7 @@
 
         $(document).ready(function() {
             // Preselect testers radion input
-            preSelectBrowserTesters('<?php echo $testersData; ?>');
+            preSelectBrowserTesters(<?php echo json_encode($plan['testers']); ?>);
         });
 
         </script>

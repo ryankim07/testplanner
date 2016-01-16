@@ -404,7 +404,7 @@ function loadAllUsersJs()
  */
 function preSelectBrowserTesters(testers)
 {
-    $('.browser-tester').each(function (testers) {
+    $('.browser-tester').each(function () {
         var browser = $(this);
         var browserId = browser.attr('id');
 
