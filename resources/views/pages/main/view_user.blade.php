@@ -24,8 +24,6 @@
         </div>
         <div class="panel-body">
 
-            <div class="alert" role="alert"></div>
-
             @include('pages/main/partials/user_info', [
                 'activeColumn'         => 'col-md-4',
                 'roleColumn'           => 'col-md-6',
@@ -51,7 +49,7 @@
 
         $(document).ready(function() {
             // User functionalities
-            loadUsersJs('{!! URL::to('user/update') !!}'');
+            loadUsersJs('{!! URL::to('user/update') !!}');
         });
 
     </script>

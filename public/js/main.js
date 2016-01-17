@@ -317,23 +317,16 @@ function loadResponseRespondJs()
 
 
 /**
- * View response dropdown viewer for a certain user
- */
-function loadResponseJs()
-{
-
-}
-
-
-/**
  * User accounts
  */
 function loadUsersJs(url)
 {
-    $('.alert').hide();
-
     $('#view-user-main').on('click', '#update-btn', function () {
         var newRoles = $("#role").val() || [];
+
+        if ($('.alert').length > 0) {
+            $('.alert').remove();
+        }
 
         $.ajax({
             method: "POST",
@@ -342,18 +335,19 @@ function loadUsersJs(url)
             dataType: "json"
         }).done(function (response) {
             var msgs = '';
+            var alertBlock = $('<div class="alert" role="alert"></div>');
 
-            $('.alert').attr('class', 'alert');
-            $('.alert').empty();
+            alertBlock.attr('class', 'alert');
+            alertBlock.empty();
 
             if (response.type == 'success') {
-                $('.alert').attr('class', 'alert alert-success').html('<i class="fa fa-check-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Success:</span> ' + response.msg).show();
+                alertBlock.attr('class', 'alert alert-success').html('<i class="fa fa-check-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Success:</span> ' + response.msg).show();
             } else {
                 $.each(response.msg, function (key, item) {
                     msgs += '<i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Error:</span> ' + item + '<br/>';
                 });
 
-                $('.alert').attr('class', 'alert alert-danger').html(msgs).show();
+                $('#view-user-main .panel-body').prepend(alertBlock.attr('class', 'alert alert-danger').html(msgs));
             }
         });
     });
