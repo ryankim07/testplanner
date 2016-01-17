@@ -35,21 +35,9 @@ class Email
             break;
 
             case 'ticket-response':
-                $emailSubject =  config('mail.ticket_response_subject') . ' - ' . $data['description'];
+                $emailSubject =  $data['description'] . ' - ' . config('mail.ticket_response_subject') . ' ' . $data['tester_first_name'];
                 $emailType    = 'emails.ticket_response';
                 break;
-
-            /*case 'creator':
-                $emailSubject = config('mail.confirmation_subject');
-                $emailType    = 'emails.registration_confirmation';
-            break;
-
-            case 'admin-system':
-                $data['email']     = config('h2pro.admin_email');
-                $data['firstname'] = config('h2pro.admin_name');
-                $emailSubject      = config('mail.admin_system_subject');
-                $emailType         = 'emails.admin_system';
-            break;*/
         }
 
         // Process email
@@ -60,29 +48,26 @@ class Email
                         // Multiple testers
                         foreach ($data['testers'] as $tester) {
                             Mail::send($emailType, array_merge($data, $tester), function ($message) use ($tester, $emailSubject) {
-                                $message->to($tester['email'], $tester['first_name'])
-                                    ->subject($emailSubject);
+                                $message->to($tester['email'], $tester['first_name'])->subject($emailSubject);
                             });
                         }
                     } else {
                         // Single tester
                         $tester = array_shift($data['testers']);
                         Mail::send($emailType, array_merge($data, $tester), function ($message) use ($tester, $emailSubject) {
-                            $message->to($tester['email'], $tester['first_name'])
-                                ->subject($emailSubject);
+                            $message->to($tester['email'], $tester['first_name'])->subject($emailSubject);
                         });
                     }
                     break;
 
                 case 'emails.ticket_response':
                     Mail::send($emailType, $data, function ($message) use ($data, $emailSubject) {
-                        $message->to($data['email'], $data['first_name'])
-                            ->subject($emailSubject);
+                        $message->from($data['tester_email'], $data['tester_first_name']);
+                        $message->to($data['creator_email'], $data['creator_first_name'])->subject($emailSubject);
                     });
                 break;
             }
         } catch(\Exception $e) {
-            // Log to system
             Utils::log($e->getMessage(), $data);
         }
 

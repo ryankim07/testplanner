@@ -21,9 +21,9 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-xs-10 col-md-10">
+                    <div class="col-xs-10 col-md-8">
                         <i class="fa fa-comments fa-3x header-icon"></i>
-                        <h4>Response - {!! $plan['description'] !!} | {!! $plan['assignee'] !!}</h4>
+                        <h4>Response - {!! $plan['description'] !!}</h4>
                     </div>
                     <div class="col-xs-2 col-md-2">
                         {!! Form::select('tester', $testers, null, ['class' => 'form-control input-sm', 'id' => 'view-tester', 'data-url' => route('plan.view.response', ['id' => null])]) !!}
@@ -40,9 +40,10 @@
                     @include('pages/testplanner/partials/response_respond_details')
 
                     @foreach($plan['tickets'] as $ticket)
+                    <div class="page-header"></div>
                         <div class="row nested-block ticket-panel">
                             <legend>Ticket - {!! Html::link($ticket['description_url'], $ticket['desc'], ['target' => '_blank', 'title' => 'Click to view issue in Jira']) !!}</legend>
-                            <div class="col-xs-12 col-md-8">
+                            <div class="col-xs-12 col-md-6">
                                 <div class="form-group">
                                     <legend>Objective</legend>
                                     <p><span>{!! $ticket['objective'] !!}</span></p>
@@ -51,19 +52,20 @@
                                     <legend>Steps to test</legend>
                                     <p><span>{!! nl2br($ticket['test_steps']) !!}</span></p>
                                 </div>
-                                <div class="form-group">
-                                    <legend>Status</legend>
+                            </div>
+                            <div class="col-xs-12 col-md-2">
+                                <legend>Status</legend>
 
-                                    <?php
-                                    $passed = '';
-                                    $failed = '';
-                                    if (isset($ticket['test_status'])) {
-                                        $passed = $ticket['test_status'] == 1 ? true : '';
-                                        $failed = $ticket['test_status'] == 0 ? true : '';
-                                    }
-                                    ?>
+                                <?php
+                                $passed = '';
+                                $failed = '';
+                                if (isset($ticket['test_status'])) {
+                                    $passed = $ticket['test_status'] == 1 ? true : '';
+                                    $failed = $ticket['test_status'] == 0 ? true : '';
+                                }
+                                ?>
 
-                                    <p>
+                                <p>
                                         <span>
                                         @if($passed)
                                                 Passed
@@ -71,8 +73,7 @@
                                                 Failed
                                             @endif
                                         </span>
-                                    </p>
-                                </div>
+                                </p>
                             </div>
                             <div class="col-xs-12 col-md-4">
                                 <div class="form-group">
@@ -86,6 +87,7 @@
                     @endforeach
                 @endif
             </div>
+        </div>
 
         {!! Form::close() !!}
 

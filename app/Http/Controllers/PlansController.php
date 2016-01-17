@@ -69,8 +69,8 @@ class PlansController extends Controller
         $jiraVersions = Utils::jiraVersions();
 
         return view('pages.testplanner.step_1', [
-            'mode'     => 'build',
-            'userId'   => $user->id,
+            'mode'          => 'build',
+            'userId'        => $user->id,
             'jira_versions' => json_encode($jiraVersions)
         ]);
     }
@@ -89,8 +89,8 @@ class PlansController extends Controller
         $jiraVersions = Utils::jiraVersions();
 
         return view('pages.testplanner.step_1', [
-            'mode'     => 'edit',
-            'planData' => $planData,
+            'mode'          => 'edit',
+            'planData'      => $planData,
             'jira_versions' => json_encode($jiraVersions)
         ]);
     }
@@ -275,17 +275,18 @@ class PlansController extends Controller
             'view'
         ], 'PlansController@index');
 
-        $query = Plans::getAllResponses($user->id, $table['sorting']['sortBy'], $table['sorting']['order']);
+        $query          = Plans::getAllResponses($user->id, $table['sorting']['sortBy'], $table['sorting']['order']);
         $browserTesters = [];
+        $testers        = [];
 
         foreach ($query->get() as $plan) {
             $allTesters = Testers::getTestersByPlanId($plan->id);
 
             foreach ($allTesters as $tester) {
-                $tmp[$tester->id] = $tester->first_name;
+                $testers[$tester->id] = $tester->first_name;
             }
 
-            $browserTesters[$plan->id] = $tmp;
+            $browserTesters[$plan->id] = $testers;
         }
 
         return view('pages.testplanner.view_all_responses', [

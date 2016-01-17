@@ -152,7 +152,7 @@ Route::get('ticket/build', [
     'roles'      => ['root', 'administrator'],
     'uses'       => 'TicketsController@build'
 ]);
-Route::get('ticket/response', ['as' => 'plan.response', 'uses' => 'TicketsController@response']);
+
 Route::get('ticket/edit', ['as' => 'ticket.edit', 'uses' => 'TicketsController@edit']);
 Route::post('ticket/save-ticket-response', ['as' => 'ticket.save.response', 'uses' => 'TicketsController@save']);
 Route::post('ticket/remove', [

@@ -117,7 +117,7 @@ class TicketsController extends Controller
     }
 
     /**
-     * Save user's plan response
+     * Save user's response
      *
      * @param UserResponseFormRequest $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
@@ -137,13 +137,14 @@ class TicketsController extends Controller
 
             // Mail all test browsers
             Email::sendEmail('ticket-response', [
-                'plan_id' => $planData['id'],
-                'plan_desc' => $planData['description'],
-                'tester_id' => $planData['tester_id'],
+                'plan_id'            => $planData['id'],
+                'description'        => $planData['description'],
+                'tester_id'          => $planData['tester_id'],
                 'creator_first_name' => $planData['reporter'],
-                'tester_first_name' => $planData['assignee'],
-                'email' => User::getUserEmail($planData['creator_id']),
-                'ticket_status' => $response
+                'creator_email'      => User::getUserEmail($planData['creator_id']),
+                'tester_first_name'  => $planData['assignee'],
+                'tester_email'       => User::getUserEmail($planData['tester_id']),
+                'response'           => $response
             ]);
 
             return redirect('dashboard')->with('flash_message', config('testplanner.plan_response_success_msg'));

@@ -124,9 +124,9 @@ class ActivityStream extends Model
 
                 case 'ticket-response':
                     if ($status == 'progress' || $status == 'update') {
-                        $message = 'has updated tickets in';
+                        $message = config('testplanner.plan_response_updated_msg');
                     } else if ($status == 'complete') {
-                        $message = 'resolved';
+                        $message = config('testplanner.plan_response_resolved');
                     }
                     break;
             }

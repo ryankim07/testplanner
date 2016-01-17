@@ -126,7 +126,7 @@ class Plans extends Model
             ->join('testers AS t', 'p.id', '=', 't.plan_id')
             ->join('users AS u', 'u.id', '=', 'p.creator_id')
             ->leftJoin('tickets_responses AS tr', 'p.id', '=', 'tr.plan_id')
-            ->select('p.*', 't.user_id', DB::raw('CONCAT(u.first_name, " ", u.last_name) AS full_name'), 't.browser', 'tr.status AS ticket_response_status')
+            ->select('p.*', DB::raw('CONCAT(u.first_name, " ", u.last_name) AS full_name'), 't.browser', 'tr.status AS ticket_response_status')
             ->where('t.user_id', '=', $userId)
             ->where('p.status', '=', 'new')
             ->orWhere('p.status', '=', 'incomplete')
@@ -207,14 +207,14 @@ class Plans extends Model
         $results = DB::table('plans AS p')
             ->join('testers AS t', 'p.id', '=', 't.plan_id')
             ->join('tickets AS ti', 'p.id', '=', 'ti.plan_id')
-            ->select('p.*', 't.user_id', 't.browser', 'ti.tickets')
+            ->select('p.*', 't.user_id AS tester_id', 't.browser', 'ti.tickets')
             ->where('p.id', '=', $planId)
             ->where('t.user_id', '=', $userId)
             ->first();
 
         $results             = get_object_vars($results);
         $results['reporter'] = User::getUserFirstName($results['creator_id'], 'first_name');
-        $results['assignee'] = User::getUserFirstName($results['user_id'], 'first_name');
+        $results['assignee'] = User::getUserFirstName($results['tester_id'], 'first_name');
         $results['tickets']  = unserialize($results['tickets']);
 
         return $results;

@@ -32,6 +32,7 @@
                 @include('pages/testplanner/partials/response_respond_details')
 
                 @foreach($plan['tickets'] as $ticket)
+                    <div class="page-header"></div>
                     <div class="row nested-block ticket-panel">
                         <legend>Ticket - {!! Html::link(isset($ticket['description_url']) ? $ticket['description_url'] : '#', $ticket['desc'], ['target' => '_blank', 'title' => 'Click to view issue in Jira']) !!}</legend>
                         <div class="col-xs-12 col-md-6">
@@ -84,7 +85,7 @@
         </div>
 
         @include('pages/main/partials/double_submit_buttons', [
-                'direction'     => 'pull-left',
+                'direction'     => 'pull-right',
                 'class'		    => 'btn-custom',
                 'updateBtnText' => 'Submit Response',
                 'updateBtnId'	=> 'respond-btn',

@@ -46,6 +46,10 @@ return [
 
     'plan_response_success_msg'  => 'Your plan has been posted successfully',
 
-    'plan_response_error_msg'    => 'There seems to be a problem processing your response. Please try again later.'
+    'plan_response_error_msg'    => 'There seems to be a problem processing your response. Please try again later.',
+
+    'plan_response_updated_msg'  => 'has updated',
+
+    'plan_response_resolved'     => 'resolved'
 
 ];

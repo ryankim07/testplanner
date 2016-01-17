@@ -136,7 +136,7 @@ return [
 
     'plan_created_subject'    => 'New test plan has been assigned to you',
 
-    'ticket_response_subject' => 'Response from tester',
+    'ticket_response_subject' => 'Response from',
 
     'email_error_subject'     => 'Confirmation email error',
 

@@ -135,7 +135,6 @@ class TicketsResponses extends Model
                     ->withInput()
                     ->withErrors(array('message' => config('testplanner.plan_response_error_msg')));
             }
-
         }
 
         return $ticketStatus;

@@ -639,7 +639,8 @@
 
                                                             <p><strong>Hi, {!! $creator_first_name !!}!</strong></p>
 
-                                                            <p>{!! tester_first_name !!} has posted responses to plan: {!! Html::linkRoute('plan.response', $plan_desc, [$plan_id, $tester_id]) !!}.</p>
+                                                            <p>{!! $tester_first_name !!}, {!! $response !!} tickets in the plan.</p>
+                                                            <p>Click the link to be taken to the test plan: {!! Html::linkRoute('plan.view.response', $description, [$plan_id, $tester_id]) !!}.</p>
                                                         </td>
                                                     </tr>
 

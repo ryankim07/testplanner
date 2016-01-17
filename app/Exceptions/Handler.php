@@ -18,6 +18,7 @@ class Handler extends ExceptionHandler
     protected $dontReport = [
         HttpException::class,
         ModelNotFoundException::class,
+        TokenMismatchException::class,
     ];
 
     /**
@@ -44,6 +45,11 @@ class Handler extends ExceptionHandler
     {
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
+        }
+
+        if ($e instanceof TokenMismatchException){
+            return redirect()->back()->withInput($request->except('_token'))
+                ->withFlashDanger('You page session expired. Please try again');
         }
 
         return parent::render($request, $e);
