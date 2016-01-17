@@ -96,11 +96,11 @@ class TestersController extends Controller
         foreach(array_shift($testers) as $tester) {
             list($id, $firstName, $browser) = explode(',', $tester);
 
-            $browserTesters[] = array(
+            $browserTesters[] = [
                 'id'         => $id,
                 'first_name' => $firstName,
                 'browser'    => $browser
-            );
+            ];
         }
 
         // Save testers data to session
@@ -122,11 +122,11 @@ class TestersController extends Controller
         foreach(array_shift($testers) as $tester) {
             list($id, $firstName, $browser) = explode(',', $tester);
 
-            $browserTesters[] = array(
+            $browserTesters[] = [
                 'id'         => $id,
                 'first_name' => $firstName,
                 'browser'    => $browser
-            );
+            ];
         }
 
         // Save testers data to session

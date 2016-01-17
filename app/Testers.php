@@ -14,6 +14,8 @@
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+use App\User;
+
 class Testers extends Model
 {
     /**
@@ -70,7 +72,7 @@ class Testers extends Model
      *
      * @param $planId
      * @param $testers
-     * @return bool
+     * @return array
      */
     public static function updateBuiltTesters($planId, $testers)
     {
@@ -92,9 +94,15 @@ class Testers extends Model
                     'user_id' => $testerId,
                     'browser' => $browser
             ]);
+
+            $testersWithEmail[] = [
+                'first_name' => $name,
+                'browser'    => $browser,
+                'email'      => User::getUserEmail($testerId)
+            ];
         }
 
-        return true;
+        return $testersWithEmail;
     }
 
     /**

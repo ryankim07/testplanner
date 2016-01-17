@@ -35,7 +35,10 @@
                 @include('errors.list')
 
                 @if($plan['mode'] == 'build')
-                    @include('pages/testplanner/partials/tickets', ['mode' => $plan['mode']])
+                    @include('pages/testplanner/partials/tickets', [
+                        'mode'             => $plan['mode'],
+                        'addTicketBtnType' => 'btn-custom'
+                    ])
                 @else
                     {!! $plan['tickets_html'] !!}
                 @endif

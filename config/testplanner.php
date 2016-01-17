@@ -34,6 +34,8 @@ return [
 
     'new_plan_msg'               => 'created a new plan,',
 
+    'plan_update_msg'            => 'updated plan,',
+
     'new_plan_build_msg'         => 'New plan successfully created.',
 
     'plan_build_error_msg'       => 'Plan building cannot be done at the current moment.  Please try again later.',

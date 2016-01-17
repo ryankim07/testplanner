@@ -14,14 +14,8 @@
                 {!! Form::label('description_label', 'Description:') !!}
                 <div class="input-group">
                     {!! Form::text('description', null, ['class' => 'form-control input-sm required', 'id' => 'plan-description']) !!}
-                    <span class="input-group-btn">
-
-                        @include('pages/main/partials/button', [
-                            'btnText'   => 'Clear',
-                            'direction' => 'pull-left',
-                            'class'     => 'btn-primary btn-sm clear-btn'
-                        ])
-
+                    <span class="input-group-addon">
+                        <i class="fa fa-eraser clear-btn"></i>
                     </span>
                 </div>
             </div>

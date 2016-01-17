@@ -156,7 +156,7 @@ class Plans extends Model
         $results['ticket_resp_id'] = isset($ticketsResponses->id) ? $ticketsResponses->id : '';
 
         if (isset($ticketsResponses->id)) {
-            $newResults = array();
+            $newResults = [];
 
             foreach ($results['tickets'] as $ticket) {
                 $responses = unserialize($ticketsResponses->responses);
@@ -169,7 +169,7 @@ class Plans extends Model
                         if (preg_match('/^ECOM-\d/', $project)) {
                             $descUrl = url(config('testplanner.jira_domain')) . '/browse/' . $project;
                         }
-                        $newResults[$ticket['id']] = array(
+                        $newResults[$ticket['id']] = [
                             'id'              => $ticket['id'],
                             'desc'            => $ticket['desc'],
                             'description_url' => $descUrl,
@@ -177,7 +177,7 @@ class Plans extends Model
                             'test_steps'      => $ticket['test_steps'],
                             'notes_response'  => nl2br($response['notes_response']),
                             'test_status'     => isset($response['test_status']) ? $response['test_status'] : null
-                        );
+                        ];
                     }
                 }
             }
@@ -236,7 +236,14 @@ class Plans extends Model
             'expired_at'  => $request->get('expired_at')
         ]);
 
-        return true;
+        $results = [
+            'id'          => $plan->id,
+            'description' => $plan->description,
+            'creator_id'  => $plan->creator_id,
+            'status'      => $plan->status
+        ];
+
+        return $results;
     }
 
     /**
@@ -313,7 +320,7 @@ class Plans extends Model
 
             return redirect()->action('PlansController@build')
                 ->withInput()
-                ->withErrors(array('message' => config('testplanner.plan_build_error_msg')));
+                ->withErrors(['message' => config('testplanner.plan_build_error_msg')]);
         }
 
         // Commit all changes

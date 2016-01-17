@@ -57,7 +57,7 @@ class AuthController extends Controller
         if ($this->auth->validate(['email' => $request->email, 'password' => $request->password, 'active' => 0])) {
             return redirect($this->loginPath())
                 ->withInput($request->only('email', 'remember'))
-                ->withErrors(array('message' => config('testplanner.acct_inactive_msg')));
+                ->withErrors(['message' => config('testplanner.acct_inactive_msg')]);
         }
 
         if ($this->auth->attempt($request->only('email', 'password')))
@@ -67,7 +67,7 @@ class AuthController extends Controller
 
         return redirect('auth/login')
             ->withInput()
-            ->withErrors(array('message' => config('testplanner.credentials_problem_msg')));
+            ->withErrors(['message' => config('testplanner.credentials_problem_msg')]);
     }
 
     /**

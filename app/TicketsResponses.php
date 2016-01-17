@@ -133,7 +133,7 @@ class TicketsResponses extends Model
 
                 return redirect()->action('PlansController@respond')
                     ->withInput()
-                    ->withErrors(array('message' => config('testplanner.plan_response_error_msg')));
+                    ->withErrors(['message' => config('testplanner.plan_response_error_msg')]);
             }
         }
 

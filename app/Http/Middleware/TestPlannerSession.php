@@ -54,7 +54,7 @@ class TestPlannerSession
                 if (!isset($session['plan'])) {
                     return redirect('/')
                         ->withInput()
-                        ->withErrors(array('message' => config('testplanner.plan_session_error')));
+                        ->withErrors(['message' => config('testplanner.plan_session_error')]);
                 }
             break;
 
@@ -62,7 +62,7 @@ class TestPlannerSession
                 if (!isset($session['plan'])) {
                     return redirect('/')
                         ->withInput()
-                        ->withErrors(array('message' => config('testplanner.plan_session_error')));
+                        ->withErrors(['message' => config('testplanner.plan_session_error')]);
                 }
             break;
 
@@ -72,7 +72,7 @@ class TestPlannerSession
                     !isset($session['tickets']) ||
                     !isset($session['testers'])) {
                     return redirect('/plan/build')->withInput()
-                        ->withErrors(array('message' => config('testplanner.plan_session_error')));
+                        ->withErrors(['message' => config('testplanner.plan_session_error')]);
                 }
             break;
 
@@ -88,7 +88,7 @@ class TestPlannerSession
                 if (!isset($session['ticket'])) {
                     return redirect('/')
                         ->withInput()
-                        ->withErrors(array('message' => config('testplanner.plan_session_error')));
+                        ->withErrors(['message' => config('testplanner.plan_session_error')]);
                 }
             break;
 
@@ -96,7 +96,7 @@ class TestPlannerSession
                 if (!isset($session['tickets'])) {
                     return redirect('/')
                         ->withInput()
-                        ->withErrors(array('message' => config('testplanner.plan_session_error')));
+                        ->withErrors(['message' => config('testplanner.plan_session_error')]);
                 }
             break;
 
@@ -113,7 +113,7 @@ class TestPlannerSession
                 if (!isset($session['testers'])) {
                     return redirect('/')
                         ->withInput()
-                        ->withErrors(array('message' => config('testplanner.plan_session_error')));
+                        ->withErrors(['message' => config('testplanner.plan_session_error')]);
                 }
             break;
 
@@ -121,7 +121,7 @@ class TestPlannerSession
                 if (!isset($session['testers'])) {
                     return redirect('/')
                         ->withInput()
-                        ->withErrors(array('message' => config('testplanner.plan_session_error')));
+                        ->withErrors(['message' => config('testplanner.plan_session_error')]);
                 }
             break;
 

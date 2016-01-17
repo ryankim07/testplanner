@@ -25,9 +25,7 @@
 
 				@include('errors.list')
 
-				@include('pages/testplanner/partials/plan', [
-					'mode' => 'edit'
-				])
+				@include('pages/testplanner/partials/plan', ['mode' => 'edit'])
 
 				<div class="page-header"></div>
 					{!! $plan['tickets_html'] !!}
@@ -43,7 +41,7 @@
 
 		@include('pages/main/partials/double_submit_buttons', [
 			'direction'     => 'pull-right',
-            'class'		    => 'btn-primary btn-custom',
+            'class'		    => 'btn-custom',
             'updateBtnText' => 'Update',
             'updateBtnId'	=> 'update-btn',
             'backBtnText'   => 'Go Back',

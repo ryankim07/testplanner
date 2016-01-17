@@ -58,7 +58,8 @@ class TicketsController extends Controller
                 'desc'       => '',
                 'objective'  => '',
                 'test_steps' => ''
-            ]
+            ],
+            'addTicketBtnType' => 'btn-custom'
         ])->render();
 
         return view('pages.testplanner.step_2', [
@@ -83,8 +84,9 @@ class TicketsController extends Controller
         $ticketsHtml = '';
         foreach($ticketsData as $ticket) {
             $ticketsHtml .= view('pages/testplanner/partials/tickets', [
-                'mode'   => 'edit',
-                'ticket' => $ticket
+                'mode'             => 'edit',
+                'ticket'           => $ticket,
+                'addTicketBtnType' => 'btn-custom'
             ])->render();
         }
 

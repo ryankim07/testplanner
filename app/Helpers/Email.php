@@ -30,9 +30,14 @@ class Email
         // Type of email to be send out
         switch($type) {
             case 'plan-created':
-                $emailSubject = config('mail.plan_created_subject') . ' - ' . $data['description'];
+                $emailSubject = $data['description'] . ' - ' . config('mail.plan_created_subject');
                 $emailType    = 'emails.plan_created';
             break;
+
+            case 'plan-updated':
+                $emailSubject = $data['description'] . ' - ' . config('mail.plan_updated_subject');
+                $emailType    = 'emails.plan_updated';
+                break;
 
             case 'ticket-response':
                 $emailSubject =  $data['description'] . ' - ' . config('mail.ticket_response_subject') . ' ' . $data['tester_first_name'];
@@ -44,6 +49,7 @@ class Email
         try {
             switch($emailType) {
                 case 'emails.plan_created':
+                case 'emails.plan_updated':
                     if (count($data['testers']) > 1) {
                         // Multiple testers
                         foreach ($data['testers'] as $tester) {
@@ -58,7 +64,7 @@ class Email
                             $message->to($tester['email'], $tester['first_name'])->subject($emailSubject);
                         });
                     }
-                    break;
+                break;
 
                 case 'emails.ticket_response':
                     Mail::send($emailType, $data, function ($message) use ($data, $emailSubject) {

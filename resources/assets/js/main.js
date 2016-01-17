@@ -261,12 +261,12 @@ function loadDashboardJs(url)
 /**
  * Responding to ticket
  */
-function loadRespondJs()
+function loadResponseRespondJs()
 {
     // If there are responded tickets, change button label for update
     var totalResponses = 0;
 
-    $('#respond-main .ticket-panel').each(function() {
+    $('#response-respond-main .ticket-panel').each(function() {
         var notesResponse = $(this).find('.notes-response');
 
         if (notesResponse.val() != '') {
@@ -279,12 +279,12 @@ function loadRespondJs()
     } else if (totalResponses == 0) {
         $('#respond-btn').prop('disabled', true);
 
-        $('#respond-main').on('focus', '.notes-response', function() {
+        $('#response-respond-main').on('focus', '.notes-response', function() {
             $('#respond-btn').prop('disabled', false);
         });
     }
 
-    $('#respond-main').on('click', '#respond-btn', function() {
+    $('#response-respond-main').on('click', '#respond-btn', function() {
         var tickets = [];
 
         $('.ticket-panel').each(function() {
@@ -303,15 +303,8 @@ function loadRespondJs()
 
         $('form').append($(input));
     });
-}
 
-
-/**
- * View response dropdown viewer for a certain user
- */
-function loadResponseJs()
-{
-    $('#view-response-main').on('change', '#view-tester', function () {
+    $('#response-respond-main').on('change', '#view-tester', function () {
         var route = $(this).data('url');
         var userId = $(this).val();
         var planId = $('#plan_id').val();
@@ -320,6 +313,15 @@ function loadResponseJs()
             window.location.href = route + '/' + planId + "/" + userId;
         }
     });
+}
+
+
+/**
+ * View response dropdown viewer for a certain user
+ */
+function loadResponseJs()
+{
+
 }
 
 

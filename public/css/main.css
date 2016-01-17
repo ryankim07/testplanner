@@ -42,27 +42,10 @@ body {
     margin-top: 0;
 }
 
-#respond-main legend, #view-response-main legend {
+#response-respond-main legend {
     font-size: 16px;
     font-weight: bold;
 }
-/*legend {
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    border-color: -moz-use-text-color -moz-use-text-color #e5e5e5;
-    border-image: none;
-    border-style: none none solid;
-    border-width: 0 0 1px;
-    color: #777777;
-    display: block;
-    font-size: 22.5px;
-    line-height: inherit;
-    margin-bottom: 21px;
-    padding: 0;
-    width: 100%;
-}*/
 
 /*
  * Panel
@@ -208,7 +191,7 @@ table:not(.dashboard-table) tbody tr:hover {
     min-width: 64px;
 }
 
-#review-main .browser-img, #respond-main #browser-img, #view-response-main #browser-img {
+#review-main .browser-img, #response-respond-main .browser-img {
     width: 32px;
     height: 32px;
 }

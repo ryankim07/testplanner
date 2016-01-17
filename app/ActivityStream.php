@@ -72,23 +72,23 @@ class ActivityStream extends Model
                     '<strong>' . strip_tags($stream->activity) . '</strong>';
 
                 $activityComments = self::find($stream->id)->comments()->get();
-                $comments = array();
+                $comments = [];
 
                 foreach($activityComments as $eachComment) {
-                    $comments[$eachComment->id] = array(
+                    $comments[$eachComment->id] = [
                         'comment_id'  => $eachComment->id,
                         'commentator' => User::getUserFirstName($eachComment->user_id),
                         'comment'     => $eachComment->comment,
                         'created_at'  => date('m/d/Y', strtotime($eachComment->created_at))
-                    );
+                    ];
                 }
 
-                $results[$stream->id] = array(
+                $results[$stream->id] = [
                     'id'         => $stream->id,
                     'activity'   => $activity,
                     'comments'   => $comments,
                     'created_at' => $createdAt
-                );
+                ];
             }
         }
 
@@ -119,7 +119,11 @@ class ActivityStream extends Model
 
             switch($type) {
                 case 'plan':
-                    $message = config('testplanner.new_plan_msg');
+                    if ($status == 'new') {
+                        $message = config('testplanner.new_plan_msg');
+                    } elseif ($status == 'update') {
+                        $message = config('testplanner.plan_update_msg');
+                    }
                     break;
 
                 case 'ticket-response':

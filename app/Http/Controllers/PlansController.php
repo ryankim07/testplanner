@@ -113,14 +113,25 @@ class PlansController extends Controller
      * Update built plan
      *
      * @param $planId
-     * @param Request $request
+     * @param PlanUpdateFormRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function updateBuiltPlan($planId, PlanUpdateFormRequest $request)
     {
-        Plans::updateBuiltPlanDetails($planId, $request);
-        Tickets::updateBuiltTickets($planId, $request->get('tickets_obj'));
-        Testers::updateBuiltTesters($planId, $request->get('tester'), $request->get('browser'));
+        $plan    = Plans::updateBuiltPlanDetails($planId, $request);
+        $tickets = Tickets::updateBuiltTickets($planId, $request->get('tickets_obj'));
+        $testers = Testers::updateBuiltTesters($planId, $request->get('tester'), $request->get('browser'));
+
+        // Log to activity stream
+        ActivityStream::saveActivityStream($plan, 'plan', 'update');
+
+        // Mail all test browsers
+        Email::sendEmail('plan-updated', array_merge([
+            'plan_id'     => $planId,
+            'description' => $request->get('description')], [
+                'testers' => $testers
+            ]
+        ));
 
         return redirect('dashboard')->with('flash_message', $request->get('description') . ' ' . config('testplanner.plan_built_update_msg'));
     }
@@ -142,8 +153,9 @@ class PlansController extends Controller
         $ticketsHtml = '';
         foreach($tickets as $ticket) {
             $ticketsHtml .= view('pages/testplanner/partials/tickets', [
-                'mode'   => 'edit',
-                'ticket' => $ticket
+                'mode'             => 'edit',
+                'ticket'           => $ticket,
+                'addTicketBtnType' => 'btn-custom'
             ])->render();
         }
 
@@ -338,7 +350,8 @@ class PlansController extends Controller
             $browserTesters[$eachTester->id] = $eachTester->first_name;
         }
 
-        return view('pages.testplanner.view_response', [
+        return view('pages.testplanner.response_respond', [
+            'mode'    => 'response',
             'userId'  => $userId,
             'plan'    => $plan,
             'testers' => $browserTesters
@@ -356,7 +369,10 @@ class PlansController extends Controller
         $user = Auth::user();
         $plan = Plans::getTesterPlanResponse($planId, $user->id);
 
-        return view('pages.testplanner.respond', ['plan' => $plan]);
+        return view('pages.testplanner.response_respond', [
+            'mode' => 'respond',
+            'plan' => $plan
+        ]);
     }
 
     /**
@@ -394,10 +410,10 @@ class PlansController extends Controller
         $planData['id'] = $results['plan_id'];
 
         // Log to activity stream
-        ActivityStream::saveActivityStream($planData, 'plan');
+        ActivityStream::saveActivityStream($planData, 'plan', 'new');
 
         // Mail all test browsers
-        Email::sendEmail('plan-created', array_merge($planData, array('testers' => $results['testers'])));
+        Email::sendEmail('plan-created', array_merge($planData, ['testers' => $results['testers']]));
 
         // Delete session
         Session::forget('mophie_testplanner');

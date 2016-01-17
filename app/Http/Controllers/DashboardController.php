@@ -63,7 +63,7 @@ class DashboardController extends Controller
         foreach($roles as $role) {
             if ($role->name == "administrator") {
                 $adminCreated = Plans::getAllResponses($user->id, 'created_at', 'DESC', 'dashboard');
-                $allAdmin     = array();
+                $allAdmin     = [];
 
                 foreach ($adminCreated->get() as $plan) {
                     $allTesters = Testers::getTestersByPlanId($plan->id);

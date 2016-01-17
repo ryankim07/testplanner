@@ -27,14 +27,8 @@
                 {!! Form::label('description_label',  'Description') !!}
                 <div class="input-group">
                     {!! Form::text($descName, $descVal, ['class' => 'form-control input-sm ticket-description required']) !!}
-                    <span class="input-group-btn">
-
-                        @include('pages/main/partials/button', [
-                            'btnText'   => 'Clear',
-                            'direction' => 'pull-left',
-                            'class'     => 'btn-primary btn-sm clear-btn'
-                        ])
-
+                    <span class="input-group-addon">
+                        <i class="fa fa-eraser clear-btn"></i>
                     </span>
                 </div>
             </div>
@@ -56,6 +50,6 @@
     @include('pages/main/partials/button', [
         'btnText'   => 'Add another ticket',
         'direction' => 'pull-left',
-        'class'     => 'btn-info btn-sm',
+        'class'     => $addTicketBtnType . ' btn-sm',
         'id'        => 'add-ticket-btn'
     ])
