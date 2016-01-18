@@ -51,15 +51,14 @@
                                 </tr>
                             @endforeach
                         </table>
-
-                        {!! $users->appends($link)->render() !!}
-
                     </div>
                 @endif
             </div>
         </div>
 
         {!! Form::close() !!}
+
+        {!! $users->appends($link)->render() !!}
 
     </div>
 

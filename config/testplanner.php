@@ -18,7 +18,9 @@ return [
 
     'jira_rest_url'              => 'https://mophie.atlassian.net/rest/api/2',
 
-    'pagination_count'           => 50,
+    'pagination_count'           => 1,
+
+    'as_pagination_count'        => 10,
 
     'new_user_added_msg'         => 'New user successfully registered.',
 

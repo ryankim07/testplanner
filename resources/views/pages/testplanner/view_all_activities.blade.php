@@ -19,7 +19,7 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
-                        <i class="fa fa-clipboard fa-3x header-icon"></i>
+                        <i class="fa fa-terminal fa-3x header-icon"></i>
                         <h4>Activity Streams <span class="badge">{!! $totalActivities !!}</span></h4>
                     </div>
                 </div>
@@ -45,9 +45,6 @@
                             @endforeach
                             </tbody>
                         </table>
-
-                        {!! $activities->appends($link)->render() !!}
-
                     </div>
                 @else
                     <p>No activities found.</p>
@@ -56,6 +53,8 @@
         </div>
 
         {!! Form::close() !!}
+
+        {!! $activities->appends($link)->render() !!}
 
     </div>
 

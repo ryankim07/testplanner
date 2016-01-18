@@ -203,3 +203,19 @@ table:not(.dashboard-table) tbody tr:hover {
     background: #777777;
     color: #FFFFFF;
 }
+
+/*
+ * PAGINATION
+ */
+#dashboard-main .pagination {
+    margin: 0px;
+}
+
+.dropdown-menu a.menu-link {
+    position: relative;
+    padding-left: 10px;
+}
+
+.dropdown-menu .menu-link-icon {
+    padding-right: 5px;
+}

@@ -24,7 +24,7 @@
             <div class="col-xs-12 col-md-7">
                 @foreach($plans as $type => $plan)
                     <div class="row">
-                        <div class="panel panel-info">
+                        <div class="panel panel-info" id="{!! $type !!}">
                             <div class="panel-heading">
                                 @if($type == 'admin_created_plans')
                                     Plans assigned to others
@@ -141,7 +141,7 @@
 
             {!! Form::open(['route' => 'activity.comment.save', 'class' => 'form-horizontal', 'id' => 'activity-stream-form']) !!}
 
-            <div class="panel panel-info">
+            <div class="panel panel-info" id="activity-stream">
                 <div class="panel-heading">Activity Stream</div>
                 <div class="panel-body">
                     @if(empty($activities))
@@ -191,6 +191,8 @@
             </div>
 
             {!! Form::close() !!}
+
+            {!! $activities->appends($link)->render() !!}
 
         </div>
     </div>

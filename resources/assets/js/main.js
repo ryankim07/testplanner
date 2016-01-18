@@ -2,10 +2,17 @@
  * TEST PLANNER JS LIBRARY
  */
 
+/*
+ * General
+ */
+// Tooltip
+$('.jira-issue').tooltip({
+    container: 'body',
+    placement: 'bottom'
+});
+
 /**
- *
  * View all admin plans
- *
  */
 
 // View or edit single plan
@@ -187,8 +194,11 @@ function TicketBuilder(config) {
  */
 function loadDashboardJs(url)
 {
+    // Pagination
+    $('#dashboard-main .pagination').addClass('pagination-sm');
+
     // Hide initially
-    $('.activity-comment-area').hide();
+    $('#dashboard-main .activity-comment-area').hide();
 
     // Disable all buttons for adding comment
     $('#dashboard-main .activity-comment-add').prop('disabled', true);

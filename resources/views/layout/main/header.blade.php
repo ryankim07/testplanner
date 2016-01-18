@@ -25,32 +25,46 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Plans <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 @if(Auth::user()->hasRole(['root', 'administrator']))
-                                    <li>{!! Html::linkRoute('plan.build', 'Build') !!}</li>
-                                    <li>{!! Html::linkRoute('plan.view.all.created', 'View/Edit') !!}</li>
+                                    <li>
+                                        <a href="{!! URL::route('plan.build') !!}" class="menu-link"><i class="fa fa-cogs menu-link-icon"></i>Build</a>
+                                    </li>
+                                    <li>
+                                        <a href="{!! URL::route('plan.view.all.created') !!}" class="menu-link"><i class="fa fa-cubes menu-link-icon"></i>View All</a>
+                                    </li>
                                 @endif
-                                <li>{!! Html::linkRoute('plan.view.all.assigned', 'Respond') !!}</li>
+                                <li>
+                                    <a href="{!! URL::route('plan.view.all.assigned') !!}" class="menu-link"><i class="fa fa-commenting-o menu-link-icon"></i>Respond</a>
+                                </li>
                             </ul>
                         </li>
                         @if(Auth::user()->hasRole(['root', 'administrator']))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Testers <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li>{!! Html::linkRoute('plan.view.all.responses', 'Responses') !!}</li>
+                                    <li>
+                                        <a href="{!! URL::route('plan.view.all.responses') !!}" class="menu-link"><i class="fa fa-comments menu-link-icon"></i>Responses</a>
+                                    </li>
                                 </ul>
                             </li>
                         @endif
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Logs <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>{!! Html::linkRoute('activity.view.all', 'View all') !!}</li>
+                                <li>
+                                    <a href="{!! URL::route('activity.view.all') !!}" class="menu-link"><i class="fa fa-terminal menu-link-icon"></i>View All</a>
+                                </li>
                             </ul>
                         </li>
                         @if(Auth::user()->hasRole(['root']))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Accounts <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li>{!! Html::linkRoute('auth.register', 'Add') !!}</li>
-                                    <li>{!! Html::linkRoute('user.view.all', 'View/Edit') !!}</li>
+                                    <li>
+                                        <a href="{!! URL::route('auth.register') !!}" class="menu-link"><i class="fa fa-user-plus menu-link-icon"></i>Add</a>
+                                    </li>
+                                    <li>
+                                        <a href="{!! URL::route('user.view.all') !!}" class="menu-link"><i class="fa fa-users menu-link-icon"></i>View/Edit</a>
+                                    </li>
                                 </ul>
                             </li>
                         @endif
@@ -63,7 +77,9 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{!! Auth::user()->first_name !!} <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>{!! Html::linkRoute('auth.logout', 'Logout') !!}</li>
+                                <li>
+                                    <a href="{!! URL::route('auth.logout') !!}" class="menu-link"><i class="fa fa-power-off menu-link-icon"></i>Logout</a>
+                                </li>
                             </ul>
                         </li>
                     @endif

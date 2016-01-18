@@ -294,7 +294,7 @@ class PlansController extends Controller
             $allTesters = Testers::getTestersByPlanId($plan->id);
 
             foreach ($allTesters as $tester) {
-                $testers[$tester->id] = $tester->first_name;
+                $testers[$tester->id] = $tester->first_name . ' - ' . $tester->browser;
             }
 
             $browserTesters[$plan->id] = $testers;

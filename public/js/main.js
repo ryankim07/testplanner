@@ -3,9 +3,21 @@
  */
 
 /**
- *
+ * General
+ */
+
+// Tooltip
+$('.jira-issue').tooltip({
+    container: 'body',
+    placement: 'bottom'
+});
+
+// Pagination
+$('.pagination').addClass('pagination-sm');
+
+
+/**
  * View all admin plans
- *
  */
 
 // View or edit single plan
@@ -188,7 +200,7 @@ function TicketBuilder(config) {
 function loadDashboardJs(url)
 {
     // Hide initially
-    $('.activity-comment-area').hide();
+    $('#dashboard-main .activity-comment-area').hide();
 
     // Disable all buttons for adding comment
     $('#dashboard-main .activity-comment-add').prop('disabled', true);

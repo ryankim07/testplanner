@@ -60,7 +60,7 @@ class Testers extends Model
     {
         $allTesters = DB::table('testers AS t')
             ->join('users AS u', 'u.id', '=', 't.user_id')
-            ->select('u.id', 'u.first_name')
+            ->select('u.id', 'u.first_name', 't.browser')
             ->where('t.plan_id', '=', $planId)
             ->get();
 

@@ -62,11 +62,11 @@ class ActivityStream extends Model
      */
     public static function getActivityStream($userId)
     {
-        $streams = self::orderBy('created_at', 'DESC')->take(50)->get();
+        $streams = self::orderBy('created_at', 'DESC');
 
         $results = '';
-        if (count($streams) > 0) {
-            foreach($streams as $stream) {
+        if (isset($streams) > 0) {
+            foreach($streams->get() as $stream) {
                 $createdAt = Utils::timeDifference($stream->created_at);
                 $activity  = (Auth::user()->hasRole(['root'])) || (Auth::user()->id == $stream->user_id) ? $stream->activity :
                     '<strong>' . strip_tags($stream->activity) . '</strong>';
@@ -91,6 +91,8 @@ class ActivityStream extends Model
                 ];
             }
         }
+
+        $results['query'] = $streams;
 
         return $results;
     }

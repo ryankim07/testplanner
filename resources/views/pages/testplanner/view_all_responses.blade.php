@@ -60,9 +60,6 @@
                             @endforeach
                             </tbody>
                         </table>
-
-                        {!! $plans->appends($link)->render() !!}
-
                     </div>
                 @else
                     <p>No plans found..</p>
@@ -71,6 +68,8 @@
         </div>
 
         {!! Form::close() !!}
+
+        {!! $plans->appends($link)->render() !!}
 
     </div>
 
@@ -90,6 +89,10 @@
 
                 $(this).closest('td').next('td').find('.plan-link').prop('href', route);
             });
+
+
+
+
         });
 
     </script>

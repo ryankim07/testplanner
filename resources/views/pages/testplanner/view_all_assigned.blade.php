@@ -63,9 +63,6 @@
                             @endforeach
                             </tbody>
                         </table>
-
-                        {!! $plans->appends($link)->render() !!}
-
                     </div>
                 @else
                     <p>No plans found..</p>
@@ -74,6 +71,8 @@
         </div>
 
         {!! Form::close() !!}
+
+        {!! $plans->appends($link)->render() !!}
 
     </div>
 

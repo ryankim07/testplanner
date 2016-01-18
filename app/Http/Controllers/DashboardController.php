@@ -69,7 +69,7 @@ class DashboardController extends Controller
                     $allTesters = Testers::getTestersByPlanId($plan->id);
 
                     foreach ($allTesters as $tester) {
-                        $browserTester[$tester->id] = $tester->first_name;
+                        $browserTester[$tester->id] = $tester->first_name . ' - ' . $tester->browser;
                     }
 
                     $plan            = get_object_vars($plan);
@@ -87,8 +87,10 @@ class DashboardController extends Controller
 
         // Return view
         return view('pages.main.dashboard', [
-            'activities' => $activityStream,
-            'plans'      => isset($plans) ? array_filter($plans) : ''
+            'activities'      => !empty($activityStream['query']) ? $activityStream['query']->paginate(config('testplanner.as_pagination_count')) : '',
+            'totalActivities' => !empty($activityStream['query']) ? ActivityStream::count() : 0,
+            'plans'           => isset($plans) ? array_filter($plans) : '',
+            'link'            => '',
         ]);
     }
 }
