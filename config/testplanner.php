@@ -44,7 +44,7 @@ return [
 
     'plan_session_error_msg'     => 'Session data is missing.',
 
-    'plan_non_user_response_msg' => 'hasn\'t submitted his response yet.',
+    'plan_non_responses_msg'     => 'Users have not submitted responses yet.',
 
     'plan_response_success_msg'  => 'Your plan has been posted successfully',
 

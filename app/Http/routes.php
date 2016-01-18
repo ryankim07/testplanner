@@ -117,6 +117,12 @@ Route::get('plan/view-all-created', [
     'roles'      => ['root', 'administrator'],
     'uses'       => 'PlansController@viewAllCreated'
 ]);
+Route::post('plan/view-all-created', [
+    'as'         => 'plan.view.all.created',
+    'middleware' => 'roles',
+    'roles'      => ['root', 'administrator'],
+    'uses'       => 'PlansController@viewAllCreated'
+]);
 
 Route::get('plan/view-all-responses', [
     'as'         => 'plan.view.all.responses',
@@ -179,3 +185,7 @@ Route::get('tester/build', [
 ]);
 Route::get('tester/edit', ['as' => 'tester.edit', 'uses' => 'TestersController@edit']);
 Route::resource('tester', 'TestersController', ['except' => ['edit']]);
+
+/*Event::listen('illuminate.query',function($query){
+    var_dump($query);
+});*/

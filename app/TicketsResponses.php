@@ -27,8 +27,7 @@ class TicketsResponses extends Model
      *
      * @var string
      */
-    protected $table      = "tickets_responses";
-    protected $primaryKey = "id";
+    protected $table = "tickets_responses";
 
     /**
      * The attributes that are mass assignable.

@@ -40,7 +40,6 @@
                             @foreach($plans as $plan)
                                 <tr class="plan-row">
                                     <td>{!! $plan->description !!}</td>
-                                    <td>{!! $plan->full_name !!}</td>
 
                                     <?php
                                         if($plan->status == 'complete') {

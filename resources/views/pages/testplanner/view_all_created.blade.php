@@ -79,22 +79,4 @@
 
     </div>
 
-    <script type="text/javascript">
-
-        $(document).ready(function() {
-            // View or edit single plan
-            $('#view-all-created-main').on('click', '.toggler', function() {
-                window.location.href = $(this).data('url');
-            });
-
-            $('#view-all-created-main').on('change', '#admin', function() {
-                var route   = $(this).data('url');
-                var adminId = $(this).val();
-
-                window.location.href =  route + '/' + adminId;
-            });
-        });
-
-    </script>
-
 @stop

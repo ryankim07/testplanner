@@ -191,7 +191,7 @@ class PlansController extends Controller
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
-    public function viewAllCreated($userId = 0)
+    public function viewAllCreated(Request $request)
     {
         $user  = Auth::user();
         $roles = $user->role()->get();
@@ -208,14 +208,14 @@ class PlansController extends Controller
         // Otherwise just get the plans created with administrator privilege.
         foreach($roles as $role) {
             $roleName = $role->name;
-            if ($roleName == "root") {
-                break;
-            }
+            $userId = $roleName == "root" ? 0 : $user->id;
+            break;
+        }
 
-            if ($roleName == "administrator") {
-                $userId = $user->id;
-                break;
-            }
+        // Display selected creator of the plan
+        $adminId = $request->get('admin');
+        if (isset($adminId)) {
+            $userId = $adminId;
         }
 
         $query = Plans::getAllPlans($table['sorting']['sortBy'], $table['sorting']['order'], $userId);
@@ -279,7 +279,6 @@ class PlansController extends Controller
         $user  = Auth::user();
         $table = Tables::prepare('order', [
             'description',
-            'admin',
             'status',
             'created_at',
             'updated_at',
@@ -334,27 +333,54 @@ class PlansController extends Controller
      * View response by plan and user ID
      *
      * @param $planId
-     * @param $userId
+     * @param $selectedUserId
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
-    public function response($planId, $userId)
+    public function response($planId, $selectedUserId)
     {
-        // Get all plan by ID and user ID
-        $plan = Plans::getTesterPlanResponse($planId, $userId);
+        // Plan details
+        $planDetails = Plans::find($planId);
 
         // Show other users that might have submitted responses
-        $allTesters = Testers::getTestersByPlanId($planId);
+        $testers = Testers::getTestersByPlanId($planId);
 
-        $browserTesters[''] = 'View other responses';
-        foreach ($allTesters as $eachTester) {
-            $browserTesters[$eachTester->id] = $eachTester->first_name;
+        $mode           = 'response';
+        $tabHeaderHtml  = '';
+        $tabBodyHtml    = '';
+        $totalResponses = 0;
+
+        foreach ($testers as $tester) {
+            $testerId        = $tester->id;
+            $testerFirstName = $tester->first_name;
+            // Render users tab
+            $tabHeaderHtml .= view('pages/testplanner/partials/response_respond/tab_header_users', [
+                'selectedUserId'  => $selectedUserId,
+                'testerId'        => $testerId,
+                'testerFirstName' => $testerFirstName
+            ])->render();
+
+            // Render plan detais
+            $plan = Plans::getTesterPlanResponse($planId, $testerId);
+
+            if (isset($plan['ticket_resp_id'])) {
+                $totalResponses++;
+            }
+
+            $tabBodyHtml .= view('pages/testplanner/partials/response_respond/tab_body', [
+                'mode'            => $mode,
+                'selectedUserId'  => $selectedUserId,
+                'testerId'        => $testerId,
+                'testerFirstName' => $testerFirstName,
+                'plan'            => $plan
+            ])->render();
         }
 
-        return view('pages.testplanner.response_respond', [
-            'mode'    => 'response',
-            'userId'  => $userId,
-            'plan'    => $plan,
-            'testers' => $browserTesters
+        return view('pages.testplanner.response_respond_main', [
+            'mode'           => $mode,
+            'plan'           => ['description' => $planDetails->description],
+            'tabHeaderHtml'  => $tabHeaderHtml,
+            'tabBodyHtml'    => $tabBodyHtml,
+            'totalResponses' => $totalResponses
         ]);
     }
 
@@ -366,12 +392,23 @@ class PlansController extends Controller
      */
     public function respond($planId)
     {
-        $user = Auth::user();
-        $plan = Plans::getTesterPlanResponse($planId, $user->id);
+        $user     = Auth::user();
+        $plan     = Plans::getTesterPlanResponse($planId, $user->id);
+        $mode     = 'respond';
+        $planHtml = '';
 
-        return view('pages.testplanner.response_respond', [
-            'mode' => 'respond',
+        $planHtml .= view('pages/testplanner/partials/response_respond/plan_details', ['plan' => $plan])
+            ->render();
+
+        $planHtml .= view('pages/testplanner/partials/response_respond/plan_tickets', [
+            'mode' => $mode,
             'plan' => $plan
+        ])->render();
+
+        return view('pages.testplanner.response_respond_main', [
+            'mode'     => $mode,
+            'plan'     => $plan,
+            'planHtml' => $planHtml,
         ]);
     }
 

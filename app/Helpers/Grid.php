@@ -45,7 +45,7 @@ class Grid
 
         $columns['admin'] = [
             'type'       => 'text',
-            'colname'    => 'Name',
+            'colname'    => 'Admin',
             'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
             'sortable'   => 'admin',
             'order'      => $order,

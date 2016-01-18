@@ -44,7 +44,7 @@
             'class'		    => 'btn-custom',
             'updateBtnText' => 'Update',
             'updateBtnId'	=> 'update-btn',
-            'backBtnText'   => 'Go Back',
+            'backBtnText'   => 'Cancel',
             'backBtnId'		=> 'back-btn'
         ])
 
@@ -82,6 +82,9 @@
 
 			// Preselect testers radion input
 			preSelectBrowserTesters(<?php echo $plan['testers']; ?>);
+
+			// Back button
+			backButtonSubmit('{!! URL::previous() !!}');
 		});
 
 	</script>

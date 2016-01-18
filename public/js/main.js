@@ -7,7 +7,21 @@
  * View all admin plans
  *
  */
-    // View all admin
+
+// View or edit single plan
+$('#view-all-created-main').on('click', '.toggler', function() {
+    window.location.href = $(this).data('url');
+});
+
+$('#view-all-created-main').on('change', '#admin', function() {
+    var route = $(this).data('url');
+    var adminId = $(this).val();
+
+    $('form').attr('action', route + 'admin=' + adminId);
+    $('form').submit();
+});
+
+// View all admin
 $('#view-all-admin-main').on('click', '.view-tester-plan', function(e) {
     e.preventDefault();
 
@@ -382,7 +396,7 @@ function loadAllUsersJs()
             })
         ).done(function (resp) {
             // Close viewer
-            $('.close-viewer').on('click', function (e) {
+            $('#view-all-users-main').on('click', '.close-viewer', function (e) {
                 e.preventDefault();
                 $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
                 $('#viewer-main').toggleClass('col-md-0 col-md-4');
@@ -498,5 +512,16 @@ function planStartExpireDates()
 
     $("#expired_at").on("dp.change", function (e) {
         $('#started_at').data("DateTimePicker").maxDate(e.date);
+    });
+}
+
+/**
+ *
+ * General
+ *
+ */
+function backButtonSubmit(url) {
+    $('form').on('click', '#back-btn', function() {
+        window.location.href = url;
     });
 }

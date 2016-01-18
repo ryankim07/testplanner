@@ -23,6 +23,7 @@ use App\Facades\Jira;
 
 use App\Tickets;
 use App\Testers;
+use App\TicketsResponses;
 
 use Session;
 
@@ -125,11 +126,14 @@ class Plans extends Model
         $query = DB::table('plans AS p')
             ->join('testers AS t', 'p.id', '=', 't.plan_id')
             ->join('users AS u', 'u.id', '=', 'p.creator_id')
-            ->leftJoin('tickets_responses AS tr', 'p.id', '=', 'tr.plan_id')
+            ->leftJoin('tickets_responses AS tr', function($join) use ($userId) {
+                $join->on('p.id', '=', 'tr.plan_id')
+                    ->where('tr.tester_id', '=', $userId);
+            })
             ->select('p.*', DB::raw('CONCAT(u.first_name, " ", u.last_name) AS full_name'), 't.browser', 'tr.status AS ticket_response_status')
             ->where('t.user_id', '=', $userId)
             ->where('p.status', '=', 'new')
-            ->orWhere('p.status', '=', 'incomplete')
+            ->orWhere('p.status', '=', 'progress')
             ->orderBy($sortBy, $order);
 
         if ($from == 'dashboard') {

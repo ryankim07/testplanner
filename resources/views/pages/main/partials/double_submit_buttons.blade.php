@@ -19,19 +19,12 @@
                     ?>
 
                     @if(!empty($backBtnText))
-                        {!! Form::submit($backBtnText, ['class' => 'btn ' . $class, 'id' => $backBtnId]) !!}
+                        {!! Form::button($backBtnText, ['class' => 'btn ' . $class, 'id' => $backBtnId]) !!}
                     @endif
+
                     {!! Form::submit($updateBtnText, ['class' => 'btn ' . $class, 'id' => $updateBtnId]) !!}
 
                 </div>
             </div>
         </div>
     </div>
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#back-btn').on('click', function () {
-                window.location.href = '{!! URL::previous() !!}}';
-            });
-        });
-    </script>

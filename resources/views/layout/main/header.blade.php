@@ -31,7 +31,7 @@
                                 <li>{!! Html::linkRoute('plan.view.all.assigned', 'Respond') !!}</li>
                             </ul>
                         </li>
-                        @if(Auth::user()->hasRole(['root']))
+                        @if(Auth::user()->hasRole(['root', 'administrator']))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Testers <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
