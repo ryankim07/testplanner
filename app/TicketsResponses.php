@@ -82,13 +82,13 @@ class TicketsResponses extends Model
         if ($incomplete == $totalTickets) {
             $ticketStatus = 'new';
         } elseif ($completed == $totalTickets) {
-            $ticketStatus = 'complete';
+            if ($planData['ticket_status'] == 'complete') {
+                $ticketStatus = 'update';
+            } else {
+                $ticketStatus = 'complete';
+            }
         } else {
             $ticketStatus = 'progress';
-        }
-
-        if ($planData['ticket_status'] == 'complete') {
-            $ticketStatus = 'update';
         }
 
         // Create or update ticket response

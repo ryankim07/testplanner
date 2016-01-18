@@ -396,7 +396,7 @@ function loadAllUsersJs()
             })
         ).done(function (resp) {
             // Close viewer
-            $('#view-all-users-main').on('click', '.close-viewer', function (e) {
+            $('.close-viewer').on('click', function (e) {
                 e.preventDefault();
                 $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
                 $('#viewer-main').toggleClass('col-md-0 col-md-4');
