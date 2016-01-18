@@ -22,6 +22,8 @@ return [
 
     'as_pagination_count'        => 10,
 
+    'dashboard_pagination_count' => 5,
+
     'new_user_added_msg'         => 'New user successfully registered.',
 
     'acct_inactive_msg'          => 'Your account is inactive.  Please contact the administrator.',

@@ -13,6 +13,15 @@
 
 /**
  *
+ * System Configuration
+ *
+ */
+Route::get('system/view-all', ['as' => 'system.view.all', 'uses' => 'SystemController@show']);
+Route::resource('system', 'SystemController', ['except' => ['edit']]);
+
+
+/**
+ *
  * Auth
  *
  */
@@ -56,7 +65,7 @@ Route::get('user/all', [
     'as'         => 'user.view.all',
     'middleware' => 'roles',
     'roles'      => ['root'],
-    'uses'       => 'UsersController@all']);
+    'uses'       => 'UsersController@index']);
 
 Route::get('user/search', 'UsersController@search');
 Route::post('user/search', ['as' => 'user.search', 'uses' => 'UsersController@search']);
@@ -82,11 +91,10 @@ Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'DashboardController@ind
  * Activity Stream
  *
  */
-Route::get('activity', ['as' => 'activity', 'uses' => 'ActivityStreamController@index']);
-Route::get('activity/view-all', ['as' => 'activity.view.all', 'uses' => 'ActivityStreamController@all']);
+Route::get('activity/view-all', ['as' => 'activity.view.all', 'uses' => 'ActivityStreamController@index']);
 Route::get('activity/search', 'ActivityStreamController@search');
 Route::post('activity/search', ['as' => 'activity.search', 'uses' => 'ActivityStreamController@search']);
-Route::post('activity/save-comment', ['as' => 'activity.comment.save', 'uses' => 'ActivityStreamController@saveComment']);
+Route::post('activity/save-comment', ['as' => 'activity.comment.save', 'uses' => 'ActivityStreamController@save']);
 
 
 /**
@@ -131,7 +139,6 @@ Route::get('plan/view-all-responses', [
     'uses'       => 'PlansController@viewAllResponses']);
 
 Route::get('plan/view-all-assigned', ['as' => 'plan.view.all.assigned', 'uses' => 'PlansController@viewAllAssigned']);
-Route::get('plan/edit', ['as' => 'plan.edit', 'uses' => 'PlansController@edit']);
 
 Route::post('plan/save', [
     'as'         => 'plan.save',
@@ -144,7 +151,7 @@ Route::post('plan/search', ['as' => 'plan.search', 'uses' => 'PlansController@se
 
 Route::patch('plan/update-built-plan/{id}', ['as' => 'plan.built.update', 'uses' => 'PlansController@updateBuiltPlan']);
 Route::put('plan/update-built-plan/{id}', ['as' => 'plan.built.update', 'uses' => 'PlansController@updateBuiltPlan']);
-Route::resource('plan', 'PlansController', ['except' => ['edit']]);
+Route::resource('plan', 'PlansController', ['except' => ['create', 'show', 'destroy']]);
 
 
 /**
@@ -168,8 +175,7 @@ Route::post('ticket/remove', [
     'uses'       => 'TicketsController@removeAjax'
 ]);
 
-Route::resource('ticket', 'TicketsController', ['except' => ['edit']]);
-
+Route::resource('ticket', 'TicketsController', ['except' => ['index', 'create', 'edit', 'show', 'destroy']]);
 
 
 /**
@@ -184,7 +190,7 @@ Route::get('tester/build', [
     'uses'       => 'TestersController@build'
 ]);
 Route::get('tester/edit', ['as' => 'tester.edit', 'uses' => 'TestersController@edit']);
-Route::resource('tester', 'TestersController', ['except' => ['edit']]);
+Route::resource('tester', 'TestersController', ['except' => ['index', 'create', 'edit', 'show', 'destroy']]);
 
 /*Event::listen('illuminate.query',function($query){
     var_dump($query);

@@ -18,7 +18,7 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-md-8">
-                        <i class="fa fa-cogs fa-3x header-icon"></i>
+                        <i class="fa fa-cubes fa-3x header-icon"></i>
                         <h4>Step 2 of 3 - {!! $plan['mode'] == 'build' ? 'Add tickets to be tested' : 'Edit tickets to be tested' !!}</h4>
                     </div>
                     @if($plan['mode'] == 'build')

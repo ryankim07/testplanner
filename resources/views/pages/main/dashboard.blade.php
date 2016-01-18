@@ -93,7 +93,7 @@
                                                         <td>
                                                             {!! Form::select('testers', $attr['testers'], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $attr['id'])]) !!}
                                                         </td>
-                                                        <td class="text-center"><a href="#" class="plan-link"><i class="fa fa-comments fa-lg"></i></a></td>
+                                                        <td class="text-center"><a href="#" class="plan-link"><i class="fa fa-bug fa-lg"></i></a></td>
                                                     @else
                                                         <td class="text-center"><a href="{!! URL::route('plan.respond', $attr['id']) !!}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
                                                     @endif

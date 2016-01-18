@@ -34,6 +34,34 @@ class UsersController extends Controller
     }
 
     /**
+     * Get all users
+     *
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function index()
+    {
+        $table = Tables::prepare('order', [
+            'first_name',
+            'last_name',
+            'email',
+            'active',
+            'role_names',
+            'created_at',
+            'updated_at'
+        ], 'UsersController@view');
+
+        $query = User::getAllUsers($table['sorting']['sortBy'], $table['sorting']['order']);
+
+        return view('pages.main.view_all_users', [
+            'users'       => isset($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
+            'totalUsers'  => isset($query) ? User::count() : 0,
+            'columns'     => $table['columns'],
+            'columnsLink' => $table['columns_link'],
+            'link'        => ''
+        ]);
+    }
+
+    /**
      * View user
      *
      * @param $id
@@ -130,34 +158,6 @@ class UsersController extends Controller
         return response()->json([
             'type' => 'success',
             'msg'  => config('testplanner.user_update_success_msg')
-        ]);
-    }
-
-    /**
-     * Get all users
-     * 
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
-     */
-    public function all()
-    {
-        $table = Tables::prepare('order', [
-            'first_name',
-            'last_name',
-            'email',
-            'active',
-            'role_names',
-            'created_at',
-            'updated_at'
-        ], 'UsersController@view');
-
-        $query = User::getAllUsers($table['sorting']['sortBy'], $table['sorting']['order']);
-
-        return view('pages.main.view_all_users', [
-            'users'       => isset($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
-            'totalUsers'  => isset($query) ? User::count() : 0,
-            'columns'     => $table['columns'],
-            'columnsLink' => $table['columns_link'],
-            'link'        => ''
         ]);
     }
 }

@@ -2,14 +2,19 @@
  * TEST PLANNER JS LIBRARY
  */
 
-/*
+/**
  * General
  */
+
 // Tooltip
 $('.jira-issue').tooltip({
     container: 'body',
     placement: 'bottom'
 });
+
+// Pagination
+$('.pagination').addClass('pagination-sm');
+
 
 /**
  * View all admin plans
@@ -194,9 +199,6 @@ function TicketBuilder(config) {
  */
 function loadDashboardJs(url)
 {
-    // Pagination
-    $('#dashboard-main .pagination').addClass('pagination-sm');
-
     // Hide initially
     $('#dashboard-main .activity-comment-area').hide();
 

@@ -18,7 +18,7 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-12 col-md-8">
-                        <i class="fa fa-cogs fa-3x header-icon"></i>
+                        <i class="fa fa-cubes fa-3x header-icon"></i>
                         <h4>Step 3 of 3 - {!! $mode == 'build' ? 'Assign testers' : 'Edit testers' !!}</h4>
                     </div>
                     @if($mode == 'build')

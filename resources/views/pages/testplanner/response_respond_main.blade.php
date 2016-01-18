@@ -25,7 +25,7 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-10 col-md-12">
-                        <i class="fa {!! $mode == 'respond' ? 'fa-commenting-o' : 'fa-comments' !!} fa-3x header-icon"></i>
+                        <i class="fa {!! $mode == 'respond' ? 'fa-commenting-o' : 'fa-bug' !!} fa-3x header-icon"></i>
                         <h4>{!! ucfirst($mode)  !!} - {!! $plan['description'] !!}</h4>
                     </div>
                 </div>

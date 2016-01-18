@@ -34,11 +34,6 @@ class ActivityStreamController extends Controller
 
     public function index()
     {
-
-    }
-
-    public function all()
-    {
         $table = Tables::prepare('order', [
             'activity',
             'created_at'
@@ -64,7 +59,7 @@ class ActivityStreamController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function saveComment(Request $request)
+    public function save(Request $request)
     {
         $results = ActivityComments::saveActivityComment($request->get('as_id'), Auth::user()->id, $request->get('comment'));
 

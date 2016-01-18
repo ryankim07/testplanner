@@ -16,7 +16,7 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-12 col-md-8">
-                        <i class="fa fa-cogs fa-3x header-icon"></i>
+                        <i class="fa fa-cubes fa-3x header-icon"></i>
                         <h4>Review</h4>
                     </div>
                     <div class="col-md-4">
