@@ -19,7 +19,7 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
-                        <i class="fa fa-bug fa-3x header-icon"></i>
+                        <i class="fa fa-check-square-o fa-3x header-icon"></i>
                         <h4>Plans assigned to others</h4>
                     </div>
                 </div>

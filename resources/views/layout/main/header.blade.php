@@ -42,7 +42,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Testers <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="{!! URL::route('plan.view.all.responses') !!}" class="menu-link"><i class="fa fa-bug menu-link-icon"></i>Responses</a>
+                                        <a href="{!! URL::route('plan.view.all.responses') !!}" class="menu-link"><i class="fa fa-check-square-o menu-link-icon"></i>Responses</a>
                                     </li>
                                 </ul>
                             </li>
@@ -73,7 +73,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">System <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="{!! URL::route('system.view.all') !!}" class="menu-link"><i class="fa fa-cogs menu-link-icon"></i>Edit</a>
+                                        <a href="{!! URL::route('system.view.all') !!}" class="menu-link"><i class="fa fa-cogs menu-link-icon"></i>Settings</a>
                                     </li>
                                 </ul>
                             </li>
