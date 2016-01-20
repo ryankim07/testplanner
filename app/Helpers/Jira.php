@@ -21,8 +21,8 @@ class Jira
 
     public function __construct()
     {
-        $this->_username = env('JIRA_LOGIN');
-        $this->_password = env('JIRA_PASS');
+        $this->_username      = config('testplanner.jira.info.login');
+        $this->_password      = config('testplanner.jira.info.password');
         $this->_jira_rest_url = config('testplanner.jira.info.rest_url');
     }
 

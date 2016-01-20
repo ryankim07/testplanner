@@ -15,6 +15,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Requests\RegisterFormRequest;
+use App\Http\Requests\UserResponseFormRequest;
+
 
 use App\User;
 use App\Tables;
@@ -97,37 +99,12 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param UserResponseFormRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request)
+    public function update(UserResponseFormRequest $request)
     {
         $userId = $request->get('user_id');
-
-        // Custom validator
-        $validator = Validator::make(array_except($request->all(), '_token'), [
-            'role' => 'required',
-            'first_name'    => 'required',
-            'last_name'     => 'required',
-            'email'         => 'required|email',
-            'password'      => 'required|confirmed|min:6'
-        ], [
-            'role.required' => 'Role is required',
-            'first_name.required'    => 'First name is required',
-            'last_name.required'     => 'Last name is required',
-            'email.required'         => 'Email is required',
-            'email.email'            => 'Enter correct email address',
-            'password.required'      => 'Password is required',
-            'password.confirmed'     => 'Password confirmation is required',
-            'password.min'           => 'Password must have a length of 6 characters'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'type' => 'error',
-                'msg'  => $validator->errors()->all()
-            ]);
-        }
 
         // Update user info
         $user = User::find($userId);

@@ -347,41 +347,48 @@ function loadResponseRespondJs()
  */
 function loadUsersJs(url)
 {
-    $('#view-user-main').on('click', '#update-btn', function () {
+    $('#view-user-main').on('click', '#update-btn', function() {
         var newRoles = $("#role").val() || [];
+        var msgBlock = $('<div class="" role="alert"></div>');
 
         if ($('.alert').length > 0) {
             $('.alert').remove();
         }
 
-        $.ajax({
-            method: "POST",
-            url: url,
-            data: $("#user-form-update").serialize() + '&new_roles=' + newRoles,
-            dataType: "json"
-        }).done(function (response) {
-            var msgs = '';
-            var alertBlock = $('<div class="alert" role="alert"></div>');
+        $.when(
+            $.ajax({
+                method: "POST",
+                url: url,
+                data: $("#user-form-update").serialize() + '&new_roles=' + newRoles,
+                dataType: "json",
+                success: function(resp) {
+                    var msgs = '';
 
-            alertBlock.attr('class', 'alert');
-            alertBlock.empty();
+                    msgBlock.attr('class', 'alert alert-success').empty().html('<i class="fa fa-check-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Success:</span> ' + resp.msg);
+                },
+                error: function(jqXhr) {
+                    if(jqXhr.status === 422) {
+                        var msgs = '';
 
-            if (response.type == 'success') {
-                alertBlock.attr('class', 'alert alert-success').html('<i class="fa fa-check-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Success:</span> ' + response.msg).show();
-            } else {
-                $.each(response.msg, function (key, item) {
-                    msgs += '<i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Error:</span> ' + item + '<br/>';
-                });
+                        $.each(jqXhr.responseJSON, function (key, item) {
+                            msgs += '<i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Error:</span> ' + item + '<br/>';
+                        });
 
-                $('#view-user-main .panel-body').prepend(alertBlock.attr('class', 'alert alert-danger').html(msgs));
-            }
+                        msgBlock.attr('class', 'alert alert-danger').empty().html(msgs);
+                    }
+                },
+                complete: function() {
+                    $('#view-user-main .panel-body').prepend(msgBlock);
+                }
+            })
+        ).done(function(resp) {
         });
     });
 }
 
 function loadAllUsersJs()
 {
-    $('#view-all-users-main').on('click', '.edit-link', function (e) {
+    $('#view-all-users-main').on('click', '.edit-link', function(e) {
         e.preventDefault();
 
         var currentClass = $('#view-all-users-main').attr('class');
@@ -406,7 +413,7 @@ function loadAllUsersJs()
                     $('#viewer-main').html(resp.viewBody);
                 }
             })
-        ).done(function (resp) {
+        ).done(function(resp) {
             // Close viewer
             $('.close-viewer').on('click', function (e) {
                 e.preventDefault();

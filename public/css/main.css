@@ -204,6 +204,11 @@ table:not(.dashboard-table) tbody tr:hover {
  * SYSTEM CONFIGURATION
  */
 
+#system-edit-form .btn {
+    position: relative;
+    top: 10px;
+}
+
 #system-main .nav-pills > li.active > a {
     background: #777777;
     color: #FFFFFF;

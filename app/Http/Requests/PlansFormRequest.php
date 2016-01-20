@@ -47,11 +47,11 @@ class PlansFormRequest extends Request
     public function messages()
     {
         return [
-			'description.required' => 'Description name is required',
-			'started_at.required'      => 'Test start date is required',
-			'started_at.date_format'   => 'Test start date format must be MM/DD/YYYY',
-			'expired_at.required'      => 'Test expiration date is required',
-			'expired_at.date_format'   => 'Test expiration date format must be MM/DD/YYYY',
+			'description.required'   => 'Description name is required',
+			'started_at.required'    => 'Test start date is required',
+			'started_at.date_format' => 'Test start date format must be MM/DD/YYYY',
+			'expired_at.required'    => 'Test expiration date is required',
+			'expired_at.date_format' => 'Test expiration date format must be MM/DD/YYYY',
 		];
 	}
 }

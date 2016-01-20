@@ -20,6 +20,8 @@ return [
         'info' => [
             'domain'   => 'https://mophie.atlassian.net',
             'rest_url' => 'https://mophie.atlassian.net/rest/api/2',
+            'login'    => 'ryan.kim',
+            'password' => 'Sk1ncare'
         ]
     ],
 

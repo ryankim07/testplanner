@@ -18,7 +18,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-xs-10 col-md-12">
+                    <div class="col-xs-10 col-md-10">
                         <i class="fa fa-cogs fa-3x header-icon"></i>
                         <h4>System Configuration</h4>
                     </div>
@@ -36,13 +36,27 @@
                 <div class="tab-content col-xs-12 col-md-10">
                     @foreach($configData as $parentKey => $child)
                         <div class="tab-pane" id="{!! $parentKey !!}">
-                            <h4 class="sub-header">{!! ucfirst($parentKey) !!} Settings</h4>
+                            <div class="page-header">
+                                <h4 class="pull-left">{!! ucfirst($parentKey) !!} Settings</h4>
+                                <div class="pull-right">
+
+                                    @include('pages/main/partials/button', [
+                                        'direction' => 'pull-right',
+                                        'class'		=> 'btn-custom btn-sm',
+                                        'btnText'	=> 'Update',
+                                        'id'        => 'update-btn'
+                                    ])
+
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
                             @foreach($child as $childKey => $attributes)
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <strong>{!! ucfirst($childKey) !!}</strong>
                                     </div>
-                                    <div class="panel-body system-config-panel-body">
+                                    <div class="panel-body">
                                         @foreach($attributes as $attrKey => $attrValue)
 
                                             <?php
@@ -67,13 +81,6 @@
                 </div>
             </div>
         </div>
-
-        @include('pages/main/partials/button', [
-			'direction' => 'pull-right',
-            'class'		=> 'btn-custom',
-            'btnText'	=> 'Update',
-            'id'        => 'update-btn'
-        ])
 
         {!! Form::close() !!}
 

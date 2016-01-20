@@ -8,7 +8,7 @@
 --}}
 
     <div class="form-group">
-        <div class="col-xs-12 col-md-8">
+        <div class="col-xs-12 col-md-12">
             <div class="clearfix">
                 <div class="{!! $direction !!}">
 
