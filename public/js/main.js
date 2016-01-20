@@ -21,7 +21,7 @@ $('.pagination').addClass('pagination-sm');
  */
 
 // View or edit single plan
-$('#view-all-created-main').on('click', '.toggler', function() {
+$('#view-all-created-main').on('click', '.edit-link', function() {
     window.location.href = $(this).data('url');
 });
 
@@ -44,7 +44,7 @@ $('#view-all-admin-main').on('click', '.view-tester-plan', function(e) {
     window.location.href = url + '/' + tester;
 });
 
-$('#view-all-assigned-main').on('click', '.toggler', function() {
+$('#view-all-assigned-main').on('click', '.edit-link', function() {
     window.location.href = $(this).data('url');
 });
 
@@ -381,7 +381,7 @@ function loadUsersJs(url)
 
 function loadAllUsersJs()
 {
-    $('#view-all-users-main').on('click', '.toggler', function (e) {
+    $('#view-all-users-main').on('click', '.edit-link', function (e) {
         e.preventDefault();
 
         var currentClass = $('#view-all-users-main').attr('class');
@@ -400,7 +400,7 @@ function loadAllUsersJs()
         $.when(
             $.ajax({
                 method: "GET",
-                url: $(this).data('url'),
+                url: $(this).attr('href'),
                 dataType: "json",
                 success: function (resp) {
                     $('#viewer-main').html(resp.viewBody);

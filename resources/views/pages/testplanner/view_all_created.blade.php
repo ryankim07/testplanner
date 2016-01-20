@@ -19,8 +19,8 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-10 col-md-10">
-                        <i class="fa fa-cubes fa-3x header-icon"></i>
-                        <h4>Plans <span class="badge">{!! $totalPlans !!}</span></h4>
+                        <i class="fa fa-cogs fa-3x header-icon"></i>
+                        <h4>Edit Plans</h4>
                     </div>
                     @if($role == "root")
                     <div class="col-xs-2 col-md-2">
@@ -60,7 +60,7 @@
                                     <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->status !!}</span></td>
                                     <td>{!! Tools::dateConverter($plan->created_at) !!}</td>
                                     <td>{!! Tools::dateConverter($plan->updated_at) !!}</td>
-                                    <td class="text-center"><a href="{!! URL::route('plan.view', $plan->id) !!}"><i class="fa fa-pencil-square-o fa-lg"></i></a></td>
+                                    <td class="text-center"><a href="{!! URL::route('plan.view', $plan->id) !!}" class="edit-link"><i class="fa fa-pencil-square-o fa-lg"></i></a></td>
                                 </tr>
                             @endforeach
                             </tbody>

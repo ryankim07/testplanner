@@ -55,7 +55,7 @@
                                     <td>{!! Tools::dateConverter($plan->created_at) !!}</td>
                                     <td>{!! Tools::dateConverter($plan->updated_at) !!}</td>
                                     <td>{!! Form::select('testers', $testers[$plan->id], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $plan->id)]) !!}</td>
-                                    <td class="text-center"><a href="#" class="plan-link"><i class="fa fa-search fa-lg"></i></a></td>
+                                    <td class="text-center"><a href="#" class="edit-link"><i class="fa fa-search fa-lg"></i></a></td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -79,7 +79,7 @@
             $('#view-all-responses-main .plan-row').each(function() {
                 var testerId = $(this).find('.testers option:nth-child(1)').val();
                 var route    = $(this).find('.testers').data('url') + '/' + testerId;
-                var link     = $(this).find('.plan-link').prop('href', route);
+                var link     = $(this).find('.edit-link').prop('href', route);
             });
 
             // Change viewer id link
@@ -87,7 +87,7 @@
                 var selectedTesterId = $(this).val();
                 var route = $(this).data('url') + '/' + selectedTesterId;
 
-                $(this).closest('td').next('td').find('.plan-link').prop('href', route);
+                $(this).closest('td').next('td').find('.edit-link').prop('href', route);
             });
 
 

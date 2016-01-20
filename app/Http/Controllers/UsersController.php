@@ -47,13 +47,14 @@ class UsersController extends Controller
             'active',
             'role_names',
             'created_at',
-            'updated_at'
+            'updated_at',
+            'edit'
         ], 'UsersController@view');
 
         $query = User::getAllUsers($table['sorting']['sortBy'], $table['sorting']['order']);
 
         return view('pages.main.view_all_users', [
-            'users'       => isset($query) ? $query->paginate(config('testplanner.system.pagination.results_tables')) : '',
+            'users'       => isset($query) ? $query->paginate(config('testplanner.tables.pagination.lists')) : '',
             'totalUsers'  => isset($query) ? User::count() : 0,
             'columns'     => $table['columns'],
             'columnsLink' => $table['columns_link'],

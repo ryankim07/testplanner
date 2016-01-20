@@ -32,7 +32,7 @@
 
                 <div class="row nested-block">
                     <legend>Plan Details</legend>
-                    <a href="{!! URL::route('plan.edit') !!}" class="pencil"><i class="fa fa-pencil fa-lg"></i></a>
+                    <a href="{!! URL::route('plan.edit') !!}" class="pencil" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
                     <ul class="list-unstyled">
                         <li>Description: <strong>{!! $plan['description'] !!}</strong></li>
                         <li>Starts on: <strong>{!! $plan['started_at'] !!}</strong></li>
@@ -43,8 +43,8 @@
                 @foreach($tickets as $ticket)
                     <div class="row nested-block ticket-row" id="{!! $ticket['id'] !!}">
                         <legend>Tickets</legend>
-                        <a href="#" class="trash" data-id="{!! $ticket['id'] !!}"><i class="fa fa-trash-o fa-lg"></i></a>
-                        <a href="{!! URL::route('ticket.edit') !!}" class="pencil"><i class="fa fa-pencil fa-lg"></i></a>
+                        <a href="#" class="trash" data-id="{!! $ticket['id'] !!}" title="Delete"><i class="fa fa-trash-o fa-lg"></i></a>
+                        <a href="{!! URL::route('ticket.edit') !!}" class="pencil" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
                         <ul class="list-unstyled">
                             <li><h4><span class="label label-default">Description</span></h4><h5>{!! $ticket['desc'] !!}</h5></li>
                             <li><h4><span class="label label-primary">Objective</span></h4><h5>{!! $ticket['objective'] !!}</h5></li>
@@ -55,7 +55,7 @@
                 <div class="page-header"></div>
                 <div class="row nested-block">
                     <legend>Browser Testers</legend>
-                    <a href="{!! URL::route('tester.edit') !!}" class="pencil"><i class="fa fa-pencil fa-lg"></i></a>
+                    <a href="{!! URL::route('tester.edit') !!}" class="pencil" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
                     @foreach($testers as $tester)
                         <div class="text-center review-testers">
                             {!! Html::image('images/' . $tester['browser'] . '.png', 'Browser', ['class' => 'browser-img']) !!}<h5><span class="caption">{!! $tester['first_name'] !!}</span></h5>

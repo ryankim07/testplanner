@@ -105,7 +105,7 @@ class Plans extends Model
         $query = self::getAllPlans($sortBy, $order, $userId);
 
         if ($from == 'dashboard') {
-            $query->take(config('testplanner.system.pagination.dashboard_tables'));
+            $query->take(config('testplanner.tables.pagination.dashboard'));
         }
 
         return $query;
@@ -135,7 +135,7 @@ class Plans extends Model
             ->orderBy($sortBy, $order);
 
         if ($from == 'dashboard') {
-            $query->take(config('testplanner.system.pagination.dashboard_tables'));
+            $query->take(config('testplanner.tables.pagination.dashboard'));
         }
 
         return $query;

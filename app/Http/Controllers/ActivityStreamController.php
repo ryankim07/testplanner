@@ -45,7 +45,7 @@ class ActivityStreamController extends Controller
         ], 'ActivityStreamController@index');
 
         return view('pages.testplanner.view_all_activities', [
-            'activities'      => ActivityStream::paginate(config('testplanner.system.pagination.activity_stream')),
+            'activities'      => ActivityStream::paginate(config('testplanner.tables.pagination.activity_stream')),
             'totalActivities' => ActivityStream::count(),
             'columns'         => $table['columns'],
             'columnsLink'     => $table['columns_link'],

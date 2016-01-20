@@ -133,7 +133,7 @@ class PlansController extends Controller
             ]
         ));
 
-        return redirect('dashboard')->with('flash_message', $request->get('description') . ' ' . config('testplanner.messages.plan.built_update'));
+        return redirect('dashboard')->with('flash_message', $request->get('description') . ' ' . config('testplanner.messages.plan.build_update'));
     }
 
     /**
@@ -231,7 +231,7 @@ class PlansController extends Controller
         return view('pages.testplanner.view_all_created', [
             'userId'      => $userId,
             'role'        => $roleName,
-            'plans'       => isset($query) ? $query->paginate(config('testplanner.system.pagination.results_tables')) : '',
+            'plans'       => isset($query) ? $query->paginate(config('testplanner.tables.pagination.lists')) : '',
             'totalPlans'  => isset($query) ? Plans::count() : 0,
             'columns'     => $table['columns'],
             'columnsLink' => $table['columns_link'],
@@ -261,7 +261,7 @@ class PlansController extends Controller
         $query = Plans::getAllAssigned($user->id, $table['sorting']['sortBy'], $table['sorting']['order']);
 
         return view('pages.testplanner.view_all_assigned', [
-            'plans'       => !empty($query) ? $query->paginate(config('testplanner.system.pagination.results_tables')) : '',
+            'plans'       => !empty($query) ? $query->paginate(config('testplanner.tables.pagination.lists')) : '',
             'totalPlans'  => !empty($query) ? Plans::count() : 0,
             'columns'     => $table['columns'],
             'columnsLink' => $table['columns_link'],
@@ -301,7 +301,7 @@ class PlansController extends Controller
         }
 
         return view('pages.testplanner.view_all_responses', [
-            'plans'       => !empty($query) ? $query->paginate(config('testplanner.system.pagination.results_tables')) : '',
+            'plans'       => !empty($query) ? $query->paginate(config('testplanner.tables.pagination.lists')) : '',
             'totalPlans'  => !empty($query) ? Plans::count() : 0,
             'testers'     => $browserTesters,
             'columns'     => $table['columns'],

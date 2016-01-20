@@ -19,8 +19,8 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
-                        <i class="fa fa-desktop fa-3x header-icon"></i>
-                        <h4>Activity Streams <span class="badge">{!! $totalActivities !!}</span></h4>
+                        <i class="fa fa-tasks fa-3x header-icon"></i>
+                        <h4>Activity Streams</h4>
                     </div>
                 </div>
             </div>

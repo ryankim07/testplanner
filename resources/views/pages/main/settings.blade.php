@@ -36,7 +36,7 @@
                 <div class="tab-content col-xs-12 col-md-10">
                     @foreach($configData as $parentKey => $child)
                         <div class="tab-pane" id="{!! $parentKey !!}">
-                            <h4 class="sub-header">{!! ucfirst($parentKey) !!} Configuration</h4>
+                            <h4 class="sub-header">{!! ucfirst($parentKey) !!} Settings</h4>
                             @foreach($child as $childKey => $attributes)
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
@@ -46,34 +46,10 @@
                                         @foreach($attributes as $attrKey => $attrValue)
 
                                             <?php
-
-                                            $inputTextName = $parentKey . '_' . $childKey . '_' . $attrKey;
-                                            $dataName      = $parentKey . '_' . $childKey . ':' . $attrKey;
-                                            $inputTextId   = str_replace('_', '-', $inputTextName);
-                                            $typeFormatted = ucfirst(str_replace('_', ' ', $attrKey));
-
-                                            /*switch($tabName) {
-                                                case 'admin':
-                                                    $labelCol = 'col-md-1-custom';
-                                                    break;
-
-                                                case 'jira':
-                                                    $labelCol = 'col-md-2-custom';
-                                                    break;
-
-                                                case 'pagination':
-                                                    $labelCol = 'col-md-2-custom';
-                                                    break;
-
-                                                case 'plan':
-                                                    $labelCol = 'col-md-3-custom';
-                                                    break;
-
-                                                default:
-                                                    $labelCol = 'col-md-4-custom';
-                                                    break;
-                                            }*/
-
+                                                $inputTextName = $parentKey . '_' . $childKey . '_' . $attrKey;
+                                                $dataName      = $parentKey . '_' . $childKey . ':' . $attrKey;
+                                                $inputTextId   = str_replace('_', '-', $inputTextName);
+                                                $typeFormatted = ucfirst(str_replace('_', ' ', $attrKey));
                                             ?>
 
                                             <div class="form-group">
@@ -122,13 +98,14 @@
                 // Grab token
                 items['_token'] = $('form').find('input[name=_token]').val();
 
-                // Grab fields that were changed
+                // Grab only fields that were changed
                 inputs.each(function() {
                     if ($(this).data('original') !== this.value) {
                         items[$(this).data('name')] = this.value;
                     }
                 });
 
+                // Update by Ajax
                 if (Object.keys(items).length > 1) {
                     $.ajax({
                         method: "POST",

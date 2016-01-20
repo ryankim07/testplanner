@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
                         <i class="fa fa-users fa-3x header-icon"></i>
-                        <h4>All users <span class="badge">{!! $totalUsers !!}</span></h4>
+                        <h4>Edit Users</h4>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
 
                             <tbody>
                             @foreach($users as $user)
-                                <tr class="toggler" data-url="{!! URL::route('user.view', $user->id) !!}">
+                                <tr class="users-row">
                                     <td>{!! $user->first_name !!}</td>
                                     <td>{!! $user->last_name !!}</td>
                                     <td>{!! $user->email !!}</td>
@@ -48,6 +48,7 @@
                                     <td>{!! $user->role_names !!}</td>
                                     <td>{!! Tools::dateConverter($user->created_at) !!}</td>
                                     <td>{!! Tools::dateConverter($user->updated_at) !!}</td>
+                                    <td class="text-center"><a href="{!! URL::route('user.view', $user->id) !!}" class="edit-link"><i class="fa fa-pencil-square-o fa-lg"></i></a></td>
                                 </tr>
                             @endforeach
                         </table>

@@ -57,7 +57,7 @@ class AuthController extends Controller
         if ($this->auth->validate(['email' => $request->email, 'password' => $request->password, 'active' => 0])) {
             return redirect($this->loginPath())
                 ->withInput($request->only('email', 'remember'))
-                ->withErrors(['message' => config('testplanner.messages.users.acct_inactive')]);
+                ->withErrors(['message' => config('testplanner.messages.users.account_inactive')]);
         }
 
         if ($this->auth->attempt($request->only('email', 'password')))

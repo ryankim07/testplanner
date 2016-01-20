@@ -35,23 +35,7 @@ class SystemController extends Controller
         // Get header and body data
         $configs = System::getConfigs();
 
-        return view('pages.testplanner.system_configs', ['configData' => $configs]);
-    }
-
-    /**
-     * Create the specified resource in storage
-     */
-    public function create()
-    {
-
-    }
-
-    /**
-     * Show the specified resource in storage
-     */
-    public function show()
-    {
-
+        return view('pages.main.settings', ['configData' => $configs]);
     }
 
     /**

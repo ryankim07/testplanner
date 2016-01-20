@@ -16,9 +16,16 @@
  * System Configuration
  *
  */
-Route::get('system/all', ['as' => 'system.view.all', 'uses' => 'SystemController@index']);
-Route::post('system/update', ['as' => 'system.update', 'uses' => 'SystemController@update']);
-Route::resource('system', 'SystemController', ['except' => ['edit', 'update']]);
+Route::get('system/all', [
+    'as'         => 'system.view.all',
+    'middleware' => 'roles',
+    'roles'      => ['root'],
+    'uses'       => 'SystemController@index']);
+Route::post('system/update', [
+    'as'         => 'system.update',
+    'middleware' => 'roles',
+    'roles'      => ['root'],
+    'uses'       => 'SystemController@update']);
 
 
 /**
@@ -30,6 +37,10 @@ Route::get('/', 'AuthController@getLogin');
 Route::get('auth/logout', ['as' => 'auth.logout', 'uses' => 'AuthController@getLogout']);
 Route::get('auth/login', ['as' => 'auth.login', 'uses' => 'AuthController@getLogin']);
 Route::post('auth/postLogin', ['as' => 'auth.post.login', 'uses' => 'AuthController@postLogin']);
+Route::get('password/getEmail', ['as' =>'password.email', 'uses' => 'PasswordController@getEmail']);
+Route::post('password/postEmail', ['as' => 'password.post.email', 'uses' => 'PasswordController@postEmail']);
+Route::get('password/getReset/{token}', ['as' =>'password.reset', 'uses' => 'PasswordController@getReset']);
+Route::post('password/postReset', ['as' => 'password.post.reset', 'uses' => 'PasswordController@postReset']);
 
 Route::get('auth/register', [
     'as'         => 'auth.register',
@@ -44,11 +55,6 @@ Route::post('auth/postRegister', [
     'roles'      => ['root'],
     'uses'       => 'AuthController@postRegister'
 ]);
-
-Route::get('password/getEmail', ['as' =>'password.email', 'uses' => 'PasswordController@getEmail']);
-Route::post('password/postEmail', ['as' => 'password.post.email', 'uses' => 'PasswordController@postEmail']);
-Route::get('password/getReset/{token}', ['as' =>'password.reset', 'uses' => 'PasswordController@getReset']);
-Route::post('password/postReset', ['as' => 'password.post.reset', 'uses' => 'PasswordController@postReset']);
 
 
 /**
@@ -68,15 +74,15 @@ Route::get('user/all', [
     'roles'      => ['root'],
     'uses'       => 'UsersController@index']);
 
-Route::get('user/search', 'UsersController@search');
-Route::post('user/search', ['as' => 'user.search', 'uses' => 'UsersController@search']);
-
 Route::post('user/update', [
     'as'         => 'user.update',
     'middleware' => 'roles',
     'roles'      => ['root'],
     'uses'       => 'UsersController@update'
 ]);
+Route::get('user/search', 'UsersController@search');
+Route::post('user/search', ['as' => 'user.search', 'uses' => 'UsersController@search']);
+
 
 
 /**
@@ -106,6 +112,7 @@ Route::post('activity/save-comment', ['as' => 'activity.comment.save', 'uses' =>
 Route::get('plan/view/{id}', ['as' => 'plan.view', 'uses' => 'PlansController@view']);
 Route::get('plan/response/{plan_id}/{user_id}', ['as' => 'plan.view.response', 'uses' => 'PlansController@response']);
 Route::get('plan/respond/{plan_id}', ['as' => 'plan.respond', 'uses' => 'PlansController@respond']);
+Route::get('plan/view-all-assigned', ['as' => 'plan.view.all.assigned', 'uses' => 'PlansController@viewAllAssigned']);
 
 Route::get('plan/build', [
     'as'         => 'plan.build',
@@ -139,19 +146,25 @@ Route::get('plan/view-all-responses', [
     'roles'      => ['root', 'administrator'],
     'uses'       => 'PlansController@viewAllResponses']);
 
-Route::get('plan/view-all-assigned', ['as' => 'plan.view.all.assigned', 'uses' => 'PlansController@viewAllAssigned']);
-
 Route::post('plan/save', [
     'as'         => 'plan.save',
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator'],
     'uses'       => 'PlansController@save']);
 
+Route::patch('plan/update-built-plan/{id}', [
+    'as'         => 'plan.built.update',
+    'middleware' => 'roles',
+    'roles'      => ['root', 'administrator'],
+    'uses'       => 'PlansController@updateBuiltPlan']);
+Route::put('plan/update-built-plan/{id}', [
+    'as'         => 'plan.built.update',
+    'middleware' => 'roles',
+    'roles'      => ['root', 'administrator'],
+    'uses'       => 'PlansController@updateBuiltPlan']);
+
 Route::get('plan/search', 'PlansController@search');
 Route::post('plan/search', ['as' => 'plan.search', 'uses' => 'PlansController@search']);
-
-Route::patch('plan/update-built-plan/{id}', ['as' => 'plan.built.update', 'uses' => 'PlansController@updateBuiltPlan']);
-Route::put('plan/update-built-plan/{id}', ['as' => 'plan.built.update', 'uses' => 'PlansController@updateBuiltPlan']);
 Route::resource('plan', 'PlansController', ['except' => ['create', 'show', 'destroy']]);
 
 
@@ -167,8 +180,12 @@ Route::get('ticket/build', [
     'uses'       => 'TicketsController@build'
 ]);
 
-Route::get('ticket/edit', ['as' => 'ticket.edit', 'uses' => 'TicketsController@edit']);
-Route::post('ticket/save-ticket-response', ['as' => 'ticket.save.response', 'uses' => 'TicketsController@save']);
+Route::get('ticket/edit', [
+    'as'         => 'ticket.edit',
+    'middleware' => 'roles',
+    'roles'      => ['root', 'administrator'],
+    'uses'       => 'TicketsController@edit']);
+
 Route::post('ticket/remove', [
     'as'         => 'ticket.remove.ajax',
     'middleware' => 'roles',
@@ -176,6 +193,7 @@ Route::post('ticket/remove', [
     'uses'       => 'TicketsController@removeAjax'
 ]);
 
+Route::post('ticket/save-ticket-response', ['as' => 'ticket.save.response', 'uses' => 'TicketsController@save']);
 Route::resource('ticket', 'TicketsController', ['except' => ['index', 'create', 'edit', 'show', 'destroy']]);
 
 
@@ -190,7 +208,11 @@ Route::get('tester/build', [
     'roles'      => ['root', 'administrator'],
     'uses'       => 'TestersController@build'
 ]);
-Route::get('tester/edit', ['as' => 'tester.edit', 'uses' => 'TestersController@edit']);
+Route::get('tester/edit', [
+    'as'         => 'tester.edit',
+    'middleware' => 'roles',
+    'roles'      => ['root', 'administrator'],
+    'uses'       => 'TestersController@edit']);
 Route::resource('tester', 'TestersController', ['except' => ['index', 'create', 'edit', 'show', 'destroy']]);
 
 /*Event::listen('illuminate.query',function($query){

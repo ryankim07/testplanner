@@ -57,7 +57,7 @@ class Tables extends Model
 
         $searchTerms = Request::input();
         $filters     = array_except($searchTerms, ['_token', 'created_from', 'created_to', 'sortBy', 'order', 'page']);
-        $perPage     = config('testplanner.system.pagination.results_tables');
+        $perPage     = config('testplanner.tables.pagination.lists');
         $page        = isset($searchTerms['page']) ? $searchTerms['page'] : 1;
         $url         = parse_url(Request::url());
 
@@ -89,7 +89,7 @@ class Tables extends Model
         if (isset($searchTerms['page'])) {
             $list = new LengthAwarePaginator($query->get(), $totalCount, $perPage, $page, ["path" => $url['path']]);
         } else {
-            $list = $query->paginate(config('testplanner.system.pagination.results_tables'));
+            $list = $query->paginate(config('testplanner.tables.pagination.lists'));
         }
 
         $results['list']       = $list;

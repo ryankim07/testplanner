@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
                         <i class="fa fa-commenting-o fa-3x header-icon"></i>
-                        <h4>Plans assigned to me  <span class="badge">{!! $totalPlans !!}</span></h4>
+                        <h4>Plans assigned to me</h4>
                     </div>
                 </div>
             </div>

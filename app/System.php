@@ -26,15 +26,6 @@ class System
     }
 
     /**
-     * Add new configuration value to testplanner config file
-     * @param $data
-     */
-    public static function setConfig($data)
-    {
-        self::writeConfig();
-    }
-
-    /**
      * Update testplanner config file
      *
      * @param $data
@@ -65,6 +56,7 @@ class System
      * Write to testplanner config file
      *
      * @param $data
+     * @return bool
      */
     public static function writeConfig($data)
     {

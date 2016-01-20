@@ -25,6 +25,9 @@ body {
     border: 0;
 }
 
+legend {
+    font-size: 18px;
+}
 
 /*
  * Main content
@@ -62,7 +65,6 @@ body {
 
 table:not(.dashboard-table) tbody tr:hover {
     color: green;
-    cursor: pointer;
 }
 
 .table-options {
@@ -149,17 +151,21 @@ table:not(.dashboard-table) tbody tr:hover {
 
 #review-main .trash {
     position:absolute;
-    margin-top: 6px;
-    margin-right: 25px;
+    margin-top: 8px;
+    margin-right: 30px;
     top:0;
     right:0;
-    line-height: 12px;
     color: #777777;
 }
 
 .header-icon {
     float:left;
     min-width: 54px;
+}
+
+#step-1-main .header-icon, #step-2-main .header-icon,
+#step-3-main .header-icon, #review-main .header-icon {
+    min-width: 64px;
 }
 
 #view-all-created-main .header-icon {
@@ -218,21 +224,5 @@ table:not(.dashboard-table) tbody tr:hover {
 }
 
 .tab-content .sub-header {
-    margin-bottom: 40px;
-}
-
-.system-config-panel-body .col-md-1-custom {
-    width: 6%;
-}
-
-.system-config-panel-body .col-md-2-custom {
-    width: 8.6%;
-}
-
-.system-config-panel-body .col-md-3-custom {
-    width: 16%;
-}
-
-.system-config-panel-body .col-md-4-custom {
-    width: 17%;
+    margin-bottom: 30px;
 }

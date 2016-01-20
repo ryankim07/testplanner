@@ -16,14 +16,6 @@ return [
         ],
     ],
 
-    'system' => [
-        'pagination' => [
-            'results_tables'   => 30,
-            'activity_stream'  => 10,
-            'dashboard_tables' => 5,
-        ]
-    ],
-
     'jira' => [
         'info' => [
             'domain'   => 'https://mophie.atlassian.net',
@@ -31,10 +23,18 @@ return [
         ]
     ],
 
+    'tables' => [
+        'pagination' => [
+            'lists'   => 30,
+            'activity_stream'  => 10,
+            'dashboard' => 5,
+        ]
+    ],
+
     'messages' => [
         'users' => [
             'new_user_added'      => 'New user successfully registered.',
-            'acct_inactive'       => 'Your account is inactive.  Please contact the administrator.',
+            'account_inactive'    => 'Your account is inactive.  Please contact the administrator.',
             'credentials_error'   => 'The credentials you entered did not match our records.',
             'unauthorized'        => 'You are not authorized to access this resource.',
             'identical_role'      => 'The role for the user you are trying to register already exists.',
@@ -45,9 +45,9 @@ return [
             'update'            => 'updated plan,',
             'new_build'         => 'New plan successfully created.',
             'build_error'       => 'Plan building cannot be done at the current moment.  Please try again later.',
-            'built_update'      => 'details has been updated successfully.',
+            'build_update'      => 'details has been updated successfully.',
             'session_error'     => 'Session data is missing.',
-            'non_responses'     => 'Users have not submitted responses yet.',
+            'users_non_responses' => 'Users have not submitted responses yet.',
             'response_success'  => 'Your plan has been posted successfully',
             'response_error'    => 'There seems to be a problem processing your response. Please try again later.',
             'response_updated'  => 'has updated',
