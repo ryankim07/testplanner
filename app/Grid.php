@@ -1,4 +1,4 @@
-<?php namespace App\Helpers;
+<?php namespace App;
 
 /**
  * Class Grid
@@ -68,7 +68,6 @@ class Grid
             'colname'    => 'Active',
             'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
             'sortable'   => 'email',
-            'order'      => $order,
             'width'      => '10px'
         ];
 
@@ -76,9 +75,6 @@ class Grid
             'type'       => 'text',
             'colname'    => 'Roles',
             'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => '',
-            'order'      => '',
-            'filterable' => false,
             'width'      => '100px'
         ];
 
@@ -118,6 +114,7 @@ class Grid
             'from_index' => 'created_from',
             'to_index'   => 'created_to',
             'sortable'   => 'created_at',
+            'filterable' => true,
             'order'      => $order,
             'width'      => '20px'
         ];
@@ -132,7 +129,6 @@ class Grid
             'type'       => 'text',
             'colname'    => 'Testers',
             'data'       => ['class' => 'form-control'],
-            'order'      => '',
             'width'      => '30px'
         ];
 
@@ -140,7 +136,6 @@ class Grid
             'type'         => 'text',
             'colname'      => 'View',
             'data'         => ['class' => 'form-control'],
-            'order'        => '',
             'width'        => '10px',
             'header_align' => 'text-center'
         ];
@@ -149,7 +144,6 @@ class Grid
             'type'         => 'text',
             'colname'      => 'Edit',
             'data'         => ['class' => 'form-control'],
-            'order'        => '',
             'width'        => '10px',
             'header_align' => 'text-center'
         ];
@@ -158,7 +152,6 @@ class Grid
             'type'         => 'text',
             'colname'      => 'Respond',
             'data'         => ['class' => 'form-control'],
-            'order'        => '',
             'width'        => '10px',
             'header_align' => 'text-center'
         ];

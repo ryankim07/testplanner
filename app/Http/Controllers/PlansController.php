@@ -195,14 +195,6 @@ class PlansController extends Controller
     {
         $user  = Auth::user();
         $roles = $user->role()->get();
-        $table = Tables::prepare('order', [
-            'description',
-            'admin',
-            'status',
-            'created_at',
-            'updated_at',
-            'edit'
-        ], 'PlansController@index');
 
         // If user has root privileges, get all the plans that were created.
         // Otherwise just get the plans created with administrator privilege.
@@ -218,15 +210,26 @@ class PlansController extends Controller
             $userId = $adminId;
         }
 
-        $query = Plans::getAllPlans($table['sorting']['sortBy'], $table['sorting']['order'], $userId);
-
         // Administrators who created plans
         $admins = User::getAllUsersByRole($roleName);
 
+        // Set up dropdown list of all admins
         $adminsList[0] = 'All';
         foreach($admins as $admin) {
             $adminsList[$admin->id] = $admin->first_name;
         }
+
+        // Prepare columns to be shown
+        $table = Tables::prepare('order', [
+            'description',
+            'admin',
+            'status',
+            'created_at',
+            'updated_at',
+            'edit'
+        ], 'PlansController@index');
+
+        $query = Plans::getAllPlans($table['sorting']['sortBy'], $table['sorting']['order'], $userId);
 
         return view('pages.testplanner.view_all_created', [
             'userId'      => $userId,
@@ -249,6 +252,8 @@ class PlansController extends Controller
     public function viewAllAssigned()
     {
         $user  = Auth::user();
+
+        // Prepare columns to be shown
         $table = Tables::prepare('order', [
             'description',
             'admin',
@@ -277,6 +282,8 @@ class PlansController extends Controller
     public function viewAllResponses()
     {
         $user  = Auth::user();
+
+        // Prepare columns to be shown
         $table = Tables::prepare('order', [
             'description',
             'status',
@@ -290,6 +297,7 @@ class PlansController extends Controller
         $browserTesters = [];
         $testers        = [];
 
+        // Setup up dropdown list of testers
         foreach ($query->get() as $plan) {
             $allTesters = Testers::getTestersByPlanId($plan->id);
 
@@ -308,11 +316,6 @@ class PlansController extends Controller
             'columnsLink' => $table['columns_link'],
             'link'        => ''
         ]);
-    }
-
-    public function search()
-    {
-
     }
 
     /**
@@ -466,5 +469,63 @@ class PlansController extends Controller
         Session::forget('mophie_testplanner');
 
         return redirect('dashboard')->with('flash_message', config('testplanner.messages.plan.new_build'));
+    }
+
+    /**
+     * Search functionality for each table
+     *
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function search(Request $request)
+    {
+        $user  = Auth::user();
+        $roles = $user->role()->get();
+
+        // If user has root privileges, get all the plans that were created.
+        // Otherwise just get the plans created with administrator privilege.
+        foreach($roles as $role) {
+            $roleName = $role->name;
+            $userId = $roleName == "root" ? 0 : $user->id;
+            break;
+        }
+
+        // Display selected creator of the plan
+        $adminId = $request->get('admin');
+        if (isset($adminId)) {
+            $userId = $adminId;
+        }
+
+        // Administrators who created plans
+        $admins = User::getAllUsersByRole($roleName);
+
+        // Set up dropdown list of all admins
+        $adminsList[0] = 'All';
+        foreach($admins as $admin) {
+            $adminsList[$admin->id] = $admin->first_name;
+        }
+
+        $query   = Plans::query();
+        $results = Tables::searchResults('plans', $query);
+
+        // Prepare columns to be shown
+        $table   = Tables::prepare('order', [
+            'description',
+            'admin',
+            'status',
+            'created_at',
+            'updated_at',
+            'edit'
+        ], 'PlansController@index');
+
+        return view('pages.testplanner.view_all_created', [
+            'userId'      => $userId,
+            'role'        => $roleName,
+            'plans'       => isset($query) ? $query->paginate(config('testplanner.tables.pagination.lists')) : '',
+            'totalPlans'  => isset($query) ? Plans::count() : 0,
+            'columns'     => $table['columns'],
+            'columnsLink' => $table['columns_link'],
+            'link'        => '',
+            'adminsList'  => isset($adminsList) ? $adminsList : ''
+        ]);
     }
 }

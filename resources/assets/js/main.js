@@ -512,9 +512,11 @@ function jiraVersions(formId, descId, versions)
 function planStartExpireDates()
 {
     $('#started_at').datetimepicker({
+        useCurrent: false,
         format: "MM/DD/YYYY"
     });
     $('#expired_at').datetimepicker({
+        useCurrent: false,
         format: "MM/DD/YYYY"
     });
 
@@ -524,6 +526,29 @@ function planStartExpireDates()
 
     $("#expired_at").on("dp.change", function (e) {
         $('#started_at').data("DateTimePicker").maxDate(e.date);
+    });
+}
+
+/**
+ * Date range
+ */
+function planCreatedDates()
+{
+    $('#created_from').datetimepicker({
+        useCurrent: false,
+        format: "MM/DD/YYYY"
+    });
+    $('#created_to').datetimepicker({
+        useCurrent: false,
+        format: "MM/DD/YYYY"
+    });
+
+    $("#created_from").on("dp.change", function (e) {
+        $('#created_to').data("DateTimePicker").minDate(e.date);
+    });
+
+    $("#created_to").on("dp.change", function (e) {
+        $('#created_from').data("DateTimePicker").maxDate(e.date);
     });
 }
 

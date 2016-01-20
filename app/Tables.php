@@ -11,16 +11,14 @@
  * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 use App\Facades\Tools;
-use App\Facades\Grid;
 
-use Config;
+use App\Grid;
 
-class Tables extends Model
+class Tables
 {
     /**
      * Returns sort and order of columns
@@ -49,10 +47,9 @@ class Tables extends Model
     public static function searchResults($searchType, $query)
     {
         $column = [
-            'customers'     => 'id',
-            'registrations' => 'registration_code',
-            'services'      => 'id',
-            'payments'      => 'id'
+            'plans'           => 'id',
+            'activity_stream' => 'id',
+            'users'           => 'id'
         ];
 
         $searchTerms = Request::input();
@@ -69,7 +66,16 @@ class Tables extends Model
 
         foreach($filters as $key => $value) {
             if (!empty($value)) {
-                $query->where($key, 'LIKE', '%' . $value . '%');
+                if ($key == 'admin') {
+                    $query->join('users', function($join) use ($value) {
+                        $join->on('users.id', '=', 'plans.creator_id')
+                            ->where('users.first_name', '=', $value);
+                    });
+
+                    $sortBy = 'plans.created_at';
+                } else {
+                    $query->where($key, 'LIKE', '%' . $value . '%');
+                }
             }
         }
 

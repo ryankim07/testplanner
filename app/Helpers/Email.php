@@ -14,7 +14,6 @@
 use App\Facades\Tools;
 
 use Mail;
-use Config;
 
 class Email
 {
