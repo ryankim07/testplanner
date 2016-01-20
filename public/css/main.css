@@ -55,31 +55,6 @@ body {
     margin-top: 20px;
 }
 
-.panel-body-chart{
-    overflow: auto;
-}
-
-/*
- * Placeholder dashboard ideas
- */
-
-.placeholders {
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-.placeholders h4 {
-    margin-bottom: 0;
-}
-
-.placeholder {
-    margin-bottom: 20px;
-}
-
-.placeholder img {
-    display: inline-block;
-    border-radius: 50%;
-}
 
 /*
  * Tables
@@ -218,4 +193,46 @@ table:not(.dashboard-table) tbody tr:hover {
 
 .dropdown-menu .menu-link-icon {
     padding-right: 5px;
+}
+
+/*
+ * SYSTEM CONFIGURATION
+ */
+
+#system-main .nav-pills > li.active > a {
+    background: #777777;
+    color: #FFFFFF;
+}
+
+#system-main .nav-pills > li.active > a:hover {
+    background: #777777;
+    color: #FFFFFF;
+}
+
+.system-config-panel-body .control-label {
+    text-align: left;
+}
+
+.tab-content .panel {
+    margin-top: 0px;
+}
+
+.tab-content .sub-header {
+    margin-bottom: 40px;
+}
+
+.system-config-panel-body .col-md-1-custom {
+    width: 6%;
+}
+
+.system-config-panel-body .col-md-2-custom {
+    width: 8.6%;
+}
+
+.system-config-panel-body .col-md-3-custom {
+    width: 16%;
+}
+
+.system-config-panel-body .col-md-4-custom {
+    width: 17%;
 }

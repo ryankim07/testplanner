@@ -35,7 +35,7 @@
                 @include('errors.list')
 
                 @if($mode == 'response' && count($totalResponses) == 0)
-                    <p>Users, {!! config('testplanner.plan_non_responses_msg') !!}</p>
+                    <p>Users, {!! config('testplanner.messages.plan.non_responses') !!}</p>
                 @else
                     @if($mode == 'response')
                         <ul class="nav nav-tabs">

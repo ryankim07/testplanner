@@ -121,25 +121,4 @@ return [
 
     'pretend' => false,
 
-    /*
-    |--------------------------------------------------------------------------
-    | Mail "Subjects"
-    |--------------------------------------------------------------------------
-    |
-    | When this option is enabled, e-mail will not actually be sent over the
-    | web and will instead be written to your application's logs files so
-    | you may inspect the message. This is great for local development.
-    |
-    */
-
-    'admin_system_subject'    => 'Test Planner System Error.',
-
-    'plan_created_subject'    => 'New test plan has been assigned to you.',
-
-    'plan_updated_subject'    => 'Existing plan has been updated.',
-
-    'ticket_response_subject' => 'Response from',
-
-    'email_error_subject'     => 'Confirmation email error.',
-
 ];

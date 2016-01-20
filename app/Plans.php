@@ -18,14 +18,12 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use PhpSpec\Exception\Exception;
 
-use App\Facades\Utils;
+use App\Facades\Tools;
 use App\Facades\Jira;
 
 use App\Tickets;
 use App\Testers;
 use App\TicketsResponses;
-
-use Session;
 
 class Plans extends Model
 {
@@ -107,7 +105,7 @@ class Plans extends Model
         $query = self::getAllPlans($sortBy, $order, $userId);
 
         if ($from == 'dashboard') {
-            $query->take(config('testplanner.dashboard_pagination_count'));
+            $query->take(config('testplanner.system.pagination.dashboard_tables'));
         }
 
         return $query;
@@ -137,7 +135,7 @@ class Plans extends Model
             ->orderBy($sortBy, $order);
 
         if ($from == 'dashboard') {
-            $query->take(config('testplanner.dashboard_pagination_count'));
+            $query->take(config('testplanner.system.pagination.dashboard_tables'));
         }
 
         return $query;
@@ -171,7 +169,7 @@ class Plans extends Model
                         list($project, $summary) = explode(':', $ticketDesc);
 
                         if (preg_match('/^ECOM-\d/', $project)) {
-                            $descUrl = url(config('testplanner.jira_domain')) . '/browse/' . $project;
+                            $descUrl = url(config('testplanner.jira.info.domain')) . '/browse/' . $project;
                         }
                         $newResults[$ticket['id']] = [
                             'id'              => $ticket['id'],
@@ -188,8 +186,8 @@ class Plans extends Model
 
             unset($results['tickets']);
 
-            $results['created_at']    = Utils::dateAndTimeConverter($results['created_at']);
-            $results['updated_at']    = Utils::dateAndTimeConverter($results['updated_at']);
+            $results['created_at']    = Tools::dateAndTimeConverter($results['created_at']);
+            $results['updated_at']    = Tools::dateAndTimeConverter($results['updated_at']);
             $results['ticket_status'] = $ticketsResponses->status;
             $results['tickets']       = $newResults;
         } else {
@@ -317,14 +315,9 @@ class Plans extends Model
             DB::rollback();
 
             // Log to system
-            Utils::log($errorMsg, array_merge($planData, $ticketsData, $testerData));
+            Tools::log($errorMsg, array_merge($planData, $ticketsData, $testerData));
 
-            // Delete session
-            Session::forget('mophie_testplanner');
-
-            return redirect()->action('PlansController@build')
-                ->withInput()
-                ->withErrors(['message' => config('testplanner.plan_build_error_msg')]);
+            return false;
         }
 
         // Commit all changes

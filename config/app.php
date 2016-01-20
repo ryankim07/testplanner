@@ -146,7 +146,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\EmailServiceProvider::class,
-        App\Providers\UtilsServiceProvider::class,
+        App\Providers\ToolsServiceProvider::class,
         App\Providers\GridServiceProvider::class,
         App\Providers\JiraServiceProvider::class,
 

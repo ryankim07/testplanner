@@ -11,7 +11,7 @@
  * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
-use App\Facades\Utils;
+use App\Facades\Tools;
 
 class Jira
 {
@@ -23,7 +23,7 @@ class Jira
     {
         $this->_username = env('JIRA_LOGIN');
         $this->_password = env('JIRA_PASS');
-        $this->_jira_rest_url = config('testplanner.jira_rest_url');
+        $this->_jira_rest_url = config('testplanner.jira.info.rest_url');
     }
 
     /**
@@ -55,12 +55,12 @@ class Jira
             curl_close($ch);
 
             if ($chError) {
-                Utils::log('cURL server response error: ', $chError);
+                Tools::log('cURL server response error: ', $chError);
             } else {
                 return json_decode($result);
             }
         } catch(\Exception $e) {
-            Utils::log('cURL errors: ' . $e->getErrors(), $data);
+            Tools::log('cURL errors: ' . $e->getErrors(), $data);
         }
     }
 

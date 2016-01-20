@@ -1,7 +1,7 @@
 <?php namespace App\Providers;
 
 /**
- * Class UtilsServiceProvider
+ * Class ToolsServiceProvider
  *
  * Service Provider
  *
@@ -13,7 +13,7 @@
 
 use Illuminate\Support\ServiceProvider;
 
-class UtilsServiceProvider extends ServiceProvider
+class ToolsServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
@@ -22,13 +22,13 @@ class UtilsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('utils',function() {
-            return new \App\Helpers\Utils;
+        $this->app->bind('tools',function() {
+            return new \App\Helpers\Tools;
         });
 
         $this->app->booting(function() {
             $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-            $loader->alias('Utils', 'App\Facades\Utils');
+            $loader->alias('Tools', 'App\Facades\Tools');
         });
     }
 }

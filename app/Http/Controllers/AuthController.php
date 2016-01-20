@@ -57,7 +57,7 @@ class AuthController extends Controller
         if ($this->auth->validate(['email' => $request->email, 'password' => $request->password, 'active' => 0])) {
             return redirect($this->loginPath())
                 ->withInput($request->only('email', 'remember'))
-                ->withErrors(['message' => config('testplanner.acct_inactive_msg')]);
+                ->withErrors(['message' => config('testplanner.messages.users.acct_inactive')]);
         }
 
         if ($this->auth->attempt($request->only('email', 'password')))
@@ -67,7 +67,7 @@ class AuthController extends Controller
 
         return redirect('auth/login')
             ->withInput()
-            ->withErrors(['message' => config('testplanner.credentials_problem_msg')]);
+            ->withErrors(['message' => config('testplanner.messages.users.credentials_error')]);
     }
 
     /**
@@ -134,7 +134,7 @@ class AuthController extends Controller
 
         if ($roleExists) {
             return redirect('admin/auth/register')
-                ->with('flash_message', config('testplanner.admin_identical_role_msg'));
+                ->with('flash_message', config('testplanner.messages.users.identical_role'));
         }
 
         $newRole = UserRole::create([
@@ -142,6 +142,6 @@ class AuthController extends Controller
             'role_id' => $request->role
         ]);
 
-        return redirect('dashboard')->with('flash_message', config('testplanner.new_user_added_msg'));;
+        return redirect('dashboard')->with('flash_message', config('testplanner.messages.users.new_user_added'));;
     }
 }

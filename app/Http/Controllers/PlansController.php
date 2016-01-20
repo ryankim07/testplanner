@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PlansFormRequest;
 use App\Http\Requests\PlanUpdateFormRequest;
 
-use App\Facades\Utils;
+use App\Facades\Tools;
 use App\Facades\Email;
 
 use App\Plans;
@@ -66,7 +66,7 @@ class PlansController extends Controller
         $user = Auth::user();
 
         // Get Jira versions
-        $jiraVersions = Utils::jiraVersions();
+        $jiraVersions = Tools::jiraVersions();
 
         return view('pages.testplanner.step_1', [
             'mode'          => 'build',
@@ -86,7 +86,7 @@ class PlansController extends Controller
         $planData = Session::get('mophie_testplanner.plan');
 
         // Get Jira versions
-        $jiraVersions = Utils::jiraVersions();
+        $jiraVersions = Tools::jiraVersions();
 
         return view('pages.testplanner.step_1', [
             'mode'          => 'edit',
@@ -133,7 +133,7 @@ class PlansController extends Controller
             ]
         ));
 
-        return redirect('dashboard')->with('flash_message', $request->get('description') . ' ' . config('testplanner.plan_built_update_msg'));
+        return redirect('dashboard')->with('flash_message', $request->get('description') . ' ' . config('testplanner.messages.plan.built_update'));
     }
 
     /**
@@ -166,17 +166,17 @@ class PlansController extends Controller
         }
 
         // Get Jira versions
-        $jiraVersions = Utils::jiraVersions();
+        $jiraVersions = Tools::jiraVersions();
 
         // Get Jira issues
-        $jiraIssues = Utils::jiraIssues();
+        $jiraIssues = Tools::jiraIssues();
 
         return view('pages.testplanner.view', [
             'plan' => [
                 'id'            => $plan->id,
                 'description'   => $plan->description,
-                'started_at'    => Utils::dateConverter($plan->started_at),
-                'expired_at'    => Utils::dateConverter($plan->expired_at),
+                'started_at'    => Tools::dateConverter($plan->started_at),
+                'expired_at'    => Tools::dateConverter($plan->expired_at),
                 'tickets_html'  => $ticketsHtml,
                 'users'         => $users,
                 'testers'       => json_encode($testers),
@@ -231,7 +231,7 @@ class PlansController extends Controller
         return view('pages.testplanner.view_all_created', [
             'userId'      => $userId,
             'role'        => $roleName,
-            'plans'       => isset($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
+            'plans'       => isset($query) ? $query->paginate(config('testplanner.system.pagination.results_tables')) : '',
             'totalPlans'  => isset($query) ? Plans::count() : 0,
             'columns'     => $table['columns'],
             'columnsLink' => $table['columns_link'],
@@ -261,7 +261,7 @@ class PlansController extends Controller
         $query = Plans::getAllAssigned($user->id, $table['sorting']['sortBy'], $table['sorting']['order']);
 
         return view('pages.testplanner.view_all_assigned', [
-            'plans'       => !empty($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
+            'plans'       => !empty($query) ? $query->paginate(config('testplanner.system.pagination.results_tables')) : '',
             'totalPlans'  => !empty($query) ? Plans::count() : 0,
             'columns'     => $table['columns'],
             'columnsLink' => $table['columns_link'],
@@ -301,7 +301,7 @@ class PlansController extends Controller
         }
 
         return view('pages.testplanner.view_all_responses', [
-            'plans'       => !empty($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
+            'plans'       => !empty($query) ? $query->paginate(config('testplanner.system.pagination.results_tables')) : '',
             'totalPlans'  => !empty($query) ? Plans::count() : 0,
             'testers'     => $browserTesters,
             'columns'     => $table['columns'],
@@ -444,6 +444,16 @@ class PlansController extends Controller
 
         // Save plan
         $results = Plans::savePlan($planData, $ticketsData, $testerData);
+
+        if (!$results) {
+            // Delete session
+            Session::forget('mophie_testplanner');
+
+            return redirect()->action('PlansController@build')
+                ->withInput()
+                ->withErrors(['message' => config('testplanner.messages.plan.build_error')]);
+        }
+
         $planData['id'] = $results['plan_id'];
 
         // Log to activity stream
@@ -455,6 +465,6 @@ class PlansController extends Controller
         // Delete session
         Session::forget('mophie_testplanner');
 
-        return redirect('dashboard')->with('flash_message', config('testplanner.new_plan_build_msg'));
+        return redirect('dashboard')->with('flash_message', config('testplanner.messages.plan.new_build'));
     }
 }

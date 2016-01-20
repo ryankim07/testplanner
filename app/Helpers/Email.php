@@ -11,7 +11,7 @@
  * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
-use App\Facades\Utils;
+use App\Facades\Tools;
 
 use Mail;
 use Config;
@@ -30,17 +30,17 @@ class Email
         // Type of email to be send out
         switch($type) {
             case 'plan-created':
-                $emailSubject = $data['description'] . ' - ' . config('mail.plan_created_subject');
+                $emailSubject = $data['description'] . ' - ' . config('testplanner.mail.subjects.plan_created');
                 $emailType    = 'emails.plan_created';
             break;
 
             case 'plan-updated':
-                $emailSubject = $data['description'] . ' - ' . config('mail.plan_updated_subject');
+                $emailSubject = $data['description'] . ' - ' . config('testplanner.mail.subjects.plan_updated');
                 $emailType    = 'emails.plan_updated';
                 break;
 
             case 'ticket-response':
-                $emailSubject =  $data['description'] . ' - ' . config('mail.ticket_response_subject') . ' ' . $data['tester_first_name'];
+                $emailSubject =  $data['description'] . ' - ' . config('testplanner.mail.subjects.ticket_response') . ' ' . $data['tester_first_name'];
                 $emailType    = 'emails.ticket_response';
                 break;
         }
@@ -74,7 +74,7 @@ class Email
                 break;
             }
         } catch(\Exception $e) {
-            Utils::log($e->getMessage(), $data);
+            Tools::log($e->getMessage(), $data);
         }
 
         return true;

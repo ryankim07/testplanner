@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-use App\Facades\Utils;
+use App\Facades\Tools;
 use App\Facades\Grid;
 
 use Config;
@@ -57,15 +57,15 @@ class Tables extends Model
 
         $searchTerms = Request::input();
         $filters     = array_except($searchTerms, ['_token', 'created_from', 'created_to', 'sortBy', 'order', 'page']);
-        $perPage     = config('testplanner.pagination_count');
+        $perPage     = config('testplanner.system.pagination.results_tables');
         $page        = isset($searchTerms['page']) ? $searchTerms['page'] : 1;
         $url         = parse_url(Request::url());
 
         // Default sort and order
         $sortBy = empty($searchTerms['sortBy']) ? 'created_at' : $searchTerms['sortBy'];
         $order  = empty($searchTerms['order'])  ? 'DESC' :$searchTerms['order'];
-        $from   = !empty($searchTerms['created_from']) ? Utils::dbDateConverter($searchTerms['created_from'], '00:00:00') : null;
-        $to     = !empty($searchTerms['created_to'])   ? Utils::dbDateConverter($searchTerms['created_to'], '23:59:59') : null;
+        $from   = !empty($searchTerms['created_from']) ? Tools::dbDateConverter($searchTerms['created_from'], '00:00:00') : null;
+        $to     = !empty($searchTerms['created_to'])   ? Tools::dbDateConverter($searchTerms['created_to'], '23:59:59') : null;
 
         foreach($filters as $key => $value) {
             if (!empty($value)) {
@@ -89,7 +89,7 @@ class Tables extends Model
         if (isset($searchTerms['page'])) {
             $list = new LengthAwarePaginator($query->get(), $totalCount, $perPage, $page, ["path" => $url['path']]);
         } else {
-            $list = $query->paginate(config('testplanner.pagination_count'));
+            $list = $query->paginate(config('testplanner.system.pagination.results_tables'));
         }
 
         $results['list']       = $list;

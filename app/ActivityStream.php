@@ -14,7 +14,7 @@
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-use App\Facades\Utils;
+use App\Facades\Tools;
 
 use App\User;
 
@@ -67,7 +67,7 @@ class ActivityStream extends Model
         $results = '';
         if (isset($streams) > 0) {
             foreach($streams->get() as $stream) {
-                $createdAt = Utils::timeDifference($stream->created_at);
+                $createdAt = Tools::timeDifference($stream->created_at);
                 $activity  = (Auth::user()->hasRole(['root'])) || (Auth::user()->id == $stream->user_id) ? $stream->activity :
                     '<strong>' . strip_tags($stream->activity) . '</strong>';
 
@@ -122,17 +122,17 @@ class ActivityStream extends Model
             switch($type) {
                 case 'plan':
                     if ($status == 'new') {
-                        $message = config('testplanner.new_plan_msg');
+                        $message = config('testplanner.messages.plan.new');
                     } elseif ($status == 'update') {
-                        $message = config('testplanner.plan_update_msg');
+                        $message = config('testplanner.messages.plan.update');
                     }
                     break;
 
                 case 'ticket-response':
                     if ($status == 'progress' || $status == 'update') {
-                        $message = config('testplanner.plan_response_updated_msg');
+                        $message = config('testplanner.messages.plan.response_updated');
                     } else if ($status == 'complete') {
-                        $message = config('testplanner.plan_response_resolved');
+                        $message = config('testplanner.messages.plan.response_resolved');
                     }
                     break;
             }
@@ -148,7 +148,7 @@ class ActivityStream extends Model
             }
         } catch(\Exception $e) {
             // Log to system
-            Utils::log($e->getMessage(), $plan);
+            Tools::log($e->getMessage(), $plan);
         }
 
         return true;

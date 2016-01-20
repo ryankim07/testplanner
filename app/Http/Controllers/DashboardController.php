@@ -87,7 +87,7 @@ class DashboardController extends Controller
 
         // Return view
         return view('pages.main.dashboard', [
-            'activities'      => !empty($activityStream['query']) ? $activityStream['query']->paginate(config('testplanner.as_pagination_count')) : '',
+            'activities'      => !empty($activityStream['query']) ? $activityStream['query']->paginate(config('testplanner.system.pagination.activity_stream')) : '',
             'totalActivities' => !empty($activityStream['query']) ? ActivityStream::count() : 0,
             'plans'           => isset($plans) ? array_filter($plans) : '',
             'link'            => '',

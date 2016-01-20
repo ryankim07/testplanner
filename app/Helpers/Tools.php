@@ -1,7 +1,7 @@
 <?php namespace App\Helpers;
 
 /**
- * Class Utils
+ * Class Tools
  *
  * Helper
  *
@@ -16,7 +16,7 @@ use App\Facades\Jira;
 use Lang;
 use Log;
 
-class Utils
+class Tools
 {
     /**
      * Generate random numbers according to length

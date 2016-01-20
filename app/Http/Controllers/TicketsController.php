@@ -18,7 +18,7 @@ use App\Http\Requests\TicketsFormRequest;
 use App\Http\Requests\UserResponseFormRequest;
 use PhpSpec\Exception\Exception;
 
-use App\Facades\Utils;
+use App\Facades\Tools;
 use App\Facades\Email;
 
 use App\User;
@@ -49,7 +49,7 @@ class TicketsController extends Controller
     public function build()
     {
         // Get Jira issues
-        $jiraIssues = Utils::jiraIssues();
+        $jiraIssues = Tools::jiraIssues();
 
         $ticketsHtml = view('pages/testplanner/partials/tickets', [
             'mode'     => 'create',
@@ -91,7 +91,7 @@ class TicketsController extends Controller
         }
 
         // Get Jira issues
-        $jiraIssues = Utils::jiraIssues();
+        $jiraIssues = Tools::jiraIssues();
 
         return view('pages.testplanner.step_2', [
             'plan' => [
@@ -133,7 +133,11 @@ class TicketsController extends Controller
         // Save ticket response
         $response = TicketsResponses::saveResponse($planData);
 
-        if ($response != 'new') {
+        if (!$response) {
+            return redirect()->action('PlansController@respond')
+                ->withInput()
+                ->withErrors(['message' => config('testplanner.messages.plan.response_error')]);
+        } elseif ($response != 'new') {
             // Log activity
             ActivityStream::saveActivityStream($planData, 'ticket-response', $response);
 
@@ -149,7 +153,7 @@ class TicketsController extends Controller
                 'response'           => $response
             ]);
 
-            return redirect('dashboard')->with('flash_message', config('testplanner.plan_response_success_msg'));
+            return redirect('dashboard')->with('flash_message', config('testplanner.messages.plan.response_success'));
         }
 
         return redirect('dashboard');

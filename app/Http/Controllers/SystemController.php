@@ -13,27 +13,61 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
-use App\Facades\Utils;
-
-use App\User;
-use App\ActivityStream;
-use App\ActivityComments;
-use App\Tables;
-
-use Auth;
+use App\System;
 
 class SystemController extends Controller
 {
     /**
-     * DashboardController constructor.
+     * SystemController constructor.
      */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function index()
+    {
+        // Get header and body data
+        $configs = System::getConfigs();
+
+        return view('pages.testplanner.system_configs', ['configData' => $configs]);
+    }
+
+    /**
+     * Create the specified resource in storage
+     */
+    public function create()
+    {
+
+    }
+
+    /**
+     * Show the specified resource in storage
+     */
     public function show()
     {
 
+    }
+
+    /**
+     * Update the specified resource in storage
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request)
+    {
+        $postData = array_except($request->all(), '_token');
+        $results  = System::updateConfig($postData);
+
+        return response()->json([
+            "status" => "success",
+            "msgs"   => $results,
+        ]);
     }
 }

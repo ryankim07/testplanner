@@ -1,7 +1,7 @@
 <?php namespace App\Facades;
 
 /**
- * Class Utils
+ * Class Tools
  *
  * Facade
  *
@@ -13,7 +13,7 @@
 
 use Illuminate\Support\Facades\Facade;
 
-class Utils extends Facade
+class Tools extends Facade
 {
     /**
      * Region Facade accessor
@@ -22,6 +22,6 @@ class Utils extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'utils';
+        return 'tools';
     }
 }

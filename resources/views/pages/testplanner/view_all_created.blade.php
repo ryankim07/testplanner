@@ -58,8 +58,8 @@
                                     ?>
 
                                     <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->status !!}</span></td>
-                                    <td>{!! Utils::dateConverter($plan->created_at) !!}</td>
-                                    <td>{!! Utils::dateConverter($plan->updated_at) !!}</td>
+                                    <td>{!! Tools::dateConverter($plan->created_at) !!}</td>
+                                    <td>{!! Tools::dateConverter($plan->updated_at) !!}</td>
                                     <td class="text-center"><a href="{!! URL::route('plan.view', $plan->id) !!}"><i class="fa fa-pencil-square-o fa-lg"></i></a></td>
                                 </tr>
                             @endforeach

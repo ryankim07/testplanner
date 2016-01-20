@@ -73,7 +73,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">System <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="{!! URL::route('auth.register') !!}" class="menu-link"><i class="fa fa-cog menu-link-icon"></i>Add</a>
+                                        <a href="{!! URL::route('system.create') !!}" class="menu-link"><i class="fa fa-cog menu-link-icon"></i>Add</a>
                                     </li>
                                     <li>
                                         <a href="{!! URL::route('system.view.all') !!}" class="menu-link"><i class="fa fa-cogs menu-link-icon"></i>Edit</a>

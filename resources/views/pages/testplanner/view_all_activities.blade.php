@@ -40,7 +40,7 @@
                             @foreach($activities as $stream)
                                 <tr>
                                     <td>{!! $stream->activity !!}</td>
-                                    <td>{!! Utils::dateConverter($stream->created_at) !!}</td>
+                                    <td>{!! Tools::dateConverter($stream->created_at) !!}</td>
                                 </tr>
                             @endforeach
                             </tbody>

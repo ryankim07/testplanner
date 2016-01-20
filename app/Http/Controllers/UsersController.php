@@ -53,7 +53,7 @@ class UsersController extends Controller
         $query = User::getAllUsers($table['sorting']['sortBy'], $table['sorting']['order']);
 
         return view('pages.main.view_all_users', [
-            'users'       => isset($query) ? $query->paginate(config('testplanner.pagination_count')) : '',
+            'users'       => isset($query) ? $query->paginate(config('testplanner.system.pagination.results_tables')) : '',
             'totalUsers'  => isset($query) ? User::count() : 0,
             'columns'     => $table['columns'],
             'columnsLink' => $table['columns_link'],
@@ -157,7 +157,7 @@ class UsersController extends Controller
 
         return response()->json([
             'type' => 'success',
-            'msg'  => config('testplanner.user_update_success_msg')
+            'msg'  => config('testplanner.messages.users.user_update')
         ]);
     }
 }

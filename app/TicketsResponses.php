@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use PhpSpec\Exception\Exception;
 
-use App\Facades\Utils;
+use App\Facades\Tools;
 
 class TicketsResponses extends Model
 {
@@ -128,11 +128,9 @@ class TicketsResponses extends Model
                 DB::rollback();
 
                 // Log to system
-                Utils::log($errorMsg, $planData);
+                Tools::log($errorMsg, $planData);
 
-                return redirect()->action('PlansController@respond')
-                    ->withInput()
-                    ->withErrors(['message' => config('testplanner.plan_response_error_msg')]);
+                return false;
             }
         }
 

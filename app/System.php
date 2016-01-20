@@ -11,52 +11,74 @@
  * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Filesystem\Filesystem;
 
-use App\User;
-
-class System extends Model
+class System
 {
     /**
-     * The database table used by the model.
+     * Get all configurations from testplanner config file
      *
-     * @var string
+     * @return mixed
      */
-    protected $table = "system";
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'section',
-        'type',
-        'value'
-    ];
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $guarded = array('id');
-
-    /**
-     * Model event to change data before saving to database
-     */
-    public static function boot()
+    public static function getConfigs()
     {
+        return config('testplanner');
     }
 
-    public static function getSections()
+    /**
+     * Add new configuration value to testplanner config file
+     * @param $data
+     */
+    public static function setConfig($data)
     {
-        $sections = DB::table('system')
-            ->distinct()
-            ->groupBy('section')
-            ->get();
+        self::writeConfig();
+    }
 
-        return $sections;
+    /**
+     * Update testplanner config file
+     *
+     * @param $data
+     * @return array
+     */
+    public static function updateConfig($data)
+    {
+        $configs  = self::getConfigs();
+        $redirect = false;
+        $errorMsg = '';
+
+        foreach($data as $key => $val) {
+            list($arrKeys, $attr) = explode(':', $key);
+            list($section, $type) = explode('_', $arrKeys);
+
+            if (isset($configs[$section][$type][$attr])) {
+                $configs[$section][$type][$attr] = $val;
+                $results[] = $attr;
+            }
+        }
+
+        self::writeConfig($configs);
+
+        return $results;
+    }
+
+    /**
+     * Write to testplanner config file
+     *
+     * @param $data
+     */
+    public static function writeConfig($data)
+    {
+        $data     = var_export($data, 1);
+        $redirect = false;
+        $errorMsg = '';
+
+        try {
+            $fs = new Filesystem();
+            $fs->put(base_path() . '/config/testplanner.php', "<?php\n return $data ;");
+        } catch (\Exception $e) {
+            $errorMsg = $e->getMessage();
+        }
+
+        return true;
     }
 }

@@ -46,8 +46,8 @@
                                     <td>{!! $user->email !!}</td>
                                     <td>{!! isset($user->active) == true ? 'Yes' : 'No' !!}</td>
                                     <td>{!! $user->role_names !!}</td>
-                                    <td>{!! Utils::dateConverter($user->created_at) !!}</td>
-                                    <td>{!! Utils::dateConverter($user->updated_at) !!}</td>
+                                    <td>{!! Tools::dateConverter($user->created_at) !!}</td>
+                                    <td>{!! Tools::dateConverter($user->updated_at) !!}</td>
                                 </tr>
                             @endforeach
                         </table>

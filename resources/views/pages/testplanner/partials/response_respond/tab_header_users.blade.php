@@ -8,5 +8,5 @@
 --}}
 
     <li class="{!! $testerId == $selectedUserId ? 'active' : '' !!}">
-            <a data-toggle="tab" href="#{!! $testerFirstName !!}">{!! $testerFirstName !!}</a></li>
+            <a href="#{!! $testerFirstName !!}" data-toggle="tab">{!! $testerFirstName !!}</a></li>
     </li>

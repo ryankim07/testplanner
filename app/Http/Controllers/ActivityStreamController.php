@@ -13,7 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
-use App\Facades\Utils;
+use App\Facades\Tools;
 
 use App\User;
 use App\ActivityStream;
@@ -32,6 +32,11 @@ class ActivityStreamController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
     public function index()
     {
         $table = Tables::prepare('order', [
@@ -40,7 +45,7 @@ class ActivityStreamController extends Controller
         ], 'ActivityStreamController@index');
 
         return view('pages.testplanner.view_all_activities', [
-            'activities'      => ActivityStream::paginate(config('testplanner.pagination_count')),
+            'activities'      => ActivityStream::paginate(config('testplanner.system.pagination.activity_stream')),
             'totalActivities' => ActivityStream::count(),
             'columns'         => $table['columns'],
             'columnsLink'     => $table['columns_link'],
@@ -67,7 +72,7 @@ class ActivityStreamController extends Controller
             "status"      => "success",
             "commentator" => User::getUserFirstName(Auth::user()->id),
             "comment"     => $results->comment,
-            "created_at"  => Utils::dateConverter($results->created_at)
+            "created_at"  => Tools::dateConverter($results->created_at)
         ]);
     }
 }

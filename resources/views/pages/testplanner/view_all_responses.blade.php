@@ -52,8 +52,8 @@
                                     ?>
 
                                     <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->status !!}</span</td>
-                                    <td>{!! Utils::dateConverter($plan->created_at) !!}</td>
-                                    <td>{!! Utils::dateConverter($plan->updated_at) !!}</td>
+                                    <td>{!! Tools::dateConverter($plan->created_at) !!}</td>
+                                    <td>{!! Tools::dateConverter($plan->updated_at) !!}</td>
                                     <td>{!! Form::select('testers', $testers[$plan->id], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $plan->id)]) !!}</td>
                                     <td class="text-center"><a href="#" class="plan-link"><i class="fa fa-search fa-lg"></i></a></td>
                                 </tr>

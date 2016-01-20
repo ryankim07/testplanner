@@ -88,7 +88,7 @@
                                                             <span class="label {!! $trLabel !!}">{!! isset($attr['ticket_response_status']) ? $attr['ticket_response_status'] : 'new' !!}</span>
                                                         @endif
                                                     </td>
-                                                    <td>{!! Utils::dateConverter($attr['created_at']) !!}</td>
+                                                    <td>{!! Tools::dateConverter($attr['created_at']) !!}</td>
                                                     @if($type == 'admin_created_plans')
                                                         <td>
                                                             {!! Form::select('testers', $attr['testers'], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $attr['id'])]) !!}

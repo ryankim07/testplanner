@@ -16,8 +16,9 @@
  * System Configuration
  *
  */
-Route::get('system/view-all', ['as' => 'system.view.all', 'uses' => 'SystemController@show']);
-Route::resource('system', 'SystemController', ['except' => ['edit']]);
+Route::get('system/all', ['as' => 'system.view.all', 'uses' => 'SystemController@index']);
+Route::post('system/update', ['as' => 'system.update', 'uses' => 'SystemController@update']);
+Route::resource('system', 'SystemController', ['except' => ['edit', 'update']]);
 
 
 /**
