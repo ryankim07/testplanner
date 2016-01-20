@@ -27,9 +27,7 @@
 
 				@include('pages/testplanner/partials/plan', ['mode' => 'edit'])
 
-				<div class="page-header"></div>
-					{!! $plan['tickets_html'] !!}
-				<div class="page-header"></div>
+				{!! $plan['tickets_html'] !!}
 
 				@include('pages/testplanner/partials/testers', [
 					'testers' => $plan['users'],

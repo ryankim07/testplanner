@@ -8,7 +8,7 @@
 
 @section('content')
 
-	<div class="col-xs-12 col-md-12 main" id="step-1-main">
+	<div class="col-xs-12 col-md-12 main plan-wizard" id="step-1-main">
         @if($mode == 'build')
 		    {!! Form::open(['route' => 'plan.store', 'class' => 'form-horizontal', 'id' => 'plan-build-form']) !!}
         @else

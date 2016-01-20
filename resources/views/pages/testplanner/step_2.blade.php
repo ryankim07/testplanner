@@ -8,7 +8,7 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-12 main" id="step-2-main">
+    <div class="col-xs-12 col-md-12 main plan-wizard" id="step-2-main">
         @if($plan['mode'] == 'build')
             {!! Form::open(['route' => 'ticket.store', 'class' => 'form-horizontal', 'id' => 'ticket-build-form']) !!}
         @else
@@ -37,7 +37,7 @@
                 @if($plan['mode'] == 'build')
                     @include('pages/testplanner/partials/tickets', [
                         'mode'             => $plan['mode'],
-                        'addTicketBtnType' => 'btn-custom'
+                        'addTicketBtnType' => 'btn-primary'
                     ])
                 @else
                     {!! $plan['tickets_html'] !!}

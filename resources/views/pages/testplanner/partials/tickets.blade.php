@@ -17,9 +17,9 @@
     $testStepVal  = $mode == 'edit' ? $ticket['test_steps'] : null;
 ?>
 
+    <div class="page-header"><h4>Tickets</h4></div>
     <div class="row ticket-row nested-block" id="{!! $id !!}">
         <div class="wrapper">
-            <legend>Ticket</legend>
             <a href="#" class="trash"><i class="fa fa-trash-o fa-lg"></i></a>
         </div>
         <div class="form-group">

@@ -8,7 +8,7 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-12 main" id="step-3-main">
+    <div class="col-xs-12 col-md-12 main plan-wizard" id="step-3-main">
         @if($mode == 'build')
             {!! Form::open(['route' => 'tester.store', 'class' => 'form-horizontal', 'id' => 'tester-build-form']) !!}
         @else
@@ -66,7 +66,7 @@
 
         $(document).ready(function() {
             // Preselect testers radion input
-            preSelectBrowserTesters(<?php echo json_encode($plan['testers']); ?>);
+            preSelectBrowserTesters(<?php echo json_encode($testers); ?>);
         });
 
         </script>

@@ -86,7 +86,7 @@ class TicketsController extends Controller
             $ticketsHtml .= view('pages/testplanner/partials/tickets', [
                 'mode'             => 'edit',
                 'ticket'           => $ticket,
-                'addTicketBtnType' => 'btn-custom'
+                'addTicketBtnType' => 'btn-primary'
             ])->render();
         }
 

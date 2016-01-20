@@ -25,12 +25,8 @@ body {
     border: 0;
 }
 
-legend {
-    font-size: 18px;
-}
-
 /*
- * Main content
+ * Main layout
  */
 
 @media (min-width: 768px) {
@@ -45,11 +41,6 @@ legend {
     margin-top: 0;
 }
 
-#response-respond-main legend {
-    font-size: 16px;
-    font-weight: bold;
-}
-
 /*
  * Panel
  */
@@ -58,9 +49,29 @@ legend {
     margin-top: 20px;
 }
 
+.nested-block {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #f7f7f8;
+    border-color: #eee #eee #eee #d4d5d9;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px 1px 1px 5px;
+    margin: 5px 0 10px 0px;
+    padding: 20px 30px 0 20px;
+    position: relative;
+}
+
 /*
  * Tables
  */
+
+.table-responsive {
+    min-height: 500px;
+    overflow-y: auto;
+}
 
 table:not(.dashboard-table) tbody tr:hover {
     color: green;
@@ -76,42 +87,8 @@ table:not(.dashboard-table) tbody tr:hover {
 }
 
 /*
- * Animations
+ * Dashboard
  */
-
-#loadingSpinner {
-    position: relative;
-    margin: 0 auto;
-    top: -50%;
-    width: 200px;
-    height: 19px;
-    z-index: 9999;
-    background: #fff;
-}
-
-.progress {
-    position: relative;
-    top: 10px;
-    margin-bottom: 0px;
-}
-
-/*
- * Others
- */
-.nested-block {
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    background-color: #f7f7f8;
-    border-color: #eee #eee #eee #d4d5d9;
-    border-image: none;
-    border-style: solid;
-    border-width: 1px 1px 1px 5px;
-    margin: 5px 0 10px 0px;
-    padding: 10px 30px 20px 20px;
-    position: relative;
-}
 
 #dashboard-main .nested-block {
     padding: 10px 10px 10px 10px;
@@ -136,72 +113,17 @@ table:not(.dashboard-table) tbody tr:hover {
 }
 
 /*
- * IMAGES
+ * Plan Wizard
  */
-.trash, .pencil {
-    position:absolute;
-    margin-top: 8px;
-    margin-right: 6px;
-    top:0;
-    right:0;
-    line-height: 12px;
-    color: #777777;
-}
 
-#review-main .trash {
-    position:absolute;
-    margin-top: 8px;
-    margin-right: 30px;
-    top:0;
-    right:0;
-    color: #777777;
-}
-
-.header-icon {
-    float:left;
-    min-width: 54px;
-}
-
-#step-1-main .header-icon, #step-2-main .header-icon,
-#step-3-main .header-icon, #review-main .header-icon {
-    min-width: 64px;
-}
-
-#view-all-created-main .header-icon {
-    min-width: 64px;
-}
-
-#review-main .browser-img, #response-respond-main .browser-img {
-    width: 32px;
-    height: 32px;
+.plan-wizard .nested-block {
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    color: #31708f;
 }
 
 /*
- * BUTTONS
- */
-.btn-custom, .panel-custom {
-    background: #777777;
-    color: #FFFFFF;
-}
-
-/*
- * PAGINATION
- */
-#dashboard-main .pagination {
-    margin: 0px;
-}
-
-.dropdown-menu a.menu-link {
-    position: relative;
-    padding-left: 10px;
-}
-
-.dropdown-menu .menu-link-icon {
-    padding-right: 5px;
-}
-
-/*
- * SYSTEM CONFIGURATION
+ * System Configuration
  */
 
 #system-edit-form .btn {
@@ -227,6 +149,91 @@ table:not(.dashboard-table) tbody tr:hover {
     margin-top: 0px;
 }
 
-.tab-content .sub-header {
+.tab-content .page-header {
     margin-bottom: 30px;
+}
+
+/*
+ * Images
+ */
+.trash, .pencil {
+    position:absolute;
+    margin-top: 8px;
+    margin-right: 6px;
+    top:0;
+    right:0;
+    line-height: 12px;
+    color: #777777;
+}
+
+#review-main .trash {
+    position:absolute;
+    margin-top: 8px;
+    margin-right: 30px;
+    top:0;
+    right:0;
+    color: #777777;
+}
+
+.header-icon {
+    float:left;
+    min-width: 54px;
+}
+
+.plan-wizard .header-icon {
+    min-width: 64px;
+}
+
+#view-all-created-main .header-icon {
+    min-width: 64px;
+}
+
+#review-main .browser-img, #response-respond-main .browser-img {
+    width: 32px;
+    height: 32px;
+}
+
+/*
+ * Buttons
+ */
+.btn-custom, .panel-custom {
+    background: #777777;
+    color: #FFFFFF;
+}
+
+/*
+ * Pagination
+ */
+#dashboard-main .pagination {
+    margin: 0px;
+}
+
+.dropdown-menu a.menu-link {
+    position: relative;
+    padding-left: 10px;
+}
+
+.dropdown-menu .menu-link-icon {
+    padding-right: 5px;
+}
+
+
+/*
+ * Animations
+ */
+
+#loadingSpinner {
+    position: relative;
+    margin: 0 auto;
+    top: -50%;
+    width: 200px;
+    height: 19px;
+    z-index: 9999;
+    background: #fff;
+}
+
+.progress {
+    position: relative;
+    top: 10px;
+    margin-bottom: 0px;
 }

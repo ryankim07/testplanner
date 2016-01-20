@@ -8,7 +8,7 @@
 
 @section('content')
 
-    <div class="col-xs-12 col-md-12 main" id="review-main">
+    <div class="col-xs-12 col-md-12 main plan-wizard" id="review-main">
 
         {!! Form::open(['route' => 'plan.save', 'class' => 'form-horizontal', 'id' => 'plan-review-form']) !!}
 
@@ -30,8 +30,8 @@
 
                 @include('errors.list')
 
+                <div class="page-header"><h4>Plan Details</h4></div>
                 <div class="row nested-block">
-                    <legend>Plan Details</legend>
                     <a href="{!! URL::route('plan.edit') !!}" class="pencil" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
                     <ul class="list-unstyled">
                         <li>Description: <strong>{!! $plan['description'] !!}</strong></li>
@@ -39,10 +39,9 @@
                         <li>Expires on: <strong>{!! $plan['expired_at'] !!}</strong></li>
                     </ul>
                 </div>
-                <div class="page-header"></div>
+                <div class="page-header"><h4>Tickets</h4></div>
                 @foreach($tickets as $ticket)
                     <div class="row nested-block ticket-row" id="{!! $ticket['id'] !!}">
-                        <legend>Tickets</legend>
                         <a href="#" class="trash" data-id="{!! $ticket['id'] !!}" title="Delete"><i class="fa fa-trash-o fa-lg"></i></a>
                         <a href="{!! URL::route('ticket.edit') !!}" class="pencil" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
                         <ul class="list-unstyled">
@@ -52,9 +51,8 @@
                         </ul>
                     </div>
                 @endforeach
-                <div class="page-header"></div>
+                <div class="page-header"><h4>Browser Testers</h4></div>
                 <div class="row nested-block">
-                    <legend>Browser Testers</legend>
                     <a href="{!! URL::route('tester.edit') !!}" class="pencil" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
                     @foreach($testers as $tester)
                         <div class="text-center review-testers">

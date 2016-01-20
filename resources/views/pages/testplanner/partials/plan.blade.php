@@ -7,8 +7,8 @@
 |
 --}}
 
+    <div class="page-header"><h4>Plan Details</h4></div>
     <div class="row nested-block">
-        <legend>Plan Details</legend>
         <div class="form-group">
             <div class="col-xs-12 col-md-8">
                 {!! Form::label('description_label', 'Description:') !!}
