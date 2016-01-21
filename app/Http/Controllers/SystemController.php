@@ -35,7 +35,7 @@ class SystemController extends Controller
         // Get header and body data
         $configs = System::getConfigs();
 
-        return view('pages.main.settings', ['configData' => $configs]);
+        return view('pages.main.system', ['configData' => $configs]);
     }
 
     /**
@@ -47,11 +47,18 @@ class SystemController extends Controller
     public function update(Request $request)
     {
         $postData = array_except($request->all(), '_token');
-        $results  = System::updateConfig($postData);
+
+        if (count($postData) == 0) {
+            return response()->json([
+                'status' => 'error',
+                'msg'    => config('testplanner.messages.system.update_error'),
+            ]);
+        }
+        $results = System::updateConfig($postData);
 
         return response()->json([
-            "status" => "success",
-            "msgs"   => $results,
+            'status' => $results['status'],
+            'msg'    => $results['msg'],
         ]);
     }
 }

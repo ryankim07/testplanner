@@ -64,6 +64,7 @@ function buildReviewJs()
         var ticketRow = $(this).closest('.ticket-row');
         var ticketId = $(this).data('id');
 
+        // Ajax post
         $.when(
             $.ajax({
                 method: "POST",
@@ -147,6 +148,7 @@ function loadDashboardJs(url)
         var parent  = $(this).parentsUntil('.activity-stream');
         var comment = parent.find('.activity-comment').val();
 
+        // Ajax post
         $.when(
             $.ajax({
                 method: "POST",
@@ -253,10 +255,12 @@ function registerEditUserJs(mode, url)
     var formData = $('form').serialize() + '&role=' + newRoles
     var msgBlock = $('<div class="alert alert-danger" role="alert"></div>');
 
+    // Clear existing flash messages
     if ($('.alert').length > 0) {
         $('.alert').remove();
     }
 
+    // Ajax post
     $.when(
         $.ajax({
             method: "POST",
@@ -307,6 +311,7 @@ function loadUsersJs(url)
         $('#view-all-users-main').css({'z-index': '1000'});
     }
 
+    // Ajax post
     $.when(
         $.ajax({
             method: "GET",

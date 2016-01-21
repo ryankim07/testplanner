@@ -56,7 +56,7 @@
                                     <div class="panel-heading">
                                         <strong>{!! ucfirst($childKey) !!}</strong>
                                     </div>
-                                    <div class="panel-body">
+                                    <div class="panel-body system-sub-panel-body">
                                         @foreach($attributes as $attrKey => $attrValue)
 
                                             <?php
@@ -99,8 +99,14 @@
             });
 
             $('#update-btn').click(function(){
+
                 var fields = [];
-                var items = {};
+                var items  = {};
+
+                // Clear existing flash messages
+                if ($('.alert').length > 0) {
+                    $('.alert').remove();
+                }
 
                 // Grab token
                 items['_token'] = $('form').find('input[name=_token]').val();
@@ -113,18 +119,26 @@
                 });
 
                 // Update by Ajax
-                if (Object.keys(items).length > 1) {
+                $.when(
                     $.ajax({
                         method: "POST",
                         url: $('form').attr('action'),
                         data: items,
-                        dataType: "json"
-                    }).done(function (res) {
-                        alert(res.msgs);
-                    });
-                } else {
-                    alert('You have not changed any fields');
-                }
+                        dataType: "json",
+                        success: function (res) {
+                            var divClass  = res.status == 'success' ? 'alert-success' : 'alert-danger';
+                            var divIcon   = res.status == 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+                            var divSrOnly = res.status == 'success' ? 'Success' : 'Error';
+
+                            var msgBlock = $('<div class="alert ' + divClass + '" role="alert"></div>');
+                            msgBlock.empty().html('<i class="fa ' + divIcon + ' fa-lg" aria-hidden="true"></i><span class="sr-only">' + divSrOnly + '</span> ' + res.msg + '<br/>');
+
+                            $('#system-main #system-main-panel-body').prepend(msgBlock);
+                        }
+                    })
+                 ).done(function() {
+                 });
+
             });
         });
 

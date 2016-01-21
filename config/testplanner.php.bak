@@ -60,7 +60,12 @@ return [
             'no_plans_found'      => 'No plans found.',
             'no_responses_found'  => 'No responses found.',
             'no_activities_found' => 'No activities found.',
-        ]
+        ],
+        'system' => [
+            'update_success'    => 'Fields successfully updated',
+            'update_error'      => 'No fields were edited for update.',
+            'file_update_error' => 'There seems to be a problem processing your update.  Please try again later.'
+        ],
     ],
 
     'mail' => [

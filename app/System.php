@@ -34,8 +34,6 @@ class System
     public static function updateConfig($data)
     {
         $configs  = self::getConfigs();
-        $redirect = false;
-        $errorMsg = '';
 
         foreach($data as $key => $val) {
             list($arrKeys, $attr) = explode(':', $key);
@@ -43,11 +41,16 @@ class System
 
             if (isset($configs[$section][$type][$attr])) {
                 $configs[$section][$type][$attr] = $val;
-                $results[] = $attr;
             }
         }
 
-        self::writeConfig($configs);
+        $update = self::writeConfig($configs);
+
+        $results = [
+            'status' => !$update ? 'error' : 'success',
+            'msg'    => !$update ? config('testplanner.messages.system.file_update_error') :
+                config('testplanner.messages.system.update_success')
+        ];
 
         return $results;
     }
@@ -60,15 +63,13 @@ class System
      */
     public static function writeConfig($data)
     {
-        $data     = var_export($data, 1);
-        $redirect = false;
-        $errorMsg = '';
+        $data = var_export($data, 1);
 
         try {
             $fs = new Filesystem();
             $fs->put(base_path() . '/config/testplanner.php', "<?php\n return $data ;");
         } catch (\Exception $e) {
-            $errorMsg = $e->getMessage();
+            return false;
         }
 
         return true;
