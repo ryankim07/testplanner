@@ -17,10 +17,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests\RegisterFormRequest;
 use App\Http\Requests\UserResponseFormRequest;
 
-
 use App\User;
 use App\Tables;
 use App\Role;
+
+use Session;
 
 class UsersController extends Controller
 {
@@ -112,12 +113,12 @@ class UsersController extends Controller
         }
 
         // Flash message so it could be shown once redirected by AJAX call
-        Session::flash('success_msg', config('testplanner.messages.users.update'));
+        Session::flash('flash_message', config('testplanner.messages.users.update'));
 
         // Return JSON success message and redirect url
         return response()->json([
-            'type'          => 'success',
-            'redirect_url'  =>  url('users/all')
+            'type'         => 'success',
+            'redirect_url' => url('user/all')
         ]);
     }
 }

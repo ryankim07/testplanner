@@ -62,7 +62,7 @@
                         </table>
                     </div>
                 @else
-                    <p>No plans found..</p>
+                    <p>{!! config('testplanner.messages.plan.no_responses_found') !!}</p>
                 @endif
             </div>
         </div>

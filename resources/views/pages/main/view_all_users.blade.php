@@ -25,8 +25,11 @@
                 </div>
             </div>
             <div class="panel-body">
+
+                @include('errors.list')
+
                 @if($totalUsers == 0)
-                    <p>No users found.</p>
+                    <p>{!! config('testplanner.messages.plan.no_users_found') !!}</p>
                 @else
                     <div class="row table-options">
                         <div class="pull-right">

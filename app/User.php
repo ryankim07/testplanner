@@ -169,6 +169,12 @@ class User extends Model implements AuthenticatableContract,
         return $query;
     }
 
+    /**
+     * Update user account information
+     *
+     * @param $request
+     * @return bool
+     */
     public static function updateUser($request)
     {
         $redirect = false;

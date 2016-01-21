@@ -47,7 +47,7 @@
                         </table>
                     </div>
                 @else
-                    <p>No activities found.</p>
+                    <p>{!! config('testplanner.messages.plan.no_activities_found') !!}</p>
                 @endif
             </div>
         </div>
