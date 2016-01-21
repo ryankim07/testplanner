@@ -20,17 +20,28 @@
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
                         <i class="fa fa-users fa-3x header-icon"></i>
-                        <h4>Edit Users</h4>
+                        <h4>Users</h4>
                     </div>
                 </div>
             </div>
             <div class="panel-body">
                 @if($totalUsers == 0)
-                    <p>No users found..</p>
+                    <p>No users found.</p>
                 @else
                     <div class="row table-options">
                         <div class="pull-right">
-                            {!! Form::button('Search', ['class' => 'btn btn-custom btn-sm', 'type' => 'submit']) !!}
+
+                            @include('pages/main/partials/double_submit_buttons', [
+                               'direction'     => 'pull-right',
+                               'class'		   => 'btn-custom btn-sm',
+                               'btnText'       => 'Add New',
+                               'btnId'         => 'add-btn',
+                               'submitBtnText' => 'Search',
+                               'submitBtnId'   => 'search-btn',
+                               'btnDataName'   => 'data-click',
+                               'btnData'       => 'register'
+                            ])
+
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -48,7 +59,7 @@
                                     <td>{!! $user->role_names !!}</td>
                                     <td>{!! Tools::dateConverter($user->created_at) !!}</td>
                                     <td>{!! Tools::dateConverter($user->updated_at) !!}</td>
-                                    <td class="text-center"><a href="{!! URL::route('user.view', $user->id) !!}" class="edit-link"><i class="fa fa-pencil-square-o fa-lg"></i></a></td>
+                                    <td class="text-center"><a href="{!! URL::route('user.view', $user->id) !!}" class="edit-link" data-click="edit"><i class="fa fa-pencil-square-o fa-lg"></i></a></td>
                                 </tr>
                             @endforeach
                         </table>
@@ -66,8 +77,18 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
-            // All users functionalities
-            loadAllUsersJs();
+            $('#view-all-users-main').on('click', '#add-btn, .edit-link', function(e) {
+                var mode = $(this).data('click');
+                var url = '{!! URL::route('auth.register') !!}';
+
+                if (mode == 'edit') {
+                    e.preventDefault();
+                    url = $(this).attr('href');
+                }
+
+                // Display registration or edit form
+                loadUsersJs(url);
+            });
         });
 
     </script>

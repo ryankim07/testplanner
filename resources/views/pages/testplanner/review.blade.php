@@ -77,41 +77,7 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
-            if ($('.ticket-row').length == 1) {
-                $('.trash').hide();
-            }
-
-            // Remove tickets
-            $('#review-main').on('click', '.trash', function(e) {
-                e.preventDefault();
-
-                var ticketRow = $(this).closest('.ticket-row');
-                var ticketId = $(this).data('id');
-
-                $.when(
-                    $.ajax({
-                        method: "POST",
-                        url: "{!! URL::to('ticket/remove') !!}",
-                        data: {
-                            "_token":  $('form').find('input[name=_token]').val(),
-                            "ticketId": ticketId
-                        },
-                        success: function(resp) {
-                            // Remove ticket row
-                            if (resp == 'success') {
-                                $('#' + ticketId).remove();
-                            }
-                        }
-                    })
-                ).done(function(resp) {
-                });
-
-                // Cannot remove all the rows, only one should be left over
-                if ($('.ticket-row').length == 1) {
-                    // The row that is left over, hide remove option
-                    $('.trash').hide();
-                }
-            });
+            buildReviewJs();
         });
 
     </script>

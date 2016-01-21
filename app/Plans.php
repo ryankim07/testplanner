@@ -13,7 +13,6 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Contracts\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use PhpSpec\Exception\Exception;
@@ -297,9 +296,6 @@ class Plans extends Model
             }
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
-            $redirect = true;
-        } catch (ValidationException $e) {
-            $errorMsg = $e->getErrors();
             $redirect = true;
         } catch (QueryException $e) {
             $errorMsg = $e->getErrors();

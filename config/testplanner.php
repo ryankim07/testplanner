@@ -35,25 +35,27 @@ return [
 
     'messages' => [
         'users' => [
-            'new_user_added'      => 'New user successfully registered.',
+            'new'                 => 'New user successfully registered.',
             'account_inactive'    => 'Your account is inactive.  Please contact the administrator.',
             'credentials_error'   => 'The credentials you entered did not match our records.',
             'unauthorized'        => 'You are not authorized to access this resource.',
+            'identical_user'      => 'The user you are trying to register already exists.',
             'identical_role'      => 'The role for the user you are trying to register already exists.',
-            'user_update'         => 'User info updated successfully.',
+            'update'              => 'User info updated successfully.',
+            'update_error'        => 'There seems to be a problem processing your request. Please try again later.'
         ],
         'plan' => [
-            'new'               => 'created a new plan,',
-            'update'            => 'updated plan,',
-            'new_build'         => 'New plan successfully created.',
-            'build_error'       => 'Plan building cannot be done at the current moment.  Please try again later.',
-            'build_update'      => 'details has been updated successfully.',
-            'session_error'     => 'Session data is missing.',
+            'new'                 => 'created a new plan,',
+            'update'              => 'updated plan,',
+            'new_build'           => 'New plan successfully created.',
+            'build_error'         => 'There seems to be a problem while building the plan.  Please try again later.',
+            'build_update'        => 'details has been updated successfully.',
+            'session_error'       => 'Session data is missing.',
             'users_non_responses' => 'Users have not submitted responses yet.',
-            'response_success'  => 'Your plan has been posted successfully',
-            'response_error'    => 'There seems to be a problem processing your response. Please try again later.',
-            'response_updated'  => 'has updated',
-            'response_resolved' => 'resolved'
+            'response_success'    => 'Your plan has been posted successfully',
+            'response_error'      => 'There seems to be a problem processing your response. Please try again later.',
+            'response_updated'    => 'has updated',
+            'response_resolved'   => 'resolved'
         ]
     ],
 

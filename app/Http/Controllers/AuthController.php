@@ -6,11 +6,16 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use App\Http\Requests\LoginFormRequest;
 use App\Http\Requests\RegisterFormRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
+use PhpSpec\Exception\Exception;
+
+use App\Facades\Tools;
 
 use App\User;
 use App\UserRole;
 use App\Role;
-use App\Tables;
 
 use Auth;
 
@@ -95,10 +100,14 @@ class AuthController extends Controller
             $rolesOptions[$eachRole->id] = ucfirst($eachRole->name);
         }
 
-        return view('pages.main.register', [
+        $viewHtml = view('pages.main.user', [
+            'mode'                 => 'register',
+            'user'                 => '',
             'rolesOptions'         => $rolesOptions,
             'rolesSelectedOptions' => ''
-        ]);
+        ])->render();
+
+        return response()->json(["viewBody" => $viewHtml]);
     }
 
     /**
@@ -109,39 +118,96 @@ class AuthController extends Controller
      */
     public function postRegister(RegisterFormRequest $request)
     {
-        // Create new user
-        $user = $this->user->where('email', '=', $request->email)->first();
+        $redirect = false;
+        $errorMsg = '';
 
-        if (!isset($user->id)) {
-            $this->user->first_name = $request->first_name;
-            $this->user->last_name  = $request->last_name;
-            $this->user->email      = $request->email;
-            $this->user->password   = bcrypt($request->password);
-            $this->user->active     = 1;
-            $this->user->save();
-        }
+        // Start transaction
+        DB::beginTransaction();
 
-        // Find all roles for this user
-        $roles = $this->user->find($user->id)->roles()->get();
+        // Register new user
+        try {
+            $user = $this->user->where('email', '=', $request->email)->first();
+            $userId = $user->id;
 
-        $roleExists = false;
-        foreach($roles as $role) {
-            if ($role->role_id == $request->role) {
-                $roleExists = true;
-                break;
+            // Save user
+            if (!isset($userId)) {
+                $this->user->first_name = $request->first_name;
+                $this->user->last_name  = $request->last_name;
+                $this->user->email      = $request->email;
+                $this->user->password   = bcrypt($request->password);
+                $this->user->active     = 1;
+                $this->user->save();
             }
+
+            // Find all roles for this user
+            $userRoles = $this->user->find($userId)->roles();
+
+            foreach($userRoles->get() as $user) {
+                $existingRoles[] = $user->role_id;
+            }
+
+            // Identical user with all the roles, throw error
+            if (isset($userId) && $userRoles->count() == 3) {
+                throw new Exception(config('testplanner.messages.users.identical_user'));
+            }
+
+            // Roles that were selected to be registered
+            $selectedRoles = explode(',', $request->get('role'));
+
+            // Throw error if role already exists
+            if (count(array_diff($selectedRoles, $existingRoles)) == 0) {
+                throw new Exception(config('testplanner.messages.users.identical_role'));
+            }
+
+            // Add new role/s to user
+            foreach($selectedRoles as $key => $id) {
+                UserRole::create([
+                    'user_id' => $userId,
+                    'role_id' => $id
+                ]);
+            }
+        } catch (\Exception $e) {
+            $errorMsg = $e->getMessage();
+            $redirect = true;
+        } catch (QueryException $e) {
+            $errorMsg = $e->getErrors();
+            $redirect = true;
+        } catch (ModelNotFoundException $e) {
+            $errorMsg = $e->getErrors();
+            $redirect = true;
         }
 
-        if ($roleExists) {
-            return redirect('admin/auth/register')
-                ->with('flash_message', config('testplanner.messages.users.identical_role'));
+        // Redirect if errors
+        if ($redirect) {
+            // Rollback
+            DB::rollback();
+
+            // Log specific technical message
+            Tools::log($errorMsg, array_except($request->all(), [
+                '_token',
+                'created_from',
+                'created_to',
+                'password',
+                'password_confirmation'
+            ]));
+
+            // Return JSON error response
+            return response()->json([
+                'type' => 'error',
+                'msg'  => $errorMsg
+            ]);
         }
 
-        $newRole = UserRole::create([
-            'user_id' => $user->id,
-            'role_id' => $request->role
+        // Commit all changes
+        DB::commit();
+
+        // Flash message so it could be shown once redirected by AJAX call
+        Session::flash('success_msg', config('testplanner.messages.users.new'));
+
+        // Return JSON success message and redirect url
+        return response()->json([
+            'type'          => 'success',
+            'redirect_url'  =>  url('users/all')
         ]);
-
-        return redirect('dashboard')->with('flash_message', config('testplanner.messages.users.new_user_added'));;
     }
 }

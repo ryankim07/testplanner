@@ -56,10 +56,10 @@
             @include('pages/main/partials/double_submit_buttons', [
                'direction'     => 'pull-right',
                'class'		   => 'btn-custom',
-               'updateBtnText' => 'Submit Response',
-               'updateBtnId'   => 'respond-btn',
-               'backBtnText'   => 'Cancel',
-               'backBtnId'	   => 'back-btn'
+               'btnText'       => 'Cancel',
+               'btnId'         => 'back-btn',
+               'submitBtnText' => 'Submit Response',
+               'submitBtnId'   => 'respond-btn'
             ])
         @endif
 

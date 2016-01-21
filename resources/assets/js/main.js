@@ -48,149 +48,46 @@ $('#view-all-assigned-main').on('click', '.edit-link', function() {
     window.location.href = $(this).data('url');
 });
 
-
 /**
- * Test Planner dynamic ticket builder
- *
- * @param config
- * @returns {{load: load}}
- * @constructor
+ * Review build
  */
-function TicketBuilder(config) {
-    var config          = config;
-    var formId          = '#' + config.formIdName;
-    var ticketRowClass  = '.' + config.ticketRowName;
-    var addBtnId        = '#' + config.addBtnName;
-    var continueBtnId   = '#' + config.continueBtnName;
-    var updateBtnId     = '#' + config.updateBtnName;
-    var removeBtnClass  = '.' + config.removeBtnName;
-    var clearBtnClass   = '.' + config.clearBtnName;
-    var ticketRowClass  = '.' + config.ticketRowName;
-    var ticketDescClass = '.' + config.ticketDescName;
-    var objectiveClass  = '.' + config.objectiveName;
-    var testStepsClass  = '.' + config.testStepsName;
-
-    /**
-     * Setup builder
-     */
-    function initiateBuilder()
-    {
-        // Set an ID for each ticket
-        if(config.mode == 'build') {
-            changeCreateTicketInputIndex($(ticketRowClass));
-        }
-
-        // If there is only one ticket, hide remove option
-        if ($(ticketRowClass).length == 1) {
-            $(removeBtnClass).hide();
-        }
-
-        // Add Ticket
-        createTicket();
-
-        // Remove Ticket
-        removeTicket();
-
-        // Continue or Update
-        continueOrUpdate();
+function buildReviewJs()
+{
+    if ($('.ticket-row').length == 1) {
+        $('.trash').hide();
     }
 
-    /**
-     * Add ticket functionality
-     */
-    function createTicket()
-    {
-        $(formId).on('click', addBtnId, function() {
-            // Clone first block
-            var clonedField = $(ticketRowClass).first().clone();
+    // Remove tickets
+    $('#review-main').on('click', '.trash', function(e) {
+        e.preventDefault();
 
-            // Clear all fields
-            var inputTypes = clonedField.find('input[type=text], textarea').val('');
+        var ticketRow = $(this).closest('.ticket-row');
+        var ticketId = $(this).data('id');
 
-            // Increment index
-            changeCreateTicketInputIndex(clonedField);
-
-            // Add as new block after latest ticket row
-            clonedField.insertAfter($(ticketRowClass).last());
-
-            // Display remove option
-            $(removeBtnClass).show();
-        });
-    }
-
-    /**
-     * Remove ticket functionality
-     */
-    function removeTicket()
-    {
-        var addBtn = $(ticketRowClass + ' ' + addBtnId);
-
-        $(formId).on('click', removeBtnClass, function(e) {
-            e.preventDefault();
-
-            $(this).closest(ticketRowClass).remove();
-
-            // Cannot remove all the rows, only one should be left over
-            if ($(ticketRowClass).length == 1) {
-                // The row that is left over, hide remove option
-                $(removeBtnClass).hide();
-
-                // Display back add ticket button
-                if (addBtn.css('display') == 'none') {
-                    addBtn.show();
+        $.when(
+            $.ajax({
+                method: "POST",
+                url: "{!! URL::to('ticket/remove') !!}",
+                data: {
+                    "_token":  $('form').find('input[name=_token]').val(),
+                    "ticketId": ticketId
+                },
+                success: function(resp) {
+                    // Remove ticket row
+                    if (resp == 'success') {
+                        $('#' + ticketId).remove();
+                    }
                 }
-            }
+            })
+        ).done(function() {
         });
-    }
 
-    /**
-     * Continue or Update
-     */
-    function continueOrUpdate()
-    {
-        var buttons = continueBtnId + ', ' + updateBtnId;
-        $(formId).on('click', buttons, function() {
-            var tickets = [];
-
-            $(formId + ' ' + ticketRowClass).each(function() {
-                // Create ticket object
-                tickets.push({
-                    "id": $(this).attr('id'),
-                    "desc": $(this).find(ticketDescClass).val(),
-                    "objective": $(this).find(objectiveClass).val(),
-                    "test_steps": $(this).find(testStepsClass).val()
-                });
-            });
-
-            // Create hidden field
-            var input = $("<input>")
-                .attr("type", "hidden")
-                .attr("name", 'tickets_obj').val(JSON.stringify(tickets));
-
-            $('form').append($(input));
-        });
-    }
-
-    /**
-     * Change input fields name to an array
-     */
-    function changeCreateTicketInputIndex(obj)
-    {
-        var index = stringGen(5);
-
-        obj.attr('id', index);
-        obj.find(ticketDescClass).attr('name', 'desc["' + index + '"]');
-        obj.find(objectiveClass).attr('name', 'objective["' + index + '"]');
-        obj.find(testStepsClass).attr('name', 'test_steps["' + index + '"]');
-
-        return true;
-    }
-
-    return {
-        load: function() {
-            initiateBuilder();
+        // Cannot remove all the rows, only one should be left over
+        if ($('.ticket-row').length == 1) {
+            // The row that is left over, hide remove option
+            $('.trash').hide();
         }
-    }
+    });
 }
 
 
@@ -250,29 +147,34 @@ function loadDashboardJs(url)
         var parent  = $(this).parentsUntil('.activity-stream');
         var comment = parent.find('.activity-comment').val();
 
-        $.ajax({
-            method: "POST",
-            url: url,
-            data: {
-                "_token":  $('form').find('input[name=_token]').val(),
-                "as_id": parent.find('.as_id').val(),
-                "comment": comment
-            },
-            dataType: "json"
-        }).done(function(res) {
-            var lastCommentLine = parent.find($('.activity-comment-line').last());
-            var newCommentLine  = $('<li class="activity-comment-line"><em>' + res.comment + ' (commented by ' + res.commentator + ' on ' + res.created_at + ')</em></li>');
+        $.when(
+            $.ajax({
+                method: "POST",
+                url: url,
+                data: {
+                    "_token": $('form').find('input[name=_token]').val(),
+                    "as_id": parent.find('.as_id').val(),
+                    "comment": comment
+                },
+                dataType: "json",
+                success: function (resp) {
+                    var lastCommentLine = parent.find($('.activity-comment-line').last());
+                    var newCommentLine = $('<li class="activity-comment-line"><em>' + res.comment + ' (commented by ' + res.commentator + ' on ' + res.created_at + ')</em></li>');
 
-            // If this is a 1st comment, appending needs to take place right after ul
-            if (lastCommentLine.length == 0) {
-                $('.activity-comment-line-block ul').append(newCommentLine);
-            } else {
-                lastCommentLine.after(newCommentLine);
-            }
-
-            // Clear comment textarea and hide block
-            parent.find('.activity-comment').val('');
-            parent.find('.activity-comment-area').hide();
+                    // If this is a 1st comment, appending needs to take place right after ul
+                    if (lastCommentLine.length == 0) {
+                        $('.activity-comment-line-block ul').append(newCommentLine);
+                    } else {
+                        lastCommentLine.after(newCommentLine);
+                    }
+                },
+                complete: function () {
+                    // Clear comment textarea and hide block
+                    parent.find('.activity-comment').val('');
+                    parent.find('.activity-comment-area').hide();
+                }
+            })
+        ).done(function() {
         });
     });
 
@@ -345,83 +247,85 @@ function loadResponseRespondJs()
 /**
  * User accounts
  */
-function loadUsersJs(url)
+function registerEditUserJs(mode, url)
 {
-    $('#view-user-main').on('click', '#update-btn', function() {
-        var newRoles = $("#role").val() || [];
-        var msgBlock = $('<div class="" role="alert"></div>');
+    var newRoles = $("#role").val() || [];
+    var formData = $('form').serialize() + '&role=' + newRoles
+    var msgBlock = $('<div class="alert alert-danger" role="alert"></div>');
 
-        if ($('.alert').length > 0) {
-            $('.alert').remove();
-        }
+    if ($('.alert').length > 0) {
+        $('.alert').remove();
+    }
 
-        $.when(
-            $.ajax({
-                method: "POST",
-                url: url,
-                data: $("#user-form-update").serialize() + '&new_roles=' + newRoles,
-                dataType: "json",
-                success: function(resp) {
+    $.when(
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: formData,
+            dataType: "json",
+            success: function(resp) {
+                var msgs = '';
+
+                if (resp.type == 'success') {
+                    window.location.href = resp.redirect_url;
+                } else {
+                    msgBlock.empty().html('<i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Error:</span> ' + resp.msg);
+                    $('#user-main .panel-body').prepend(msgBlock);
+                }
+            },
+            error: function(jqXhr) {
+                // Messages only apply for request validation errors
+                if(jqXhr.status === 422) {
                     var msgs = '';
 
-                    msgBlock.attr('class', 'alert alert-success').empty().html('<i class="fa fa-check-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Success:</span> ' + resp.msg);
-                },
-                error: function(jqXhr) {
-                    if(jqXhr.status === 422) {
-                        var msgs = '';
+                    $.each(jqXhr.responseJSON, function (key, item) {
+                        msgs += '<i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Error:</span> ' + item + '<br/>';
+                    });
 
-                        $.each(jqXhr.responseJSON, function (key, item) {
-                            msgs += '<i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Error:</span> ' + item + '<br/>';
-                        });
+                    msgBlock.empty().html(msgs);
 
-                        msgBlock.attr('class', 'alert alert-danger').empty().html(msgs);
-                    }
-                },
-                complete: function() {
-                    $('#view-user-main .panel-body').prepend(msgBlock);
+                    $('#user-main .panel-body').prepend(msgBlock);
                 }
-            })
-        ).done(function(resp) {
-        });
+            }
+        })
+    ).done(function() {
     });
 }
 
-function loadAllUsersJs()
+function loadUsersJs(url)
 {
-    $('#view-all-users-main').on('click', '.edit-link', function(e) {
-        e.preventDefault();
+    var currentClass = $('#view-all-users-main').attr('class');
 
-        var currentClass = $('#view-all-users-main').attr('class');
+    if (currentClass != 'col-xs-12 col-md-8') {
+        // Control width of both columns
+        $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
+        $('#viewer-main').toggleClass('col-md-0 col-md-4');
+    }
 
-        if (currentClass != 'col-xs-12 col-md-8') {
-            // Control width of both columns
-            $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
-            $('#viewer-main').toggleClass('col-md-0 col-md-4');
-        }
+    // Selecting rows on mobile
+    if (currentClass == 'col-xs-12 col-md-12') {
+        $('#view-all-users-main').css({'z-index': '1000'});
+    }
 
-        // Selecting rows on mobile
-        if (currentClass == 'col-xs-12 col-md-12') {
-            $('#view-all-users-main').css({'z-index': '1000'});
-        }
-
-        $.when(
-            $.ajax({
-                method: "GET",
-                url: $(this).attr('href'),
-                dataType: "json",
-                success: function (resp) {
-                    $('#viewer-main').html(resp.viewBody);
-                }
-            })
-        ).done(function(resp) {
-            // Close viewer
-            $('.close-viewer').on('click', function (e) {
-                e.preventDefault();
-                $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
-                $('#viewer-main').toggleClass('col-md-0 col-md-4');
-                $('#viewer-main').empty();
-            });
-        });
+    $.when(
+        $.ajax({
+            method: "GET",
+            url: url,
+            dataType: "json",
+            success: function (resp) {
+                $('#viewer-main').html(resp.viewBody);
+            },
+            complete: function() {
+                // Close viewer
+                $('.close-viewer').on('click', function (e) {
+                    e.preventDefault();
+                    $('#view-all-users-main').toggleClass('col-md-12 col-md-8');
+                    $('#viewer-main').toggleClass('col-md-0 col-md-4');
+                    $('#viewer-main').empty();
+                });
+            }
+        })
+    ).done(function() {
     });
 }
 

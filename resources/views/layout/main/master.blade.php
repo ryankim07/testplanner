@@ -37,6 +37,7 @@
             <script type="text/javascript" src="https://www.google.com/jsapi"></script>
             {!! Html::script('js/app.js') !!}
             {!! Html::script('js/main.js') !!}
+            {!! Html::script('js/ticketbuilder.js') !!}
 
         </head>
         <body class="@yield('body-class')">

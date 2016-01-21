@@ -9,6 +9,13 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
+use PhpSpec\Exception\Exception;
+
+use App\Facades\Tools;
+
+use App\UserRole;
 
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
@@ -144,6 +151,12 @@ class User extends Model implements AuthenticatableContract,
         return $query;
     }
 
+    /**
+     * Get all users by role
+     *
+     * @param $role
+     * @return mixed
+     */
     public static function getAllUsersByRole($role)
     {
         $query = DB::table('users as u')
@@ -154,5 +167,78 @@ class User extends Model implements AuthenticatableContract,
             ->get();
 
         return $query;
+    }
+
+    public static function updateUser($request)
+    {
+        $redirect = false;
+        $errorMsg = '';
+
+        // Start transaction
+        DB::beginTransaction();
+
+        // Create new user
+        try {
+            $userId = $request->get('user_id');
+
+            // Update user info
+            $user = self::find($userId);
+
+            $user->update([
+                'first_name' => $request->get('first_name'),
+                'last_name' => $request->get('last_name'),
+                'email' => $request->get('email'),
+                'active' => $request->get('active'),
+                'password' => bcrypt($request->get('password'))
+            ]);
+
+            // Remove all existing roles for user
+            if (isset($userId)) {
+                UserRole::where('user_id', $userId)->delete();
+            }
+
+            // Update user roles
+            $newRoles = explode(',', $request->get('role'));
+
+            if (count($newRoles) > 0) {
+                foreach ($newRoles as $key => $value) {
+                    UserRole::create([
+                        'user_id' => $userId,
+                        'role_id' => $value
+                    ]);
+                }
+            }
+        } catch (\Exception $e) {
+            $errorMsg = $e->getMessage();
+            $redirect = true;
+        } catch (QueryException $e) {
+            $errorMsg = $e->getErrors();
+            $redirect = true;
+        } catch (ModelNotFoundException $e) {
+            $errorMsg = $e->getErrors();
+            $redirect = true;
+        }
+
+        // Redirect if errors
+        if ($redirect) {
+            // Rollback
+            DB::rollback();
+
+            // Log specific technical message
+            Tools::log($errorMsg, array_except($request->all(), [
+                '_token',
+                'created_from',
+                'created_to',
+                'password',
+                'password_confirmation'
+            ]));
+
+            return false;
+        }
+
+        // Commit all changes
+        DB::commit();
+
+        return true;
     }
 }

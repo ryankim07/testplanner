@@ -24,7 +24,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="panel-body" id="system-main-panel-body">
 
                 @include('errors.list')
 

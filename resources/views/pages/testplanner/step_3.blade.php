@@ -50,10 +50,10 @@
             @include('pages/main/partials/double_submit_buttons', [
                 'direction'     => 'pull-right',
                 'class'		    => 'btn-primary',
-                'updateBtnText' => 'Update',
-                'updateBtnId'	=> 'update-btn',
-                'backBtnText'   => 'Go Back',
-                'backBtnId'		=> 'back-btn'
+                'btnText'       => 'Go Back',
+                'btnId'		    => 'back-btn',
+                'submitBtnText' => 'Update',
+                'submitBtnId'	=> 'update-btn',
             ])
         @endif
 

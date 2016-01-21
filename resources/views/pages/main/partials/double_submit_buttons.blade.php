@@ -14,15 +14,17 @@
 
                     <?php
                         $class       = !isset($class) ? '' : $class;
-                        $updateBtnId = !isset($updateBtnId) ? '' : $updateBtnId;
-                        $backBtnId   = !isset($backBtnId) ? '' : $backBtnId;
+                        $btnId       = !isset($btnId) ? '' : $btnId;
+                        $submitBtnId = !isset($submitBtnId) ? '' : $submitBtnId;
+                        $btnDataName = !isset($btnDataName) ? '' : $btnDataName;
+                        $btnData     = !isset($btnData) ? '' : $btnData;
                     ?>
 
-                    @if(!empty($backBtnText))
-                        {!! Form::button($backBtnText, ['class' => 'btn ' . $class, 'id' => $backBtnId]) !!}
+                    @if(!empty($btnText))
+                        {!! Form::button($btnText, ['class' => 'btn ' . $class, 'id' => $btnId, $btnDataName => $btnData]) !!}
                     @endif
 
-                    {!! Form::submit($updateBtnText, ['class' => 'btn ' . $class, 'id' => $updateBtnId]) !!}
+                    {!! Form::submit($submitBtnText, ['class' => 'btn ' . $class, 'id' => $submitBtnId]) !!}
 
                 </div>
             </div>

@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col-xs-10 col-md-10">
                         <i class="fa fa-cogs fa-3x header-icon"></i>
-                        <h4>Edit Plans</h4>
+                        <h4>Built Plans</h4>
                     </div>
                     @if($role == "root")
                     <div class="col-xs-2 col-md-2">

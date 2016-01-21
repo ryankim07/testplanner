@@ -40,10 +40,10 @@
 		@include('pages/main/partials/double_submit_buttons', [
 			'direction'     => 'pull-right',
             'class'		    => 'btn-custom',
-            'updateBtnText' => 'Update',
-            'updateBtnId'	=> 'update-btn',
-            'backBtnText'   => 'Cancel',
-            'backBtnId'		=> 'back-btn'
+            'btnText'       => 'Cancel',
+            'btnId'		    => 'back-btn',
+            'submitBtnText' => 'Update',
+            'submitBtnId'	=> 'update-btn',
         ])
 
 		{!! Form::close() !!}

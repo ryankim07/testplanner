@@ -29,7 +29,7 @@
                                         <a href="{!! URL::route('plan.build') !!}" class="menu-link"><i class="fa fa-cubes menu-link-icon"></i>Build</a>
                                     </li>
                                     <li>
-                                        <a href="{!! URL::route('plan.view.all.created') !!}" class="menu-link"><i class="fa fa-cogs menu-link-icon"></i>Edit</a>
+                                        <a href="{!! URL::route('plan.view.all.created') !!}" class="menu-link"><i class="fa fa-cogs menu-link-icon"></i>Plans</a>
                                     </li>
                                 @endif
                                 <li>
@@ -60,10 +60,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Accounts <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="{!! URL::route('auth.register') !!}" class="menu-link"><i class="fa fa-user-plus menu-link-icon"></i>Add</a>
-                                    </li>
-                                    <li>
-                                        <a href="{!! URL::route('user.view.all') !!}" class="menu-link"><i class="fa fa-users menu-link-icon"></i>Edit</a>
+                                        <a href="{!! URL::route('user.view.all') !!}" class="menu-link"><i class="fa fa-users menu-link-icon"></i>Users</a>
                                     </li>
                                 </ul>
                             </li>

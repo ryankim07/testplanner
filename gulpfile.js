@@ -37,4 +37,5 @@ elixir(function(mix) {
 
     mix.copy("resources/assets/vendor/font-awesome/fonts", "public/fonts");
     mix.copy("resources/assets/js/main.js", "public/js/main.js")
+    mix.copy("resources/assets/js/ticketbuilder.js", "public/js/ticketbuilder.js")
 });

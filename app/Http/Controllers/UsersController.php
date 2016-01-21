@@ -21,9 +21,6 @@ use App\Http\Requests\UserResponseFormRequest;
 use App\User;
 use App\Tables;
 use App\Role;
-use App\UserRole;
-
-use Validator;
 
 class UsersController extends Controller
 {
@@ -86,8 +83,8 @@ class UsersController extends Controller
             }
         }
 
-        $viewHtml = view('pages.main.view_user', [
-            'mode'                 => 'view',
+        $viewHtml = view('pages.main.user', [
+            'mode'                 => 'edit',
             'user'                 => $user,
             'rolesOptions'         => $rolesOptions,
             'rolesSelectedOptions' => count($rolesSelected) > 0 ? $rolesSelected : ''
@@ -104,38 +101,23 @@ class UsersController extends Controller
      */
     public function update(UserResponseFormRequest $request)
     {
-        $userId = $request->get('user_id');
+        $results = User::updateUser($request);
 
-        // Update user info
-        $user = User::find($userId);
-        $user->update([
-            'first_name' => $request->get('first_name'),
-            'last_name'  => $request->get('last_name'),
-            'email'      => $request->get('email'),
-            'active'     => $request->get('active'),
-            'password'   => bcrypt($request->get('password'))
-        ]);
-
-        // Remove all existing roles for user
-        if (isset($userId)) {
-            UserRole::where('user_id', $userId)->delete();
+        if (!$results) {
+            // Return JSON error response
+            return response()->json([
+                'type' => 'error',
+                'msg'  => config('testplanner.messages.users.update_error')
+            ]);
         }
 
-        // Update user roles
-        $newRoles = explode(',', $request->get('new_roles'));
+        // Flash message so it could be shown once redirected by AJAX call
+        Session::flash('success_msg', config('testplanner.messages.users.update'));
 
-        if (count($newRoles) > 0) {
-            foreach($newRoles as $key => $value) {
-                UserRole::create([
-                    'user_id' => $userId,
-                    'role_id' => $value
-                ]);
-            }
-        }
-
+        // Return JSON success message and redirect url
         return response()->json([
-            'type' => 'success',
-            'msg'  => config('testplanner.messages.users.user_update')
+            'type'          => 'success',
+            'redirect_url'  =>  url('users/all')
         ]);
     }
 }

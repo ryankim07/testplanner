@@ -34,8 +34,8 @@
                             </div>
                             <div class="panel-body">
                                 @if(count($plan) > 0)
-                                    <div class="table-responsive">
-                                        <table class="table dashboard-table">
+                                    <div class="table-responsive dashboard-table">
+                                        <table class="table">
                                             <thead>
                                             <tr>
                                                 <th>Description</th>
