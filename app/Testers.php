@@ -44,6 +44,13 @@ class Testers extends Model
     protected $guarded = array('id');
 
     /**
+     * Custom attribute to be included in model
+     *
+     * @var array
+     */
+    protected $appends = array('user_first_name');
+
+    /**
      * Model event to change data before saving to database
      */
     public static function boot()
@@ -51,20 +58,13 @@ class Testers extends Model
     }
 
     /**
-     * Get testers by plan ID
+     * Retrieve custom accessor
      *
-     * @param $planId
      * @return mixed
      */
-    public static function getTestersByPlanId($planId)
+    public function getUserFirstNameAttribute()
     {
-        $allTesters = DB::table('testers AS t')
-            ->join('users AS u', 'u.id', '=', 't.user_id')
-            ->select('u.id', 'u.first_name', 't.browser')
-            ->where('t.plan_id', '=', $planId)
-            ->get();
-
-        return $allTesters;
+        return User::getUserFirstName($this->user_id);
     }
 
     /**

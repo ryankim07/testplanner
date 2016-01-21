@@ -27,9 +27,9 @@ return [
 
     'tables' => [
         'pagination' => [
-            'lists'   => 30,
-            'activity_stream'  => 10,
-            'dashboard' => 5,
+            'lists'           => 30,
+            'activity_stream' => 10,
+            'dashboard'       => 5,
         ]
     ],
 

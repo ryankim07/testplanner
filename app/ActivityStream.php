@@ -48,6 +48,13 @@ class ActivityStream extends Model
     protected $guarded = array('id');
 
     /**
+     * Custom attribute to be included in model
+     *
+     * @var array
+     */
+    protected $appends = array('custom_activity');
+
+    /**
      * Model event to change data before saving to database
      */
     public static function boot()
@@ -55,44 +62,39 @@ class ActivityStream extends Model
     }
 
     /**
+     * Retrieve custom accesspr
+     *
+     * @return mixed
+     */
+    public function getCustomActivityAttribute()
+    {
+        return Auth::user()->id == $this->user_id ? $this->activity : strip_tags($this->activity);
+    }
+
+
+    /**
+     * Calculate and convert to a human readable format
+     *
+     * @param $value
+     * @return mixed
+     */
+    public function getCreatedAtAttribute($value)
+    {
+        return Tools::timeDifference($value);
+    }
+
+    /**
      * Get activity logs
      *
-     * @param $userId
      * @return string
      */
-    public static function getActivityStream($userId)
+    public static function getActivityStream()
     {
-        $streams = self::orderBy('created_at', 'DESC');
+        $query = ActivityStream::orderBy('created_at', 'DESC')
+            ->paginate(config('testplanner.tables.pagination.activity_stream'));
 
-        $results = '';
-        if (isset($streams) > 0) {
-            foreach($streams->get() as $stream) {
-                $createdAt = Tools::timeDifference($stream->created_at);
-                $activity  = (Auth::user()->hasRole(['root'])) || (Auth::user()->id == $stream->user_id) ? $stream->activity :
-                    '<strong>' . strip_tags($stream->activity) . '</strong>';
-
-                $activityComments = self::find($stream->id)->comments()->get();
-                $comments = [];
-
-                foreach($activityComments as $eachComment) {
-                    $comments[$eachComment->id] = [
-                        'comment_id'  => $eachComment->id,
-                        'commentator' => User::getUserFirstName($eachComment->user_id),
-                        'comment'     => $eachComment->comment,
-                        'created_at'  => date('m/d/Y', strtotime($eachComment->created_at))
-                    ];
-                }
-
-                $results[$stream->id] = [
-                    'id'         => $stream->id,
-                    'activity'   => $activity,
-                    'comments'   => $comments,
-                    'created_at' => $createdAt
-                ];
-            }
-        }
-
-        $results['query'] = $streams;
+        $results['query']       = $query;
+        $results['total_count'] = self::count();
 
         return $results;
     }

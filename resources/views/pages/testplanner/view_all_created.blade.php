@@ -44,23 +44,24 @@
                             <tbody>
                             @foreach($plans as $plan)
                                 <tr class="plan-row">
-                                    <td>{!! $plan->description !!}</td>
-                                    <td>{!! $plan->full_name !!}</td>
+                                    <td>{!! $plan['description'] !!}</td>
+                                    <td>{!! $plan['first_name'] !!}</td>
+                                    <td>{!! $plan['last_name'] !!}</td>
 
                                     <?php
-                                        if($plan->status == 'complete') {
+                                        if($plan['status'] == 'complete') {
                                             $trLabel = 'label-default';
-                                        } else if($plan->status  == 'progress') {
+                                        } else if($plan['status']  == 'progress') {
                                             $trLabel = 'label-warning';
                                         } else {
                                             $trLabel = 'label-success';
                                         }
                                     ?>
 
-                                    <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->status !!}</span></td>
-                                    <td>{!! Tools::dateConverter($plan->created_at) !!}</td>
-                                    <td>{!! Tools::dateConverter($plan->updated_at) !!}</td>
-                                    <td class="text-center"><a href="{!! URL::route('plan.view', $plan->id) !!}" class="edit-link"><i class="fa fa-pencil-square-o fa-lg"></i></a></td>
+                                    <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan['status'] !!}</span></td>
+                                    <td>{!! Tools::dateConverter($plan['created_at']) !!}</td>
+                                    <td>{!! Tools::dateConverter($plan['updated_at']) !!}</td>
+                                    <td class="text-center"><a href="{!! URL::route('plan.view', $plan['id']) !!}" class="edit-link"><i class="fa fa-pencil-square-o fa-lg"></i></a></td>
                                 </tr>
                             @endforeach
                             </tbody>

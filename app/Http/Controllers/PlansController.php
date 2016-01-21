@@ -14,6 +14,7 @@
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\PlansFormRequest;
 use App\Http\Requests\PlanUpdateFormRequest;
 
@@ -222,7 +223,8 @@ class PlansController extends Controller
         // Prepare columns to be shown
         $table = Tables::prepare('order', [
             'description',
-            'admin',
+            'first_name',
+            'last_name',
             'status',
             'created_at',
             'updated_at',
@@ -256,7 +258,8 @@ class PlansController extends Controller
         // Prepare columns to be shown
         $table = Tables::prepare('order', [
             'description',
-            'admin',
+            'first_name',
+            'last_name',
             'status',
             'created_at',
             'updated_at',
@@ -293,25 +296,19 @@ class PlansController extends Controller
             'view'
         ], 'PlansController@index');
 
-        $query          = Plans::getAllResponses($user->id, $table['sorting']['sortBy'], $table['sorting']['order']);
-        $browserTesters = [];
-        $testers        = [];
+        $query       = Plans::getAllResponses($user->id, $table['sorting']['sortBy'], $table['sorting']['order']);
+        $optionsHtml = [];
 
         // Setup up dropdown list of testers
         foreach ($query->get() as $plan) {
-            $allTesters = Testers::getTestersByPlanId($plan->id);
-
-            foreach ($allTesters as $tester) {
-                $testers[$tester->id] = $tester->first_name . ' - ' . $tester->browser;
-            }
-
-            $browserTesters[$plan->id] = $testers;
+            $testers                  = Plans::getTestersByPlanId($plan['id']);
+            $optionsHtml[$plan['id']] = Tools::dropDownOptionsHtml($testers);
         }
 
         return view('pages.testplanner.view_all_responses', [
             'plans'       => !empty($query) ? $query->paginate(config('testplanner.tables.pagination.lists')) : '',
             'totalPlans'  => !empty($query) ? Plans::count() : 0,
-            'testers'     => $browserTesters,
+            'testers'     => $optionsHtml,
             'columns'     => $table['columns'],
             'columnsLink' => $table['columns_link'],
             'link'        => ''
@@ -345,7 +342,7 @@ class PlansController extends Controller
         $planDetails = Plans::find($planId);
 
         // Show other users that might have submitted responses
-        $testers = Testers::getTestersByPlanId($planId);
+        $testers = Plans::getTestersByPlanId($planId);
 
         $mode           = 'response';
         $tabHeaderHtml  = '';
@@ -353,8 +350,8 @@ class PlansController extends Controller
         $totalResponses = 0;
 
         foreach ($testers as $tester) {
-            $testerId        = $tester->id;
-            $testerFirstName = $tester->first_name;
+            $testerId        = $tester->user_id;
+            $testerFirstName = $tester->user_first_name;
             // Render users tab
             $tabHeaderHtml .= view('pages/testplanner/partials/response_respond/tab_header_users', [
                 'selectedUserId'  => $selectedUserId,
@@ -504,13 +501,14 @@ class PlansController extends Controller
             $adminsList[$admin->id] = $admin->first_name;
         }
 
-        $query   = Plans::query();
-        $results = Tables::searchResults('plans', $query);
+        $query   = DB::table('plans AS p');
+        $results = Tables::searchResults($query);
 
         // Prepare columns to be shown
         $table   = Tables::prepare('order', [
             'description',
-            'admin',
+            'first_name',
+            'last_name',
             'status',
             'created_at',
             'updated_at',
@@ -520,11 +518,11 @@ class PlansController extends Controller
         return view('pages.testplanner.view_all_created', [
             'userId'      => $userId,
             'role'        => $roleName,
-            'plans'       => isset($query) ? $query->paginate(config('testplanner.tables.pagination.lists')) : '',
-            'totalPlans'  => isset($query) ? Plans::count() : 0,
+            'plans'       => isset($results['list']) ? $results['list'] : '',
+            'totalPlans'  => isset($results['totalCount']) ? $results['totalCount'] : 0,
             'columns'     => $table['columns'],
             'columnsLink' => $table['columns_link'],
-            'link'        => '',
+            'link'        => $results['link'],
             'adminsList'  => isset($adminsList) ? $adminsList : ''
         ]);
     }

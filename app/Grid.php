@@ -43,16 +43,6 @@ class Grid
             'width'      => '40px'
         ];
 
-        $columns['admin'] = [
-            'type'       => 'text',
-            'colname'    => 'Admin',
-            'data'       => ['class' => 'form-control input-sm', 'id' => 'search-term'],
-            'sortable'   => 'admin',
-            'order'      => $order,
-            'filterable' => true,
-            'width'      => '80px'
-        ];
-
         $columns['email'] = [
             'type'       => 'text',
             'colname'    => 'Email',

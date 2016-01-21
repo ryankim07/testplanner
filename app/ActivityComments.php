@@ -14,17 +14,19 @@
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+use App\User;
+
 class ActivityComments extends Model
 {
     /**
-     * The database table used by the model.
+     * The database table used by the model
      *
      * @var string
      */
     protected $table = "activity_comments";
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are mass assignable
      *
      * @var array
      */
@@ -35,11 +37,18 @@ class ActivityComments extends Model
     ];
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are mass assignable
      *
      * @var array
      */
     protected $guarded = array('id');
+
+    /**
+     * Custom attribute to be included in model
+     *
+     * @var array
+     */
+    protected $appends = array('user_first_name');
 
     /**
      * Model event to change data before saving to database
@@ -47,6 +56,28 @@ class ActivityComments extends Model
     public static function boot()
     {
     }
+
+    /**
+     * Retrieve custom accessor
+     *
+     * @return mixed
+     */
+    public function getUserFirstNameAttribute()
+    {
+        return User::getUserFirstName($this->user_id);
+    }
+
+    /**
+     * Date accessor
+     *
+     * @param $value
+     * @return mixed
+     */
+    public function getCreatedAtAttribute($value)
+    {
+        return date('m/d/Y', strtotime($value));
+    }
+
 
     /**
      * Create comment in activity stream

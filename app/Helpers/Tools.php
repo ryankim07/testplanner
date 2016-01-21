@@ -66,7 +66,7 @@ class Tools
      */
     public function dbDateConverter($date, $time)
     {
-        return date('Y-m-d' . $time, strtotime($date));
+        return date('Y-m-d' . ' ' . $time, strtotime($date));
     }
 
     /**
@@ -183,5 +183,14 @@ class Tools
         $msg    = $header . $errorMsg . "\n\n" . print_r($data, true);
 
         Log::notice($msg);
+    }
+
+    public function dropDownOptionsHtml($testers)
+    {
+        foreach ($testers as $tester) {
+            $results[$tester->id] = $tester->user_first_name . ' - ' . $tester->browser;
+        }
+
+        return $results;
     }
 }

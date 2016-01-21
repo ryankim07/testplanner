@@ -59,6 +59,44 @@ class User extends Model implements AuthenticatableContract,
     protected $hidden = ['password', 'remember_token'];
 
     /**
+     * Capitalize the first name when retrieving from the database
+     *
+     * @param $value
+     * @return string
+     */
+    public function getFirstNameAttribute($value)
+    {
+        return ucfirst($value);
+    }
+
+    /**
+     * Capitalize the last name when retrieving from the database
+     *
+     * @param $value
+     * @return string
+     */
+    public function getLastNameAttribute($value)
+    {
+        return ucfirst($value);
+    }
+
+    /**
+     * Capitalize the first name when saving to the database
+     *
+     * @param $value
+     */
+    public function setFirstNameAttribute($value) {
+        $this->attributes['first_name'] = ucfirst($value);
+    }
+
+    /**
+     * Capitalize the last name when saving to the database
+     */
+    public function setLastNameAttribute($value) {
+        $this->attributes['last_name'] = ucfirst($value);
+    }
+
+    /**
      * Get role
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

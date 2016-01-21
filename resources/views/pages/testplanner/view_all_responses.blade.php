@@ -39,22 +39,22 @@
                             <tbody>
                             @foreach($plans as $plan)
                                 <tr class="plan-row">
-                                    <td>{!! $plan->description !!}</td>
+                                    <td>{!! $plan['description'] !!}</td>
 
                                     <?php
-                                        if($plan->status == 'complete') {
+                                        if($plan['status'] == 'complete') {
                                             $trLabel = 'label-default';
-                                        } else if($plan->status  == 'progress') {
+                                        } else if($plan['status']  == 'progress') {
                                             $trLabel = 'label-warning';
                                         } else {
                                             $trLabel = 'label-success';
                                         }
                                     ?>
 
-                                    <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->status !!}</span</td>
-                                    <td>{!! Tools::dateConverter($plan->created_at) !!}</td>
-                                    <td>{!! Tools::dateConverter($plan->updated_at) !!}</td>
-                                    <td>{!! Form::select('testers', $testers[$plan->id], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $plan->id)]) !!}</td>
+                                    <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan['status'] !!}</span></td>
+                                    <td>{!! Tools::dateConverter($plan['created_at']) !!}</td>
+                                    <td>{!! Tools::dateConverter($plan['updated_at']) !!}</td>
+                                    <td>{!! Form::select('testers', $testers[$plan['id']], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $plan['id'])]) !!}</td>
                                     <td class="text-center"><a href="#" class="edit-link"><i class="fa fa-search fa-lg"></i></a></td>
                                 </tr>
                             @endforeach

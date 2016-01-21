@@ -15,6 +15,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
+use App\Facades\Tools;
+
 use App\Plans;
 use App\ActivityStream;
 use App\ActivityComments;
@@ -44,37 +46,23 @@ class DashboardController extends Controller
         // Get user's role
         $user  = Auth::user();
         $roles = $user->role()->get();
+        $plans = [];
 
         // Get assigned plans from others
-        $assignedResponses = Plans::getAllAssigned($user->id, 'created_at', 'DESC', 'dashboard');
-
-        if (isset($assignedResponses)) {
-            $results = [];
-            foreach($assignedResponses->get() as $plan) {
-                $results[] = get_object_vars($plan);
-            }
-
-            $plans['plans_assigned'] = $results;
-        }
+        $plans['plans_assigned'] = Plans::getAllAssigned($user->id, 'created_at', 'DESC', 'dashboard')->get();
 
         // Display administrator created plans
         $browserTester = [];
         $allAdmin = [];
         foreach($roles as $role) {
             if ($role->name == "administrator") {
-                $adminCreated = Plans::getAllResponses($user->id, 'created_at', 'DESC', 'dashboard');
-                $allAdmin     = [];
+                $adminCreatedPlans = Plans::getAllResponses($user->id, 'created_at', 'DESC', 'dashboard');
 
-                foreach ($adminCreated->get() as $plan) {
-                    $allTesters = Testers::getTestersByPlanId($plan->id);
-
-                    foreach ($allTesters as $tester) {
-                        $browserTester[$tester->id] = $tester->first_name . ' - ' . $tester->browser;
-                    }
-
-                    $plan            = get_object_vars($plan);
-                    $plan['testers'] = $browserTester;
-                    $allAdmin[]      = $plan;
+                foreach ($adminCreatedPlans->get() as $adminPlan) {
+                    $testers     = Plans::getTestersByPlanId($adminPlan['id']);
+                    $optionsHtml = Tools::dropDownOptionsHtml($testers);
+                    $adminPlan['testers'] = $optionsHtml;
+                    $allAdmin[]           = $adminPlan;
                 }
 
                 $plans['admin_created_plans'] = $allAdmin;
@@ -83,12 +71,12 @@ class DashboardController extends Controller
         }
 
         // Get activity stream
-        $activityStream = ActivityStream::getActivityStream($user->id);
+        $activityStream = ActivityStream::getActivityStream();
 
         // Return view
         return view('pages.main.dashboard', [
-            'activities'      => !empty($activityStream['query']) ? $activityStream['query']->paginate(config('testplanner.tables.pagination.activity_stream')) : '',
-            'totalActivities' => !empty($activityStream['query']) ? ActivityStream::count() : 0,
+            'activities'      => $activityStream['total_count'] > 0 ? $activityStream['query'] : '',
+            'totalActivities' => isset($activityStream['total_count']) ? $activityStream['total_count'] : 0,
             'plans'           => isset($plans) ? array_filter($plans) : '',
             'link'            => '',
         ]);

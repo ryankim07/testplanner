@@ -40,7 +40,8 @@
                                             <tr>
                                                 <th>Description</th>
                                                 @if($type != 'admin_created_plans')
-                                                    <th>Admin</th>
+                                                    <th>First</th>
+                                                    <th>Last</th>
                                                 @endif
                                                 <th class="text-center">Status</th>
                                                 <th>Created</th>
@@ -57,7 +58,8 @@
                                                 <tr class="{!! $type !!}_rows">
                                                     <td>{!! $attr['description'] !!}</td>
                                                     @if($type != 'admin_created_plans')
-                                                        <td>{!! $attr['full_name'] !!}</td>
+                                                        <td>{!! $attr['first_name'] !!}</td>
+                                                        <td>{!! $attr['last_name'] !!}</td>
                                                     @endif
                                                     <td class="text-center">
                                                         @if($type == 'admin_created_plans')
@@ -144,7 +146,7 @@
             <div class="panel panel-info" id="activity-stream">
                 <div class="panel-heading">Activity Stream</div>
                 <div class="panel-body">
-                    @if(empty($activities))
+                    @if($totalActivities == 0)
                         <p><span>There are no activities at the current moment.</span></p>
                     @else
                         @foreach($activities as $stream)
@@ -152,12 +154,12 @@
                                 <div class="col-xs-2 col-md-2"><img src="images/mophie-user.jpeg" alt="mophie-user" class="" width="40" height="40"></div>
                                 <div class="col-xs-10 col-md-10">
                                     <div class="row">
-                                        {!! $stream['activity'] !!}
+                                        {!! $stream['custom_activity'] !!}
                                     </div>
                                     <div class="row activity-comment-line-block">
                                         <ul class="list-styled">
                                             @foreach($stream['comments'] as $eachComment)
-                                                <li class="activity-comment-line"><em>{!! $eachComment['comment'] !!} (commented by {!! $eachComment['commentator'] !!} on {!! $eachComment['created_at'] !!})</em></li>
+                                                <li class="activity-comment-line"><em>{!! $eachComment['comment'] !!} (commented by {!! $eachComment['user_first_name'] !!} on {!! $eachComment['created_at'] !!})</em></li>
                                             @endforeach
                                         </ul>
                                     </div>
@@ -192,7 +194,9 @@
 
             {!! Form::close() !!}
 
-            {!! $activities->appends($link)->render() !!}
+            @if($totalActivities > 0)
+                {!! $activities->appends($link)->render() !!}
+            @endif
 
         </div>
     </div>

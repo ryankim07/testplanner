@@ -159,7 +159,7 @@ function loadDashboardJs(url)
                     "comment": comment
                 },
                 dataType: "json",
-                success: function (resp) {
+                success: function (res) {
                     var lastCommentLine = parent.find($('.activity-comment-line').last());
                     var newCommentLine = $('<li class="activity-comment-line"><em>' + res.comment + ' (commented by ' + res.commentator + ' on ' + res.created_at + ')</em></li>');
 
@@ -457,14 +457,6 @@ function planCreatedDates()
     $('#created_to').datetimepicker({
         useCurrent: false,
         format: "MM/DD/YYYY"
-    });
-
-    $("#created_from").on("dp.change", function (e) {
-        $('#created_to').data("DateTimePicker").minDate(e.date);
-    });
-
-    $("#created_to").on("dp.change", function (e) {
-        $('#created_from').data("DateTimePicker").maxDate(e.date);
     });
 }
 

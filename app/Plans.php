@@ -24,6 +24,8 @@ use App\Tickets;
 use App\Testers;
 use App\TicketsResponses;
 
+use PDO;
+
 class Plans extends Model
 {
     /**
@@ -58,13 +60,35 @@ class Plans extends Model
      */
     public static function boot()
     {
-        parent::boot();
+    }
 
-        static::creating(function($content)
-        {
-            $content->started_at = date('Y-m-d h:i:s', strtotime($content->started_at));
-            $content->expired_at = date('Y-m-d 23:59:59', strtotime($content->expired_at));
-        });
+    /**
+     * Format to datetime when saving to database
+     *
+     * @param $value
+     */
+    public function setStartedAtAttribute($value)
+    {
+        $this->attributes['started_at'] = date('Y-m-d H:i:s', strtotime($value));
+    }
+
+    /**
+     * Format to datetime when saving to database
+     *
+     * @param $value
+     */
+    public function setExpiredAtAttribute($value)
+    {
+        $this->attributes['expired_at'] = date('Y-m-d 23:59:59', strtotime($value));
+    }
+
+    /**
+     * Always capitalize the first name when saving to the database
+     *
+     * @param $value
+     */
+    public function setFirstNameAttribute($value) {
+        $this->attributes['first_name'] = ucfirst($value);
     }
 
     /**
@@ -77,9 +101,12 @@ class Plans extends Model
      */
     public static function getAllPlans($sortBy, $order, $userId = null)
     {
+        // Fetch entire collection as array
+        DB::connection()->setFetchMode(PDO::FETCH_ASSOC);
+
         $query = DB::table('plans AS p')
             ->join('users AS u', 'u.id', '=', 'p.creator_id')
-            ->select('p.*', DB::raw('CONCAT(u.first_name, " ", u.last_name) AS full_name'));
+            ->select('p.*', 'u.first_name', 'u.last_name');
 
         if (!empty($userId)) {
             $query->where('p.creator_id', '=', $userId);
@@ -120,6 +147,9 @@ class Plans extends Model
      */
     public static function getAllAssigned($userId, $sortBy, $order, $from = null)
     {
+        // Fetch entire collection as array
+        DB::connection()->setFetchMode(PDO::FETCH_ASSOC);
+
         $query = DB::table('plans AS p')
             ->join('testers AS t', 'p.id', '=', 't.plan_id')
             ->join('users AS u', 'u.id', '=', 'p.creator_id')
@@ -127,7 +157,7 @@ class Plans extends Model
                 $join->on('p.id', '=', 'tr.plan_id')
                     ->where('tr.tester_id', '=', $userId);
             })
-            ->select('p.*', DB::raw('CONCAT(u.first_name, " ", u.last_name) AS full_name'), 't.browser', 'tr.status AS ticket_response_status')
+            ->select('p.*', 'u.first_name', 'u.last_name', 't.browser', 'tr.status AS ticket_response_status')
             ->where('t.user_id', '=', $userId)
             ->where('p.status', '=', 'new')
             ->orWhere('p.status', '=', 'progress')
@@ -205,6 +235,9 @@ class Plans extends Model
      */
     public static function renderPlan($planId, $userId)
     {
+        // Fetch entire collection as array
+        DB::connection()->setFetchMode(PDO::FETCH_ASSOC);
+
         $results = DB::table('plans AS p')
             ->join('testers AS t', 'p.id', '=', 't.plan_id')
             ->join('tickets AS ti', 'p.id', '=', 'ti.plan_id')
@@ -213,7 +246,6 @@ class Plans extends Model
             ->where('t.user_id', '=', $userId)
             ->first();
 
-        $results             = get_object_vars($results);
         $results['reporter'] = User::getUserFirstName($results['creator_id'], 'first_name');
         $results['assignee'] = User::getUserFirstName($results['tester_id'], 'first_name');
         $results['tickets']  = unserialize($results['tickets']);
@@ -325,6 +357,17 @@ class Plans extends Model
         ];
 
         return $results;
+    }
+
+    /**
+     * Get testers by plan ID
+     *
+     * @param $id
+     * @return array
+     */
+    public static function getTestersByPlanId($id)
+    {
+        return Plans::find($id)->testers()->get();
     }
 
     /**
