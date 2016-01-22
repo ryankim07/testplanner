@@ -11,7 +11,6 @@
  * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -129,9 +128,7 @@ class PlansController extends Controller
         // Mail all test browsers
         Email::sendEmail('plan-updated', array_merge([
             'plan_id'     => $planId,
-            'description' => $request->get('description')], [
-                'testers' => $testers
-            ]
+            'description' => $request->get('description')], ['testers' => $testers]
         ));
 
         return redirect('dashboard')->with('flash_success', $request->get('description') . ' ' . config('testplanner.messages.plan.build_update'));

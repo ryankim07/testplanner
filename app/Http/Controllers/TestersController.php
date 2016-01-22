@@ -11,7 +11,6 @@
  * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\TestersFormRequest;
 
 use App\User;
@@ -105,14 +104,10 @@ class TestersController extends Controller
      */
     public function store(TestersFormRequest $request)
     {
-        // All user
-        $allUsers   = User::all();
-        $allTesters = json_decode($request->get('browser_testers'), true);
-
         // Save testers data to session
         Session::put('mophie_testplanner.testers', [
-            'users'   => $allUsers,
-            'testers' => $allTesters
+            'users'   => User::all(),
+            'testers' => $request->get('browser_testers')
         ]);
 
         return redirect('plan/review');

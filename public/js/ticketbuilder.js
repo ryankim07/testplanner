@@ -8,12 +8,10 @@
 function TicketBuilder(config) {
     var config          = config;
     var formId          = '#' + config.formIdName;
-    var ticketRowClass  = '.' + config.ticketRowName;
     var addBtnId        = '#' + config.addBtnName;
     var continueBtnId   = '#' + config.continueBtnName;
     var updateBtnId     = '#' + config.updateBtnName;
     var removeBtnClass  = '.' + config.removeBtnName;
-    var clearBtnClass   = '.' + config.clearBtnName;
     var ticketRowClass  = '.' + config.ticketRowName;
     var ticketDescClass = '.' + config.ticketDescName;
     var objectiveClass  = '.' + config.objectiveName;
@@ -80,15 +78,42 @@ function TicketBuilder(config) {
             $(this).closest(ticketRowClass).remove();
 
             // Cannot remove all the rows, only one should be left over
-            if ($(ticketRowClass).length == 1) {
-                // The row that is left over, hide remove option
-                $(removeBtnClass).hide();
+            removeTrashBtn(true);
+        });
+    }
 
-                // Display back add ticket button
-                if (addBtn.css('display') == 'none') {
-                    addBtn.show();
-                }
-            }
+    function removeTicketAjax(url)
+    {
+        removeTrashBtn(false);
+
+        // Remove tickets
+        $(formId).on('click', removeBtnClass, function(e) {
+            e.preventDefault();
+
+            var ticketRow = $(this).closest(ticketRowClass);
+            var ticketId = $(this).data('id');
+
+            // Ajax post
+            $.when(
+                $.ajax({
+                    method: "POST",
+                    url: url,
+                    data: {
+                        "_token":  $('form').find('input[name=_token]').val(),
+                        "ticketId": ticketId
+                    },
+                    success: function(resp) {
+                        // Remove ticket row
+                        if (resp == 'success') {
+                            $('#' + ticketId).remove();
+                        }
+                    }
+                })
+            ).done(function() {
+            });
+
+            // Cannot remove all the rows, only one should be left over
+            removeTrashBtn(false);
         });
     }
 
@@ -112,11 +137,8 @@ function TicketBuilder(config) {
             });
 
             // Create hidden field
-            var input = $("<input>")
-                .attr("type", "hidden")
-                .attr("name", 'tickets_obj').val(JSON.stringify(tickets));
-
-            $('form').append($(input));
+            var input = $("<input>").attr({"type":"hidden","name":"tickets_obj"}).val(JSON.stringify(tickets));
+            $('form').append(input);
         });
     }
 
@@ -135,9 +157,30 @@ function TicketBuilder(config) {
         return true;
     }
 
+    /**
+     * Utility function
+     */
+    function removeTrashBtn(displayBtn)
+    {
+        // Hide button
+        if ($(ticketRowClass).length == 1) {
+            $(removeBtnClass).hide();
+        }
+
+        // Show again add ticket button
+        if (displayBtn) {
+            if (addBtn.css('display') == 'none') {
+                addBtn.show();
+            }
+        }
+    }
+
     return {
         load: function() {
             initiateBuilder();
+        },
+        removeAjax: function(url) {
+            removeTicketAjax(url);
         }
     }
 }

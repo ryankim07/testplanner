@@ -190,7 +190,7 @@ Route::post('ticket/remove', [
     'as'         => 'ticket.remove.ajax',
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator'],
-    'uses'       => 'TicketsController@removeAjax'
+    'uses'       => 'TicketsController@removeTicketAjax'
 ]);
 
 Route::post('ticket/save-ticket-response', ['as' => 'ticket.save.response', 'uses' => 'TicketsController@save']);

@@ -11,15 +11,12 @@
  * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
-use App\Http\Requests\RegisterFormRequest;
 use App\Http\Requests\UserResponseFormRequest;
 
 use App\User;
 use App\Tables;
-use App\Role;
 
 use Session;
 
@@ -70,30 +67,14 @@ class UsersController extends Controller
      */
     public function view(Request $request)
     {
-        list($id, $firstName, $lastName, $email, $active, $userRoles) = explode(':', $request->get('info'));
-
-        $userRoles = explode(',', $userRoles);
-
-        $user = [
-            'id'         => $id,
-            'first_name' => $firstName,
-            'last_name'  => $lastName,
-            'email'      => $email,
-            'active'     => $active,
-        ];
-
-        // Prepare dropdown list of all roles
-        $allRoles  = Role::all();
-
-        foreach($allRoles as $eachRole) {
-            $rolesOptions[$eachRole->id] = $eachRole->custom_role_name;
-        }
+        $info    = $request->get('info');
+        $results = User::displayUser($info);
 
         $viewHtml = view('pages.main.user', [
             'mode'                 => 'edit',
-            'user'                 => $user,
-            'rolesOptions'         => $rolesOptions,
-            'rolesSelectedOptions' => count($userRoles) > 0 ? $userRoles : ''
+            'user'                 => $results['user'],
+            'rolesOptions'         => $results['role_options'],
+            'rolesSelectedOptions' => $results['user_roles']
         ])->render();
 
         return response()->json(["viewBody" => $viewHtml]);

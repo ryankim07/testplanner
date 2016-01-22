@@ -3,7 +3,7 @@
 | Review new created plan
 |--------------------------------------------------------------------------
 --}}
-
+<?php var_dump($testers['testers']) ?>
 @extends('layout.main.master')
 
 @section('content')
@@ -54,7 +54,7 @@
                 <div class="page-header"><h4>Browser Testers</h4></div>
                 <div class="row nested-block">
                     <a href="{!! URL::route('tester.edit') !!}" class="pencil" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
-                    @include('pages/testplanner/partials/testers', ['testers' => $testers['testers']])
+                    @include('pages/testplanner/partials/testers', ['testers' => $testers['users']])
                 </div>
             </div>
         </div>
@@ -73,7 +73,19 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
-            buildReviewJs();
+
+            // Load ticket builder
+            var ticketBuilder = new TicketBuilder({
+                formIdName: 'review-main',
+                ticketRowName: 'ticket-row',
+                removeBtnName: 'trash'
+            });
+
+            // Remove ticket by Ajax
+            ticketBuilder.removeAjax("{!! URL::to('ticket/remove') !!}");
+
+            // Check all the selected browser testers
+            preCheckBrowserTesters('<?php echo $testers['testers'] ?>');
         });
 
     </script>

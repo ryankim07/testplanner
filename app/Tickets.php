@@ -63,6 +63,22 @@ class Tickets extends Model
     }
 
     /**
+     * Remove from ticket session data
+     *
+     * @param $ticketsData
+     * @param $ticketId
+     */
+    public static function removeTicketFromSession($ticketsData, $ticketId)
+    {
+        foreach($ticketsData as $ticket) {
+            $modifiedData[$ticket['id']] = $ticket;
+        }
+
+        // Remove
+        unset($modifiedData[$ticketId]);
+    }
+
+    /**
      * Only one task belongs to a case
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

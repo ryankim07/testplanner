@@ -9,7 +9,6 @@
  * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
@@ -53,11 +52,6 @@ class ActivityStreamController extends Controller
         ]);
     }
 
-    public function search()
-    {
-
-    }
-
     /**
      * Create comment in activity stream
      *
@@ -74,5 +68,10 @@ class ActivityStreamController extends Controller
             "comment"     => $results->comment,
             "created_at"  => Tools::dateConverter($results->created_at)
         ]);
+    }
+
+    public function search()
+    {
+
     }
 }

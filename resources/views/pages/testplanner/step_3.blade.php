@@ -61,21 +61,14 @@
 
     </div>
 
-    @if($mode == 'edit')
-        <script type="text/javascript">
-
-        $(document).ready(function() {
-            // Preselect testers radion input
-            preSelectBrowserTesters(<?php echo json_encode($testers); ?>);
-        });
-
-        </script>
-    @endif
-
     <script type="text/javascript">
 
         $(document).ready(function() {
-            browserFieldGrabberJs()
+            @if($mode == 'edit')
+                preSelectBrowserTesters(<?php echo json_encode($testers); ?>);
+            @endif
+
+            grabBrowserTesters();
         });
 
     </script>

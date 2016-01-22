@@ -26,12 +26,12 @@
                 @foreach($testers as $tester)
                     <tr class="testers" data-id="{!! $tester['id'] !!}" data-fname="{!! $tester['first_name'] !!}" data-email="{!! $tester['email'] !!}">
                         <td>{!! $tester['first_name'] !!}</td>
-                        <td class="text-center">{!! Form::checkbox('tester[]', 'chrome',  null, ['class' => 'browser']) !!}</td>
-                        <td class="text-center">{!! Form::checkbox('tester[]', 'firefox', null, ['class' => 'browser']) !!}</td>
-                        <td class="text-center">{!! Form::checkbox('tester[]', 'ie',      null, ['class' => 'browser']) !!}</td>
-                        <td class="text-center">{!! Form::checkbox('tester[]', 'safari',  null, ['class' => 'browser']) !!}</td>
-                        <td class="text-center">{!! Form::checkbox('tester[]', 'ios',     null, ['class' => 'browser']) !!}</td>
-                        <td class="text-center">{!! Form::checkbox('tester[]', 'android', null, ['class' => 'browser']) !!}</td>
+                        <td class="text-center">{!! Form::checkbox('tester[]', 'chrome',  null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester['id'] . '-chrome']) !!}</td>
+                        <td class="text-center">{!! Form::checkbox('tester[]', 'firefox', null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester['id'] . '-firefox']) !!}</td>
+                        <td class="text-center">{!! Form::checkbox('tester[]', 'ie',      null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester['id'] . '-ie']) !!}</td>
+                        <td class="text-center">{!! Form::checkbox('tester[]', 'safari',  null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester['id'] . '-safari']) !!}</td>
+                        <td class="text-center">{!! Form::checkbox('tester[]', 'ios',     null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester['id'] . '-apple']) !!}</td>
+                        <td class="text-center">{!! Form::checkbox('tester[]', 'android', null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester['id'] . '-android']) !!}</td>
                     </tr>
                 @endforeach
                 </tbody>

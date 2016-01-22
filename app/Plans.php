@@ -254,6 +254,38 @@ class Plans extends Model
     }
 
     /**
+     * Display plans that were created and assigned to the user
+     *
+     * @param $user
+     * @param $roles
+     */
+    public static function getDashboardCreatedAssigned($user, $roles)
+    {
+        $plans = [];
+
+        // Get assigned plans from others
+        $plans['plans_assigned'] = self::getAllAssigned($user->id, 'created_at', 'DESC', 'dashboard')->get();
+
+        // Display administrator created plans
+        $allAdmin = [];
+        foreach($roles as $role) {
+            if ($role->name == "administrator") {
+                $adminCreatedPlans = self::getAllResponses($user->id, 'created_at', 'DESC', 'dashboard');
+
+                foreach ($adminCreatedPlans->get() as $adminPlan) {
+                    $testers     = self::getTestersByPlanId($adminPlan['id']);
+                    $optionsHtml = Tools::dropDownOptionsHtml($testers);
+                    $adminPlan['testers'] = $optionsHtml;
+                    $allAdmin[]           = $adminPlan;
+                }
+
+                $plans['admin_created_plans'] = $allAdmin;
+                break;
+            }
+        }
+    }
+
+    /**
      * Update built plan details
      *
      * @param $planId

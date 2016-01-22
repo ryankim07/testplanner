@@ -48,49 +48,6 @@ $('#view-all-assigned-main').on('click', '.edit-link', function() {
     window.location.href = $(this).data('url');
 });
 
-/**
- * Review build
- */
-function buildReviewJs()
-{
-    if ($('.ticket-row').length == 1) {
-        $('.trash').hide();
-    }
-
-    // Remove tickets
-    $('#review-main').on('click', '.trash', function(e) {
-        e.preventDefault();
-
-        var ticketRow = $(this).closest('.ticket-row');
-        var ticketId = $(this).data('id');
-
-        // Ajax post
-        $.when(
-            $.ajax({
-                method: "POST",
-                url: "{!! URL::to('ticket/remove') !!}",
-                data: {
-                    "_token":  $('form').find('input[name=_token]').val(),
-                    "ticketId": ticketId
-                },
-                success: function(resp) {
-                    // Remove ticket row
-                    if (resp == 'success') {
-                        $('#' + ticketId).remove();
-                    }
-                }
-            })
-        ).done(function() {
-        });
-
-        // Cannot remove all the rows, only one should be left over
-        if ($('.ticket-row').length == 1) {
-            // The row that is left over, hide remove option
-            $('.trash').hide();
-        }
-    });
-}
-
 
 /**
  * Dashboard
@@ -335,22 +292,26 @@ function loadUsersJs(url, data)
     });
 }
 
-function browserFieldGrabberJs()
+function grabBrowserTesters()
 {
     $('#step-3-main').on('click', '#continue-btn', function() {
         var browserTesters = [];
         $('.testers').each(function() {
+            var id = $(this).data('id');
             var browsers = [];
+            var inputIds = [];
 
             $(this).find('input[type="checkbox"]:checked').each(function () {
+                inputIds.push('tester-' + id  + '-' + $(this).val());
                 browsers.push($(this).val());
             });
 
             browserTesters.push({
-                "id": $(this).data('id'),
+                "id": id,
                 "first_name": $(this).data('fname'),
                 "email": $(this).data('email'),
-                "browsers": browsers.join(',')
+                "browsers": browsers.join(','),
+                "input-ids": inputIds
             });
         });
 
@@ -365,16 +326,20 @@ function browserFieldGrabberJs()
  *
  * @param testers
  */
-function preSelectBrowserTesters(testers)
+function preCheckBrowserTesters(testers)
 {
-    $('.browser-tester').each(function () {
-        var browser = $(this);
-        var browserId = browser.attr('id');
+    var testers = $.parseJSON(testers);
 
-        $.each(testers, function (i, testerBrowserId) {
-            if (browserId == testerBrowserId) {
-                browser.prop("checked", true);
-            }
+    $.each(testers, function (i, objs) {
+        $.each(objs['input-ids'], function (i, inputIds) {
+            $('.browser-tester').each(function () {
+                var browser = $(this);
+                var browserId = browser.attr('id');
+
+                if (browserId == inputIds) {
+                    browser.prop("checked", true);
+                }
+            });
         });
     });
 }

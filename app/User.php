@@ -15,6 +15,7 @@ use PhpSpec\Exception\Exception;
 
 use App\Facades\Tools;
 
+use App\Role;
 use App\UserRole;
 
 class User extends Model implements AuthenticatableContract,
@@ -140,6 +141,40 @@ class User extends Model implements AuthenticatableContract,
         $info = self::find($userId);
 
         return $info->email;
+    }
+
+    /**
+     * Show user for adding or editing
+     *
+     * @param $info
+     * @return array
+     */
+    public static function displayUser($info)
+    {
+        $results = [];
+
+        list($id, $firstName, $lastName, $email, $active, $userRoles) = explode(':', $info);
+
+        $results['user_roles'] = explode(',', $userRoles);
+
+        $results['user'] = [
+            'id'         => $id,
+            'first_name' => $firstName,
+            'last_name'  => $lastName,
+            'email'      => $email,
+            'active'     => $active,
+        ];
+
+        // Prepare dropdown list of all roles
+        $allRoles  = Role::all();
+
+        foreach($allRoles as $eachRole) {
+            $rolesOptions[$eachRole->id] = $eachRole->custom_role_name;
+        }
+
+        $results['role_options'] = count($rolesOptions) > 0 ? $rolesOptions : '';
+
+        return $results;
     }
 
     /**

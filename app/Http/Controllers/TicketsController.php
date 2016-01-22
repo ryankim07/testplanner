@@ -11,12 +11,10 @@
  * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Requests\TicketsFormRequest;
 use App\Http\Requests\UserResponseFormRequest;
-use PhpSpec\Exception\Exception;
 
 use App\Facades\Tools;
 use App\Facades\Email;
@@ -143,7 +141,7 @@ class TicketsController extends Controller
 
             // Mail all test browsers
             Email::sendEmail('ticket-response', [
-                'plan_id'            => $planData['id'],
+                'plan_id'            => $planData['plan_id'],
                 'description'        => $planData['description'],
                 'tester_id'          => $planData['tester_id'],
                 'creator_first_name' => $planData['reporter'],
@@ -180,17 +178,13 @@ class TicketsController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function removeAjax(Request $request)
+    public function removeTicketAjax(Request $request)
     {
         // Get tickets session data
         $ticketsData = Session::get('mophie_testplanner.tickets');
+        $ticketId    = $request->get('ticketId');
 
-        foreach($ticketsData as $ticket) {
-            $modifiedData[$ticket['id']] = $ticket;
-        }
-
-        // Remove
-        unset($modifiedData[$request->get('ticketId')]);
+        $modifiedData = Tickets::removeTicketFromSession($ticketsData, $ticketId);
 
         // Save plan data to session
         Session::put('mophie_testplanner.tickets', $modifiedData);
