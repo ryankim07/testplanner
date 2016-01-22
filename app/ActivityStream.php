@@ -62,7 +62,7 @@ class ActivityStream extends Model
     }
 
     /**
-     * Retrieve custom accesspr
+     * Retrieve custom accessor
      *
      * @return mixed
      */

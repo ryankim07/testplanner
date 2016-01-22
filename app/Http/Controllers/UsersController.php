@@ -65,30 +65,35 @@ class UsersController extends Controller
     /**
      * View user
      *
-     * @param $id
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function view($id)
+    public function view(Request $request)
     {
-        $user      = User::find($id);
-        $userRoles = $user->role->all();
+        list($id, $firstName, $lastName, $email, $active, $userRoles) = explode(':', $request->get('info'));
+
+        $userRoles = explode(',', $userRoles);
+
+        $user = [
+            'id'         => $id,
+            'first_name' => $firstName,
+            'last_name'  => $lastName,
+            'email'      => $email,
+            'active'     => $active,
+        ];
+
+        // Prepare dropdown list of all roles
         $allRoles  = Role::all();
 
         foreach($allRoles as $eachRole) {
-            $rolesOptions[$eachRole->id] = ucfirst($eachRole->name);
-
-            foreach($userRoles as $eachUserRole) {
-                if ($eachUserRole->id == $eachRole->id) {
-                    $rolesSelected[] = $eachUserRole->id;
-                }
-            }
+            $rolesOptions[$eachRole->id] = $eachRole->custom_role_name;
         }
 
         $viewHtml = view('pages.main.user', [
             'mode'                 => 'edit',
             'user'                 => $user,
             'rolesOptions'         => $rolesOptions,
-            'rolesSelectedOptions' => count($rolesSelected) > 0 ? $rolesSelected : ''
+            'rolesSelectedOptions' => count($userRoles) > 0 ? $userRoles : ''
         ])->render();
 
         return response()->json(["viewBody" => $viewHtml]);

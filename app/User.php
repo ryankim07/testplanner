@@ -59,28 +59,6 @@ class User extends Model implements AuthenticatableContract,
     protected $hidden = ['password', 'remember_token'];
 
     /**
-     * Capitalize the first name when retrieving from the database
-     *
-     * @param $value
-     * @return string
-     */
-    public function getFirstNameAttribute($value)
-    {
-        return ucfirst($value);
-    }
-
-    /**
-     * Capitalize the last name when retrieving from the database
-     *
-     * @param $value
-     * @return string
-     */
-    public function getLastNameAttribute($value)
-    {
-        return ucfirst($value);
-    }
-
-    /**
      * Capitalize the first name when saving to the database
      *
      * @param $value
@@ -178,11 +156,11 @@ class User extends Model implements AuthenticatableContract,
         $sub = DB::table('users as u')
             ->leftJoin('user_role AS ur', 'ur.user_id', '=', 'u.id')
             ->leftJoin('roles AS r', 'r.id', '=', 'ur.role_id')
-            ->select('u.*', 'r.name AS role_names')
-            ->toSql();
+            ->select('u.*', 'ur.role_id AS role_ids', 'r.name AS role_names')
+            ->toSql(); // Do not remove this
 
         $query = DB::table(DB::raw("($sub) AS sub"))
-            ->select('sub.*', DB::raw("GROUP_CONCAT(sub.role_names SEPARATOR ', ') AS role_names"))
+            ->select('sub.*', DB::raw("GROUP_CONCAT(sub.role_ids SEPARATOR ', ') AS role_ids"), DB::raw("GROUP_CONCAT(sub.role_names SEPARATOR ', ') AS role_names"))
             ->groupBy('sub.id')
             ->orderBy($sortBy, $order);
 

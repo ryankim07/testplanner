@@ -9,7 +9,7 @@
 
     @if($mode == 'edit')
         {!! Form::open(['route' => 'user.update', 'class' => 'form-horizontal viewer-form', 'id' => 'user-update-form']) !!}
-        {!! Form::hidden('user_id', $user->id) !!}
+        {!! Form::hidden('user_id', $user['id']) !!}
     @else
         {!! Form::open(['route' => 'auth.post.register', 'class' => 'form-horizontal viewer-form', 'id' => 'user-register-form']) !!}
     @endif
@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col-xs-10 col-md-10">
                     <i class="fa fa-user fa-3x header-icon"></i>
-                    <h4>{!! $mode == 'edit' ? $user->first_name : 'Add new user' !!}</h4>
+                    <h4>{!! $mode == 'edit' ? $user['first_name'] : 'Add new user' !!}</h4>
                 </div>
                 <div class="col-xs-2 col-md-2">
                     <button type="button" class="close close-viewer" aria-label="Close"><span aria-hidden="true">&times;</span></button>

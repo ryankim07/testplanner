@@ -18,6 +18,7 @@ use App\UserRole;
 use App\Role;
 
 use Auth;
+use Session;
 
 class AuthController extends Controller
 {
@@ -126,22 +127,28 @@ class AuthController extends Controller
 
         // Register new user
         try {
-            $user = $this->user->where('email', '=', $request->email)->first();
-            $userId = $user->id;
+            $user   = $this->user->where('email', '=', $request->email)->first();
+            $userId = isset($user->id) ? $user->id : false;
 
             // Save user
-            if (!isset($userId)) {
+            if (!$userId) {
                 $this->user->first_name = $request->first_name;
                 $this->user->last_name  = $request->last_name;
                 $this->user->email      = $request->email;
                 $this->user->password   = bcrypt($request->password);
                 $this->user->active     = 1;
                 $this->user->save();
+
+                $userId = $this->user->id;
             }
 
-            // Find all roles for this user
-            $userRoles = $this->user->find($userId)->roles();
+            // Roles that were selected to be registered
+            $selectedRoles = explode(',', $request->get('role'));
 
+            // Find all roles for this user
+            $userRoles = $this->user->findOrNew($userId)->roles();
+
+            $existingRoles = [];
             foreach($userRoles->get() as $user) {
                 $existingRoles[] = $user->role_id;
             }
@@ -151,21 +158,13 @@ class AuthController extends Controller
                 throw new Exception(config('testplanner.messages.users.identical_user'));
             }
 
-            // Roles that were selected to be registered
-            $selectedRoles = explode(',', $request->get('role'));
-
             // Throw error if role already exists
             if (count(array_diff($selectedRoles, $existingRoles)) == 0) {
                 throw new Exception(config('testplanner.messages.users.identical_role'));
             }
 
-            // Add new role/s to user
-            foreach($selectedRoles as $key => $id) {
-                UserRole::create([
-                    'user_id' => $userId,
-                    'role_id' => $id
-                ]);
-            }
+            // Add user's role
+            UserRole::addRoles($userId, $selectedRoles);
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
             $redirect = true;
@@ -194,7 +193,7 @@ class AuthController extends Controller
             // Return JSON error response
             return response()->json([
                 'type' => 'error',
-                'msg'  => $errorMsg
+                'msg'  => config('testplanner.messages.users.new_error')
             ]);
         }
 

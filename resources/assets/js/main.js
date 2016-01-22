@@ -296,7 +296,7 @@ function registerEditUserJs(mode, url)
     });
 }
 
-function loadUsersJs(url)
+function loadUsersJs(url, data)
 {
     var currentClass = $('#view-all-users-main').attr('class');
 
@@ -316,6 +316,7 @@ function loadUsersJs(url)
         $.ajax({
             method: "GET",
             url: url,
+            data: data,
             dataType: "json",
             success: function (resp) {
                 $('#viewer-main').html(resp.viewBody);

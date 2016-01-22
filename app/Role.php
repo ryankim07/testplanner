@@ -23,6 +23,40 @@ class Role extends Model
     protected $table = 'roles';
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'description',
+    ];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = array('id');
+
+    /**
+     * Custom attribute to be included in model
+     *
+     * @var array
+     */
+    protected $appends = array('custom_role_name');
+
+    /**
+     * Retrieve custom accesspr
+     *
+     * @return mixed
+     */
+    public function getCustomRoleNameAttribute()
+    {
+        return ucfirst($this->name);
+    }
+
+    /**
      * Get admin users
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

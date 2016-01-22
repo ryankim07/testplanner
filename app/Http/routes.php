@@ -62,7 +62,7 @@ Route::post('auth/postRegister', [
  * Users
  *
  */
-Route::get('user/view/{user_id}', [
+Route::get('user/view', [
     'as'         => 'user.view',
     'middleware' => 'roles',
     'roles'      => ['root'],
