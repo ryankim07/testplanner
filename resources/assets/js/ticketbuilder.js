@@ -112,11 +112,8 @@ function TicketBuilder(config) {
             });
 
             // Create hidden field
-            var input = $("<input>")
-                .attr("type", "hidden")
-                .attr("name", 'tickets_obj').val(JSON.stringify(tickets));
-
-            $('form').append($(input));
+            var input = $("<input>").attr({"type":"hidden","name":"tickets_obj"}).val(JSON.stringify(tickets));
+            $('form').append(input);
         });
     }
 

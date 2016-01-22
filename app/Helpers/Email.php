@@ -73,7 +73,8 @@ class Email
                 break;
             }
         } catch(\Exception $e) {
-            Tools::log($e->getMessage(), $data);
+            Tools::log($e->getMessage() . ' email sending', $data);
+            Session::flash('flash_error', config('testplanner.messages.plan.system.email_error'));
         }
 
         return true;

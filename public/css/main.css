@@ -170,6 +170,16 @@ body {
     color: #777777;
 }
 
+#step-3-main img {
+    width: 64px;
+    height: 64px;
+}
+
+#review-main img {
+    width: 32px;
+    height: 32px;
+}
+
 #review-main .trash {
     position:absolute;
     margin-top: 8px;

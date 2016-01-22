@@ -51,7 +51,7 @@ return [
             'new_build'           => 'New plan successfully created.',
             'build_error'         => 'There seems to be a problem while building the plan.  Please contact the administrator.',
             'build_update'        => 'details has been updated successfully.',
-            'session_error'       => 'Session data is missing.',
+            'session_error'       => 'There seems to be a problem processing your plan build. Make sure if plan was created.  If not, please contact the administrator for this error.',
             'users_non_responses' => 'Users have not submitted responses yet.',
             'response_success'    => 'Your plan has been posted successfully.',
             'response_error'      => 'There seems to be a problem processing your response. Please contact the administrator.',
@@ -63,9 +63,11 @@ return [
             'no_activities_found' => 'No activities found.',
         ],
         'system' => [
-            'update_success'    => 'Fields successfully updated',
-            'update_error'      => 'No fields were edited for update.',
-            'file_update_error' => 'There seems to be a problem processing your update.  Please contact the administrator.'
+            'update_success'        => 'Fields successfully updated',
+            'update_error'          => 'No fields were edited for update.',
+            'file_update_error'     => 'There seems to be a problem processing your update.  Please contact the administrator.',
+            'email_error'           => 'Operation executed successfully.  However, there was a problem while sending email.',
+            'activity_stream_error' => 'Operation executed successfully.  However, there was a problem logging to the stream.'
         ],
     ],
 

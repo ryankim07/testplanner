@@ -7,7 +7,7 @@
  *
  * @author     Ryan Kim
  * @category   Mophie
- * @package    Test planner
+ * @package    Test Planner
  * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 

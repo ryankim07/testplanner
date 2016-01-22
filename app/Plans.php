@@ -300,7 +300,7 @@ class Plans extends Model
             // Save new plan build
             $plan = self::create($planData);
             $planId = $plan->id;
-            $planData['id'] = $planId;
+            $planData['plan_id'] = $planId;
 
             if (isset($plan->id)) {
                 // Save new tickets
@@ -316,14 +316,6 @@ class Plans extends Model
                         'user_id' => $tester['id'],
                         'browser' => $tester['browser']
                     ]);
-
-                    // Create object for email
-                    $testersWithEmail[] = [
-                        'tester_id'  => $tester['id'],
-                        'first_name' => $tester['first_name'],
-                        'browser'    => $tester['browser'],
-                        'email'      => User::getUserEmail($tester['id'])
-                    ];
                 }
             }
         } catch (\Exception $e) {
@@ -351,12 +343,7 @@ class Plans extends Model
         // Commit all changes
         DB::commit();
 
-        $results = [
-            'plan_id' => $plan->id,
-            'testers' => $testersWithEmail
-        ];
-
-        return $results;
+        return $plan->id;
     }
 
     /**

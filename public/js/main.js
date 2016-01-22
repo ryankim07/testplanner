@@ -428,11 +428,16 @@ function jiraVersions(formId, descId, versions)
  */
 function planStartExpireDates()
 {
+    var curDate = new Date();
+    var yest    = curDate.setDate(curDate.getDate() - 1)
+
     $('#started_at').datetimepicker({
+        minDate:yest,
         useCurrent: false,
         format: "MM/DD/YYYY"
     });
     $('#expired_at').datetimepicker({
+        minDate:yest,
         useCurrent: false,
         format: "MM/DD/YYYY"
     });

@@ -17,10 +17,18 @@
     </div>
 @endif
 
-@if(Session::has('flash_message'))
+@if(Session::has('flash_success'))
     <div class="alert alert-success" role="alert">
         <i class="fa fa-check-circle fa-lg" aria-hidden="true"></i>
         <span class="sr-only">Success:</span>
-        {!! Session::get('flash_message') !!}
+        {!! Session::get('flash_success') !!}
+    </div>
+@endif
+
+@if(Session::has('flash_error'))
+    <div class="alert alert-danger" role="alert">
+        <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"></i>
+        <span class="sr-only">Error:</span>
+        {!! Session::get('flash_error') !!}
     </div>
 @endif

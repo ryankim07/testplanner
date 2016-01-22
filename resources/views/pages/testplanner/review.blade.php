@@ -54,11 +54,7 @@
                 <div class="page-header"><h4>Browser Testers</h4></div>
                 <div class="row nested-block">
                     <a href="{!! URL::route('tester.edit') !!}" class="pencil" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
-                    @foreach($testers as $tester)
-                        <div class="text-center review-testers">
-                            {!! Html::image('images/' . $tester['browser'] . '.png', 'Browser', ['class' => 'browser-img']) !!}<h5><span class="caption">{!! $tester['first_name'] !!}</span></h5>
-                        </div>
-                    @endforeach
+                    @include('pages/testplanner/partials/testers', ['testers' => $testers['testers']])
                 </div>
             </div>
         </div>

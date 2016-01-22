@@ -335,6 +335,30 @@ function loadUsersJs(url, data)
     });
 }
 
+function browserFieldGrabberJs()
+{
+    $('#step-3-main').on('click', '#continue-btn', function() {
+        var browserTesters = [];
+        $('.testers').each(function() {
+            var browsers = [];
+
+            $(this).find('input[type="checkbox"]:checked').each(function () {
+                browsers.push($(this).val());
+            });
+
+            browserTesters.push({
+                "id": $(this).data('id'),
+                "first_name": $(this).data('fname'),
+                "email": $(this).data('email'),
+                "browsers": browsers.join(',')
+            });
+        });
+
+        var input = $("<input>").attr({"type":"hidden","name":"browser_testers"}).val(JSON.stringify(browserTesters));
+        $('form').append(input);
+    });
+}
+
 /**
  * Pre check all the radio buttons for browser testers
  * when editing form
@@ -428,11 +452,16 @@ function jiraVersions(formId, descId, versions)
  */
 function planStartExpireDates()
 {
+    var curDate = new Date();
+    var yest    = curDate.setDate(curDate.getDate() - 1)
+
     $('#started_at').datetimepicker({
+        minDate:yest,
         useCurrent: false,
         format: "MM/DD/YYYY"
     });
     $('#expired_at').datetimepicker({
+        minDate:yest,
         useCurrent: false,
         format: "MM/DD/YYYY"
     });

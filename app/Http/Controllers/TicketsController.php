@@ -153,7 +153,7 @@ class TicketsController extends Controller
                 'response'           => $response
             ]);
 
-            return redirect('dashboard')->with('flash_message', config('testplanner.messages.plan.response_success'));
+            return redirect('dashboard')->with('flash_success', config('testplanner.messages.plan.response_success'));
         }
 
         return redirect('dashboard');

@@ -118,7 +118,7 @@ class ActivityStream extends Model
                 $userId       = $plan['tester_id'];
             }
 
-            $planLink = link_to_route('plan.view.response', $plan['description'], [$plan['id'], $userId]);
+            $planLink = link_to_route('plan.view.response', $plan['description'], [$plan['plan_id'], $userId]);
             $message  = '';
 
             switch($type) {
@@ -128,7 +128,7 @@ class ActivityStream extends Model
                     } elseif ($status == 'update') {
                         $message = config('testplanner.messages.plan.update');
                     }
-                    break;
+                break;
 
                 case 'ticket-response':
                     if ($status == 'progress' || $status == 'update') {
@@ -136,10 +136,10 @@ class ActivityStream extends Model
                     } else if ($status == 'complete') {
                         $message = config('testplanner.messages.plan.response_resolved');
                     }
-                    break;
+                break;
             }
 
-            if ($status != 'new') {
+            if ($status == 'new') {
                 $activity = $assigneeName . ' ' . $message . ' ' . $planLink;
 
                 $comment = self::create([
@@ -150,7 +150,8 @@ class ActivityStream extends Model
             }
         } catch(\Exception $e) {
             // Log to system
-            Tools::log($e->getMessage(), $plan);
+            Tools::log($e->getMessage() . ' activity stream', $plan);
+            Session::flash('flash_error', config('testplanner.messages.plan.system.activity_stream_error'));
         }
 
         return true;

@@ -15,11 +15,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TestersFormRequest;
 
 use App\User;
-use App\Testers;
 
-use Validator;
 use Session;
-use App;
 
 class TestersController extends Controller
 {
@@ -108,20 +105,15 @@ class TestersController extends Controller
      */
     public function store(TestersFormRequest $request)
     {
-        $testers = array_except($request->all(), '_token');
-
-        foreach(array_shift($testers) as $tester) {
-            list($id, $firstName, $browser) = explode(',', $tester);
-
-            $browserTesters[] = [
-                'id'         => $id,
-                'first_name' => $firstName,
-                'browser'    => $browser
-            ];
-        }
+        // All user
+        $allUsers   = User::all();
+        $allTesters = json_decode($request->get('browser_testers'), true);
 
         // Save testers data to session
-        Session::put('mophie_testplanner.testers', $browserTesters);
+        Session::put('mophie_testplanner.testers', [
+            'users'   => $allUsers,
+            'testers' => $allTesters
+        ]);
 
         return redirect('plan/review');
     }

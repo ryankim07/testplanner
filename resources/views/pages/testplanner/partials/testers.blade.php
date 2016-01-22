@@ -14,24 +14,24 @@
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th class="text-center">{!! Html::image('images/chrome.png', 'Chrome', ['width' => 64, 'height' => 64]) !!}<br/>Chrome</th>
-                    <th class="text-center">{!! Html::image('images/firefox.png', 'Firefox', ['width' => 64, 'height' => 64]) !!}<br/>Firefox</th>
-                    <th class="text-center">{!! Html::image('images/ie.png', 'IE', ['width' => 64, 'height' => 64]) !!}<br/>IE</th>
-                    <th class="text-center">{!! Html::image('images/safari.png', 'Safari', ['width' => 64, 'height' => 64]) !!}<br/>Safari</th>
-                    <th class="text-center">{!! Html::image('images/ios.png', 'IOS', ['width' => 64, 'height' => 64]) !!}<br/>IOS</th>
-                    <th class="text-center">{!! Html::image('images/android.png', 'Android', ['width' => 64, 'height' => 64]) !!}<br/>Android</th>
+                    <th class="text-center">{!! Html::image('images/chrome.png', 'Chrome') !!}<br/>Chrome</th>
+                    <th class="text-center">{!! Html::image('images/firefox.png', 'Firefox') !!}<br/>Firefox</th>
+                    <th class="text-center">{!! Html::image('images/ie.png', 'IE') !!}<br/>IE</th>
+                    <th class="text-center">{!! Html::image('images/safari.png', 'Safari') !!}<br/>Safari</th>
+                    <th class="text-center">{!! Html::image('images/ios.png', 'IOS') !!}<br/>IOS</th>
+                    <th class="text-center">{!! Html::image('images/android.png', 'Android') !!}<br/>Android</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($testers as $tester)
-                    <tr>
+                    <tr class="testers" data-id="{!! $tester['id'] !!}" data-fname="{!! $tester['first_name'] !!}" data-email="{!! $tester['email'] !!}">
                         <td>{!! $tester['first_name'] !!}</td>
-                        <td class="text-center">{!! Form::checkbox('tester[' . $tester["id"] . ']', $tester["id"] . ',' . $tester["first_name"] . ',chrome',  null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester["id"] . '-chrome']) !!}</td>
-                        <td class="text-center">{!! Form::checkbox('tester[' . $tester["id"] . ']', $tester["id"] . ',' . $tester["first_name"] . ',firefox', null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester["id"] . '-firefox']) !!}</td>
-                        <td class="text-center">{!! Form::checkbox('tester[' . $tester["id"] . ']', $tester["id"] . ',' . $tester["first_name"] . ',ie',      null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester["id"] . '-ie']) !!}</td>
-                        <td class="text-center">{!! Form::checkbox('tester[' . $tester["id"] . ']', $tester["id"] . ',' . $tester["first_name"] . ',safari',  null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester["id"] . '-safari']) !!}</td>
-                        <td class="text-center">{!! Form::checkbox('tester[' . $tester["id"] . ']', $tester["id"] . ',' . $tester["first_name"] . ',ios',     null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester["id"] . '-ios']) !!}</td>
-                        <td class="text-center">{!! Form::checkbox('tester[' . $tester["id"] . ']', $tester["id"] . ',' . $tester["first_name"] . ',android', null, ['class' => 'browser-tester', 'id' => 'tester-' . $tester["id"] . '-android']) !!}</td>
+                        <td class="text-center">{!! Form::checkbox('tester[]', 'chrome',  null, ['class' => 'browser']) !!}</td>
+                        <td class="text-center">{!! Form::checkbox('tester[]', 'firefox', null, ['class' => 'browser']) !!}</td>
+                        <td class="text-center">{!! Form::checkbox('tester[]', 'ie',      null, ['class' => 'browser']) !!}</td>
+                        <td class="text-center">{!! Form::checkbox('tester[]', 'safari',  null, ['class' => 'browser']) !!}</td>
+                        <td class="text-center">{!! Form::checkbox('tester[]', 'ios',     null, ['class' => 'browser']) !!}</td>
+                        <td class="text-center">{!! Form::checkbox('tester[]', 'android', null, ['class' => 'browser']) !!}</td>
                     </tr>
                 @endforeach
                 </tbody>

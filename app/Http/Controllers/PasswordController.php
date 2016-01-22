@@ -74,7 +74,7 @@ class PasswordController extends Controller
 
         switch ($response) {
             case PasswordBroker::RESET_LINK_SENT:
-                return redirect()->back()->with('flash_message', trans($response));
+                return redirect()->back()->with('flash_success', trans($response));
 
             case PasswordBroker::INVALID_USER:
                 return redirect()->back()->withErrors(['email' => trans($response)]);

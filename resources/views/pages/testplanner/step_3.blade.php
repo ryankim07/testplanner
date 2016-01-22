@@ -72,4 +72,12 @@
         </script>
     @endif
 
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            browserFieldGrabberJs()
+        });
+
+    </script>
+
 @stop

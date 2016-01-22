@@ -134,7 +134,7 @@ class PlansController extends Controller
             ]
         ));
 
-        return redirect('dashboard')->with('flash_message', $request->get('description') . ' ' . config('testplanner.messages.plan.build_update'));
+        return redirect('dashboard')->with('flash_success', $request->get('description') . ' ' . config('testplanner.messages.plan.build_update'));
     }
 
     /**
@@ -443,9 +443,10 @@ class PlansController extends Controller
         $testerData  = Session::get('mophie_testplanner.testers');
 
         // Save plan
-        $results = Plans::savePlan($planData, $ticketsData, $testerData);
+        $planId = Plans::savePlan($planData, $ticketsData, $testerData);
+        $planData['plan_id'] = $planId;
 
-        if (!$results) {
+        if (!$planId) {
             // Delete session
             Session::forget('mophie_testplanner');
 
@@ -454,18 +455,16 @@ class PlansController extends Controller
                 ->withErrors(['message' => config('testplanner.messages.plan.build_error')]);
         }
 
-        $planData['id'] = $results['plan_id'];
-
         // Log to activity stream
         ActivityStream::saveActivityStream($planData, 'plan', 'new');
 
         // Mail all test browsers
-        Email::sendEmail('plan-created', array_merge($planData, ['testers' => $results['testers']]));
+        Email::sendEmail('plan-created', array_merge($planData, ['testers' => $testerData]));
 
         // Delete session
         Session::forget('mophie_testplanner');
 
-        return redirect('dashboard')->with('flash_message', config('testplanner.messages.plan.new_build'));
+        return redirect('dashboard')->with('flash_success', config('testplanner.messages.plan.new_build'));
     }
 
     /**

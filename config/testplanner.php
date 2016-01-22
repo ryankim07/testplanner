@@ -46,36 +46,38 @@ return [
             'update_error'        => 'There seems to be a problem processing your request. Please contact the administrator.'
         ],
         'plan' => [
-    'new'                 => 'created a new plan,',
-    'update'              => 'updated plan,',
-    'new_build'           => 'New plan successfully created.',
-    'build_error'         => 'There seems to be a problem while building the plan.  Please contact the administrator.',
-    'build_update'        => 'details has been updated successfully.',
-    'session_error'       => 'Session data is missing.',
-    'users_non_responses' => 'Users have not submitted responses yet.',
-    'response_success'    => 'Your plan has been posted successfully.',
-    'response_error'      => 'There seems to be a problem processing your response. Please contact the administrator.',
-    'response_updated'    => 'has updated',
-    'response_resolved'   => 'resolved',
-    'no_users_found'      => 'No users found.',
-    'no_plans_found'      => 'No plans found.',
-    'no_responses_found'  => 'No responses found.',
-    'no_activities_found' => 'No activities found.',
-],
+            'new'                 => 'created a new plan,',
+            'update'              => 'updated plan,',
+            'new_build'           => 'New plan successfully created.',
+            'build_error'         => 'There seems to be a problem while building the plan.  Please contact the administrator.',
+            'build_update'        => 'details has been updated successfully.',
+            'session_error'       => 'There seems to be a problem processing your plan build. Make sure if plan was created.  If not, please contact the administrator for this error.',
+            'users_non_responses' => 'Users have not submitted responses yet.',
+            'response_success'    => 'Your plan has been posted successfully.',
+            'response_error'      => 'There seems to be a problem processing your response. Please contact the administrator.',
+            'response_updated'    => 'has updated',
+            'response_resolved'   => 'resolved',
+            'no_users_found'      => 'No users found.',
+            'no_plans_found'      => 'No plans found.',
+            'no_responses_found'  => 'No responses found.',
+            'no_activities_found' => 'No activities found.',
+        ],
         'system' => [
-    'update_success'    => 'Fields successfully updated',
-    'update_error'      => 'No fields were edited for update.',
-    'file_update_error' => 'There seems to be a problem processing your update.  Please contact the administrator.'
-],
+            'update_success'        => 'Fields successfully updated',
+            'update_error'          => 'No fields were edited for update.',
+            'file_update_error'     => 'There seems to be a problem processing your update.  Please contact the administrator.',
+            'email_error'           => 'Operation executed successfully.  However, there was a problem while sending email.',
+            'activity_stream_error' => 'Operation executed successfully.  However, there was a problem logging to the stream.'
+        ],
     ],
 
     'mail' => [
-    'subjects' => [
-        'admin_system'    => 'Test Planner System Error.',
-        'plan_created'    => 'New test plan has been assigned to you.',
-        'plan_updated'    => 'Existing plan has been updated.',
-        'ticket_response' => 'Response from',
-        'email_error'     => 'Confirmation email error.'
+        'subjects' => [
+            'admin_system'    => 'Test Planner System Error.',
+            'plan_created'    => 'New test plan has been assigned to you.',
+            'plan_updated'    => 'Existing plan has been updated.',
+            'ticket_response' => 'Response from',
+            'email_error'     => 'Confirmation email error.'
+        ]
     ]
-]
 ];

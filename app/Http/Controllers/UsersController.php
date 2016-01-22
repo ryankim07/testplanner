@@ -118,7 +118,7 @@ class UsersController extends Controller
         }
 
         // Flash message so it could be shown once redirected by AJAX call
-        Session::flash('flash_message', config('testplanner.messages.users.update'));
+        Session::flash('flash_success', config('testplanner.messages.users.update'));
 
         // Return JSON success message and redirect url
         return response()->json([

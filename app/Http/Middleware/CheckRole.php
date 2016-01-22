@@ -35,7 +35,7 @@ class CheckRole
             return $next($request);
         }
 
-        return redirect('dashboard')->with('flash_message', config('testplanner.messages.users.unauthorized'));
+        return redirect('dashboard')->with('flash_success', config('testplanner.messages.users.unauthorized'));
     }
 
     /**
