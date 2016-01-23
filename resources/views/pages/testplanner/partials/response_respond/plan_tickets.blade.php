@@ -6,7 +6,6 @@
 | This template is used when rendering tickets.
 |
 --}}
-
     @foreach($plan['tickets'] as $ticket)
         <div class="page-header"></div>
         <div class="row nested-block ticket-panel">
@@ -36,11 +35,11 @@
                         ?>
 
                         <label>
-                            {!! Form::radio('test_status[' . $ticket["id"] . ']', 1, $passed, ['class' => 'test_status']) !!}
+                            {!! Form::radio('test_status[]', 1, $passed, ['class' => 'test_status']) !!}
                             Passed
                         </label>
                         <label>
-                            {!! Form::radio('test_status[' . $ticket["id"] . ']', 0, $failed, ['class' => 'test_status']) !!}
+                            {!! Form::radio('test_status[]', 0, $failed, ['class' => 'test_status']) !!}
                             Failed
                         </label>
 

@@ -30,7 +30,7 @@
 				    @include('pages/testplanner/partials/plan', ['mode' => 'edit'])
 				</div>
                 <div class="page-header"><h4>Tickets</h4></div>
-                <div class="row nested-block">
+                <div class="row ticket-row nested-block">
                     {!! $plan['tickets_html'] !!}
                 </div>
                 <div class="page-header"><h4>Browsers</h4></div>
@@ -69,13 +69,13 @@
 				formIdName: 'view-main',
 				ticketRowName: 'ticket-row',
 				ticketDescName: 'ticket-description',
-				objectiveName: 'objective',
-				testStepsName: 'test-steps',
-				ticketsObjName: 'tickets_obj',
-				addBtnName: 'add-ticket-btn',
-				removeBtnName: 'trash',
-				continueBtnName:'continue-btn',
-				updateBtnName: 'update-btn'
+                objectiveName: 'objective',
+                testStepsName: 'test-steps',
+                ticketsObjName: 'tickets_obj',
+                addBtnName: 'add-ticket-btn',
+                removeBtnName: 'trash',
+                continueBtnName:'continue-btn',
+                updateBtnName: 'update-btn'
 			});
 
 			// Load ticket builder
@@ -85,7 +85,7 @@
             preCheckBrowserTesters('<?php echo $plan['testers'] ?>', 'plan-edit');
 
             // Prepare data when submitting
-            grabBrowserTesters();
+            grabBrowserTesters('view-main', 'update-btn');
 
 			// Back button
 			backButtonSubmit('{!! URL::previous() !!}');

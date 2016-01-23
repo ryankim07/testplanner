@@ -66,7 +66,7 @@ class TestPlannerSession
                 }
             break;
 
-            /*case url() . '/plan/review':
+            case url() . '/plan/review':
             case url() . '/plan/save':
                 if (!isset($session['plan']) ||
                     !isset($session['tickets']) ||
@@ -74,7 +74,7 @@ class TestPlannerSession
                     return redirect('/plan/build')->withInput()
                         ->withErrors(['message' => config('testplanner.messages.plan.session_error')]);
                 }
-            break;*/
+            break;
 
             /** TICKETS **/
 
@@ -102,7 +102,7 @@ class TestPlannerSession
 
             /** TESTERS **/
 
-            /*case url() . '/tester/build':
+            case url() . '/tester/build':
                 if (!isset($session['plan']) ||
                     !isset($session['tickets'])) {
                     return redirect('/plan/build');
@@ -123,12 +123,12 @@ class TestPlannerSession
                         ->withInput()
                         ->withErrors(['message' => config('testplanner.messages.plan.session_error')]);
                 }
-            break;*/
+            break;
 
             default:
-                /*if (!isset($session)) {
+                if (!isset($session)) {
                     return redirect('/');
-                }*/
+                }
             break;
         }
 

@@ -184,11 +184,8 @@ function loadResponseRespondJs()
         });
 
         // Create hidden field
-        var input = $("<input>")
-            .attr("type", "hidden")
-            .attr("name", "tickets_obj").val(JSON.stringify(tickets));
-
-        $('form').append($(input));
+        var input = $("<input>").attr({"type":"hidden","name":"tickets_obj"}).val(JSON.stringify(tickets));
+        $('form').append(input);
     });
 
     $('#response-respond-main').on('change', '#view-tester', function () {
@@ -292,9 +289,9 @@ function loadUsersJs(url, data)
     });
 }
 
-function grabBrowserTesters()
+function grabBrowserTesters(formId, btnId)
 {
-    $('#step-3-main').on('click', '#continue-btn, #update-btn', function() {
+    $('#' + formId).on('click', '#' + btnId, function() {
         var browserTesters = [];
 
         $('.testers').each(function() {

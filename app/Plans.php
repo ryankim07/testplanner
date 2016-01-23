@@ -240,7 +240,7 @@ class Plans extends Model
         $results = DB::table('plans AS p')
             ->join('testers AS t', 'p.id', '=', 't.plan_id')
             ->join('tickets AS ti', 'p.id', '=', 'ti.plan_id')
-            ->select('p.*', 't.user_id AS tester_id', 't.browsers', 'ti.tickets')
+            ->select('p.*', 't.id', 't.user_id AS tester_id', 't.browsers', 'ti.tickets')
             ->where('p.id', '=', $planId)
             ->where('t.user_id', '=', $userId)
             ->first();
@@ -290,20 +290,53 @@ class Plans extends Model
      * Update built plan details
      *
      * @param $planId
-     * @param $request
+     * @param $planData
      * @return bool
      */
-    public static function updateBuiltPlanDetails($planId, $request)
+    public static function updateBuiltPlanDetails($planId, $planData)
     {
-        $plan = self::find($planId);
-        $plan->update([
-            'description' => $request->get('description'),
-            'started_at'  => $request->get('started_at'),
-            'expired_at'  => $request->get('expired_at')
-        ]);
+        $redirect = false;
+        $errorMsg = '';
+
+        // Start transaction
+        DB::beginTransaction();
+
+        // Start plan update
+        try {
+            $plan = self::find($planId);
+
+            $plan->update([
+                'description' => $planData->get('description'),
+                'started_at'  => $planData->get('started_at'),
+                'expired_at'  => $planData->get('expired_at')
+            ]);
+        } catch (\Exception $e) {
+            $errorMsg = $e->getMessage();
+            $redirect = true;
+        } catch (QueryException $e) {
+            $errorMsg = $e->getErrors();
+            $redirect = true;
+        } catch (ModelNotFoundException $e) {
+            $errorMsg = $e->getErrors();
+            $redirect = true;
+        }
+
+        // Redirect if errors
+        if ($redirect) {
+            // Rollback
+            DB::rollback();
+
+            // Log to system
+            Tools::log($errorMsg, $planData);
+
+            return false;
+        }
+
+        // Commit all changes
+        DB::commit();
 
         $results = [
-            'id'          => $plan->id,
+            'plan_id'     => $plan->id,
             'description' => $plan->description,
             'creator_id'  => $plan->creator_id,
             'status'      => $plan->status

@@ -13,8 +13,11 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
+use PhpSpec\Exception\Exception;
 
-use App\User;
+use App\Facades\Tools;
 
 class Testers extends Model
 {
@@ -71,38 +74,66 @@ class Testers extends Model
      * Update tester from built plan
      *
      * @param $planId
-     * @param $testers
-     * @return array
+     * @param $testersData
+     * @return array|bool
      */
-    public static function updateBuiltTesters($planId, $testers)
+    public static function updateBuiltTesters($planId, $testersData)
     {
-        foreach($testers as $eachTester) {
-            list($testerId, $name, $browsers) = explode(',', $eachTester);
+        $redirect = false;
+        $errorMsg = '';
 
-            $id = '';
-            $query = Testers::where('plan_id', '=', $planId)
-                ->where('user_id', '=', $testerId)
-                ->first();
+        // Start transaction
+        DB::beginTransaction();
 
-            if (isset($query->id)) {
-                $id = $query->id;
+        // Start testers update
+        try {
+            $testersData = json_decode($testersData, true);
+
+            foreach($testersData as $tester) {
+                // Get primary key of testers table
+                $id = '';
+                $query = Testers::where('plan_id', '=', $planId)
+                    ->where('user_id', '=', $tester['id'])
+                    ->first();
+
+                if (isset($query->id)) {
+                    $id = $query->id;
+                }
+
+                // Create new or update
+                self::updateOrCreate([
+                    'id' => $id], [
+                        'plan_id'  => $planId,
+                        'user_id'  => $tester['id'],
+                        'browsers' => $tester['browsers']
+                ]);
             }
-
-            self::updateOrCreate([
-                'id' => $id], [
-                    'plan_id'  => $planId,
-                    'user_id'  => $testerId,
-                    'browsers' => $browsers
-            ]);
-
-            $testersWithEmail[] = [
-                'first_name' => $name,
-                'browsers'   => $browsers,
-                'email'      => User::getUserEmail($testerId)
-            ];
+        } catch (\Exception $e) {
+            $errorMsg = $e->getMessage();
+            $redirect = true;
+        } catch (QueryException $e) {
+            $errorMsg = $e->getErrors();
+            $redirect = true;
+        } catch (ModelNotFoundException $e) {
+            $errorMsg = $e->getErrors();
+            $redirect = true;
         }
 
-        return $testersWithEmail;
+        // Redirect if errors
+        if ($redirect) {
+            // Rollback
+            DB::rollback();
+
+            // Log to system
+            Tools::log($errorMsg, $testerData);
+
+            return false;
+        }
+
+        // Commit all changes
+        DB::commit();
+
+        return true;
     }
 
     /**

@@ -19,6 +19,7 @@ use App\Facades\Tools;
 use App\User;
 
 use Auth;
+use Session;
 
 class ActivityStream extends Model
 {

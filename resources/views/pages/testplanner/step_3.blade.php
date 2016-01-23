@@ -72,7 +72,7 @@
             @endif
 
             // Prepare data when submitting
-            grabBrowserTesters();
+            grabBrowserTesters('step-3-main', 'continue-btn');
         });
 
     </script>

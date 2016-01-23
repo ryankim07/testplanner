@@ -133,20 +133,30 @@ class PlansController extends Controller
      */
     public function updateBuiltPlan($planId, PlanUpdateFormRequest $request)
     {
-        $plan    = Plans::updateBuiltPlanDetails($planId, $request);
-        $tickets = Tickets::updateBuiltTickets($planId, $request->get('tickets_obj'));
-        $testers = Testers::updateBuiltTesters($planId, $request->get('tester'), $request->get('browsers'));
+        $testerData = $request->get('browser_testers');
 
-        // Log to activity stream
-        ActivityStream::saveActivityStream($plan, 'plan', 'update');
+        $planData      = Plans::updateBuiltPlanDetails($planId, $request);
+        $ticketsUpdate = Tickets::updateBuiltTickets($planId, $request->get('tickets_obj'));
+        $testersUpdate = Testers::updateBuiltTesters($planId, $testerData);
 
-        // Mail all test browsers
-        Email::sendEmail('plan-updated', array_merge([
-            'plan_id'     => $planId,
-            'description' => $request->get('description')], ['testers' => $testers]
-        ));
+        if ((count($planData) > 0) && $ticketsUpdate && $testersUpdate) {
+            // Log to activity stream
+            ActivityStream::saveActivityStream($planData, 'plan', 'update');
 
-        return redirect('dashboard')->with('flash_success', $request->get('description') . ' ' . config('testplanner.messages.plan.build_update'));
+            // Mail all test browsers
+            Email::sendEmail('plan-updated', array_merge([
+                'plan_id'     => $planId,
+                'description' => $request->get('description')], [
+                    'testers' => $testerData
+                ]
+            ));
+
+            $msg = config('testplanner.messages.plan.build_update_error');
+        } else {
+            $msg = config('testplanner.messages.plan.build_update');
+        }
+
+        return redirect('dashboard')->with('flash_success', $msg);
     }
 
     /**
@@ -159,9 +169,6 @@ class PlansController extends Controller
     {
         $plan    = Plans::find($id);
         $tickets = unserialize($plan->tickets()->first()->tickets);
-        $testers = $plan->testers()->get();
-        $users   = User::all();
-        $results = [];
 
         // Render tickets
         $ticketsHtml = '';
@@ -186,8 +193,8 @@ class PlansController extends Controller
                 'started_at'    => Tools::dateConverter($plan->started_at),
                 'expired_at'    => Tools::dateConverter($plan->expired_at),
                 'tickets_html'  => $ticketsHtml,
-                'users'         => $users->toArray(),
-                'testers'       => json_encode($testers->toArray()),
+                'users'         => User::all()->toArray(),
+                'testers'       => json_encode($plan->testers()->get()->toArray()),
                 'jira_versions' => json_encode($jiraVersions),
                 'jira_issues'   => json_encode($jiraIssues)
             ]

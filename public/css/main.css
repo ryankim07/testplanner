@@ -193,7 +193,7 @@ body {
     height: 64px;
 }
 
-#review-main img {
+#review-main img, #view-main img {
     width: 32px;
     height: 32px;
 }
@@ -220,11 +220,6 @@ body {
     min-width: 64px;
 }
 
-#review-main .browser-img, #response-respond-main .browser-img,
-#view-main .browser-img {
-    width: 32px;
-    height: 32px;
-}
 
 /*
  * Buttons
@@ -232,6 +227,10 @@ body {
 .btn-custom, .panel-custom {
     background: #777777;
     color: #FFFFFF;
+}
+
+.clear-btn {
+    cursor: pointer;
 }
 
 /*
