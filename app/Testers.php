@@ -33,7 +33,7 @@ class Testers extends Model
     protected $fillable = [
         'plan_id',
         'user_id',
-        'browser'
+        'browsers'
     ];
 
     /**
@@ -77,7 +77,7 @@ class Testers extends Model
     public static function updateBuiltTesters($planId, $testers)
     {
         foreach($testers as $eachTester) {
-            list($testerId, $name, $browser) = explode(',', $eachTester);
+            list($testerId, $name, $browsers) = explode(',', $eachTester);
 
             $id = '';
             $query = Testers::where('plan_id', '=', $planId)
@@ -90,14 +90,14 @@ class Testers extends Model
 
             self::updateOrCreate([
                 'id' => $id], [
-                    'plan_id' => $planId,
-                    'user_id' => $testerId,
-                    'browser' => $browser
+                    'plan_id'  => $planId,
+                    'user_id'  => $testerId,
+                    'browsers' => $browsers
             ]);
 
             $testersWithEmail[] = [
                 'first_name' => $name,
-                'browser'    => $browser,
+                'browsers'   => $browsers,
                 'email'      => User::getUserEmail($testerId)
             ];
         }

@@ -112,23 +112,6 @@ body {
     display: block;
 }
 
-/*
- * Plan Wizard
- */
-
-.plan-wizard .nested-block {
-    background-color: #d9edf7;
-    border-color: #bce8f1;
-    color: #31708f;
-}
-
-#review-main .table {
-    margin-top: 30px;
-}
-
-#review-main .table tr{
-    background-color: #FFFFFF;
-}
 
 /*
  * System Configuration
@@ -164,6 +147,26 @@ body {
 .tab-content .page-header {
     margin-bottom: 30px;
 }
+
+
+/*
+ * Plan Wizard
+ */
+
+.plan-wizard .nested-block {
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    color: #31708f;
+}
+
+#review-main .table {
+    margin-top: 30px;
+}
+
+#review-main .table tr{
+    background-color: #FFFFFF;
+}
+
 
 /*
  * Images

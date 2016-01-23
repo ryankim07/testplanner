@@ -108,10 +108,8 @@ class TicketsController extends Controller
      */
     public function update(TicketsFormRequest $request)
     {
-        $tickets = json_decode($request->get('tickets_obj'), true);
-
         // Save data to session
-        Session::put('mophie_testplanner.tickets', $tickets);
+        Session::put('mophie_testplanner.tickets', json_decode($request->get('tickets_obj'), true));
 
         return redirect('plan/review');
     }
@@ -124,10 +122,8 @@ class TicketsController extends Controller
      */
     public function store(TicketsFormRequest $request)
     {
-        $tickets = json_decode($request->get('tickets_obj'), true);
-
         // Save data to session
-        Session::put('mophie_testplanner.tickets', $tickets);
+        Session::put('mophie_testplanner.tickets', json_decode($request->get('tickets_obj'), true));
 
         return redirect('tester/build');
     }

@@ -18,7 +18,6 @@ use Illuminate\Database\QueryException;
 use PhpSpec\Exception\Exception;
 
 use App\Facades\Tools;
-use App\Facades\Jira;
 
 use App\Tickets;
 use App\Testers;
@@ -157,7 +156,7 @@ class Plans extends Model
                 $join->on('p.id', '=', 'tr.plan_id')
                     ->where('tr.tester_id', '=', $userId);
             })
-            ->select('p.*', 'u.first_name', 'u.last_name', 't.browser', 'tr.status AS ticket_response_status')
+            ->select('p.*', 'u.first_name', 'u.last_name', 't.browsers', 'tr.status AS ticket_response_status')
             ->where('t.user_id', '=', $userId)
             ->where('p.status', '=', 'new')
             ->orWhere('p.status', '=', 'progress')
@@ -241,7 +240,7 @@ class Plans extends Model
         $results = DB::table('plans AS p')
             ->join('testers AS t', 'p.id', '=', 't.plan_id')
             ->join('tickets AS ti', 'p.id', '=', 'ti.plan_id')
-            ->select('p.*', 't.user_id AS tester_id', 't.browser', 'ti.tickets')
+            ->select('p.*', 't.user_id AS tester_id', 't.browsers', 'ti.tickets')
             ->where('p.id', '=', $planId)
             ->where('t.user_id', '=', $userId)
             ->first();
@@ -344,9 +343,9 @@ class Plans extends Model
                 // Save new testers
                 foreach($testerData as $tester) {
                     Testers::create([
-                        'plan_id' => $planId,
-                        'user_id' => $tester['id'],
-                        'browser' => $tester['browser']
+                        'plan_id'  => $planId,
+                        'user_id'  => $tester['id'],
+                        'browsers' => $tester['browsers']
                     ]);
                 }
             }

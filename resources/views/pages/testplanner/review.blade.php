@@ -39,7 +39,7 @@
                         <li>Expires on: <strong>{!! $plan['expired_at'] !!}</strong></li>
                     </ul>
                 </div>
-                <div class="page-header"><h4>Tickets</h4></div>
+                <div class="page-header tickets"><h4>Tickets</h4></div>
                 @foreach($tickets as $ticket)
                     <div class="row nested-block ticket-row" id="{!! $ticket['id'] !!}">
                         <a href="#" class="trash" data-id="{!! $ticket['id'] !!}" title="Delete"><i class="fa fa-trash-o fa-lg"></i></a>
@@ -51,7 +51,7 @@
                         </ul>
                     </div>
                 @endforeach
-                <div class="page-header"><h4>Browser Testers</h4></div>
+                <div class="page-header testers"><h4>Browser Testers</h4></div>
                 <div class="row nested-block">
                     <a href="{!! URL::route('tester.edit') !!}" class="pencil" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
                     @include('pages/testplanner/partials/testers', $users)

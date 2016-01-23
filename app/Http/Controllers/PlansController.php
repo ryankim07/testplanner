@@ -117,7 +117,21 @@ class PlansController extends Controller
      */
     public function store(PlansFormRequest $request)
     {
+        // Get all users
+        $users    = User::all();
+        $allUsers = [];
+
+        foreach($users as $user) {
+            $allUsers[] = [
+                'id'         => $user->id,
+                'first_name' => $user->first_name,
+                'last_name'  => $user->last_name,
+                'email'      => $user->email,
+            ];
+        }
+
         // Save data to session
+        Session::put('mophie_testplanner.users', $allUsers);
         Session::put('mophie_testplanner.plan', array_except($request->all(), '_token'));
 
         return redirect('ticket/build');
@@ -134,7 +148,7 @@ class PlansController extends Controller
     {
         $plan    = Plans::updateBuiltPlanDetails($planId, $request);
         $tickets = Tickets::updateBuiltTickets($planId, $request->get('tickets_obj'));
-        $testers = Testers::updateBuiltTesters($planId, $request->get('tester'), $request->get('browser'));
+        $testers = Testers::updateBuiltTesters($planId, $request->get('tester'), $request->get('browsers'));
 
         // Log to activity stream
         ActivityStream::saveActivityStream($plan, 'plan', 'update');
@@ -174,7 +188,7 @@ class PlansController extends Controller
         // Testers
         $testers = [];
         foreach($allTesters as $tester) {
-            $testers[$tester->id] = 'tester-' . $tester->user_id . '-' . $tester->browser;
+            $testers[$tester->id] = 'tester-' . $tester->user_id . '-' . $tester->browsers;
         }
 
         // Get Jira versions
@@ -421,8 +435,8 @@ class PlansController extends Controller
         return view('pages.testplanner.review', [
             'plan'    => Session::get('mophie_testplanner.plan'),
             'tickets' => Session::get('mophie_testplanner.tickets'),
-            'users'   => Session::get('mophie_testplanner.testers.users'),
-            'testers' => json_encode(Session::get('mophie_testplanner.testers.testers'))
+            'users'   => Session::get('mophie_testplanner.users'),
+            'testers' => json_encode(Session::get('mophie_testplanner.testers'))
         ]);
     }
 
@@ -439,14 +453,14 @@ class PlansController extends Controller
         $testerData  = Session::get('mophie_testplanner.testers');
 
         // Save plan
-        $planId = Plans::savePlan($planData, $ticketsData, $testerData);
+        $planId = Plans::savePlan($planData, $ticketsData, $testerData['testers']);
         $planData['plan_id'] = $planId;
 
         if (!$planId) {
             // Delete session
             Session::forget('mophie_testplanner');
 
-            return redirect()->action('PlansController@build')
+            return redirect()->action('PlansController@review')
                 ->withInput()
                 ->withErrors(['message' => config('testplanner.messages.plan.build_error')]);
         }

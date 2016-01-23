@@ -188,7 +188,7 @@ class Tools
     public function dropDownOptionsHtml($testers)
     {
         foreach ($testers as $tester) {
-            $results[$tester->id] = $tester->user_first_name . ' - ' . $tester->browser;
+            $results[$tester->id] = $tester->user_first_name . ' - ' . $tester->browsers;
         }
 
         return $results;
