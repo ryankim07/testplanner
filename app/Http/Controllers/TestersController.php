@@ -65,6 +65,13 @@ class TestersController extends Controller
      */
     public function update(TestersFormRequest $request)
     {
+        // Save data to session
+        Session::put('mophie_testplanner.testers', [
+            'users'   => User::all(),
+            'testers' => json_decode($request->get('browser_testers'), true)
+        ]);
+
+        return redirect('plan/review');
     }
 
     /**

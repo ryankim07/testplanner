@@ -28,7 +28,7 @@
                     <td class="text-center">{!! Form::checkbox('tester[]', 'firefox', null, ['class' => 'browser-tester', 'id' => 'tester-' . $user['id'] . '-firefox']) !!}</td>
                     <td class="text-center">{!! Form::checkbox('tester[]', 'ie',      null, ['class' => 'browser-tester', 'id' => 'tester-' . $user['id'] . '-ie']) !!}</td>
                     <td class="text-center">{!! Form::checkbox('tester[]', 'safari',  null, ['class' => 'browser-tester', 'id' => 'tester-' . $user['id'] . '-safari']) !!}</td>
-                    <td class="text-center">{!! Form::checkbox('tester[]', 'ios',     null, ['class' => 'browser-tester', 'id' => 'tester-' . $user['id'] . '-apple']) !!}</td>
+                    <td class="text-center">{!! Form::checkbox('tester[]', 'ios',     null, ['class' => 'browser-tester', 'id' => 'tester-' . $user['id'] . '-ios']) !!}</td>
                     <td class="text-center">{!! Form::checkbox('tester[]', 'android', null, ['class' => 'browser-tester', 'id' => 'tester-' . $user['id'] . '-android']) !!}</td>
                 </tr>
             @endforeach

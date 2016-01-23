@@ -12,7 +12,7 @@
         @if($mode == 'build')
             {!! Form::open(['route' => 'tester.store', 'class' => 'form-horizontal', 'id' => 'tester-build-form']) !!}
         @else
-            {!! Form::model($testers, ['method' => 'PATCH', 'action' => ['TestersController@store'], 'class' => 'form-horizontal', 'id' => 'tester-edit-form']) !!}
+            {!! Form::model($testers, ['method' => 'PATCH', 'action' => ['TestersController@update'], 'class' => 'form-horizontal', 'id' => 'tester-edit-form']) !!}
         @endif
         <div class="panel panel-info">
             <div class="panel-heading">
