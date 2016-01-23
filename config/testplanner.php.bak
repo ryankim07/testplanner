@@ -52,7 +52,7 @@ return [
             'build_error'         => 'There seems to be a problem while building the plan.  Please contact the administrator.',
             'build_update'        => 'details has been updated successfully.',
             'session_error'       => 'There seems to be a problem processing your plan build. Make sure if plan was created.  If not, please contact the administrator for this error.',
-            'users_non_responses' => 'Users have not submitted responses yet.',
+            'users_non_responses' => 'User has not submitted responses yet.',
             'response_success'    => 'Your plan has been posted successfully.',
             'response_error'      => 'There seems to be a problem processing your response. Please contact the administrator.',
             'response_updated'    => 'has updated',

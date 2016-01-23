@@ -118,7 +118,7 @@ function loadDashboardJs(url)
                 dataType: "json",
                 success: function (res) {
                     var lastCommentLine = parent.find($('.activity-comment-line').last());
-                    var newCommentLine = $('<li class="activity-comment-line"><i class="fa-li fa fa-comment-o"></i><em>' + res.comment + ' (commented by ' + res.commentator + ' on ' + res.created_at + ')</em></li>');
+                    var newCommentLine = $('<li class="activity-comment-line"><em>' + res.comment + ' (commented by ' + res.commentator + ' on ' + res.created_at + ')</em></li>');
 
                     // If this is a 1st comment, appending needs to take place right after ul
                     if (lastCommentLine.length == 0) {

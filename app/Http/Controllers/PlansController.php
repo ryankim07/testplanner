@@ -373,7 +373,7 @@ class PlansController extends Controller
             // Render plan detais
             $plan = Plans::getTesterPlanResponse($planId, $testerId);
 
-            if (isset($plan['ticket_resp_id'])) {
+            if (!empty($plan['ticket_resp_id'])) {
                 $totalResponses++;
             }
 
@@ -382,7 +382,8 @@ class PlansController extends Controller
                 'selectedUserId'  => $selectedUserId,
                 'testerId'        => $testerId,
                 'testerFirstName' => $testerFirstName,
-                'plan'            => $plan
+                'plan'            => $plan,
+                'totalResponses'  => $totalResponses
             ])->render();
         }
 
@@ -391,7 +392,6 @@ class PlansController extends Controller
             'plan'           => ['description' => $planDetails->description],
             'tabHeaderHtml'  => $tabHeaderHtml,
             'tabBodyHtml'    => $tabBodyHtml,
-            'totalResponses' => $totalResponses
         ]);
     }
 

@@ -34,20 +34,15 @@
 
                 @include('errors.list')
 
-                @if($mode == 'response' && count($totalResponses) == 0)
-                    <p>Users, {!! config('testplanner.messages.plan.users_non_responses') !!}</p>
+                @if($mode == 'response')
+                    <ul class="nav nav-tabs">
+                        {!! $tabHeaderHtml !!}
+                    </ul>
+                    <div class="tab-content">
+                        {!! $tabBodyHtml !!}
+                    </div>
                 @else
-                    @if($mode == 'response')
-                        <ul class="nav nav-tabs">
-                            {!! $tabHeaderHtml !!}
-                        </ul>
-                        <div class="tab-content">
-                            {!! $tabBodyHtml !!}
-                        </div>
-                    @else
-                        {!! $planHtml !!}
-                    @endif
-
+                    {!! $planHtml !!}
                 @endif
             </div>
         </div>

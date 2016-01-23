@@ -9,8 +9,13 @@
 
     <div id="{!! $testerFirstName !!}" class="tab-pane fade {!! $testerId == $selectedUserId ? 'in active' : '' !!}">
         @include('pages/testplanner/partials/response_respond/plan_details', ['plan' => $plan])
-        @include('pages/testplanner/partials/response_respond/plan_tickets', [
-            'mode' => $mode,
-            'plan' => $plan
-        ])
+
+        @if($mode == 'response' && $totalResponses == 0)
+            @include('errors.panel_body', ['msg' => config('testplanner.messages.plan.users_non_responses')])
+        @else
+            @include('pages/testplanner/partials/response_respond/plan_tickets', [
+                'mode' => $mode,
+                'plan' => $plan
+            ])
+        @endif
     </div>

@@ -64,6 +64,18 @@ body {
     position: relative;
 }
 
+.jumbotron {
+    background-color: #f7f7f8;
+}
+
+#response-respond-main .nested-block:first-child {
+    margin-top: 20px;
+}
+
+#system-main-panel-body, #response-respond-main .panel-body {
+    min-height: 500px;
+}
+
 /*
  * Tables
  */
@@ -112,14 +124,9 @@ body {
     display: block;
 }
 
-
 /*
  * System Configuration
  */
-
-#system-main-panel-body {
-    min-height: 500px;
-}
 
 #system-edit-form .btn {
     position: relative;

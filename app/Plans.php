@@ -282,6 +282,8 @@ class Plans extends Model
                 break;
             }
         }
+
+        return $plans;
     }
 
     /**

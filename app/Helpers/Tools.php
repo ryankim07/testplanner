@@ -194,9 +194,20 @@ class Tools
     public function dropDownOptionsHtml($testers)
     {
         foreach ($testers as $tester) {
-            $results[$tester->id] = $tester->user_first_name . ' - ' . $tester->browsers;
+            $results[$tester->user_id] = $tester->user_first_name . ' - ' . $this->capitalizeBrowserNames($tester->browsers);
         }
 
         return $results;
+    }
+
+    /**
+     * Capitalize comma separated browser names
+     *
+     * @param $browser
+     * @return string
+     */
+    public function capitalizeBrowserNames($browser)
+    {
+        return implode(', ', array_map('ucfirst', explode(',', $browser)));
     }
 }
