@@ -76,7 +76,7 @@ class TicketsController extends Controller
      */
     public function edit()
     {
-        // Get tickets session data
+        // Get from session data
         $ticketsData = Session::get('mophie_testplanner.tickets');
 
         $ticketsHtml = '';
@@ -110,10 +110,26 @@ class TicketsController extends Controller
     {
         $tickets = json_decode($request->get('tickets_obj'), true);
 
-        // Save tickets data to session
+        // Save data to session
         Session::put('mophie_testplanner.tickets', $tickets);
 
         return redirect('plan/review');
+    }
+
+    /**
+     * Store a newly created resource in storage
+     *
+     * @param TicketsFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
+     */
+    public function store(TicketsFormRequest $request)
+    {
+        $tickets = json_decode($request->get('tickets_obj'), true);
+
+        // Save data to session
+        Session::put('mophie_testplanner.tickets', $tickets);
+
+        return redirect('tester/build');
     }
 
     /**
@@ -155,22 +171,6 @@ class TicketsController extends Controller
         }
 
         return redirect('dashboard');
-    }
-
-    /**
-     * Store a newly created resource in storage
-     *
-     * @param TicketsFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
-     */
-    public function store(TicketsFormRequest $request)
-    {
-        $tickets = json_decode($request->get('tickets_obj'), true);
-
-        // Save tickets data to session
-        Session::put('mophie_testplanner.tickets', $tickets);
-
-        return redirect('tester/build');
     }
 
     /**

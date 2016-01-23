@@ -40,8 +40,10 @@
 					{!! Form::hidden('creator_id', $planData['creator_id']) !!}
                 @endif
 
-				@include('pages/testplanner/partials/plan')
-
+				<div class="page-header"><h4>Plan Details</h4></div>
+				<div class="row nested-block">
+					@include('pages/testplanner/partials/plan')
+				</div>
 			</div>
 		</div>
 

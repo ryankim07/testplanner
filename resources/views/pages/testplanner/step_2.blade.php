@@ -34,14 +34,17 @@
 
                 @include('errors.list')
 
-                @if($plan['mode'] == 'build')
-                    @include('pages/testplanner/partials/tickets', [
-                        'mode'             => $plan['mode'],
-                        'addTicketBtnType' => 'btn-primary'
-                    ])
-                @else
-                    {!! $plan['tickets_html'] !!}
-                @endif
+                <div class="page-header"><h4>Tickets</h4></div>
+                <div class="row ticket-row nested-block" id="{!! $id !!}">
+                    @if($plan['mode'] == 'build')
+                        @include('pages/testplanner/partials/tickets', [
+                            'mode'             => $plan['mode'],
+                            'addTicketBtnType' => 'btn-primary'
+                        ])
+                    @else
+                        {!! $plan['tickets_html'] !!}
+                    @endif
+                </div>
             </div>
         </div>
 

@@ -12,14 +12,14 @@
         @if($mode == 'build')
             {!! Form::open(['route' => 'tester.store', 'class' => 'form-horizontal', 'id' => 'tester-build-form']) !!}
         @else
-            {!! Form::model($testersData, ['method' => 'PATCH', 'action' => ['TestersController@update'], 'class' => 'form-horizontal', 'id' => 'tester-edit-form']) !!}
+            {!! Form::model($testers, ['method' => 'PATCH', 'action' => ['TestersController@store'], 'class' => 'form-horizontal', 'id' => 'tester-edit-form']) !!}
         @endif
         <div class="panel panel-info">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-12 col-md-8">
                         <i class="fa fa-cubes fa-3x header-icon"></i>
-                        <h4>Step 3 of 3 - {!! $mode == 'build' ? 'Assign testers' : 'Edit testers' !!}</h4>
+                        <h4>Step 3 of 3 - {!! $mode == 'build' ? 'Assign testers' : 'Edit browser testers' !!}</h4>
                     </div>
                     @if($mode == 'build')
                         <div class="col-md-4">
@@ -34,8 +34,10 @@
 
                 @include('errors.list')
 
-                @include('pages/testplanner/partials/testers')
-
+                <div class="page-header"><h4>Browsers</h4></div>
+                <div class="row nested-block">
+                    @include('pages/testplanner/partials/testers')
+                </div>
             </div>
         </div>
 
@@ -65,7 +67,7 @@
 
         $(document).ready(function() {
             @if($mode == 'edit')
-                preSelectBrowserTesters(<?php echo json_encode($testers); ?>);
+                preCheckBrowserTesters('<?php echo $testers ?>', '{!! $mode !!}');
             @endif
 
             grabBrowserTesters();

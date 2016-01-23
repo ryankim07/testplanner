@@ -118,7 +118,7 @@ function loadDashboardJs(url)
                 dataType: "json",
                 success: function (res) {
                     var lastCommentLine = parent.find($('.activity-comment-line').last());
-                    var newCommentLine = $('<li class="activity-comment-line"><em>' + res.comment + ' (commented by ' + res.commentator + ' on ' + res.created_at + ')</em></li>');
+                    var newCommentLine = $('<li class="activity-comment-line"><i class="fa-li fa fa-comment-o"></i><em>' + res.comment + ' (commented by ' + res.commentator + ' on ' + res.created_at + ')</em></li>');
 
                     // If this is a 1st comment, appending needs to take place right after ul
                     if (lastCommentLine.length == 0) {
@@ -294,7 +294,7 @@ function loadUsersJs(url, data)
 
 function grabBrowserTesters()
 {
-    $('#step-3-main').on('click', '#continue-btn', function() {
+    $('#step-3-main').on('click', '#continue-btn, #update-btn', function() {
         var browserTesters = [];
         $('.testers').each(function() {
             var id = $(this).data('id');
@@ -321,27 +321,34 @@ function grabBrowserTesters()
 }
 
 /**
- * Pre check all the radio buttons for browser testers
- * when editing form
+ * Pre check all checkboxes for browser testers
+ * when editing or add check icons when reviewing
  *
  * @param testers
  */
-function preCheckBrowserTesters(testers)
+function preCheckBrowserTesters(testers, page)
 {
-    var testers = $.parseJSON(testers);
+    var testers   = $.parseJSON(testers);
+    var checkIcon = '<i class="fa fa-check"></i>';
 
     $.each(testers, function (i, objs) {
-        $.each(objs['input-ids'], function (i, inputIds) {
-            $('.browser-tester').each(function () {
-                var browser = $(this);
-                var browserId = browser.attr('id');
+        var inputIds = objs['input-ids'];
 
-                if (browserId == inputIds) {
-                    browser.prop("checked", true);
-                }
-            });
+        $.each(inputIds, function (i, inputId) {
+            if (page == 'review') {
+                $('#' + inputId).replaceWith(checkIcon);
+            } else {
+                console.log(inputId);
+                $('#' + inputId).prop('checked', true);
+            }
         });
     });
+
+    if (page == 'review') {
+        $('input[type="checkbox"]').each(function () {
+            $(this).replaceWith('');
+        });
+    }
 }
 
 /**

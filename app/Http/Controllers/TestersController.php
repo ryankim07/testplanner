@@ -37,12 +37,9 @@ class TestersController extends Controller
      */
     public function build()
     {
-        // All user
-        $users = User::all();
-
         return view('pages.testplanner.step_3', [
-            'mode'    => 'build',
-            'testers' => $users
+            'mode'  => 'build',
+            'users' => $users = User::all()
         ]);
     }
 
@@ -53,20 +50,10 @@ class TestersController extends Controller
      */
     public function edit()
     {
-        // All user
-        $users = User::all();
-
-        // Get testers session data
-        $testersData = Session::get('mophie_testplanner.testers');
-
-        foreach($testersData as $tester) {
-            $results[$tester['id']] = 'tester-' . $tester['id'] . '-' . $tester['browser'];
-        }
-
         return view('pages.testplanner.step_3', [
-            'mode'        => 'edit',
-            'testersData' => json_encode($results),
-            'testers'     => $users
+            'mode'    => 'edit',
+            'users'   => Session::get('mophie_testplanner.testers.users'),
+            'testers' => json_encode(Session::get('mophie_testplanner.testers.testers'))
         ]);
     }
 
@@ -78,22 +65,6 @@ class TestersController extends Controller
      */
     public function update(TestersFormRequest $request)
     {
-        $testers = array_except($request->all(), ['_token', '_method']);
-
-        foreach(array_shift($testers) as $tester) {
-            list($id, $firstName, $browser) = explode(',', $tester);
-
-            $browserTesters[] = [
-                'id'         => $id,
-                'first_name' => $firstName,
-                'browser'    => $browser
-            ];
-        }
-
-        // Save testers data to session
-        Session::put('mophie_testplanner.testers', $browserTesters);
-
-        return redirect('plan/review');
     }
 
     /**
@@ -104,10 +75,10 @@ class TestersController extends Controller
      */
     public function store(TestersFormRequest $request)
     {
-        // Save testers data to session
+        // Save data to session
         Session::put('mophie_testplanner.testers', [
             'users'   => User::all(),
-            'testers' => $request->get('browser_testers')
+            'testers' => json_decode($request->get('browser_testers'), true)
         ]);
 
         return redirect('plan/review');

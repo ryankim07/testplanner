@@ -103,10 +103,24 @@ class PlansController extends Controller
      */
     public function update(PlansFormRequest $request)
     {
-        // Save plan data to session
+        // Save data to session
         Session::put('mophie_testplanner.plan', array_except($request->all(), ['_token', '_method']));
 
         return redirect()->action('PlansController@review');
+    }
+
+    /**
+     * Store a newly created resource in storage
+     *
+     * @param PlansFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
+     */
+    public function store(PlansFormRequest $request)
+    {
+        // Save data to session
+        Session::put('mophie_testplanner.plan', array_except($request->all(), '_token'));
+
+        return redirect('ticket/build');
     }
 
     /**
@@ -313,20 +327,6 @@ class PlansController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage
-     *
-     * @param PlansFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
-     */
-    public function store(PlansFormRequest $request)
-    {
-        // Save Plan data to session
-        Session::put('mophie_testplanner.plan', array_except($request->all(), '_token'));
-
-        return redirect('ticket/build');
-    }
-
-    /**
      * View response by plan and user ID
      *
      * @param $planId
@@ -417,14 +417,13 @@ class PlansController extends Controller
      */
     public function review()
     {
-        // Session data
-        $data = [
+        // Get from session data
+        return view('pages.testplanner.review', [
             'plan'    => Session::get('mophie_testplanner.plan'),
             'tickets' => Session::get('mophie_testplanner.tickets'),
-            'testers' => Session::get('mophie_testplanner.testers')
-        ];
-
-        return view('pages.testplanner.review', $data);
+            'users'   => Session::get('mophie_testplanner.testers.users'),
+            'testers' => json_encode(Session::get('mophie_testplanner.testers.testers'))
+        ]);
     }
 
     /**
