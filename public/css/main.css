@@ -220,7 +220,8 @@ body {
     min-width: 64px;
 }
 
-#review-main .browser-img, #response-respond-main .browser-img {
+#review-main .browser-img, #response-respond-main .browser-img,
+#view-main .browser-img {
     width: 32px;
     height: 32px;
 }

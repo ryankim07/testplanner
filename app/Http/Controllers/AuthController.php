@@ -95,10 +95,11 @@ class AuthController extends Controller
      */
     public function getRegister()
     {
-        $allRoles  = Role::all();
+        // Prepare dropdown for roles
+        $allRoles = Role::all();
 
         foreach($allRoles as $eachRole) {
-            $rolesOptions[$eachRole->id] = ucfirst($eachRole->name);
+            $rolesOptions[$eachRole->id] = $eachRole->custom_role_name;
         }
 
         $viewHtml = view('pages.main.user', [

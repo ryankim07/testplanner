@@ -210,4 +210,22 @@ class Tools
     {
         return implode(', ', array_map('ucfirst', explode(',', $browser)));
     }
+
+    /**
+     * Return tester browser images
+     *
+     * @param $browsers
+     * @return string
+     */
+    public function getTesterBrowserImg($browsers)
+    {
+        $browsers= explode(',', $browsers);
+        $results = '';
+
+        foreach($browsers as $browser) {
+            $results .= asset('images/' . $browser . '.png', ['class' => 'browser-img']);
+        }
+
+        return $results;
+    }
 }

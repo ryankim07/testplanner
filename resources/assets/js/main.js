@@ -296,6 +296,7 @@ function grabBrowserTesters()
 {
     $('#step-3-main').on('click', '#continue-btn, #update-btn', function() {
         var browserTesters = [];
+
         $('.testers').each(function() {
             var id = $(this).data('id');
             var browsers = [];
@@ -326,25 +327,32 @@ function grabBrowserTesters()
  *
  * @param testers
  */
-function preCheckBrowserTesters(testers, page)
+function preCheckBrowserTesters(testers, mode)
 {
     var testers   = $.parseJSON(testers);
     var checkIcon = '<i class="fa fa-check"></i>';
 
     $.each(testers, function (i, objs) {
-        var inputIds = objs['input-ids'];
+        var inputIds = mode == 'plan-edit' ? objs['browsers'] : objs['input-ids'];
+
+        if(mode == 'plan-edit') {
+            inputIds = inputIds.split(',');
+        }
 
         $.each(inputIds, function (i, inputId) {
-            if (page == 'review') {
+            if (mode == 'review') {
                 $('#' + inputId).replaceWith(checkIcon);
             } else {
-                console.log(inputId);
+                if (mode == 'plan-edit') {
+                    inputId = 'tester-' + objs['user_id']  + '-' + inputId;
+                }
+
                 $('#' + inputId).prop('checked', true);
             }
         });
     });
 
-    if (page == 'review') {
+    if (mode == 'review') {
         $('input[type="checkbox"]').each(function () {
             $(this).replaceWith('');
         });
@@ -428,7 +436,6 @@ function planStartExpireDates()
     var yest    = curDate.setDate(curDate.getDate() - 1)
 
     $('#started_at').datetimepicker({
-        minDate:yest,
         useCurrent: false,
         format: "MM/DD/YYYY"
     });

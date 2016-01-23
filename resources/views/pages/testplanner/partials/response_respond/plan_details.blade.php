@@ -42,7 +42,7 @@
 
                     <span class="label {!! $trLabel !!}">{!! empty($plan['ticket_status']) ? 'NEW' : strtoupper($plan['ticket_status']) !!}</span>
                 </p>
-                <p>Browser: {!! Html::image('images/' . $plan['browsers'] . '.png', 'Browser', ['class' => 'browser-img']) !!}</p>
+                <p>Browser: {!! $plan['browsers'] !!}</p>
             </div>
         </div>
     </div>

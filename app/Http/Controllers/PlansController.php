@@ -117,21 +117,8 @@ class PlansController extends Controller
      */
     public function store(PlansFormRequest $request)
     {
-        // Get all users
-        $users    = User::all();
-        $allUsers = [];
-
-        foreach($users as $user) {
-            $allUsers[] = [
-                'id'         => $user->id,
-                'first_name' => $user->first_name,
-                'last_name'  => $user->last_name,
-                'email'      => $user->email,
-            ];
-        }
-
         // Save data to session
-        Session::put('mophie_testplanner.users', $allUsers);
+        Session::put('mophie_testplanner.users', User::all()->toArray());
         Session::put('mophie_testplanner.plan', array_except($request->all(), '_token'));
 
         return redirect('ticket/build');
@@ -170,10 +157,11 @@ class PlansController extends Controller
      */
     public function view($id)
     {
-        $plan       = Plans::find($id);
-        $tickets    = unserialize($plan->tickets()->first()->tickets);
-        $allTesters = $plan->testers()->get();
-        $users      = User::all();
+        $plan    = Plans::find($id);
+        $tickets = unserialize($plan->tickets()->first()->tickets);
+        $testers = $plan->testers()->get();
+        $users   = User::all();
+        $results = [];
 
         // Render tickets
         $ticketsHtml = '';
@@ -183,12 +171,6 @@ class PlansController extends Controller
                 'ticket'           => $ticket,
                 'addTicketBtnType' => 'btn-custom'
             ])->render();
-        }
-
-        // Testers
-        $testers = [];
-        foreach($allTesters as $tester) {
-            $testers[$tester->id] = 'tester-' . $tester->user_id . '-' . $tester->browsers;
         }
 
         // Get Jira versions
@@ -204,8 +186,8 @@ class PlansController extends Controller
                 'started_at'    => Tools::dateConverter($plan->started_at),
                 'expired_at'    => Tools::dateConverter($plan->expired_at),
                 'tickets_html'  => $ticketsHtml,
-                'users'         => $users,
-                'testers'       => json_encode($testers),
+                'users'         => $users->toArray(),
+                'testers'       => json_encode($testers->toArray()),
                 'jira_versions' => json_encode($jiraVersions),
                 'jira_issues'   => json_encode($jiraIssues)
             ]
@@ -363,6 +345,7 @@ class PlansController extends Controller
         foreach ($testers as $tester) {
             $testerId        = $tester->user_id;
             $testerFirstName = $tester->user_first_name;
+
             // Render users tab
             $tabHeaderHtml .= view('pages/testplanner/partials/response_respond/tab_header_users', [
                 'selectedUserId'  => $selectedUserId,
@@ -383,7 +366,8 @@ class PlansController extends Controller
                 'testerId'        => $testerId,
                 'testerFirstName' => $testerFirstName,
                 'plan'            => $plan,
-                'totalResponses'  => $totalResponses
+                'totalResponses'  => $totalResponses,
+                'browsers'        => Tools::getTesterBrowserImg($tester->browsers)
             ])->render();
         }
 
@@ -391,7 +375,7 @@ class PlansController extends Controller
             'mode'           => $mode,
             'plan'           => ['description' => $planDetails->description],
             'tabHeaderHtml'  => $tabHeaderHtml,
-            'tabBodyHtml'    => $tabBodyHtml,
+            'tabBodyHtml'    => $tabBodyHtml
         ]);
     }
 

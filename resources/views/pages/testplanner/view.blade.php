@@ -25,15 +25,18 @@
 
 				@include('errors.list')
 
-				@include('pages/testplanner/partials/plan', ['mode' => 'edit'])
-
-				{!! $plan['tickets_html'] !!}
-
-				@include('pages/testplanner/partials/testers', [
-					'testers' => $plan['users'],
-					'mode'    => 'edit'
-				])
-
+                <div class="page-header"><h4>Plan Details</h4></div>
+                <div class="row nested-block">
+				    @include('pages/testplanner/partials/plan', ['mode' => 'edit'])
+				</div>
+                <div class="page-header"><h4>Tickets</h4></div>
+                <div class="row nested-block">
+                    {!! $plan['tickets_html'] !!}
+                </div>
+                <div class="page-header"><h4>Browsers</h4></div>
+                <div class="row nested-block">
+                    @include('pages/testplanner/partials/testers', ['users' => $plan['users']])
+                </div>
 			</div>
 		</div>
 
@@ -54,8 +57,8 @@
 
 		$(document).ready(function() {
 			// Load Jira versions, issues
-			jiraVersions('view-main', 'plan-description', '<?php echo $plan['jira_versions']; ?>');
-			jiraIssues('view-main', 'ticket-description','<?php echo $plan['jira_issues']; ?>');
+			jiraVersions('view-main', 'plan-description', <?php echo $plan['jira_versions']; ?>);
+			jiraIssues('view-main', 'ticket-description',<?php echo $plan['jira_issues']; ?>);
 
 			// Fill expiration date
 			planStartExpireDates();
@@ -78,8 +81,11 @@
 			// Load ticket builder
 			ticketBuilder.load();
 
-			// Preselect testers radion input
-			preSelectBrowserTesters(<?php echo $plan['testers']; ?>);
+            // Preselect testers checkbox input
+            preCheckBrowserTesters('<?php echo $plan['testers'] ?>', 'plan-edit');
+
+            // Prepare data when submitting
+            grabBrowserTesters();
 
 			// Back button
 			backButtonSubmit('{!! URL::previous() !!}');

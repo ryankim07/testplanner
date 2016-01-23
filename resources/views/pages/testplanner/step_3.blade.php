@@ -66,10 +66,12 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
+            // Preselect testers checkbox input
             @if($mode == 'edit')
-                preCheckBrowserTesters('<?php echo $testers ?>', '{!! $mode !!}');
+                preCheckBrowserTesters('<?php echo $testers ?>', 'build-edit');
             @endif
 
+            // Prepare data when submitting
             grabBrowserTesters();
         });
 

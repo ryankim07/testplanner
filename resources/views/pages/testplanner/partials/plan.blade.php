@@ -24,8 +24,8 @@
             <div class="input-group date" id="started_at">
                 {!! Form::text('started_at', null, ['class' => 'form-control input-sm required']) !!}
                 <span class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </span>
+                    <i class="fa fa-calendar"></i>
+                </span>
             </div>
         </div>
     </div>
@@ -35,9 +35,8 @@
             <div class="input-group date" id="expired_at">
                 {!! Form::text('expired_at', null, ['class' => 'form-control input-sm required']) !!}
                 <span class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </span>
+                    <i class="fa fa-calendar"></i>
+                </span>
             </div>
         </div>
-    </div>
     </div>

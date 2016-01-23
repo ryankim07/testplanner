@@ -84,7 +84,7 @@
             // Remove ticket by Ajax
             ticketBuilder.removeAjax("{!! URL::to('ticket/remove') !!}");
 
-            // Check all the selected browser testers
+            // Preselect testers checkbox input
             preCheckBrowserTesters('<?php echo $testers ?>', 'review');
         });
 
