@@ -185,6 +185,12 @@ class Tools
         Log::notice($msg);
     }
 
+    /**
+     * Restructure testers dropdown options
+     *
+     * @param $testers
+     * @return mixed
+     */
     public function dropDownOptionsHtml($testers)
     {
         foreach ($testers as $tester) {

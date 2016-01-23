@@ -453,7 +453,7 @@ class PlansController extends Controller
         $testerData  = Session::get('mophie_testplanner.testers');
 
         // Save plan
-        $planId = Plans::savePlan($planData, $ticketsData, $testerData['testers']);
+        $planId = Plans::savePlan($planData, $ticketsData, $testerData);
         $planData['plan_id'] = $planId;
 
         if (!$planId) {

@@ -14,6 +14,7 @@
 use App\Facades\Tools;
 
 use Mail;
+use Session;
 
 class Email
 {
@@ -52,6 +53,7 @@ class Email
                     if (count($data['testers']) > 1) {
                         // Multiple testers
                         foreach ($data['testers'] as $tester) {
+
                             Mail::send($emailType, array_merge($data, $tester), function ($message) use ($tester, $emailSubject) {
                                 $message->to($tester['email'], $tester['first_name'])->subject($emailSubject);
                             });
@@ -59,6 +61,7 @@ class Email
                     } else {
                         // Single tester
                         $tester = array_shift($data['testers']);
+
                         Mail::send($emailType, array_merge($data, $tester), function ($message) use ($tester, $emailSubject) {
                             $message->to($tester['email'], $tester['first_name'])->subject($emailSubject);
                         });

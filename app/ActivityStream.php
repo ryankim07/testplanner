@@ -143,15 +143,16 @@ class ActivityStream extends Model
                 $activity = $assigneeName . ' ' . $message . ' ' . $planLink;
 
                 $comment = self::create([
-                    'plan_id'  => $plan['id'],
+                    'plan_id'  => $plan['plan_id'],
                     'user_id'  => $userId,
                     'activity' => $activity
                 ]);
             }
         } catch(\Exception $e) {
-            // Log to system
             Tools::log($e->getMessage() . ' activity stream', $plan);
             Session::flash('flash_error', config('testplanner.messages.plan.system.activity_stream_error'));
+
+            return true;
         }
 
         return true;
