@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="panel-body">
-                @if($totalActivities > 0)
+                @if(count($activities) > 0)
                     <div class="row table-options">
                         <div class="pull-right">
                             {!! Form::button('Search', ['class' => 'btn btn-custom btn-sm', 'type' => 'submit']) !!}
@@ -54,7 +54,7 @@
 
         {!! Form::close() !!}
 
-        {!! $activities->appends($link)->render() !!}
+        {!! $activities->appends('')->render() !!}
 
     </div>
 
