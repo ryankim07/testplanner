@@ -12,27 +12,35 @@
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
-use App\System;
+use App\Api\SystemApi;
 
 class SystemController extends Controller
 {
     /**
-     * SystemController constructor.
+     * @var SystemApi
      */
-    public function __construct()
+    protected $systemApi;
+
+    /**
+     * SystemController constructor
+     *
+     * @param SystemApi $system
+     */
+    public function __construct(SystemApi $system)
     {
         $this->middleware('auth');
+        $this->systemApi = $system;
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function index()
     {
         // Get header and body data
-        $configs = System::getConfigs();
+        $configs = $this->systemApi->getConfigs();
 
         return view('pages.main.system', ['configData' => $configs]);
     }
@@ -50,14 +58,16 @@ class SystemController extends Controller
         if (count($postData) == 0) {
             return response()->json([
                 'status' => 'error',
-                'msg'    => config('testplanner.messages.system.update_error'),
+                'msg'    => config('testplanner.messages.system.update_error')
             ]);
         }
-        $results = System::updateConfig($postData);
+
+        $update = $this->systemApi->updateConfigs($postData);
 
         return response()->json([
-            'status' => $results['status'],
-            'msg'    => $results['msg'],
+            'status' => $update ? 'success' : 'error',
+            'msg'    => $update ? config('testplanner.messages.system.update_success') :
+                config('testplanner.messages.system.file_update_error')
         ]);
     }
 }

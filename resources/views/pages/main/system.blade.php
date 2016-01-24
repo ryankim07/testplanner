@@ -98,8 +98,7 @@
                 $(this).data('original', this.value);
             });
 
-            $('#update-btn').click(function(){
-
+            $('#system-main').on('click', '#update-btn', function() {
                 var fields = [];
                 var items  = {};
 
@@ -113,7 +112,7 @@
 
                 // Grab only fields that were changed
                 inputs.each(function() {
-                    if ($(this).data('original') !== this.value) {
+                    if ($(this).data('original') != this.value) {
                         items[$(this).data('name')] = this.value;
                     }
                 });
@@ -137,6 +136,9 @@
                         }
                     })
                  ).done(function() {
+                    var inputs = $('input[type="text"]').each(function() {
+                        $(this).data('original', this.value);
+                    });
                  });
 
             });
