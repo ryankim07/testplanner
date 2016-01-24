@@ -15,19 +15,22 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserResponseFormRequest;
 
-use App\User;
-use App\Tables;
+use App\Api\UserApi;
+use App\Api\TablesApi;
 
 use Session;
 
 class UsersController extends Controller
 {
+    protected $userApi;
+
     /**
      * TicketsController constructor.
      */
-    public function __construct()
+    public function __construct(UserApi $userApi)
     {
         $this->middleware('auth');
+        $this->userApi = $userApi;
     }
 
     /**
@@ -37,26 +40,9 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $table = Tables::prepare('order', [
-            'first_name',
-            'last_name',
-            'email',
-            'active',
-            'role_names',
-            'created_at',
-            'updated_at',
-            'edit'
-        ], 'UsersController@view');
+        $results = $this->userApi->getAllUsers();
 
-        $query = User::getAllUsers($table['sorting']['sortBy'], $table['sorting']['order']);
-
-        return view('pages.main.view_all_users', [
-            'users'       => isset($query) ? $query->paginate(config('testplanner.tables.pagination.lists')) : '',
-            'totalUsers'  => isset($query) ? User::count() : 0,
-            'columns'     => $table['columns'],
-            'columnsLink' => $table['columns_link'],
-            'link'        => ''
-        ]);
+        return view('pages.main.view_all_users', $results);
     }
 
     /**
@@ -68,7 +54,7 @@ class UsersController extends Controller
     public function view(Request $request)
     {
         $info    = $request->get('info');
-        $results = User::displayUser($info);
+        $results = $this->userApi->displayUser($info);
 
         $viewHtml = view('pages.main.user', [
             'mode'                 => 'edit',
@@ -88,7 +74,7 @@ class UsersController extends Controller
      */
     public function update(UserResponseFormRequest $request)
     {
-        $results = User::updateUser($request);
+        $results = $this->userApi->updateUser($request);
 
         if (!$results) {
             // Return JSON error response

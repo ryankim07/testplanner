@@ -28,7 +28,7 @@
 
                 @include('errors.list')
 
-                @if($totalUsers == 0)
+                @if(count($users) == 0)
                     <p>{!! config('testplanner.messages.plan.no_users_found') !!}</p>
                 @else
                     <div class="row table-options">
@@ -73,7 +73,7 @@
 
         {!! Form::close() !!}
 
-        {!! $users->appends($link)->render() !!}
+        {!! $users->appends('')->render() !!}
 
     </div>
 
