@@ -22,7 +22,7 @@ use App\Api\Grid;
 class TablesApi
 {
     /**
-     * @var
+     * @var GridApi
      */
     protected $gridApi;
 

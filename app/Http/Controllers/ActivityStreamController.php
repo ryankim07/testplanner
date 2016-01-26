@@ -14,27 +14,33 @@ use Illuminate\Http\Request;
 
 use App\Helpers\Tools;
 
-use App\Api\ActivityStreamApi;
-use App\Api\Users;
+use App\Api\ActivityStreamApi,
+    App\Api\UserApi;
 
 use Auth;
 
 class ActivityStreamController extends Controller
 {
     /**
-     * @var Activity Stream
+     * @var Activity Stream Api
      */
     protected $streamApi;
+
+    /**
+     * @var User Api
+     */
+    protected $userApi;
 
     /**
      * ActivityStreamController constructor
      *
      * @param ActivityStreamApi $streamApi
      */
-    public function __construct(ActivityStreamApi $streamApi)
+    public function __construct(ActivityStreamApi $streamApi, UserApi $userApi)
     {
         $this->middleware('auth');
         $this->streamApi = $streamApi;
+        $this->userApi   = $userApi;
     }
 
     /**

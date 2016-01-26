@@ -32,26 +32,40 @@ use Session;
 
 class PlansController extends Controller
 {
-    const CONSTANT = 'constant value';
+    /**
+     * @var User
+     */
+    protected $userModel;
 
     /**
-     * @var PlansApi
+     * @var Plans Api
      */
     protected $plansApi;
-    protected $userModel;
+
+    /**
+     * @var Testers Api
+     */
+    protected $testersApi;
+
+    /**
+     * @var Tickets Api
+     */
+    protected $ticketsApi;
 
     /**
      * PlansController constructor.
      */
-    public function __construct(PlansApi $plansApi, User $user)
+    public function __construct(PlansApi $plansApi, User $user, TestersApi $testersApi, TicketsApi $ticketsApi)
     {
         $this->middleware('auth');
         $this->middleware('testplanner', [
             'only' => ['build', 'edit', 'update', 'review', 'save']
         ]);
 
-        $this->plansApi  = $plansApi;
-        $this->userModel = $user;
+        $this->userModel  = $user;
+        $this->plansApi   = $plansApi;
+        $this->testersApi = $testersApi;
+        $this->ticketsApi = $ticketsApi;
     }
 
     /**
@@ -244,8 +258,8 @@ class PlansController extends Controller
         $testerData  = Session::get('mophie_testplanner.testers');
 
         // Save plan
-        $planId = $this->plansApi->savePlan($planData, $ticketsData, $testerData);
-        $planData['plan_id'] = $planId;
+        $planId    = $this->plansApi->savePlan($planData, $ticketsData, $testerData);
+        $planData += ['plan_id' => $planId];
 
         if (!$planId) {
             // Delete session

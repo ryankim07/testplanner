@@ -22,6 +22,9 @@ use Session;
 
 class UsersController extends Controller
 {
+    /**
+     * @var User Api
+     */
     protected $userApi;
 
     /**

@@ -30,8 +30,16 @@ class UserApi extends BaseApi
     /**
      * @var Plans
      */
-    protected $userModel;
+    protected $model;
+
+    /**
+     * @var UserRole
+     */
     protected $userRoleModel;
+
+    /**
+     * @var \App\Api\TablesApi
+     */
     protected $tablesApi;
 
     /**
@@ -41,7 +49,7 @@ class UserApi extends BaseApi
      */
     public function __construct(User $user, UserRole $userRole, TablesApi $tables)
     {
-        $this->userModel     = $user;
+        $this->model         = $user;
         $this->userRoleModel = $userRole;
         $this->tablesApi     = $tables;
     }
@@ -54,7 +62,7 @@ class UserApi extends BaseApi
      */
     public function getUserFirstName($userId)
     {
-        $info = $this->userModel->find($userId)->first();
+        $info = $this->model->find($userId)->first();
 
         return $info->first_name;
     }
@@ -67,7 +75,7 @@ class UserApi extends BaseApi
      */
     public function getUserEmail($userId)
     {
-        $info = $this->userModel->find($userId);
+        $info = $this->model->find($userId);
 
         return $info->email;
     }
@@ -205,7 +213,7 @@ class UserApi extends BaseApi
             $userId = $request->get('user_id');
 
             // Update user info
-            $user   = $this->userModel->find($userId);
+            $user   = $this->model->find($userId);
             $update = $user->update([
                 'first_name' => $request->get('first_name'),
                 'last_name'  => $request->get('last_name'),

@@ -23,8 +23,16 @@ class ActivityStreamApi
     /**
      * @var Activity Stream
      */
-    protected $streamModel;
+    protected $model;
+
+    /**
+     * @var Comments
+     */
     protected $commentModel;
+
+    /**
+     * @var TablesApi
+     */
     protected $tablesApi;
 
     /**
@@ -35,7 +43,7 @@ class ActivityStreamApi
      */
     public function __construct(Stream $streams, Comments $comments, TablesApi $tables)
     {
-        $this->streamModel  = $streams;
+        $this->model        = $streams;
         $this->commentModel = $comments;
         $this->tablesApi    = $tables;
     }
@@ -64,7 +72,7 @@ class ActivityStreamApi
      */
     public function getActivityStream()
     {
-        $query = $this->streamModel->orderBy('created_at', 'DESC')
+        $query = $this->model->orderBy('created_at', 'DESC')
             ->paginate(config('testplanner.tables.pagination.activity_stream'));
 
         return $query;
@@ -139,7 +147,7 @@ class ActivityStreamApi
      */
     public function saveActivityComment($asId, $userId, $comment)
     {
-        $results = $this->streamModel->create([
+        $results = $this->model->create([
             'as_id'   => $asId,
             'user_id' => $userId,
             'comment' => $comment
