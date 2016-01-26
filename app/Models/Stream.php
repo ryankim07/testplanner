@@ -61,7 +61,6 @@ class Stream extends Model
         return Auth::user()->id == $this->user_id ? $this->activity : strip_tags($this->activity);
     }
 
-
     /**
      * Calculate and convert to a human readable format
      *

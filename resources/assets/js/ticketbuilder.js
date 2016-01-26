@@ -5,6 +5,7 @@
  * @returns {{load: load}}
  * @constructor
  */
+
 function TicketBuilder(config) {
     var config          = config;
     var formId          = '#' + config.formIdName;
@@ -82,6 +83,57 @@ function TicketBuilder(config) {
         });
     }
 
+    /**
+     * Continue or Update
+     */
+    function continueOrUpdate()
+    {
+        var buttons = continueBtnId + ', ' + updateBtnId;
+
+        $(formId).on('click', buttons, function(e) {
+            e.preventDefault();
+
+            var tickets = [];
+
+            $(formId + ' ' + ticketRowClass).each(function() {
+                // Create ticket object
+                tickets.push({
+                    "id": $(this).attr('id'),
+                    "desc": $(this).find(ticketDescClass).val(),
+                    "objective": $(this).find(objectiveClass).val(),
+                    "test_steps": $(this).find(testStepsClass).val()
+                });
+            });
+
+            // Create hidden field
+            var input = $("<input>").attr({"type":"hidden","name":"tickets_obj"}).val(JSON.stringify(tickets));
+            $('form').append(input).submit();
+        });
+    }
+
+    /**
+     * Change input fields name to an array
+     *
+     * @param obj
+     * @returns {boolean}
+     */
+    function changeCreateTicketInputIndex(obj)
+    {
+        var index = stringGen(5);
+
+        obj.attr('id', index);
+        obj.find(ticketDescClass).attr('name', 'desc["' + index + '"]');
+        obj.find(objectiveClass).attr('name', 'objective["' + index + '"]');
+        obj.find(testStepsClass).attr('name', 'test_steps["' + index + '"]');
+
+        return true;
+    }
+
+    /**
+     * Remove tickets by Ajax
+     *
+     * @param url
+     */
     function removeTicketAjax(url)
     {
         removeTrashBtn(false);
@@ -118,47 +170,9 @@ function TicketBuilder(config) {
     }
 
     /**
-     * Continue or Update
-     */
-    function continueOrUpdate()
-    {
-        var buttons = continueBtnId + ', ' + updateBtnId;
-        $(formId).on('click', buttons, function() {
-            var tickets = [];
-
-            $(formId + ' ' + ticketRowClass).each(function() {
-                // Create ticket object
-                tickets.push({
-                    "id": $(this).attr('id'),
-                    "desc": $(this).find(ticketDescClass).val(),
-                    "objective": $(this).find(objectiveClass).val(),
-                    "test_steps": $(this).find(testStepsClass).val()
-                });
-            });
-
-            // Create hidden field
-            var input = $("<input>").attr({"type":"hidden","name":"tickets_obj"}).val(JSON.stringify(tickets));
-            $('form').append(input);
-        });
-    }
-
-    /**
-     * Change input fields name to an array
-     */
-    function changeCreateTicketInputIndex(obj)
-    {
-        var index = stringGen(5);
-
-        obj.attr('id', index);
-        obj.find(ticketDescClass).attr('name', 'desc["' + index + '"]');
-        obj.find(objectiveClass).attr('name', 'objective["' + index + '"]');
-        obj.find(testStepsClass).attr('name', 'test_steps["' + index + '"]');
-
-        return true;
-    }
-
-    /**
      * Utility function
+     *
+     * @param displayBtn
      */
     function removeTrashBtn(displayBtn)
     {
@@ -175,6 +189,9 @@ function TicketBuilder(config) {
         }
     }
 
+    /**
+     * Initialize functions
+     */
     return {
         load: function() {
             initiateBuilder();

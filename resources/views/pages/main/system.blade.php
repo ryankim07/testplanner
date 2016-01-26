@@ -41,6 +41,7 @@
                                 <div class="pull-right">
 
                                     @include('pages/main/partials/button', [
+                                        'type'      => 'button',
                                         'direction' => 'pull-right',
                                         'class'		=> 'btn-custom btn-sm',
                                         'btnText'	=> 'Update',

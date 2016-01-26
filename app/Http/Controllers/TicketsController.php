@@ -50,13 +50,8 @@ class TicketsController extends Controller
         $jiraIssues = Tools::jiraIssues();
 
         $ticketsHtml = view('pages/testplanner/partials/tickets', [
-            'mode'     => 'create',
-            'ticket[]' => [
-                'id'         => '',
-                'desc'       => '',
-                'objective'  => '',
-                'test_steps' => ''
-            ],
+            'mode'             => 'build',
+            'ticket'           => [],
             'addTicketBtnType' => 'btn-custom'
         ])->render();
 

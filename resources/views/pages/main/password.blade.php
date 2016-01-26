@@ -24,11 +24,11 @@
                     </div>
                 </div>
 
-                @include('pages/main/partials/submit_button', [
-                    'submitBtnText' => 'Send Password Reset',
-                    'direction'     => 'pull-left',
-                    'class'		    => 'btn-custom btn-sm',
-                    'id'			=> 'send-btn'
+                @include('pages/main/partials/button', [
+                    'btnText'   => 'Send Password Reset',
+                    'direction' => 'pull-left',
+                    'class'		=> 'btn-custom btn-sm',
+                    'id'		=> 'send-btn'
                 ])
 
             </div>

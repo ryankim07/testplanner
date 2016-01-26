@@ -35,24 +35,16 @@
                 @include('errors.list')
 
                 <div class="page-header"><h4>Tickets</h4></div>
-                    @if($plan['mode'] == 'build')
-                        @include('pages/testplanner/partials/tickets', [
-                            'mode'             => $plan['mode'],
-                            'addTicketBtnType' => 'btn-primary'
-                        ])
-                    @else
-                        {!! $plan['tickets_html'] !!}
-                    @endif
-                </div>
+                {!! $plan['tickets_html'] !!}
             </div>
         </div>
 
         @if($plan['mode'] == 'build')
-            @include('pages/main/partials/submit_button', [
-                'submitBtnText' => 'Continue',
-                'direction'     => 'pull-right',
-                'class'		    => 'btn-primary',
-                'id'			=> 'continue-btn'
+            @include('pages/main/partials/button', [
+                'btnText'   => 'Continue',
+                'direction' => 'pull-right',
+                'class'		=> 'btn-primary',
+                'id'		=> 'continue-btn'
             ])
         @else
             @include('pages/main/partials/double_submit_buttons', [
@@ -61,7 +53,7 @@
                 'btnText'       => 'Go Back',
                 'btnId'		    => 'back-btn',
                 'submitBtnText' => 'Update',
-                'submitBtnId'	=> 'update-btn',
+                'submitBtnId'	=> 'update-btn'
             ])
         @endif
 

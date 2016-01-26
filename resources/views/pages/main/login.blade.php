@@ -43,11 +43,11 @@
                     </div>
                 </div>
 
-                @include('pages/main/partials/submit_button', [
-                    'submitBtnText' => 'Login',
-                    'direction'     => 'pull-left',
-                    'class'		    => 'btn-custom btn-sm',
-                    'id'			=> 'login-btn'
+                @include('pages/main/partials/button', [
+                    'btnText'   => 'Login',
+                    'direction' => 'pull-left',
+                    'class'		=> 'btn-custom btn-sm',
+                    'id'		=> 'login-btn'
                 ])
 
                 <div class="form-group">

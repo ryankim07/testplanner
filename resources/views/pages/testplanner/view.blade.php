@@ -83,7 +83,7 @@
             preCheckBrowserTesters('<?php echo $plan['testers'] ?>', 'plan-edit');
 
             // Prepare data when submitting
-            grabBrowserTesters('view-main', 'update-btn');
+            grabBrowserTesters('view-main');
 
 			// Back button
 			backButtonSubmit('{!! URL::previous() !!}');

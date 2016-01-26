@@ -42,11 +42,11 @@
         </div>
 
         @if($mode == 'build')
-            @include('pages/main/partials/submit_button', [
-                'submitBtnText' => 'Continue',
-                'direction'     => 'pull-right',
-                'class'		    => 'btn-primary',
-                'id'			=> 'continue-btn'
+            @include('pages/main/partials/button', [
+                'btnText'   => 'Continue',
+                'direction' => 'pull-right',
+                'class'		=> 'btn-primary',
+                'id'		=> 'continue-btn'
             ])
         @else
             @include('pages/main/partials/double_submit_buttons', [
@@ -72,7 +72,7 @@
             @endif
 
             // Prepare data when submitting
-            grabBrowserTesters('step-3-main', 'continue-btn');
+            grabBrowserTesters('step-3-main');
         });
 
     </script>

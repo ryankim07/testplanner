@@ -20,8 +20,6 @@ use App\Facades\Tools;
 
 class TicketResponsesApi
 {
-
-
     /**
      * Save tester's ticket responses
      *

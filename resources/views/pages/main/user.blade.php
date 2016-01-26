@@ -38,6 +38,7 @@
             ])
 
             @include('pages/main/partials/button', [
+                'type'      => 'button',
                 'btnText'   => $mode == 'edit' ? 'Update' : 'Register',
                 'direction' => 'pull-left',
                 'class'     => 'btn btn-custom btn-sm',

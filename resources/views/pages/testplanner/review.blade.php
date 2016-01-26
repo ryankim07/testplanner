@@ -59,11 +59,11 @@
             </div>
         </div>
 
-        @include('pages/main/partials/submit_button', [
-            'submitBtnText' => 'Finalize',
-            'direction'     => 'pull-right',
-            'class'		    => 'btn-primary',
-            'id'            => 'continue-btn'
+        @include('pages/main/partials/button', [
+            'btnText'   => 'Finalize',
+            'direction' => 'pull-right',
+            'class'		=> 'btn-primary',
+            'id'        => 'continue-btn'
         ])
 
         {!! Form::close() !!}

@@ -274,9 +274,15 @@ function loadUsersJs(url, data)
     });
 }
 
-function grabBrowserTesters(formId, btnId)
+/**
+ * Grab all selected browsers by user from the checkboxes
+ *
+ * @param formId
+ */
+function grabBrowserTesters(formId)
 {
-    $('#' + formId).on('click', '#' + btnId, function() {
+    $('#' + formId).on('click', '#continue-btn, #update-btn', function(e) {
+        e.preventDefault();
         var browserTesters = [];
 
         $('.testers').each(function() {
@@ -299,7 +305,7 @@ function grabBrowserTesters(formId, btnId)
         });
 
         var input = $("<input>").attr({"type":"hidden","name":"browser_testers"}).val(JSON.stringify(browserTesters));
-        $('form').append(input);
+        $('form').append(input).submit();
     });
 }
 

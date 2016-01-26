@@ -13,8 +13,6 @@
 
 use App\Http\Requests\TestersFormRequest;
 
-use App\User;
-
 use Session;
 
 class TestersController extends Controller
@@ -66,9 +64,7 @@ class TestersController extends Controller
     public function update(TestersFormRequest $request)
     {
         // Save data to session
-        Session::put('mophie_testplanner.testers', [
-            'testers' => json_decode($request->get('browser_testers'), true)
-        ]);
+        Session::put('mophie_testplanner.testers', json_decode($request->get('browser_testers'), true));
 
         return redirect('plan/review');
     }

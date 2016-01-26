@@ -6,7 +6,6 @@
 | This template is used when rendering tickets.
 |
 --}}
-<?php var_dump($plan) ?>
 
     @foreach($plan['tickets'] as $ticket)
         <div class="page-header"></div>

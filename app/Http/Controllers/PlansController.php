@@ -244,7 +244,7 @@ class PlansController extends Controller
         $testerData  = Session::get('mophie_testplanner.testers');
 
         // Save plan
-        $planId = Plans::savePlan($planData, $ticketsData, $testerData);
+        $planId = $this->plansApi->savePlan($planData, $ticketsData, $testerData);
         $planData['plan_id'] = $planId;
 
         if (!$planId) {
@@ -279,9 +279,9 @@ class PlansController extends Controller
     {
         $testerData = $request->get('browser_testers');
 
-        $planData      = Plans::updateBuiltPlanDetails($planId, $request);
-        $ticketsUpdate = Tickets::updateBuiltTickets($planId, $request->get('tickets_obj'));
-        $testersUpdate = Testers::updateBuiltTesters($planId, $testerData);
+        $planData      = $this->plansApi->updateBuiltPlanDetails($planId, $request);
+        $ticketsUpdate = $this->ticketsApi->updateBuiltTickets($planId, $request->get('tickets_obj'));
+        $testersUpdate = $this->testersApi->updateBuiltTesters($planId, $testerData);
 
         if ((count($planData) > 0) && $ticketsUpdate && $testersUpdate) {
             // Log to activity stream

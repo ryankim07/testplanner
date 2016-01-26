@@ -51,7 +51,7 @@ class Testers extends Model
     );
 
     /**
-     * Retrieve custom accessor
+     * Retrieve first name accessor
      *
      * @return mixed
      */
@@ -62,6 +62,11 @@ class Testers extends Model
         return $user->first_name;
     }
 
+    /**
+     * Retrieve browser name accessor
+     *
+     * @return string
+     */
     public function getUserBrowsersAttribute()
     {
         return implode(', ', array_map('ucfirst', explode(',', $this->browsers)));
