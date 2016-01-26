@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="panel-body">
-                @if($totalPlans > 0)
+                @if(count($plans) > 0)
                     <div class="row table-options">
                         <div class="pull-right">
                             {!! Form::button('Search', ['class' => 'btn btn-custom btn-sm', 'type' => 'submit']) !!}
@@ -41,25 +41,25 @@
                             @foreach($plans as $plan)
                                 <tr class="plan-row">
                                     <td>
-                                        {!! $plan['description'] !!}
+                                        {!! $plan->description !!}
                                     </td>
-                                    <td>{!! $plan['first_name'] !!}</td>
-                                    <td>{!! $plan['last_name'] !!}</td>
+                                    <td>{!! $plan->first_name !!}</td>
+                                    <td>{!! $plan->last_name !!}</td>
 
                                     <?php
-                                        if($plan['ticket_response_status'] == 'complete') {
+                                        if($plan->ticket_response_status == 'complete') {
                                             $trLabel = 'label-default';
-                                        } else if($plan['ticket_response_status'] == 'progress') {
+                                        } else if($plan->ticket_response_status == 'progress') {
                                             $trLabel = 'label-warning';
                                         } else {
                                             $trLabel = 'label-success';
                                         }
                                     ?>
 
-                                    <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan['ticket_response_status'] !!}</span></td>
-                                    <td>{!! Tools::dateConverter($plan['created_at']) !!}</td>
-                                    <td>{!! Tools::dateConverter($plan['updated_at']) !!}</td>
-                                    <td class="text-center"><a href="{!! URL::route('plan.respond', $plan['id']) !!}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
+                                    <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->ticket_response_status!!}</span></td>
+                                    <td>{!! Tools::dateConverter($plan->created_at) !!}</td>
+                                    <td>{!! Tools::dateConverter($plan->updated_at) !!}</td>
+                                    <td class="text-center"><a href="{!! URL::route('plan.respond', $plan->id) !!}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -73,7 +73,7 @@
 
         {!! Form::close() !!}
 
-        {!! $plans->appends($link)->render() !!}
+        {!! $plans->appends('')->render() !!}
 
     </div>
 

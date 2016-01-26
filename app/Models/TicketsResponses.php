@@ -1,4 +1,4 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class TicketsResponses
@@ -49,19 +49,12 @@ class TicketsResponses extends Model
     protected $guarded = array('id');
 
     /**
-     * Model event to change data before saving to database
-     */
-    public static function boot()
-    {
-    }
-
-    /**
      * Save tester's ticket responses
      *
      * @param $planData
      * @return string
      */
-    public static function saveResponse($planData)
+    public function saveResponse($planData)
     {
         $completed    = 0;
         $progress     = 0;

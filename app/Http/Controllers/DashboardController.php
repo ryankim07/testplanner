@@ -13,10 +13,8 @@
 
 use App\Http\Requests;
 
-use App\Plans;
-use App\ActivityStream;
-
-use Auth;
+use App\Api\PlansApi,
+    App\Api\ActivityStreamApi;
 
 class DashboardController extends Controller
 {
@@ -32,25 +30,19 @@ class DashboardController extends Controller
     /**
      * Show all the plans assigned to user
      *
+     * @param Plans $plansApi
+     * @param ActivityStream $activityApi
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
-    public function index()
+    public function index(PlansApi $plansApi, ActivityStreamApi $activityApi)
     {
-        // Get user's role
-        $user  = Auth::user();
-        $roles = $user->role()->get();
-
-        $plans = Plans::getDashboardCreatedAssigned($user, $roles);
+        // Get created and assigned plans
+        $plans = $plansApi->getDashboardCreatedAssigned();
 
         // Get activity stream
-        $activityStream = ActivityStream::getActivityStream();
+        $activities = $activityApi->getActivityStream();
 
         // Return view
-        return view('pages.main.dashboard', [
-            'activities'      => $activityStream['total_count'] > 0 ? $activityStream['query'] : '',
-            'totalActivities' => isset($activityStream['total_count']) ? $activityStream['total_count'] : 0,
-            'plans'           => isset($plans) ? array_filter($plans) : '',
-            'link'            => '',
-        ]);
+        return view('pages.main.dashboard', compact('plans', 'activities'));
     }
 }

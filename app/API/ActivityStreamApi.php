@@ -1,9 +1,9 @@
-<?php namespace App;
+<?php namespace App\Api;
 
 /**
- * Class ActivityStream
+ * Class ActivityStreamApi
  *
- * Model
+ * Custom Model
  *
  * @author     Ryan Kim
  * @category   Mophie
@@ -11,93 +11,63 @@
  * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
  */
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use App\Helpers\Tools;
 
-use App\Facades\Tools;
+use App\Models\Stream,
+    App\Models\Comments;
 
-use App\User;
-
-use Auth;
 use Session;
 
-class ActivityStream extends Model
+class ActivityStreamApi
 {
     /**
-     * The database table used by the model.
-     *
-     * @var string
+     * @var Activity Stream
      */
-    protected $table = "activity_stream";
+    protected $streamModel;
+    protected $commentModel;
+    protected $tablesApi;
 
     /**
-     * The attributes that are mass assignable.
+     * ActivityStream constructor
      *
-     * @var array
+     * @param Stream $streams
+     * @param Comments $comments
      */
-    protected $fillable = [
-        'plan_id',
-        'user_id',
-        'activity'
-    ];
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $guarded = array('id');
-
-    /**
-     * Custom attribute to be included in model
-     *
-     * @var array
-     */
-    protected $appends = array('custom_activity');
-
-    /**
-     * Model event to change data before saving to database
-     */
-    public static function boot()
+    public function __construct(Stream $streams, Comments $comments, TablesApi $tables)
     {
+        $this->streamModel  = $streams;
+        $this->commentModel = $comments;
+        $this->tablesApi    = $tables;
     }
 
-    /**
-     * Retrieve custom accessor
-     *
-     * @return mixed
-     */
-    public function getCustomActivityAttribute()
+    public function displayActivityStream()
     {
-        return Auth::user()->id == $this->user_id ? $this->activity : strip_tags($this->activity);
+        $table = $this->tablesApi->prepare('order', [
+            'activity',
+            'created_at'
+        ], 'ActivityStreamController@index');
+
+        $results = [
+            'activities'  => $this->getActivityStream(),
+            'columns'     => $table['columns'],
+            'columnsLink' => $table['columns_link'],
+        ];
+
+        return $results;
     }
 
-
-    /**
-     * Calculate and convert to a human readable format
-     *
-     * @param $value
-     * @return mixed
-     */
-    public function getCreatedAtAttribute($value)
-    {
-        return Tools::timeDifference($value);
-    }
 
     /**
      * Get activity logs
      *
      * @return string
      */
-    public static function getActivityStream()
+    public function getActivityStream()
     {
-        $query = ActivityStream::orderBy('created_at', 'DESC')
+        $query = $this->streamModel->orderBy('created_at', 'DESC')
             ->paginate(config('testplanner.tables.pagination.activity_stream'));
 
-        $results['query']       = $query;
-        $results['total_count'] = self::count();
-
-        return $results;
+        return $query;
     }
 
     /**
@@ -108,10 +78,10 @@ class ActivityStream extends Model
      * @param null $status
      * @return bool
      */
-    public static function saveActivityStream($plan, $type, $status = null)
+    public function saveActivityStream($plan, $type, $status = null)
     {
         try {
-            $assigneeName = User::getUserFirstName($plan['creator_id']);
+            $assigneeName = Tools::getUserFirstName($plan['creator_id']);
             $userId       = $plan['creator_id'];
 
             if ($type != 'plan') {
@@ -129,7 +99,7 @@ class ActivityStream extends Model
                     } elseif ($status == 'update') {
                         $message = config('testplanner.messages.plan.update');
                     }
-                break;
+                    break;
 
                 case 'ticket-response':
                     if ($status == 'progress' || $status == 'update') {
@@ -137,13 +107,13 @@ class ActivityStream extends Model
                     } else if ($status == 'complete') {
                         $message = config('testplanner.messages.plan.response_resolved');
                     }
-                break;
+                    break;
             }
 
             if ($status == 'new') {
                 $activity = $assigneeName . ' ' . $message . ' ' . $planLink;
 
-                $comment = self::create([
+                $comment = $this->commentModel->create([
                     'plan_id'  => $plan['plan_id'],
                     'user_id'  => $userId,
                     'activity' => $activity
@@ -160,12 +130,21 @@ class ActivityStream extends Model
     }
 
     /**
-     * One activity stream could have multiple comments
+     * Create comment in activity stream
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @param $asId
+     * @param $userId
+     * @param $comment
+     * @return bool
      */
-    public function comments()
+    public function saveActivityComment($asId, $userId, $comment)
     {
-        return $this->hasMany('App\ActivityComments', 'as_id', 'id');
+        $results = $this->streamModel->create([
+            'as_id'   => $asId,
+            'user_id' => $userId,
+            'comment' => $comment
+        ]);
+
+        return $results;
     }
 }

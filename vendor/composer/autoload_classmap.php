@@ -11,7 +11,6 @@ return array(
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
     'CreatePlansTable' => $baseDir . '/database/migrations/2015_10_22_225951_create_plans_table.php',
     'CreateRolesTable' => $baseDir . '/database/migrations/2015_11_02_051454_create_roles_table.php',
-    'CreateSystemTable' => $baseDir . '/database/migrations/2016_01_18_221426_create_system_table.php',
     'CreateTestersTable' => $baseDir . '/database/migrations/2015_10_28_215101_create_testers_table.php',
     'CreateTicketsResponsesTable' => $baseDir . '/database/migrations/2015_10_29_043504_create_tickets_responses_table.php',
     'CreateTicketsTable' => $baseDir . '/database/migrations/2015_10_22_230005_create_tickets_table.php',

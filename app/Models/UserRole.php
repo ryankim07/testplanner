@@ -1,4 +1,4 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class UserRole
@@ -12,10 +12,6 @@
  */
 
 use Illuminate\Database\Eloquent\Model;
-
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
-use PhpSpec\Exception\Exception;
 
 class UserRole extends Model
 {
@@ -43,11 +39,11 @@ class UserRole extends Model
      */
     protected $guarded = array('id');
 
-    public static function addRoles($userId, $selectedRoles)
+    public function addRoles($userId, $selectedRoles)
     {
         try {
             foreach ($selectedRoles as $key => $id) {
-                UserRole::create([
+                $this->create([
                     'user_id' => $userId,
                     'role_id' => $id
                 ]);

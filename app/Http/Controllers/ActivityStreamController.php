@@ -12,23 +12,29 @@
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
-use App\Facades\Tools;
+use App\Helpers\Tools;
 
-use App\User;
-use App\ActivityStream;
-use App\ActivityComments;
-use App\Tables;
+use App\Api\ActivityStreamApi;
+use App\Api\Users;
 
 use Auth;
 
 class ActivityStreamController extends Controller
 {
     /**
-     * DashboardController constructor.
+     * @var Activity Stream
      */
-    public function __construct()
+    protected $streamApi;
+
+    /**
+     * ActivityStreamController constructor
+     *
+     * @param ActivityStreamApi $streamApi
+     */
+    public function __construct(ActivityStreamApi $streamApi)
     {
         $this->middleware('auth');
+        $this->streamApi = $streamApi;
     }
 
     /**
@@ -38,33 +44,28 @@ class ActivityStreamController extends Controller
      */
     public function index()
     {
-        $table = Tables::prepare('order', [
-            'activity',
-            'created_at'
-        ], 'ActivityStreamController@index');
+        $streams = $this->streamApi->displayActivityStream();
 
-        return view('pages.testplanner.view_all_activities', [
-            'activities'      => ActivityStream::paginate(config('testplanner.tables.pagination.activity_stream')),
-            'totalActivities' => ActivityStream::count(),
-            'columns'         => $table['columns'],
-            'columnsLink'     => $table['columns_link'],
-            'link'            => ''
-        ]);
+        return view('pages.testplanner.view_all_activities', $streams);
     }
 
     /**
-     * Create comment in activity stream
+     * Save comment in activity stream
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function save(Request $request)
     {
-        $results = ActivityComments::saveActivityComment($request->get('as_id'), Auth::user()->id, $request->get('comment'));
+        $asId    = $request->get('as_id');
+        $userId  = Auth::user()->id;
+        $comment = $request->get('comment');
+
+        $results = $this->streamApi->saveActivityComment($asId, $userId, $comment);
 
         return response()->json([
             "status"      => "success",
-            "commentator" => User::getUserFirstName(Auth::user()->id),
+            "commentator" => $this->userApi->getUserFirstName(Auth::user()->id),
             "comment"     => $results->comment,
             "created_at"  => Tools::dateConverter($results->created_at)
         ]);

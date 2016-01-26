@@ -1,7 +1,7 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
- * Class ActivityComments
+ * Class Comments
  *
  * Model
  *
@@ -12,11 +12,8 @@
  */
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
-use App\User;
-
-class ActivityComments extends Model
+class Comments extends Model
 {
     /**
      * The database table used by the model
@@ -51,13 +48,6 @@ class ActivityComments extends Model
     protected $appends = array('user_first_name');
 
     /**
-     * Model event to change data before saving to database
-     */
-    public static function boot()
-    {
-    }
-
-    /**
      * Retrieve custom accessor
      *
      * @return mixed
@@ -76,26 +66,6 @@ class ActivityComments extends Model
     public function getCreatedAtAttribute($value)
     {
         return date('m/d/Y', strtotime($value));
-    }
-
-
-    /**
-     * Create comment in activity stream
-     *
-     * @param $asId
-     * @param $userId
-     * @param $comment
-     * @return bool
-     */
-    public static function saveActivityComment($asId, $userId, $comment)
-    {
-        $results = self::create([
-            'as_id'   => $asId,
-            'user_id' => $userId,
-            'comment' => $comment
-        ]);
-
-        return $results;
     }
 
     /**

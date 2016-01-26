@@ -1,4 +1,4 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class Tickets
@@ -46,20 +46,13 @@ class Tickets extends Model
     protected $guarded = array('id');
 
     /**
-     * Model event to change data before saving to database
-     */
-    public static function boot()
-    {
-    }
-
-    /**
      * Update tickets from built plan
      *
      * @param $planId
      * @param $ticketsData
      * @return bool
      */
-    public static function updateBuiltTickets($planId, $ticketsData)
+    public function updateBuiltTickets($planId, $ticketsData)
     {
         $redirect = false;
         $errorMsg = '';
@@ -106,7 +99,7 @@ class Tickets extends Model
      * @param $ticketsData
      * @param $ticketId
      */
-    public static function removeTicketFromSession($ticketsData, $ticketId)
+    public function removeTicketFromSession($ticketsData, $ticketId)
     {
         foreach($ticketsData as $ticket) {
             $modifiedData[$ticket['id']] = $ticket;

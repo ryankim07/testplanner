@@ -20,12 +20,12 @@ use App\Http\Requests\PlanUpdateFormRequest;
 use App\Facades\Tools;
 use App\Facades\Email;
 
-use App\Plans;
+use App\Api\PlansApi;/*
 use App\Tickets;
 use App\Testers;
-use App\ActivityStream;
-use App\User;
-use App\Tables;
+use App\ActivityStream;*/
+
+use App\Models\User;
 
 use Auth;
 use Session;
@@ -35,14 +35,23 @@ class PlansController extends Controller
     const CONSTANT = 'constant value';
 
     /**
+     * @var PlansApi
+     */
+    protected $plansApi;
+    protected $userModel;
+
+    /**
      * PlansController constructor.
      */
-    public function __construct()
+    public function __construct(PlansApi $plansApi, User $user)
     {
         $this->middleware('auth');
         $this->middleware('testplanner', [
             'only' => ['build', 'edit', 'update', 'review', 'save']
         ]);
+
+        $this->plansApi  = $plansApi;
+        $this->userModel = $user;
     }
 
     /**
@@ -118,45 +127,10 @@ class PlansController extends Controller
     public function store(PlansFormRequest $request)
     {
         // Save data to session
-        Session::put('mophie_testplanner.users', User::all()->toArray());
+        Session::put('mophie_testplanner.users', $this->userModel->all()->toArray());
         Session::put('mophie_testplanner.plan', array_except($request->all(), '_token'));
 
         return redirect('ticket/build');
-    }
-
-    /**
-     * Update built plan
-     *
-     * @param $planId
-     * @param PlanUpdateFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function updateBuiltPlan($planId, PlanUpdateFormRequest $request)
-    {
-        $testerData = $request->get('browser_testers');
-
-        $planData      = Plans::updateBuiltPlanDetails($planId, $request);
-        $ticketsUpdate = Tickets::updateBuiltTickets($planId, $request->get('tickets_obj'));
-        $testersUpdate = Testers::updateBuiltTesters($planId, $testerData);
-
-        if ((count($planData) > 0) && $ticketsUpdate && $testersUpdate) {
-            // Log to activity stream
-            ActivityStream::saveActivityStream($planData, 'plan', 'update');
-
-            // Mail all test browsers
-            Email::sendEmail('plan-updated', array_merge([
-                'plan_id'     => $planId,
-                'description' => $request->get('description')], [
-                    'testers' => $testerData
-                ]
-            ));
-
-            $msg = config('testplanner.messages.plan.build_update_error');
-        } else {
-            $msg = config('testplanner.messages.plan.build_update');
-        }
-
-        return redirect('dashboard')->with('flash_success', $msg);
     }
 
     /**
@@ -167,38 +141,9 @@ class PlansController extends Controller
      */
     public function view($id)
     {
-        $plan    = Plans::find($id);
-        $tickets = unserialize($plan->tickets()->first()->tickets);
+        $plan = $this->plansApi->viewPlan($id);
 
-        // Render tickets
-        $ticketsHtml = '';
-        foreach($tickets as $ticket) {
-            $ticketsHtml .= view('pages/testplanner/partials/tickets', [
-                'mode'             => 'edit',
-                'ticket'           => $ticket,
-                'addTicketBtnType' => 'btn-custom'
-            ])->render();
-        }
-
-        // Get Jira versions
-        $jiraVersions = Tools::jiraVersions();
-
-        // Get Jira issues
-        $jiraIssues = Tools::jiraIssues();
-
-        return view('pages.testplanner.view', [
-            'plan' => [
-                'id'            => $plan->id,
-                'description'   => $plan->description,
-                'started_at'    => Tools::dateConverter($plan->started_at),
-                'expired_at'    => Tools::dateConverter($plan->expired_at),
-                'tickets_html'  => $ticketsHtml,
-                'users'         => User::all()->toArray(),
-                'testers'       => json_encode($plan->testers()->get()->toArray()),
-                'jira_versions' => json_encode($jiraVersions),
-                'jira_issues'   => json_encode($jiraIssues)
-            ]
-        ]);
+        return view('pages.testplanner.view', $plan);
     }
 
     /**
@@ -208,55 +153,10 @@ class PlansController extends Controller
      */
     public function viewAllCreated(Request $request)
     {
-        $user  = Auth::user();
-        $roles = $user->role()->get();
-
-        // If user has root privileges, get all the plans that were created.
-        // Otherwise just get the plans created with administrator privilege.
-        foreach($roles as $role) {
-            $roleName = $role->name;
-            $userId = $roleName == "root" ? 0 : $user->id;
-            break;
-        }
-
-        // Display selected creator of the plan
         $adminId = $request->get('admin');
-        if (isset($adminId)) {
-            $userId = $adminId;
-        }
+        $plans   = $this->plansApi->getAllCreated($adminId);
 
-        // Administrators who created plans
-        $admins = User::getAllUsersByRole($roleName);
-
-        // Set up dropdown list of all admins
-        $adminsList[0] = 'All';
-        foreach($admins as $admin) {
-            $adminsList[$admin->id] = $admin->first_name;
-        }
-
-        // Prepare columns to be shown
-        $table = Tables::prepare('order', [
-            'description',
-            'first_name',
-            'last_name',
-            'status',
-            'created_at',
-            'updated_at',
-            'edit'
-        ], 'PlansController@index');
-
-        $query = Plans::getAllPlans($table['sorting']['sortBy'], $table['sorting']['order'], $userId);
-
-        return view('pages.testplanner.view_all_created', [
-            'userId'      => $userId,
-            'role'        => $roleName,
-            'plans'       => isset($query) ? $query->paginate(config('testplanner.tables.pagination.lists')) : '',
-            'totalPlans'  => isset($query) ? Plans::count() : 0,
-            'columns'     => $table['columns'],
-            'columnsLink' => $table['columns_link'],
-            'link'        => '',
-            'adminsList'  => isset($adminsList) ? $adminsList : ''
-        ]);
+        return view('pages.testplanner.view_all_created', $plans);
     }
 
     /**
@@ -268,27 +168,9 @@ class PlansController extends Controller
     public function viewAllAssigned()
     {
         $user  = Auth::user();
+        $plans = $this->plansApi->getAllAssigned($user->id, 'created_at', 'DESC');
 
-        // Prepare columns to be shown
-        $table = Tables::prepare('order', [
-            'description',
-            'first_name',
-            'last_name',
-            'status',
-            'created_at',
-            'updated_at',
-            'respond'
-        ], 'PlansController@index');
-
-        $query = Plans::getAllAssigned($user->id, $table['sorting']['sortBy'], $table['sorting']['order']);
-
-        return view('pages.testplanner.view_all_assigned', [
-            'plans'       => !empty($query) ? $query->paginate(config('testplanner.tables.pagination.lists')) : '',
-            'totalPlans'  => !empty($query) ? Plans::count() : 0,
-            'columns'     => $table['columns'],
-            'columnsLink' => $table['columns_link'],
-            'link'        => ''
-        ]);
+        return view('pages.testplanner.view_all_assigned', $plans);
     }
 
     /**
@@ -299,34 +181,9 @@ class PlansController extends Controller
     public function viewAllResponses()
     {
         $user  = Auth::user();
+        $plans = $this->plansApi->getAllResponses($user->id, 'created_at', 'DESC');
 
-        // Prepare columns to be shown
-        $table = Tables::prepare('order', [
-            'description',
-            'status',
-            'created_at',
-            'updated_at',
-            'testers',
-            'view'
-        ], 'PlansController@index');
-
-        $query       = Plans::getAllResponses($user->id, $table['sorting']['sortBy'], $table['sorting']['order']);
-        $optionsHtml = [];
-
-        // Setup up dropdown list of testers
-        foreach ($query->get() as $plan) {
-            $testers                  = Plans::getTestersByPlanId($plan['id']);
-            $optionsHtml[$plan['id']] = Tools::dropDownOptionsHtml($testers);
-        }
-
-        return view('pages.testplanner.view_all_responses', [
-            'plans'       => !empty($query) ? $query->paginate(config('testplanner.tables.pagination.lists')) : '',
-            'totalPlans'  => !empty($query) ? Plans::count() : 0,
-            'testers'     => $optionsHtml,
-            'columns'     => $table['columns'],
-            'columnsLink' => $table['columns_link'],
-            'link'        => ''
-        ]);
+        return view('pages.testplanner.view_all_responses', $plans);
     }
 
     /**
@@ -338,52 +195,9 @@ class PlansController extends Controller
      */
     public function response($planId, $selectedUserId)
     {
-        // Plan details
-        $planDetails = Plans::find($planId);
+        $response = $this->plansApi->viewResponse($planId, $selectedUserId);
 
-        // Show other users that might have submitted responses
-        $testers = Plans::getTestersByPlanId($planId);
-
-        $mode           = 'response';
-        $tabHeaderHtml  = '';
-        $tabBodyHtml    = '';
-        $totalResponses = 0;
-
-        foreach ($testers as $tester) {
-            $testerId        = $tester->user_id;
-            $testerFirstName = $tester->user_first_name;
-
-            // Render users tab
-            $tabHeaderHtml .= view('pages/testplanner/partials/response_respond/tab_header_users', [
-                'selectedUserId'  => $selectedUserId,
-                'testerId'        => $testerId,
-                'testerFirstName' => $testerFirstName
-            ])->render();
-
-            // Render plan detais
-            $plan = Plans::getTesterPlanResponse($planId, $testerId);
-
-            if (!empty($plan['ticket_resp_id'])) {
-                $totalResponses++;
-            }
-
-            $tabBodyHtml .= view('pages/testplanner/partials/response_respond/tab_body', [
-                'mode'            => $mode,
-                'selectedUserId'  => $selectedUserId,
-                'testerId'        => $testerId,
-                'testerFirstName' => $testerFirstName,
-                'plan'            => $plan,
-                'totalResponses'  => $totalResponses,
-                'browsers'        => Tools::getTesterBrowserImg($tester->browsers)
-            ])->render();
-        }
-
-        return view('pages.testplanner.response_respond_main', [
-            'mode'           => $mode,
-            'plan'           => ['description' => $planDetails->description],
-            'tabHeaderHtml'  => $tabHeaderHtml,
-            'tabBodyHtml'    => $tabBodyHtml
-        ]);
+        return view('pages.testplanner.response_respond_main', $response);
     }
 
     /**
@@ -394,24 +208,10 @@ class PlansController extends Controller
      */
     public function respond($planId)
     {
-        $user     = Auth::user();
-        $plan     = Plans::getTesterPlanResponse($planId, $user->id);
-        $mode     = 'respond';
-        $planHtml = '';
+        $user    = Auth::user();
+        $respond = $this->plansApi->respond($planId, $user->id);
 
-        $planHtml .= view('pages/testplanner/partials/response_respond/plan_details', ['plan' => $plan])
-            ->render();
-
-        $planHtml .= view('pages/testplanner/partials/response_respond/plan_tickets', [
-            'mode' => $mode,
-            'plan' => $plan
-        ])->render();
-
-        return view('pages.testplanner.response_respond_main', [
-            'mode'     => $mode,
-            'plan'     => $plan,
-            'planHtml' => $planHtml,
-        ]);
+        return view('pages.testplanner.response_respond_main', $respond);
     }
 
     /**
@@ -469,6 +269,41 @@ class PlansController extends Controller
     }
 
     /**
+     * Update built plan
+     *
+     * @param $planId
+     * @param PlanUpdateFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateBuiltPlan($planId, PlanUpdateFormRequest $request)
+    {
+        $testerData = $request->get('browser_testers');
+
+        $planData      = Plans::updateBuiltPlanDetails($planId, $request);
+        $ticketsUpdate = Tickets::updateBuiltTickets($planId, $request->get('tickets_obj'));
+        $testersUpdate = Testers::updateBuiltTesters($planId, $testerData);
+
+        if ((count($planData) > 0) && $ticketsUpdate && $testersUpdate) {
+            // Log to activity stream
+            ActivityStream::saveActivityStream($planData, 'plan', 'update');
+
+            // Mail all test browsers
+            Email::sendEmail('plan-updated', array_merge([
+                'plan_id'     => $planId,
+                'description' => $request->get('description')], [
+                    'testers' => $testerData
+                ]
+            ));
+
+            $msg = config('testplanner.messages.plan.build_update_error');
+        } else {
+            $msg = config('testplanner.messages.plan.build_update');
+        }
+
+        return redirect('dashboard')->with('flash_success', $msg);
+    }
+
+    /**
      * Search functionality for each table
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
@@ -493,7 +328,7 @@ class PlansController extends Controller
         }
 
         // Administrators who created plans
-        $admins = User::getAllUsersByRole($roleName);
+        $admins = $this->userModel->getAllUsersByRole($roleName);
 
         // Set up dropdown list of all admins
         $adminsList[0] = 'All';

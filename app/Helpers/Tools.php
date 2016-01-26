@@ -18,6 +18,7 @@ use Log;
 
 class Tools
 {
+
     /**
      * Generate random numbers according to length
      *
@@ -186,15 +187,25 @@ class Tools
     }
 
     /**
-     * Restructure testers dropdown options
+     * Restructure users dropdown options
      *
-     * @param $testers
+     * @param $list
+     * @param $type
      * @return mixed
      */
-    public function dropDownOptionsHtml($testers)
+    public function getUsersDropdrownOptions($list, $type)
     {
-        foreach ($testers as $tester) {
-            $results[$tester->user_id] = $tester->user_first_name . ' - ' . $this->capitalizeBrowserNames($tester->browsers);
+        // Set up dropdown list of all admins
+        $results[0] = 'All';
+
+        foreach($list as $each) {
+            if ($type == 'admin') {
+                $results[$each->id] = $each->first_name;
+            } elseif ($type == 'testers') {
+                $results[$each->user_id] = $each->user_first_name . ' - ' . $each->user_browsers;
+            } else {
+                $results[$each->user_id] = $each->first_name;
+            }
         }
 
         return $results;

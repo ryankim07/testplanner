@@ -18,11 +18,11 @@
 
         @include('errors.list')
 
-        <!-- ASSIGNED OR ADMIN CREATED PLANS -->
+                <!-- ASSIGNED OR ADMIN CREATED PLANS -->
 
         @if(!empty($plans))
             <div class="col-xs-12 col-md-7">
-                @foreach($plans as $type => $plan)
+                @foreach($plans as $type => $group)
                     <div class="row">
                         <div class="panel panel-info" id="{!! $type !!}">
                             <div class="panel-heading">
@@ -33,7 +33,7 @@
                                 @endif
                             </div>
                             <div class="panel-body">
-                                @if(count($plan) > 0)
+                                @if(count($group) > 0)
                                     <div class="table-responsive dashboard-table">
                                         <table class="table">
                                             <thead>
@@ -46,7 +46,6 @@
                                                 <th class="text-center">Status</th>
                                                 <th>Created</th>
                                                 @if($type == 'admin_created_plans')
-                                                    <th>Testers</th>
                                                     <th class="text-center">View</th>
                                                 @else
                                                     <th class="text-center">Respond</th>
@@ -54,50 +53,47 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($plan as $attr)
+                                            @foreach($group['plans']->get() as $plan)
                                                 <tr class="{!! $type !!}_rows">
-                                                    <td>{!! $attr['description'] !!}</td>
+                                                    <td>{!! $plan->description !!}</td>
                                                     @if($type != 'admin_created_plans')
-                                                        <td>{!! $attr['first_name'] !!}</td>
-                                                        <td>{!! $attr['last_name'] !!}</td>
+                                                        <td>{!! $plan->first_name !!}</td>
+                                                        <td>{!! $plan->last_name !!}</td>
                                                     @endif
                                                     <td class="text-center">
                                                         @if($type == 'admin_created_plans')
 
                                                             <?php
-                                                                if($attr['status'] == 'complete') {
-                                                                    $label = 'label-default';
-                                                                } else if($attr['status'] == 'progress') {
-                                                                    $label = 'label-warning';
-                                                                } else {
-                                                                    $label = 'label-success';
-                                                                }
+                                                            if($plan->status == 'complete') {
+                                                                $label = 'label-default';
+                                                            } else if($plan->status == 'progress') {
+                                                                $label = 'label-warning';
+                                                            } else {
+                                                                $label = 'label-success';
+                                                            }
                                                             ?>
 
-                                                            <span class="label {!! $label !!}">{!! $attr['status'] !!}</span>
+                                                            <span class="label {!! $label !!}">{!! $plan->status !!}</span>
                                                         @else
 
                                                             <?php
-                                                                if($attr['ticket_response_status'] == 'complete') {
-                                                                    $trLabel = 'label-default';
-                                                                } else if($attr['ticket_response_status'] == 'progress') {
-                                                                    $trLabel = 'label-warning';
-                                                                } else {
-                                                                    $trLabel = 'label-success';
-                                                                }
+                                                            if($plan->ticket_response_status == 'complete') {
+                                                                $trLabel = 'label-default';
+                                                            } else if($plan->ticket_response_status == 'progress') {
+                                                                $trLabel = 'label-warning';
+                                                            } else {
+                                                                $trLabel = 'label-success';
+                                                            }
                                                             ?>
 
-                                                            <span class="label {!! $trLabel !!}">{!! isset($attr['ticket_response_status']) ? $attr['ticket_response_status'] : 'new' !!}</span>
+                                                            <span class="label {!! $trLabel !!}">{!! isset($plan->ticket_response_status) ? $plan->ticket_response_status : 'new' !!}</span>
                                                         @endif
                                                     </td>
-                                                    <td>{!! Tools::dateConverter($attr['created_at']) !!}</td>
+                                                    <td>{!! Tools::dateConverter($plan->created_at) !!}</td>
                                                     @if($type == 'admin_created_plans')
-                                                        <td>
-                                                            {!! Form::select('testers', $attr['testers'], null, ['class' => 'form-control input-sm testers', 'data-url' => route('plan.view.response', $attr['id'])]) !!}
-                                                        </td>
                                                         <td class="text-center"><a href="#" class="plan-link"><i class="fa fa-search fa-lg"></i></a></td>
                                                     @else
-                                                        <td class="text-center"><a href="{!! URL::route('plan.respond', $attr['id']) !!}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
+                                                        <td class="text-center"><a href="{!! URL::route('plan.respond', $plan->id) !!}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
                                                     @endif
 
                                                 </tr>
@@ -141,62 +137,62 @@
 
         <div class="col-xs-12 col-md-5">
 
-            {!! Form::open(['route' => 'activity.comment.save', 'class' => 'form-horizontal', 'id' => 'activity-stream-form']) !!}
+        {!! Form::open(['route' => 'activity.comment.save', 'class' => 'form-horizontal', 'id' => 'activity-stream-form']) !!}
 
-            <div class="panel panel-info" id="activity-stream">
-                <div class="panel-heading">Activity Stream</div>
-                <div class="panel-body">
-                    @if($totalActivities == 0)
-                        <p><span>There are no activities at the current moment.</span></p>
-                    @else
-                        @foreach($activities as $stream)
-                            <div class="row activity-stream nested-block">
-                                <div class="col-xs-2 col-md-2"><img src="images/mophie-user.jpeg" alt="mophie-user" class="" width="40" height="40"></div>
-                                <div class="col-xs-10 col-md-10">
-                                    <div class="row">
-                                        {!! $stream['custom_activity'] !!}
+        <div class="panel panel-info" id="activity-stream">
+        <div class="panel-heading">Activity Stream</div>
+        <div class="panel-body">
+            @if(count($activities) == 0)
+                <p><span>There are no activities at the current moment.</span></p>
+            @else
+                @foreach($activities as $stream)
+                    <div class="row activity-stream nested-block">
+                        <div class="col-xs-2 col-md-2"><img src="images/mophie-user.jpeg" alt="mophie-user" class="" width="40" height="40"></div>
+                        <div class="col-xs-10 col-md-10">
+                            <div class="row">
+                                {!! $stream['custom_activity'] !!}
+                            </div>
+                            <div class="row activity-comment-line-block">
+                                <ul class="list-styled">
+                                    @foreach($stream['comments'] as $eachComment)
+                                        <li class="activity-comment-line"><em>{!! $eachComment['comment'] !!} (commented by {!! $eachComment['user_first_name'] !!} on {!! $eachComment['created_at'] !!})</em></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <div class="row">
+                                <ul class="list-inline">
+                                    <li><i class="fa fa-clock-o fa-lg"></i> {!! $stream['created_at'] !!}</li>
+                                    <li><i class="fa fa-commenting-o fa-lg"></i> <a href="#" class="activity-comment-link">Comment</a></li>
+                                </ul>
+                            </div>
+                            <div class="row activity-comment-area">
+                                <div class="form-group">
+                                    <div class="col-xs-8 col-md-8">
+                                        {!! Form::textarea('activity_comment', null, ['class' => 'form-control activity-comment', 'rows' => '4']) !!}
                                     </div>
-                                    <div class="row activity-comment-line-block">
-                                        <ul class="list-styled">
-                                            @foreach($stream['comments'] as $eachComment)
-                                                <li class="activity-comment-line"><em>{!! $eachComment['comment'] !!} (commented by {!! $eachComment['user_first_name'] !!} on {!! $eachComment['created_at'] !!})</em></li>
-                                            @endforeach
-                                        </ul>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-8 col-md-8">
+                                        {!! Form::button('Add', ['class' => 'btn btn-primary btn-sm activity-comment-add']) !!}
+                                        {!! Form::button('Cancel', ['class' => 'btn btn-primary btn-sm activity-comment-cancel']) !!}
                                     </div>
-                                    <div class="row">
-                                        <ul class="list-inline">
-                                            <li><i class="fa fa-clock-o fa-lg"></i> {!! $stream['created_at'] !!}</li>
-                                            <li><i class="fa fa-commenting-o fa-lg"></i> <a href="#" class="activity-comment-link">Comment</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="row activity-comment-area">
-                                        <div class="form-group">
-                                            <div class="col-xs-8 col-md-8">
-                                                {!! Form::textarea('activity_comment', null, ['class' => 'form-control activity-comment', 'rows' => '4']) !!}
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-xs-8 col-md-8">
-                                                {!! Form::button('Add', ['class' => 'btn btn-primary btn-sm activity-comment-add']) !!}
-                                                {!! Form::button('Cancel', ['class' => 'btn btn-primary btn-sm activity-comment-cancel']) !!}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {!! Form::hidden('as_id', $stream['id'], ['class' => 'as_id']) !!}
-
                                 </div>
                             </div>
-                        @endforeach
-                    @endif
-                </div>
-            </div>
 
-            {!! Form::close() !!}
+                            {!! Form::hidden('as_id', $stream['id'], ['class' => 'as_id']) !!}
 
-            @if($totalActivities > 0)
-                {!! $activities->appends($link)->render() !!}
+                        </div>
+                    </div>
+                @endforeach
             @endif
+        </div>
+        </div>
+
+        {!! Form::close() !!}
+
+        @if(count($activities) > 0)
+            {!! $activities->appends('')->render() !!}
+        @endif
 
         </div>
     </div>

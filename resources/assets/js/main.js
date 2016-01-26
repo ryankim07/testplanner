@@ -61,21 +61,6 @@ function loadDashboardJs(url)
     $('#dashboard-main .activity-comment-add').prop('disabled', true);
 
 
-    // Prepare link
-    $('#dashboard-main .admin_created_plans_rows').each(function() {
-        var testerId = $(this).find('.testers option:nth-child(1)').val();
-        var route = $(this).find('.testers').data('url') + '/' + testerId;
-        var link = $(this).find('.plan-link').prop('href', route);
-    });
-
-    // Change viewer id link
-    $('#dashboard-main').on('change', '.testers', function() {
-        var selectedTesterId = $(this).val();
-        var route = $(this).data('url') + '/' + selectedTesterId;
-
-        $(this).closest('td').next('td').find('.plan-link').prop('href', route);
-    });
-
     // Toggle comment to show or hide
     $('#dashboard-main').on('click', '.activity-comment-link', function(e) {
         e.preventDefault();

@@ -33,11 +33,12 @@ class UserResponseFormRequest extends Request
 	public function rules()
     {
         return [
-			'role'       => 'required',
-			'first_name' => 'required',
-			'last_name'  => 'required',
-			'email'      => 'required|email',
-			'password'   => 'required|confirmed|min:6'
+			'role'       			=> 'required',
+			'first_name' 			=> 'required',
+			'last_name'  			=> 'required',
+			'email'      			=> 'required|email',
+			'password'   			=> 'required|confirmed|min:6',
+			'password_confirmation' => 'required'
         ];
     }
 
@@ -55,8 +56,8 @@ class UserResponseFormRequest extends Request
 			'email.required'      => 'Email is required',
 			'email.email'         => 'Enter correct email address',
 			'password.required'   => 'Password is required',
-			'password.confirmed'  => 'Password confirmation is required',
+			'password.confirmed'  => 'Password confirmation do not match',
 			'password.min'        => 'Password must have a length of 6 characters'
-        ];
+		];
 	}
 }

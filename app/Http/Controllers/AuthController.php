@@ -13,9 +13,9 @@ use PhpSpec\Exception\Exception;
 
 use App\Facades\Tools;
 
-use App\User;
-use App\UserRole;
-use App\Role;
+use App\Models\User,
+    App\Models\UserRole,
+    App\Models\Role;
 
 use Auth;
 use Session;
