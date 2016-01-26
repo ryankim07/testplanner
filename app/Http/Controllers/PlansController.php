@@ -20,10 +20,9 @@ use App\Http\Requests\PlanUpdateFormRequest;
 use App\Facades\Tools;
 use App\Facades\Email;
 
-use App\Api\PlansApi;/*
-use App\Tickets;
-use App\Testers;
-use App\ActivityStream;*/
+use App\Api\PlansApi,
+    App\Api\TestersApi,
+    App\Api\TicketsApi;
 
 use App\Models\User;
 
@@ -207,9 +206,9 @@ class PlansController extends Controller
      * @param $selectedUserId
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
-    public function response($planId, $selectedUserId)
+    public function response($planId)
     {
-        $response = $this->plansApi->viewResponse($planId, $selectedUserId);
+        $response = $this->plansApi->viewResponse($planId);
 
         return view('pages.testplanner.response_respond_main', $response);
     }

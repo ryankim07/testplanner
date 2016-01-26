@@ -7,7 +7,7 @@
 |
 --}}
 
-    <div id="{!! $testerFirstName !!}" class="tab-pane fade {!! $testerId == $selectedUserId ? 'in active' : '' !!}">
+    <div id="{!! $testerFirstName !!}" class="">
         @include('pages/testplanner/partials/response_respond/plan_details', [
             'plan'     => $plan,
             'browsers' => $browsers

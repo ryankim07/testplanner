@@ -66,6 +66,10 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
+            @if($mode == 'repsonse')
+                $('.nav-tabs li:first-child').attr.('class', 'active');
+                $('.tab-content div:first-child').attr.('class', 'tab-pane fade in active')
+            @endif
             // Respond functionalities
             loadResponseRespondJs();
 

@@ -18,12 +18,14 @@ use PhpSpec\Exception\Exception;
 
 use App\Facades\Tools;
 
+use App\Models\Testers;
+
 class TestersApi
 {
     /**
-     * @var Plans
+     * @var Testers
      */
-    protected $testersModel;
+    protected $model;
 
     /**
      * TestersApi constructor
@@ -32,7 +34,7 @@ class TestersApi
      */
     public function __construct(Testers $testers)
     {
-        $this->testersModel = $testers;
+        $this->model = $testers;
     }
 
     /**
@@ -57,7 +59,7 @@ class TestersApi
             foreach($testersData as $tester) {
                 // Get primary key of testers table
                 $id = '';
-                $query = $this->testersModel->where('plan_id', '=', $planId)
+                $query = $this->model->where('plan_id', '=', $planId)
                     ->where('user_id', '=', $tester['id'])
                     ->first();
 
@@ -66,7 +68,7 @@ class TestersApi
                 }
 
                 // Create new or update
-                $this->testersModel->updateOrCreate([
+                $this->model->updateOrCreate([
                     'id' => $id], [
                     'plan_id'  => $planId,
                     'user_id'  => $tester['id'],

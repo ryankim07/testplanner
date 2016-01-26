@@ -91,7 +91,7 @@
                                                     </td>
                                                     <td>{!! Tools::dateConverter($plan->created_at) !!}</td>
                                                     @if($type == 'admin_created_plans')
-                                                        <td class="text-center"><a href="#" class="plan-link"><i class="fa fa-search fa-lg"></i></a></td>
+                                                        <td class="text-center"><a href="{!! URL::route('plan.view.response', $plan->id) !!}"><i class="fa fa-search fa-lg"></i></a></td>
                                                     @else
                                                         <td class="text-center"><a href="{!! URL::route('plan.respond', $plan->id) !!}"><i class="fa fa-commenting-o fa-lg"></i></a></td>
                                                     @endif

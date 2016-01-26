@@ -110,7 +110,7 @@ Route::post('activity/save-comment', ['as' => 'activity.comment.save', 'uses' =>
  *
  */
 Route::get('plan/view/{id}', ['as' => 'plan.view', 'uses' => 'PlansController@view']);
-Route::get('plan/response/{plan_id}/{user_id}', ['as' => 'plan.view.response', 'uses' => 'PlansController@response']);
+Route::get('plan/response/{plan_id}', ['as' => 'plan.view.response', 'uses' => 'PlansController@response']);
 Route::get('plan/respond/{plan_id}', ['as' => 'plan.respond', 'uses' => 'PlansController@respond']);
 Route::get('plan/view-all-assigned', ['as' => 'plan.view.all.assigned', 'uses' => 'PlansController@viewAllAssigned']);
 
