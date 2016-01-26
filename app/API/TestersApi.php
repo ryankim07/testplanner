@@ -1,5 +1,15 @@
 <?php namespace App\Api;
 
+/**
+ * Class TestersApi
+ *
+ * Custom Model
+ *
+ * @author     Ryan Kim
+ * @category   Mophie
+ * @package    Test Planner
+ * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
+ */
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

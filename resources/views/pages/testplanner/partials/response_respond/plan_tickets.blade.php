@@ -6,6 +6,8 @@
 | This template is used when rendering tickets.
 |
 --}}
+<?php var_dump($plan) ?>
+
     @foreach($plan['tickets'] as $ticket)
         <div class="page-header"></div>
         <div class="row nested-block ticket-panel">
@@ -46,22 +48,22 @@
                     </div>
                 @else
                     <?php
-                        $passed = '';
-                        $failed = '';
-                        if (isset($ticket['test_status'])) {
-                            $passed = $ticket['test_status'] == 1 ? true : '';
-                            $failed = $ticket['test_status'] == 0 ? true : '';
-                        }
+                    $passed = '';
+                    $failed = '';
+                    if (isset($ticket['test_status'])) {
+                        $passed = $ticket['test_status'] == 1 ? true : '';
+                        $failed = $ticket['test_status'] == 0 ? true : '';
+                    }
                     ?>
 
                     <p>
-                        <span>
-                        @if($passed)
-                            Passed
-                        @elseif($failed)
-                            Failed
-                        @endif
-                        </span>
+                            <span>
+                            @if($passed)
+                                    Passed
+                                @elseif($failed)
+                                    Failed
+                                @endif
+                            </span>
                     </p>
                 @endif
             </div>

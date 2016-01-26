@@ -6,6 +6,7 @@
 | This template is used when rendering plan details.
 |
 --}}
+
     <div class="row nested-block">
         <legend>Plan Details</legend>
         <div class="col-xs-12 col-md-3">

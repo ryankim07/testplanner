@@ -1,7 +1,7 @@
 <?php namespace App\Api;
 
 /**
- * Class Tables
+ * Class TablesApi
  *
  * Custom Model
  *

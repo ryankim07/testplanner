@@ -6,6 +6,7 @@
 | This template is used when viewing, editing plan response.
 |
 --}}
+<?php var_dump($plan) ?>
 
 @extends('layout.main.master')
 

@@ -1,7 +1,7 @@
 <?php namespace App\Api;
 
 /**
- * Class Grid
+ * Class GridApi
  *
  * Custom Model
  *

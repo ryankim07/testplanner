@@ -35,7 +35,6 @@
                 @include('errors.list')
 
                 <div class="page-header"><h4>Tickets</h4></div>
-                <div class="row ticket-row nested-block">
                     @if($plan['mode'] == 'build')
                         @include('pages/testplanner/partials/tickets', [
                             'mode'             => $plan['mode'],

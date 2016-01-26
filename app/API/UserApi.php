@@ -54,7 +54,7 @@ class UserApi extends BaseApi
      */
     public function getUserFirstName($userId)
     {
-        $info = $this->userModel->find($userId);
+        $info = $this->userModel->find($userId)->first();
 
         return $info->first_name;
     }

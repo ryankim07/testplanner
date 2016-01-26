@@ -30,9 +30,7 @@
 				    @include('pages/testplanner/partials/plan', ['mode' => 'edit'])
 				</div>
                 <div class="page-header"><h4>Tickets</h4></div>
-                <div class="row ticket-row nested-block">
-                    {!! $plan['tickets_html'] !!}
-                </div>
+                	{!! $plan['tickets_html'] !!}
                 <div class="page-header"><h4>Browsers</h4></div>
                 <div class="row nested-block">
                     @include('pages/testplanner/partials/testers', ['users' => $plan['users']])
