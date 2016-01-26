@@ -8,7 +8,7 @@
  * @author     Ryan Kim
  * @category   Mophie
  * @package    Test Planner
- * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
+ * @copyright  Copyright (c) 2016 mophie (https://tp.nophie.us)
  */
 
 use App\Http\Requests;
@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\PlansFormRequest;
 use App\Http\Requests\PlanUpdateFormRequest;
 
-use App\Facades\Tools;
-use App\Facades\Email;
+use App\Helpers\Tools;
+use App\Helpers\Email;
 
 use App\Api\PlansApi,
     App\Api\TestersApi,

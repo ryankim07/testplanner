@@ -6,7 +6,7 @@
  * @author     Ryan Kim
  * @category   Mophie
  * @package    Test Planner
- * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
+ * @copyright  Copyright (c) 2016 mophie (https://tp.nophie.us)
  */
 
 use App\Http\Requests;

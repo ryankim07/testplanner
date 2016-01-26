@@ -8,10 +8,8 @@
  * @author     Ryan Kim
  * @category   Mophie
  * @package    Test Planner
- * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
+ * @copyright  Copyright (c) 2016 mophie (https://tp.nophie.us)
  */
-
-use App\Facades\Jira;
 
 use Lang;
 use Log;
@@ -25,7 +23,7 @@ class Tools
      * @param int $max
      * @return string
      */
-    public function generateSalt($max = 32)
+    public static function generateSalt($max = 32)
     {
         $baseStr = time() . rand(0, 1000000) . rand(0, 1000000);
         $md5Hash = md5($baseStr);
@@ -43,7 +41,7 @@ class Tools
      * @param $date
      * @return bool|string
      */
-    public function dateConverter($date)
+    public static function dateConverter($date)
     {
         return date('m/d/Y', strtotime($date));
     }
@@ -54,7 +52,7 @@ class Tools
      * @param $date
      * @return bool|string
      */
-    public function dateAndTimeConverter($date)
+    public static function dateAndTimeConverter($date)
     {
         return date('m/d/Y h:i:s', strtotime($date));
     }
@@ -65,7 +63,7 @@ class Tools
      * @param $date
      * @return bool|string
      */
-    public function dbDateConverter($date, $time)
+    public static function dbDateConverter($date, $time)
     {
         return date('Y-m-d' . ' ' . $time, strtotime($date));
     }
@@ -76,7 +74,7 @@ class Tools
      * @param $date
      * @return string
      */
-    public function timeDifference($date)
+    public static function timeDifference($date)
     {
         $interval = date_diff(date_create($date), date_create(date('Y-m-d H:i:s', time())));
         $years    = $interval->format('%y');
@@ -137,10 +135,10 @@ class Tools
      *
      * @return array
      */
-    public function jiraVersions()
+    public static function jiraVersions(JiraApi $jiraApi)
     {
         // Get JIRA project versions
-        $results  = Jira::getAllProjectVersions('ECOM');
+        $results  = $jiraApi->getAllProjectVersions('ECOM');
         $versions = [];
 
         if (isset($results)) {
@@ -157,10 +155,10 @@ class Tools
      *
      * @return array
      */
-    public function jiraIssues()
+    public static function jiraIssues(JiraApi $jiraApi)
     {
         // Get JIRA issues
-        $results = Jira::getAllIssues('ECOM');
+        $results = $jiraApi->getAllIssues('ECOM');
         $issues  = [];
 
         if (isset($results)) {
@@ -178,7 +176,7 @@ class Tools
      * @param $errorMsg
      * @param $data
      */
-    public function log($errorMsg, $data)
+    public static function log($errorMsg, $data)
     {
         $header = "\n\n" . "The following error occurred: " . "\n\n";
         $msg    = $header . $errorMsg . "\n\n" . print_r($data, true);
@@ -193,7 +191,7 @@ class Tools
      * @param $type
      * @return mixed
      */
-    public function getUsersDropdrownOptions($list, $type)
+    public static function getUsersDropdrownOptions($list, $type)
     {
         // Set up dropdown list of all admins
         $results[0] = 'All';
@@ -217,7 +215,7 @@ class Tools
      * @param $browser
      * @return string
      */
-    public function capitalizeBrowserNames($browser)
+    public static function capitalizeBrowserNames($browser)
     {
         return implode(', ', array_map('ucfirst', explode(',', $browser)));
     }
@@ -228,7 +226,7 @@ class Tools
      * @param $browsers
      * @return string
      */
-    public function getTesterBrowserImg($browsers)
+    public static function getTesterBrowserImg($browsers)
     {
         $browsers= explode(',', $browsers);
         $results = '';

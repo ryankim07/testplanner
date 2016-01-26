@@ -8,10 +8,10 @@
  * @author     Ryan Kim
  * @category   Mophie
  * @package    Test Planner
- * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
+ * @copyright  Copyright (c) 2016 mophie (https://tp.nophie.us)
  */
 
-use App\Facades\Tools;
+use App\Helpers\Tools;
 
 use Mail;
 use Session;
@@ -25,7 +25,7 @@ class Email
      * @param $data
      * @return mixed
      */
-    public function sendEmail($type, $data)
+    public static function sendEmail($type, $data)
     {
         // Type of email to be send out
         switch($type) {

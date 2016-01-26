@@ -8,7 +8,7 @@
  * @author     Ryan Kim
  * @category   Mophie
  * @package    Test Planner
- * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
+ * @copyright  Copyright (c) 2016 mophie (https://tp.nophie.us)
  */
 
 use App\Http\Requests;
@@ -16,8 +16,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\TicketsFormRequest;
 use App\Http\Requests\UserResponseFormRequest;
 
-use App\Facades\Tools;
-use App\Facades\Email;
+use App\Helpers\Tools;
+use App\Helpers\Email;
 
 use App\User;
 use App\Tickets;
