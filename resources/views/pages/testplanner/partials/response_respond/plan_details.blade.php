@@ -32,18 +32,18 @@
                 <p>Status:
 
                     <?php
-                    if($plan['ticket_status'] == 'complete') {
+                    if($responseStatus == 'complete') {
                         $trLabel = 'label-default';
-                    } else if($plan['ticket_status'] == 'progress') {
+                    } else if($responseStatus == 'progress') {
                         $trLabel = 'label-warning';
                     } else {
                         $trLabel = 'label-success';
                     }
                     ?>
 
-                    <span class="label {!! $trLabel !!}">{!! empty($plan['ticket_status']) ? 'NEW' : strtoupper($plan['ticket_status']) !!}</span>
+                    <span class="label {!! $trLabel !!}">{!! empty($responseStatus) ? 'NEW' : strtoupper($responseStatus) !!}</span>
                 </p>
-                <p>Browser: {!! $plan['browsers'] !!}</p>
+                <p>Browser: {!! strtoupper($browser) !!}</p>
             </div>
         </div>
     </div>

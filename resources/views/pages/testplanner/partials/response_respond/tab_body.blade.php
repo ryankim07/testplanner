@@ -7,18 +7,23 @@
 |
 --}}
 
-    <div id="{!! $testerFirstName !!}" class="">
+    <div id="{!! $paneSelectorId !!}" class="tab-pane">
+        {!! Form::hidden($browserName . '_ticket_resp_id', $plan['responses'][$browserName]['ticket_resp_id'], ['class' => 'ticket-resp-id']) !!}
+        {!! Form::hidden($browserName . '_ticket_status', $plan['responses'][$browserName]['response_status'], ['class' => 'ticket-status']) !!}
+
         @include('pages/testplanner/partials/response_respond/plan_details', [
-            'plan'     => $plan,
-            'browsers' => $browsers
+            'plan'           => $plan,
+            'responseStatus' => $plan['responses'][$browserName]['response_status'],
+            'browser'        => $browserName
         ])
 
         @if($mode == 'response' && $totalResponses == 0)
             @include('errors.panel_body', ['msg' => config('testplanner.messages.plan.users_non_responses')])
         @else
             @include('pages/testplanner/partials/response_respond/plan_tickets', [
-                'mode' => $mode,
-                'plan' => $plan
+                'mode'      => $mode,
+                'responses' => $plan['responses'][$browserName],
+                'browser'   => $browserName
             ])
         @endif
     </div>

@@ -16,7 +16,6 @@ use Log;
 
 class Tools
 {
-
     /**
      * Generate random numbers according to length
      *
@@ -128,46 +127,6 @@ class Tools
         }
 
         return $results;
-    }
-
-    /**
-     * Use Jira API
-     *
-     * @return array
-     */
-    public static function jiraVersions(JiraApi $jiraApi)
-    {
-        // Get JIRA project versions
-        $results  = $jiraApi->getAllProjectVersions('ECOM');
-        $versions = [];
-
-        if (isset($results)) {
-            foreach($results as $version) {
-                $versions[] = 'Test Plan for build v' . $version['name'];
-            }
-        }
-
-        return $versions;
-    }
-
-    /**
-     * Use Jira API
-     *
-     * @return array
-     */
-    public static function jiraIssues(JiraApi $jiraApi)
-    {
-        // Get JIRA issues
-        $results = $jiraApi->getAllIssues('ECOM');
-        $issues  = [];
-
-        if (isset($results)) {
-            foreach ($results as $issue) {
-                $issues[] = $issue['key'] . ': ' . $issue['summary'];
-            }
-        }
-
-        return $issues;
     }
 
     /**

@@ -35,7 +35,7 @@
                 </ul>
                 <div class="tab-content col-xs-12 col-md-10">
                     @foreach($configData as $parentKey => $child)
-                        <div class="tab-pane" id="{!! $parentKey !!}">
+                        <div class="tab-pane fade" id="{!! $parentKey !!}">
                             <div class="page-header">
                                 <h4 class="pull-left">{!! ucfirst($parentKey) !!} Settings</h4>
                                 <div class="pull-right">
@@ -91,8 +91,7 @@
 
         $(document).ready(function() {
             // Activate first tab nav and tab content
-            $('#system-main .nav-pills li').first().addClass('active');
-            $('#system-main .tab-content div').first().addClass('active');
+            activateTabNav('system-main', 'nav-pills', 'tab-content');
 
             // Grab all the original contents
             var inputs = $('input[type="text"]').each(function() {

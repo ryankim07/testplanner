@@ -11,6 +11,7 @@
  * @copyright  Copyright (c) 2016 mophie (https://tp.nophie.us)
  */
 
+use App\Api\TablesApi;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,9 +21,11 @@ use App\Http\Requests\PlanUpdateFormRequest;
 use App\Helpers\Tools;
 use App\Helpers\Email;
 
-use App\Api\PlansApi,
+use App\Api\UserApi,
+    App\Api\PlansApi,
     App\Api\TestersApi,
-    App\Api\TicketsApi;
+    App\Api\TicketsApi,
+    App\Api\JiraApi;
 
 use App\Models\User;
 
@@ -32,9 +35,9 @@ use Session;
 class PlansController extends Controller
 {
     /**
-     * @var User
+     * @var User Api
      */
-    protected $userModel;
+    protected $userApi;
 
     /**
      * @var Plans Api
@@ -52,19 +55,26 @@ class PlansController extends Controller
     protected $ticketsApi;
 
     /**
+     * @var JiraApi
+     */
+    protected $jiraApi;
+
+    /**
      * PlansController constructor.
      */
-    public function __construct(PlansApi $plansApi, User $user, TestersApi $testersApi, TicketsApi $ticketsApi)
+    public function __construct(PlansApi $plansApi, UserApi $userApi, TestersApi $testersApi,
+                                TicketsApi $ticketsApi, JiraApi $jiraApi)
     {
         $this->middleware('auth');
         $this->middleware('testplanner', [
             'only' => ['build', 'edit', 'update', 'review', 'save']
         ]);
 
-        $this->userModel  = $user;
+        $this->userApi    = $userApi;
         $this->plansApi   = $plansApi;
         $this->testersApi = $testersApi;
         $this->ticketsApi = $ticketsApi;
+        $this->jiraApi    = $jiraApi;
     }
 
     /**
@@ -88,7 +98,7 @@ class PlansController extends Controller
         $user = Auth::user();
 
         // Get Jira versions
-        $jiraVersions = Tools::jiraVersions();
+        $jiraVersions = $this->jiraApi->jiraVersions();
 
         return view('pages.testplanner.step_1', [
             'mode'          => 'build',
@@ -108,7 +118,7 @@ class PlansController extends Controller
         $planData = Session::get('mophie_testplanner.plan');
 
         // Get Jira versions
-        $jiraVersions = Tools::jiraVersions();
+        $jiraVersions = $this->jiraApi->jiraVersions();
 
         return view('pages.testplanner.step_1', [
             'mode'          => 'edit',
@@ -140,7 +150,7 @@ class PlansController extends Controller
     public function store(PlansFormRequest $request)
     {
         // Save data to session
-        Session::put('mophie_testplanner.users', $this->userModel->all()->toArray());
+        Session::put('mophie_testplanner.users', $this->userApi->usersList());
         Session::put('mophie_testplanner.plan', array_except($request->all(), '_token'));
 
         return redirect('ticket/build');
@@ -200,7 +210,8 @@ class PlansController extends Controller
     }
 
     /**
-     * View response by plan and user ID
+     * View response by plan and user ID.  This controller will only render
+     * the side stacked pills.3
      *
      * @param $planId
      * @param $selectedUserId
@@ -208,9 +219,9 @@ class PlansController extends Controller
      */
     public function response($planId)
     {
-        $response = $this->plansApi->viewResponse($planId);
+        $response = $this->plansApi->responses($planId);
 
-        return view('pages.testplanner.response_respond_main', $response);
+        return view('pages.testplanner.responses', $response);
     }
 
     /**
@@ -224,7 +235,7 @@ class PlansController extends Controller
         $user    = Auth::user();
         $respond = $this->plansApi->respond($planId, $user->id);
 
-        return view('pages.testplanner.response_respond_main', $respond);
+        return view('pages.testplanner.respond', $respond);
     }
 
     /**
@@ -321,7 +332,7 @@ class PlansController extends Controller
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
-    public function search(Request $request)
+    public function search(Request $request, TablesApi $tablesApi)
     {
         $user  = Auth::user();
         $roles = $user->role()->get();
@@ -341,7 +352,7 @@ class PlansController extends Controller
         }
 
         // Administrators who created plans
-        $admins = $this->userModel->getAllUsersByRole($roleName);
+        $admins = $this->userApi->getAllUsersByRole($roleName);
 
         // Set up dropdown list of all admins
         $adminsList[0] = 'All';
@@ -350,10 +361,10 @@ class PlansController extends Controller
         }
 
         $query   = DB::table('plans AS p');
-        $results = Tables::searchResults($query);
+        $results = $tablesApi->searchResults($query);
 
         // Prepare columns to be shown
-        $table   = Tables::prepare('order', [
+        $table   = $tablesApi->prepare('order', [
             'description',
             'first_name',
             'last_name',

@@ -19,24 +19,28 @@ use App\Http\Requests\UserResponseFormRequest;
 use App\Helpers\Tools;
 use App\Helpers\Email;
 
-use App\User;
-use App\Tickets;
-use App\TicketsResponses;
-use App\ActivityStream;
+use App\Api\TicketsApi,
+    App\Api\TicketsResponsesApi,
+    App\Api\JiraApi;
 
 use Session;
 
 class TicketsController extends Controller
 {
     /**
+     * @var JiraApi
+     */
+    protected $jiraApi;
+
+
+    /**
      * TicketsController constructor.
      */
-    public function __construct()
+    public function __construct(JiraApi $jiraApi)
     {
         $this->middleware('auth');
-        $this->middleware('testplanner', [
-            'only' => ['build', 'edit']
-        ]);
+        $this->middleware('testplanner', ['only' => ['build', 'edit']]);
+        $this->jiraApi = $jiraApi;
     }
 
     /**
@@ -47,7 +51,7 @@ class TicketsController extends Controller
     public function build()
     {
         // Get Jira issues
-        $jiraIssues = Tools::jiraIssues();
+        $jiraIssues = $this->jiraApi->jiraIssues();
 
         $ticketsHtml = view('pages/testplanner/partials/tickets', [
             'mode'             => 'build',
@@ -84,7 +88,7 @@ class TicketsController extends Controller
         }
 
         // Get Jira issues
-        $jiraIssues = Tools::jiraIssues();
+        $jiraIssues = $this->jiraApi->jiraIssues();
 
         return view('pages.testplanner.step_2', [
             'plan' => [
@@ -129,14 +133,14 @@ class TicketsController extends Controller
      * @param UserResponseFormRequest $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
-    public function save(UserResponseFormRequest $request)
+    public function save(Request $request, TicketsResponsesApi $trApi)
     {
         $planData = json_decode($request->get('plan'), true);
         $tickets  = json_decode($request->get('tickets_obj'), true);
-        $planData['tickets_responses'] = $tickets;
+        $planData += ['tickets_responses' => $tickets];
 
         // Save ticket response
-        $response = TicketsResponses::saveResponse($planData);
+        $response = $trApi->saveResponse($planData);
 
         if (!$response) {
             return redirect()->action('PlansController@respond')
@@ -169,13 +173,13 @@ class TicketsController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function removeTicketAjax(Request $request)
+    public function removeTicketAjax(Request $request, TicketsApi $ticketsApi)
     {
         // Get tickets session data
         $ticketsData = Session::get('mophie_testplanner.tickets');
         $ticketId    = $request->get('ticketId');
 
-        $modifiedData = Tickets::removeTicketFromSession($ticketsData, $ticketId);
+        $modifiedData = $ticketsApi->removeTicketFromSession($ticketsData, $ticketId);
 
         // Save plan data to session
         Session::put('mophie_testplanner.tickets', $modifiedData);

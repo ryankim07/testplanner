@@ -135,53 +135,7 @@ function loadDashboardJs(url)
  */
 function loadResponseRespondJs()
 {
-    // If there are responded tickets, change button label for update
-    var totalResponses = 0;
 
-    $('#response-respond-main .ticket-panel').each(function() {
-        var notesResponse = $(this).find('.notes-response');
-
-        if (notesResponse.val() != '') {
-            totalResponses++;
-        }
-    });
-
-    if (totalResponses > 0) {
-        $('#respond-btn').prop('value', 'Update Response')
-    } else if (totalResponses == 0) {
-        $('#respond-btn').prop('disabled', true);
-
-        $('#response-respond-main').on('focus', '.notes-response', function() {
-            $('#respond-btn').prop('disabled', false);
-        });
-    }
-
-    $('#response-respond-main').on('click', '#respond-btn', function() {
-        var tickets = [];
-
-        $('.ticket-panel').each(function() {
-            // Create ticket object
-            tickets.push({
-                "id": $(this).find('.ticket-id').val(),
-                "test_status": $(this).find('input[type="radio"]:checked').val(),
-                "notes_response": $(this).find('.notes-response').val()
-            });
-        });
-
-        // Create hidden field
-        var input = $("<input>").attr({"type":"hidden","name":"tickets_obj"}).val(JSON.stringify(tickets));
-        $('form').append(input);
-    });
-
-    $('#response-respond-main').on('change', '#view-tester', function () {
-        var route = $(this).data('url');
-        var userId = $(this).val();
-        var planId = $('#plan_id').val();
-
-        if (userId != '') {
-            window.location.href = route + '/' + planId + "/" + userId;
-        }
-    });
 }
 
 
@@ -466,4 +420,10 @@ function backButtonSubmit(url) {
     $('form').on('click', '#back-btn', function() {
         window.location.href = url;
     });
+}
+
+function activateTabNav(formId, navClass, contentClass)
+{
+    $('#' + formId + ' ' + '.' + navClass + ' li:first-child').addClass('active');
+    $('#' + formId + ' ' + '.' + contentClass + ' div:first-child').removeClass('fade').addClass('active fade in');
 }

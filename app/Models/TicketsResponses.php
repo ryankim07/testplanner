@@ -29,7 +29,8 @@ class TicketsResponses extends Model
      */
     protected $fillable = [
         'plan_id',
-        'tester_id',
+        'testers_id',
+        'browser',
         'status',
         'responses'
     ];

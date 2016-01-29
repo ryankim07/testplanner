@@ -7,9 +7,9 @@
 |
 --}}
 
-    @foreach($plan['tickets'] as $ticket)
+    @foreach($responses['tickets'] as $ticket)
         <div class="page-header"></div>
-        <div class="row nested-block ticket-panel">
+        <div class="row nested-block ticket-panel" id="{!! $ticket['id'] !!}">
             <legend>Ticket - {!! Html::link(isset($ticket['description_url']) ? $ticket['description_url'] : '#', $ticket['desc'], ['class' => 'jira-issue', 'target' => '_blank', 'title' => 'Click to view issue in Jira']) !!}</legend>
             <div class="col-xs-12 col-md-6">
                 <div class="form-group">
@@ -36,11 +36,11 @@
                         ?>
 
                         <label>
-                            {!! Form::radio('test_status[]', 1, $passed, ['class' => 'test_status']) !!}
+                            {!! Form::radio($browser . '_' . $ticket['id'] . '_test_status[]', 1, $passed, ['class' => 'test_status']) !!}
                             Passed
                         </label>
                         <label>
-                            {!! Form::radio('test_status[]', 0, $failed, ['class' => 'test_status']) !!}
+                            {!! Form::radio($browser . '_' . $ticket['id'] . '_test_status[]', 0, $failed, ['class' => 'test_status']) !!}
                             Failed
                         </label>
 
@@ -72,14 +72,11 @@
                     @if($mode == 'respond')
                         <?php $notesResponse = isset($ticket['notes_response']) ? $ticket['notes_response'] : null; ?>
 
-                        {!! Form::textarea('notes_response', $notesResponse, ['class' => 'form-control notes-response', 'rows' => '10']) !!}
+                        {!! Form::textarea('notes_response[]', $notesResponse, ['class' => 'form-control notes-response', 'rows' => '10']) !!}
                     @else
                         {!! isset($ticket['notes_response']) ? nl2br($ticket['notes_response']) : null !!}
                     @endif
                 </div>
             </div>
-            @if($mode == 'respond')
-                {!! Form::hidden('ticket_id', $ticket['id'], ['class' => 'ticket-id']) !!}
-            @endif
         </div>
     @endforeach

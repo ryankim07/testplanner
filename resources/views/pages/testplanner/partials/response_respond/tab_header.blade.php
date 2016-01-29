@@ -8,5 +8,5 @@
 --}}
 
     <li class="">
-            <a href="#{!! $testerFirstName !!}" data-toggle="tab">{!! $testerFirstName !!}</a></li>
+        <a href="#{!! $selectorId !!}" data-toggle="tab">{!! ucwords($selectorName) !!}</a>
     </li>
