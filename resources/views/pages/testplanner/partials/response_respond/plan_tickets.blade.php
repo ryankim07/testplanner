@@ -8,7 +8,6 @@
 --}}
 
     @foreach($responses['tickets'] as $ticket)
-        <div class="page-header"></div>
         <div class="row nested-block ticket-panel" id="{!! $ticket['id'] !!}">
             <legend>Ticket - {!! Html::link(isset($ticket['description_url']) ? $ticket['description_url'] : '#', $ticket['desc'], ['class' => 'jira-issue', 'target' => '_blank', 'title' => 'Click to view issue in Jira']) !!}</legend>
             <div class="col-xs-12 col-md-6">
