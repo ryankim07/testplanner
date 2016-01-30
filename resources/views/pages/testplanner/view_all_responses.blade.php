@@ -54,7 +54,7 @@
                                     <td class="text-center"><span class="label {!! $trLabel !!}">{!! $plan->status !!}</span></td>
                                     <td>{!! Tools::dateConverter($plan->created_at) !!}</td>
                                     <td>{!! Tools::dateConverter($plan->updated_at) !!}</td>
-                                    <td class="text-center"><a href="#" class="edit-link"><i class="fa fa-search fa-lg"></i></a></td>
+                                    <td class="text-center"><a href="{!! URL::route('plan.view.response', $plan->id) !!}" class="edit-link"><i class="fa fa-search fa-lg"></i></a></td>
                                 </tr>
                             @endforeach
                             </tbody>

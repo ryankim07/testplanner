@@ -14,6 +14,7 @@
         @else
 			{!! Form::model($planData, ['method' => 'PATCH', 'action' => ['PlansController@update'], 'class' => 'form-horizontal', 'id' => 'plan-edit-form']) !!}
 	    @endif
+			{!! Form::hidden('build_version_id', null, ['id' => 'build-version-id']) !!}
 		<div class="panel panel-info">
 			<div class="panel-heading">
 				<div class="row">

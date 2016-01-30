@@ -41,6 +41,9 @@ function TicketBuilder(config) {
 
         // Continue or Update
         continueOrUpdate();
+
+        // Add Button
+        addAnotherTicketBtn();
     }
 
     /**
@@ -187,6 +190,21 @@ function TicketBuilder(config) {
                 addBtn.show();
             }
         }
+    }
+
+    /**
+     * Option to add more tickets, always insert after last ticket block
+     */
+    function addAnotherTicketBtn()
+    {
+        var addBtn = $('<div class="form-group">' +
+                     '<div class="col-xs-12 col-md-12">' +
+                     '<div class="clearfix">' +
+                     '<div class="pull-left">' +
+                     '<input type="button" value="Add another ticket" class="btn-custom btn-sm" id="add-ticket-btn">' +
+                     '</div></div></div></div>');
+
+        addBtn.insertAfter($(formId + ' ' + ticketRowClass).last());
     }
 
     /**

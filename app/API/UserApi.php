@@ -21,9 +21,9 @@ use App\Facades\Tools;
 
 use App\Api\TablesApi;
 
-use App\Models\User;
-use App\Models\Role;
-use App\Models\UserRole;
+use App\Models\User,
+    App\Models\Role,
+    App\Models\UserRole;
 
 class UserApi extends BaseApi
 {
@@ -62,9 +62,9 @@ class UserApi extends BaseApi
      */
     public function getUserFirstName($userId)
     {
-        $info = $this->model->find($userId)->first();
+        $user = $this->model->find($userId);
 
-        return $info->first_name;
+        return $user->first_name;
     }
 
     /**
@@ -78,6 +78,14 @@ class UserApi extends BaseApi
         $info = $this->model->find($userId);
 
         return $info->email;
+    }
+
+    /**
+     * User's basic list
+     */
+    public function usersList()
+    {
+        return $this->model->all()->toArray();
     }
 
     /**
@@ -115,7 +123,7 @@ class UserApi extends BaseApi
     }
 
     /**
-     * Get all users
+     * Get all users query
      *
      * @param $sortBy
      * @param $order
@@ -137,6 +145,11 @@ class UserApi extends BaseApi
         return $query;
     }
 
+    /**
+     * List of all users with pagination
+     *
+     * @return array
+     */
     public function getAllUsers()
     {
         $table = $this->tablesApi->prepare('order', [
@@ -154,9 +167,9 @@ class UserApi extends BaseApi
         $users = $query->paginate(config('testplanner.tables.pagination.lists'));
 
         $results = [
-            'users'         => $users,
-            'columns'       => $table['columns'],
-            'columnsLink'   => $table['columns_link']
+            'users'       => $users,
+            'columns'     => $table['columns'],
+            'columnsLink' => $table['columns_link']
 
         ];
 

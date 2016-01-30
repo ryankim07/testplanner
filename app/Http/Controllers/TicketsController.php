@@ -50,20 +50,24 @@ class TicketsController extends Controller
      */
     public function build()
     {
-        // Get Jira issues
-        $jiraIssues = $this->jiraApi->jiraIssues();
+        $buildVersionId = Session::get('mophie_testplanner.plan.build_version_id');
 
-        $ticketsHtml = view('pages/testplanner/partials/tickets', [
-            'mode'             => 'build',
-            'ticket'           => [],
-            'addTicketBtnType' => 'btn-custom'
-        ])->render();
+        // Get Jira issues
+        $jiraIssues = $this->jiraApi->jiraIssuesByVersion($buildVersionId);
+        $ticketsHtml = '';
+
+        foreach($jiraIssues['specificIssues'] as $issue) {
+            $ticketsHtml .= view('pages/testplanner/partials/tickets', [
+                'mode'   => 'custom',
+                'ticket' => ['desc' => $issue]
+            ])->render();
+        }
 
         return view('pages.testplanner.step_2', [
             'plan' => [
-                'mode'          => 'build',
-                'tickets_html'  => $ticketsHtml,
-                'jira_issues'   => json_encode($jiraIssues)
+                'mode'         => 'build',
+                'tickets_html' => $ticketsHtml,
+                'jira_issues'  => json_encode($jiraIssues['allIssues']),
             ]
         ]);
     }

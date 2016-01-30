@@ -362,7 +362,13 @@ function jiraVersions(formId, descId, versions)
 {
     $('#' + formId).on('focus', '#' + descId, function () {
         $(this).autocomplete({
-            source: versions
+            source: versions,
+            select: function(event, ui) {
+                $( "#plan-description" ).val( ui.item.label );
+                $( "#build-version-id" ).val( ui.item.value );
+
+                return false;
+            }
         });
     });
 

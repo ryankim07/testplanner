@@ -10,7 +10,7 @@
 <?php
     $id           = !empty($ticket['id']) ? $ticket['id'] : '';
     $descName     = $mode == 'edit' ? "desc['" . $id . "']" : 'desc';
-    $descVal      = $mode == 'edit' ? $ticket['desc'] : null;
+    $descVal      = $mode == 'edit' || $mode == 'custom' ? $ticket['desc'] : null;
     $objName      = $mode == 'edit' ? "objective['" . $id . "']" : 'objective';
     $objVal       = $mode == 'edit' ? $ticket['objective'] : null;
     $testStepName = $mode == 'edit' ? "test_steps['" . $id . "']" : 'test_steps';
@@ -43,11 +43,3 @@
             </div>
         </div>
     </div>
-
-    @include('pages/main/partials/button', [
-        'type'      => 'button',
-        'btnText'   => 'Add another ticket',
-        'direction' => 'pull-left',
-        'class'     => $addTicketBtnType . ' btn-sm',
-        'id'        => 'add-ticket-btn'
-    ])
