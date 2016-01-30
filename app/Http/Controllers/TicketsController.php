@@ -50,10 +50,11 @@ class TicketsController extends Controller
      */
     public function build()
     {
+        // Grab Jira build version ID
         $buildVersionId = Session::get('mophie_testplanner.plan.build_version_id');
 
         // Get Jira issues
-        $jiraIssues = $this->jiraApi->jiraIssuesByVersion($buildVersionId);
+        $jiraIssues  = $this->jiraApi->jiraIssuesByVersion($buildVersionId);
         $ticketsHtml = '';
 
         foreach($jiraIssues['specificIssues'] as $issue) {
