@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\PlansFormRequest;
 use App\Http\Requests\PlanUpdateFormRequest;
 
-use App\Events\LogActivity;
 use App\Events\SavingPlan;
 
 use App\Facades\Email;
@@ -218,10 +217,9 @@ class PlansController extends Controller
 
     /**
      * View response by plan and user ID.  This controller will only render
-     * the side stacked pills.3
+     * the side stacked pills
      *
      * @param $planId
-     * @param $selectedUserId
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function response($planId)
@@ -275,12 +273,7 @@ class PlansController extends Controller
         $testerData  = Session::get('mophie_testplanner.testers');
 
         // Save plan
-        $planId    = $this->plansApi->savePlan($planData, $ticketsData, $testerData);
-        $planData += [
-            'plan_id' => $planId,
-            'type'    => 'plan',
-            'status'  => 'new'
-        ];
+        $planId = $this->plansApi->savePlan($planData, $ticketsData, $testerData);
 
         if (!$planId) {
             // Delete session
@@ -291,8 +284,15 @@ class PlansController extends Controller
                 ->withErrors(['message' => config('testplanner.messages.plan.build_error')]);
         }
 
-        // Send notifications
-        event(new SavingPlan(array_merge($planData, ['testers' => $testerData])));
+        $planData += [
+            'type'    => 'plan',
+            'status'  => 'new',
+            'plan_id' => $planId,
+            'testers' => $testerData
+        ];
+
+        // Send notifications observer
+        event(new SavingPlan($planData));
 
         // Delete session
         Session::forget('mophie_testplanner');
@@ -316,16 +316,16 @@ class PlansController extends Controller
         $testersUpdate = $this->testersApi->updateBuiltTesters($planId, $testerData);
 
         if ((count($planData) > 0) && $ticketsUpdate && $testersUpdate) {
-            // Log to activity stream
-            ActivityStream::saveActivityStream($planData, 'plan', 'update');
-
-            // Mail all test browsers
-            Email::sendEmail('plan-updated', array_merge([
+            $planData += [
+                'type'        => 'plan',
+                'status'      => 'update',
                 'plan_id'     => $planId,
-                'description' => $request->get('description')], [
-                    'testers' => $testerData
-                ]
-            ));
+                'description' => $request->get('description'),
+                'testers'     => $testerData
+            ];
+
+            // Send notifications observer
+            event(new updatingPlan($planData));
 
             $msg = config('testplanner.messages.plan.build_update_error');
         } else {

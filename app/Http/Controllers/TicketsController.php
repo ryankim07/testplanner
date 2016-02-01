@@ -135,14 +135,15 @@ class TicketsController extends Controller
     /**
      * Save user's response
      *
-     * @param UserResponseFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
+     * @param Request $request
+     * @param TicketsResponsesApi $trApi
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
     public function save(Request $request, TicketsResponsesApi $trApi)
     {
         $planData = json_decode($request->get('plan'), true);
         $tickets  = json_decode($request->get('tickets_obj'), true);
-        $planData += ['tickets_responses' => $tickets];
+        $planData += ['tickets_responses'  => $tickets];
 
         // Save ticket response
         $response = $trApi->saveResponse($planData);
@@ -151,24 +152,9 @@ class TicketsController extends Controller
             return redirect()->action('PlansController@respond')
                 ->withInput()
                 ->withErrors(['message' => config('testplanner.messages.plan.response_error')]);
-        } elseif ($response != 'new') {
-            // Log activity
-            ActivityStream::saveActivityStream($planData, 'ticket-response', $response);
-
-            // Mail all test browsers
-            Email::sendEmail('ticket-response', [
-                'plan_id'            => $planData['plan_id'],
-                'description'        => $planData['description'],
-                'tester_id'          => $planData['tester_id'],
-                'creator_first_name' => $planData['reporter'],
-                'creator_email'      => Tools::getUserEmail($planData['creator_id']),
-                'tester_first_name'  => $planData['assignee'],
-                'tester_email'       => Tools::getUserEmail($planData['tester_id']),
-                'response'           => $response
-            ]);
-
-            return redirect('dashboard')->with('flash_success', config('testplanner.messages.plan.response_success'));
         }
+
+        return redirect('dashboard')->with('flash_success', config('testplanner.messages.plan.response_success'));
 
         return redirect('dashboard');
     }

@@ -14,7 +14,7 @@
     <div class="col-xs-12 col-md-12 main" id="respond-main">
 
         {!! Form::open(['route' => 'ticket.save.response', 'class' => 'form-horizontal', 'id' => 'ticket-response-form']) !!}
-        {!! Form::hidden('plan', json_encode(array_only($plan, ['id', 'tester_id', 'ticket_status']))) !!}
+        {!! Form::hidden('plan', json_encode(array_only($plan, ['id', 'creator_id', 'tester_id', 'reporter', 'assignee', 'ticket_status']))) !!}
 
         <div class="panel panel-default">
             <div class="panel-heading">

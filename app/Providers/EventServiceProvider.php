@@ -12,10 +12,15 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $listen = [
-        'App\Events\SavingPlan' => [
-            'App\Listeners\SendNotification',
-        ],
+    protected $listen = [];
+
+    /**
+     * The subscriber classes to register.
+     *
+     * @var array
+     */
+    protected $subscribe = [
+        'App\Listeners\SendNotification'
     ];
 
     /**
@@ -27,7 +32,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot(DispatcherContract $events)
     {
         parent::boot($events);
-
-        //
     }
 }

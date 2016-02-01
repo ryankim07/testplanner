@@ -81,4 +81,14 @@ class Testers extends Model
     {
         return $this->belongsTo('App\Models\Plans');
     }
+
+    /**
+     * One tester could have multiple responses
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tickets()
+    {
+        return $this->hasMany('App\Models\TicketsResponses', 'tester_id', 'user_id');
+    }
 }

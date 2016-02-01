@@ -47,6 +47,6 @@ class Tickets extends Model
      */
     public function plan()
     {
-        return $this->belongsTo('App\Plans');
+        return $this->belongsTo('App\Models\Plans');
     }
 }

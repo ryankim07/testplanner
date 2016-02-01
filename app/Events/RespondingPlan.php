@@ -4,14 +4,14 @@ use App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class SavingPlan extends Event
+class RespondingPlan extends Event
 {
     use SerializesModels;
 
     public $planData;
 
     /**
-     * SavingPlan constructor
+     * UpdatingPlan constructor
      *
      * @param $planData
      */

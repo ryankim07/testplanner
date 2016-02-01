@@ -29,10 +29,10 @@ class TicketsResponses extends Model
      */
     protected $fillable = [
         'plan_id',
-        'testers_id',
+        'tester_id',
         'browser',
-        'status',
-        'responses'
+        'responses',
+        'status'
     ];
 
     /**
@@ -41,4 +41,14 @@ class TicketsResponses extends Model
      * @var array
      */
     protected $guarded = array('id');
+
+    /**
+     * Only one response belongs to a case
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function tester()
+    {
+        return $this->belongsTo('App\Models\Testers');
+    }
 }

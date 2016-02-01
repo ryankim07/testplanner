@@ -70,8 +70,8 @@ class Email
 
                 case 'emails.ticket_response':
                     Mail::send($emailType, $data, function ($message) use ($data, $emailSubject) {
-                        $message->from($data['tester_email'], $data['tester_first_name']);
-                        $message->to($data['creator_email'], $data['creator_first_name'])->subject($emailSubject);
+                        $message->from(Tools::getUserEmail($data['tester_id']), $data['assignee']);
+                        $message->to(Tools::getUserEmail($data['creator_id']), $data['reporter'])->subject($emailSubject);
                     });
                 break;
             }

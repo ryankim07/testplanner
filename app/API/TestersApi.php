@@ -69,7 +69,8 @@ class TestersApi
 
                 // Create new or update
                 $this->model->updateOrCreate([
-                    'id' => $id], [
+                    'id' => $id
+                ], [
                     'plan_id'  => $planId,
                     'user_id'  => $tester['id'],
                     'browsers' => $tester['browsers']

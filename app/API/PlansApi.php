@@ -192,7 +192,8 @@ class PlansApi extends BaseApi
             // Render users side tab
             $usersTabHtml .= view('pages/testplanner/partials/response_respond/tab_header', [
                 'selectorId'   => $testerFirstName . '-' . $testerId,
-                'selectorName' => $testerFirstName
+                'selectorName' => $testerFirstName,
+                'image'        => ''
             ])->render();
 
             // Plan details
@@ -205,16 +206,17 @@ class PlansApi extends BaseApi
             foreach ($browsers as $browser) {
                 // Browsers header tab
                 $tabHeaderHtml .= view('pages/testplanner/partials/response_respond/tab_header', [
-                    'selectorId' => $browser . '-' . $testerId,
-                    'selectorName' => $browser
+                    'selectorId'   => $browser . '-' . $testerId,
+                    'selectorName' => $browser,
+                    'image'        => '<img src="' . asset("/images/{$browser}.png") . '" alt="' . $browser . '">'
                 ])->render();
 
                 // Browsers main body tab
                 $tabBodyHtml .= view('pages/testplanner/partials/response_respond/tab_body', [
-                    'mode' => 'responses',
-                    'browserName' => $browser,
+                    'mode'           => 'responses',
+                    'browserName'    => $browser,
                     'paneSelectorId' => $browser . '-' . $testerId,
-                    'plan' => $plan
+                    'plan'           => $plan
                 ])->render();
             }
 
@@ -249,15 +251,16 @@ class PlansApi extends BaseApi
         foreach ($browsers as $browser) {
             // Render users tab
             $tabHeaderHtml .= view('pages/testplanner/partials/response_respond/tab_header', [
-                'selectorId' => $browser,
-                'selectorName' => $browser
+                'selectorId'   => $browser,
+                'selectorName' => $browser,
+                'image'        => '<img src="' . asset("/images/{$browser}.png") . '" alt="' . $browser . '">'
             ]);
 
             $tabBodyHtml .= view('pages/testplanner/partials/response_respond/tab_body', [
-                'mode' => 'respond',
-                'browserName' => $browser,
+                'mode'           => 'respond',
+                'browserName'    => $browser,
                 'paneSelectorId' => $browser,
-                'plan' => $plan
+                'plan'           => $plan
             ])->render();
         }
 
@@ -475,9 +478,9 @@ class PlansApi extends BaseApi
             $plan->responses = $results;
         }
 
-        $plan->reporter       = Tools::getUserFirstName($plan->creator_id);
-        $plan->assignee       = Tools::getUserFirstName($plan->tester_id);
-        $plan->browsers       = $plan->browsers;
+        $plan->reporter = Tools::getUserFirstName($plan->creator_id);
+        $plan->assignee = Tools::getUserFirstName($plan->tester_id);
+        $plan->browsers = $plan->browsers;
 
         return get_object_vars($plan);
     }

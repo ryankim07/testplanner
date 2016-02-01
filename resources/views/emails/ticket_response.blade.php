@@ -637,9 +637,9 @@
                                                     <tr>
                                                         <td style="font-size: 14px; line-height: 26px; font-family:Open Sans,Arial,Tahoma, Helvetica, sans-serif; color:#000001; font-weight:500; text-align:left; ">
 
-                                                            <p><strong>Hi, {!! $creator_first_name !!}!</strong></p>
+                                                            <p><strong>Hi, {!! $reporter !!}!</strong></p>
 
-                                                            <p>{!! $tester_first_name !!}, {!! $response !!} tickets in the plan.</p>
+                                                            <p>{!! $assignee, {!! $status !!} tickets in the plan.</p>
                                                             <p>Click the link to be taken to the test plan: {!! Html::linkRoute('plan.view.response', $description, [$plan_id, $tester_id]) !!}.</p>
                                                         </td>
                                                     </tr>
