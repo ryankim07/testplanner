@@ -14,24 +14,31 @@
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-use App\Events\SavingPlan;
-
-use App\Facades\Email;
-
-use App\Api\ActivityStreamApi;
+use App\Api\ActivityStreamApi,
+    App\Api\EmailApi;
 
 class SendNotification
 {
+    /**
+     * @var ActivityStreamApi
+     */
     protected $asApi;
+
+    /**
+     * @var EmailApi
+     */
+    protected $emailApi;
 
     /**
      * SendNotification constructor
      *
      * @param ActivityStreamApi $asApi
+     * @param EmailApi $emailApi
      */
-    public function __construct(ActivityStreamApi $asApi)
+    public function __construct(ActivityStreamApi $asApi, EmailApi $emailApi)
     {
-        $this->asApi = $asApi;
+        $this->asApi    = $asApi;
+        $this->emailApi = $emailApi;
     }
 
     /**
@@ -47,7 +54,7 @@ class SendNotification
         $this->asApi->saveActivityStream($data);
 
         // Mail all test browsers
-        Email::sendEmail('plan-new', $data);
+        $this->emailApi->sendEmail('plan-new', $data);
     }
 
     /**
@@ -64,7 +71,7 @@ class SendNotification
 
         // Mail all test browsers
         // Mail all test browsers
-        Email::sendEmail('plan-updated', $data);
+        $this->emailApi->sendEmail('plan-updated', $data);
     }
 
     /**
@@ -80,7 +87,7 @@ class SendNotification
         $this->asApi->saveActivityStream($data);
 
         // Mail all test browsers
-        Email::sendEmail('ticket-response', $data);
+        $this->emailApi->sendEmail('ticket-response', $data);
     }
 
     /**

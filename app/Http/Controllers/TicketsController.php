@@ -14,10 +14,6 @@
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Requests\TicketsFormRequest;
-use App\Http\Requests\UserResponseFormRequest;
-
-use App\Facades\Tools;
-use App\Helpers\Email;
 
 use App\Api\TicketsApi,
     App\Api\TicketsResponsesApi,

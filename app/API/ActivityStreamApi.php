@@ -98,7 +98,7 @@ class ActivityStreamApi
                 $userId       = $plan['tester_id'];
             }
 
-            $planLink = link_to_route('plan.view.response', $plan['description'], [$plan['plan_id'], $userId]);
+            $planLink = link_to_route('plan.view.response', $plan['description'], [$plan['id'], $userId]);
             $message  = '';
 
             switch($type) {
@@ -119,15 +119,13 @@ class ActivityStreamApi
                     break;
             }
 
-            if ($status == 'new') {
-                $activity = $assigneeName . ' ' . $message . ' ' . $planLink;
+            $activity = $assigneeName . ' ' . $message . ' ' . $planLink;
 
-                $this->model->create([
-                    'plan_id'  => $plan['plan_id'],
-                    'user_id'  => $userId,
-                    'activity' => $activity
-                ]);
-            }
+            $this->model->create([
+                'plan_id'  => $plan['plan_id'],
+                'user_id'  => $userId,
+                'activity' => $activity
+            ]);
         } catch(\Exception $e) {
             Tools::log($e->getMessage() . ' activity stream', $plan);
             Session::flash('flash_error', config('testplanner.messages.plan.system.activity_stream_error'));

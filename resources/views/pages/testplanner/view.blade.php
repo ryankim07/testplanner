@@ -27,7 +27,7 @@
 
                 <div class="page-header"><h4>Plan Details</h4></div>
                 <div class="row nested-block">
-				    @include('pages/testplanner/partials/plan', ['mode' => 'edit'])
+				    @include('pages/testplanner/partials/plan')
 				</div>
                 <div class="page-header"><h4>Tickets</h4></div>
                 	{!! $plan['tickets_html'] !!}

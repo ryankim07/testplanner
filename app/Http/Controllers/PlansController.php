@@ -17,9 +17,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\PlansFormRequest;
 use App\Http\Requests\PlanUpdateFormRequest;
 
-use App\Events\SavingPlan;
-
-use App\Facades\Email;
+use App\Events\SavingPlan,
+    App\Events\UpdatingPlan;
 
 use App\Api\UserApi,
     App\Api\PlansApi,
@@ -163,14 +162,14 @@ class PlansController extends Controller
     }
 
     /**
-     * View plan for editing
+     *  View plan for editing
      *
      * @param $id
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function view($id)
     {
-        $plan = $this->plansApi->viewPlan($id);
+        $plan = $this->plansApi->viewPlan($id, $this->userApi, $this->jiraApi);
 
         return view('pages.testplanner.view', $plan);
     }
@@ -183,7 +182,7 @@ class PlansController extends Controller
     public function viewAllCreated(Request $request)
     {
         $adminId = $request->get('admin');
-        $plans   = $this->plansApi->getAllCreated($adminId);
+        $plans   = $this->plansApi->getAllCreated($this->userApi, $adminId);
 
         return view('pages.testplanner.view_all_created', $plans);
     }
@@ -273,29 +272,19 @@ class PlansController extends Controller
         $testerData  = Session::get('mophie_testplanner.testers');
 
         // Save plan
-        $planId = $this->plansApi->savePlan($planData, $ticketsData, $testerData);
+        $saveData = $this->plansApi->savePlan($planData, $ticketsData, $testerData);
 
-        if (!$planId) {
-            // Delete session
-            Session::forget('mophie_testplanner');
+        // Delete session
+        Session::forget('mophie_testplanner');
 
+        if (!$saveData) {
             return redirect()->action('PlansController@review')
                 ->withInput()
                 ->withErrors(['message' => config('testplanner.messages.plan.build_error')]);
         }
 
-        $planData += [
-            'type'    => 'plan',
-            'status'  => 'new',
-            'plan_id' => $planId,
-            'testers' => $testerData
-        ];
-
         // Send notifications observer
-        event(new SavingPlan($planData));
-
-        // Delete session
-        Session::forget('mophie_testplanner');
+        event(new SavingPlan($saveData));
 
         return redirect('dashboard')->with('flash_success', config('testplanner.messages.plan.new_build'));
     }
@@ -309,26 +298,16 @@ class PlansController extends Controller
      */
     public function updateBuiltPlan($planId, PlanUpdateFormRequest $request)
     {
-        $testerData = $request->get('browser_testers');
-
         $planData      = $this->plansApi->updateBuiltPlanDetails($planId, $request);
         $ticketsUpdate = $this->ticketsApi->updateBuiltTickets($planId, $request->get('tickets_obj'));
-        $testersUpdate = $this->testersApi->updateBuiltTesters($planId, $testerData);
+        $testersUpdate = $this->testersApi->updateBuiltTesters($planId, $request->get('browser_testers'));
+
+        $msg = config('testplanner.messages.plan.build_update_error');
 
         if ((count($planData) > 0) && $ticketsUpdate && $testersUpdate) {
-            $planData += [
-                'type'        => 'plan',
-                'status'      => 'update',
-                'plan_id'     => $planId,
-                'description' => $request->get('description'),
-                'testers'     => $testerData
-            ];
-
             // Send notifications observer
-            event(new updatingPlan($planData));
+            event(new updatingPlan(array_merge($planData, ['testers' => $request->get('browser_testers')])));
 
-            $msg = config('testplanner.messages.plan.build_update_error');
-        } else {
             $msg = config('testplanner.messages.plan.build_update');
         }
 

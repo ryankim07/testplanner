@@ -388,7 +388,6 @@ function planStartExpireDates()
         format: "MM/DD/YYYY"
     });
     $('#expired_at').datetimepicker({
-        minDate:yest,
         useCurrent: false,
         format: "MM/DD/YYYY"
     });

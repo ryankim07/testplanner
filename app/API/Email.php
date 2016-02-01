@@ -1,7 +1,7 @@
-<?php namespace App\Helpers;
+<?php namespace App\Api;
 
 /**
- * Class Email
+ * Class EmailApi
  *
  * Helper
  *
@@ -16,7 +16,7 @@ use App\Facades\Tools;
 use Mail;
 use Session;
 
-class Email
+class EmailApi
 {
     /**
      * Send email

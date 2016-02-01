@@ -16,7 +16,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UserResponseFormRequest;
 
 use App\Api\UserApi;
-use App\Api\TablesApi;
 
 use Session;
 

@@ -25,10 +25,7 @@ use App\Models\Plans,
     App\Models\TicketsResponses,
     App\Models\Testers;
 
-use App\Api\TablesApi,
-    App\Api\UserApi,
-    App\Api\TicketsResponsesApi,
-    App\Api\JiraApi;
+use App\Api\TablesApi;
 
 use Auth;
 
@@ -60,14 +57,9 @@ class PlansApi extends BaseApi
     protected $testersModel;
 
     /**
-     * @var \App\Api\UserApi
+     * @var Tables
      */
-    protected $userApi;
-
-    /**
-     * @var \App\Api\TablesApi
-     */
-    protected $tableApi;
+    protected $tablesApi;
 
     /**
      * @var
@@ -75,27 +67,19 @@ class PlansApi extends BaseApi
     protected $authUser;
 
     /**
-     * @var JiraApi
-     */
-    protected $jiraApi;
-
-    /**
      * Plans constructor.
      *
      * @param Plans $plans
      */
     public function __construct(Plans $plans, User $user, Tickets $tickets, TicketsResponses $tr,
-                                Testers $testers, UserApi $userApi, TablesApi $tablesApi,
-                                JiraApi $jiraApi)
+                                Testers $testers, TablesApi $tablesApi)
     {
         $this->model        = $plans;
         $this->userModel    = $user;
         $this->ticketsModel = $tickets;
         $this->trModel      = $tr;
         $this->testersModel = $testers;
-        $this->userApi      = $userApi;
-        $this->tableApi     = $tablesApi;
-        $this->jiraApi      = $jiraApi;
+        $this->tablesApi    = $tablesApi;
         $this->authUser     = Auth::user();
     }
 
@@ -129,9 +113,11 @@ class PlansApi extends BaseApi
      * Display plan
      *
      * @param $id
+     * @param $userApi
+     * @param $jiraApi
      * @return array
      */
-    public function viewPlan($id)
+    public function viewPlan($id, $userApi, $jiraApi)
     {
         $plan    = $this->model->find($id);
         $tickets = unserialize($plan->tickets()->first()->tickets);
@@ -147,10 +133,10 @@ class PlansApi extends BaseApi
         }
 
         // Get Jira versions
-        $jiraVersions = $this->jiraApi->jiraVersions();
+        $jiraVersions = $jiraApi->jiraVersions();
 
         // Get Jira issues
-        $jiraIssues = $this->jiraApi->jiraIssues();
+        $jiraIssues = $jiraApi->jiraIssues();
 
         $results = [
             'plan' => [
@@ -159,7 +145,7 @@ class PlansApi extends BaseApi
                 'started_at'    => Tools::dateConverter($plan->started_at),
                 'expired_at'    => Tools::dateConverter($plan->expired_at),
                 'tickets_html'  => $ticketsHtml,
-                'users'         => $this->usersApi->usersList(),
+                'users'         => $userApi->usersList(),
                 'testers'       => json_encode($plan->testers()->get()->toArray()),
                 'jira_versions' => json_encode($jiraVersions),
                 'jira_issues'   => json_encode($jiraIssues)
@@ -279,7 +265,7 @@ class PlansApi extends BaseApi
      * @param $userId
      * @return array
      */
-    public function getAllCreated($userId)
+    public function getAllCreated($userApi, $userId)
     {
         // Display selected creator of the plan
         if ($isRoot = $this->authUser->hasRole(['root'])) {
@@ -288,10 +274,10 @@ class PlansApi extends BaseApi
 
         // Administrators who created plans
         $dropDownOptions = [];
-        $dropDownOptions = $this->userApi->getUsersDropdrownOptions();
+        $dropDownOptions = $userApi->getUsersDropdrownOptions();
 
         // Prepare columns to be shown
-        $table = $this->tableApi->prepare('order', [
+        $table = $this->tablesApi->prepare('order', [
             'description',
             'first_name',
             'last_name',
@@ -326,7 +312,7 @@ class PlansApi extends BaseApi
     public function getAllResponses($userId, $sortBy, $order, $from = null)
     {
         // Prepare columns to be shown
-        $table = $this->tableApi->prepare('order', [
+        $table = $this->tablesApi->prepare('order', [
             'description',
             'status',
             'created_at',
@@ -367,7 +353,7 @@ class PlansApi extends BaseApi
                 $join->on('p.id', '=', 'tr.plan_id')
                     ->where('tr.tester_id', '=', $userId);
             })
-            ->select('p.*', 'u.first_name', 'u.last_name', 't.browsers', 'tr.status AS ticket_response_status')
+            ->select('p.*', 'u.first_name', 'u.last_name', 't.browsers')
             ->where('t.user_id', '=', $userId)
             ->where('p.status', '=', 'new')
             ->orWhere('p.status', '=', 'progress')
@@ -381,11 +367,10 @@ class PlansApi extends BaseApi
         }
 
         // Prepare columns to be shown
-        $table = $this->tableApi->prepare('order', [
+        $table = $this->tablesApi->prepare('order', [
             'description',
             'first_name',
             'last_name',
-            'status',
             'created_at',
             'updated_at',
             'respond'
@@ -500,10 +485,10 @@ class PlansApi extends BaseApi
      * Update built plan details
      *
      * @param $planId
-     * @param $planData
-     * @return bool
+     * @param $request
+     * @return array|bool
      */
-    public function updateBuiltPlanDetails($planId, $planData)
+    public function updateBuiltPlanDetails($planId, $request)
     {
         $redirect = false;
         $errorMsg = '';
@@ -513,12 +498,12 @@ class PlansApi extends BaseApi
 
         // Start plan update
         try {
-            $plan = self::find($planId);
+            $plan = $this->model->find($planId);
 
             $plan->update([
-                'description' => $planData->get('description'),
-                'started_at'  => $planData->get('started_at'),
-                'expired_at'  => $planData->get('expired_at')
+                'description' => $request->get('description'),
+                'started_at'  => $request->get('started_at'),
+                'expired_at'  => $request->get('expired_at')
             ]);
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
@@ -537,7 +522,7 @@ class PlansApi extends BaseApi
             DB::rollback();
 
             // Log to system
-            Tools::log($errorMsg, $planData);
+            Tools::log($errorMsg, $request);
 
             return false;
         }
@@ -546,10 +531,11 @@ class PlansApi extends BaseApi
         DB::commit();
 
         $results = [
-            'plan_id'     => $plan->id,
-            'description' => $plan->description,
+            'type'        => 'plan',
+            'status'      => 'update',
+            'id'          => $plan->id,
             'creator_id'  => $plan->creator_id,
-            'status'      => $plan->status
+            'description' => $plan->description
         ];
 
         return $results;
@@ -620,6 +606,17 @@ class PlansApi extends BaseApi
         // Commit all changes
         DB::commit();
 
-        return $plan->id;
+        if (!$planId) {
+            return false;
+        }
+
+        $planData += [
+            'type'    => 'plan',
+            'status'  => 'new',
+            'plan_id' => $planId,
+            'testers' => $testerData
+        ];
+
+        return $planData;
     }
 }

@@ -145,7 +145,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\EmailServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
         App\Providers\ToolsServiceProvider::class,
 
     ],
@@ -199,5 +199,6 @@ return [
         'Form'      => Collective\Html\FormFacade::class,
         'Html'      => Collective\Html\HtmlFacade::class,
 
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
 ];

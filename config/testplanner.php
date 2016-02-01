@@ -18,11 +18,12 @@ return [
 
     'jira' => [
         'info' => [
-            'domain'   => 'https://mophie.atlassian.net',
-            'rest_url' => 'https://mophie.atlassian.net/rest/api/2',
-            'project'  => 'ECOM',
-            'login'    => 'ryan.kim',
-            'password' => 'Sk1ncare'
+            'domain'              => 'https://mophie.atlassian.net',
+            'rest_url'            => 'https://mophie.atlassian.net/rest/api/2',
+            'project'             => 'ECOM',
+            'login'               => 'ryan.kim',
+            'password'            => 'Sk1ncare',
+            'version_description' => 'Test Plan for build v'
         ]
     ],
 

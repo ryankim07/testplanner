@@ -67,7 +67,7 @@ class GridApi
             'sortable'   => 'description',
             'order'      => $order,
             'filterable' => true,
-            'width'      => '100px'
+            'width'      => '80px'
         ];
 
         $columns['testers'] = [

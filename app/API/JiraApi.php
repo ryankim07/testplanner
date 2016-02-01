@@ -86,7 +86,7 @@ class JiraApi
 
             foreach ($responseData as $version) {
                 $versions[] = [
-                    'label' => 'Test Plan for build v' . $version->name,
+                    'label' => config('testplanner.jira.info.version_description') . $version->name,
                     'value' => $version->id
                 ];
             }
