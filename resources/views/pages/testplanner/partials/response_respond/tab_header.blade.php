@@ -3,10 +3,10 @@
 | Response tab header partial
 |--------------------------------------------------------------------------
 |
-| This template is used when rendering users for tab selection.
+| This template is used when rendering browser names for tab selection.
 |
 --}}
 
     <li class="">
-        <a href="#{!! $selectorId !!}" data-toggle="tab">{!! ucwords($selectorName) !!}</a>
+        <a href="#{!! $selectorId !!}" data-toggle="tab">{!! $image !!} {!! ucwords($selectorName) !!}</a>
     </li>

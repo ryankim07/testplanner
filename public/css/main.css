@@ -68,12 +68,18 @@ body {
     background-color: #f7f7f8;
 }
 
-#response-respond-main .nested-block:first-child {
+#response-main .nested-block:first-child,
+#respond-main  .nested-block:first-child {
     margin-top: 20px;
 }
 
-#system-main-panel-body, #response-respond-main .panel-body {
+#system-main-panel-body,
+#response-main .panel-body, #respond-main .panel-body {
     min-height: 500px;
+}
+
+#response-main legend, #respond-main legend {
+    font-size: 18.5px;
 }
 
 /*
@@ -205,6 +211,11 @@ body {
     top:0;
     right:0;
     color: #777777;
+}
+
+#response-main img, #respond-main img {
+    width: 32px;
+    height: 32px;
 }
 
 .header-icon {

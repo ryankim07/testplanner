@@ -13,8 +13,7 @@
 
         @include('pages/testplanner/partials/response_respond/plan_details', [
             'plan'           => $plan,
-            'responseStatus' => $plan['responses'][$browserName]['response_status'],
-            'browser'        => $browserName
+            'responseStatus' => $plan['responses'][$browserName]['response_status']
         ])
 
         @if($mode == 'response' && !isset($plan['responses'][$browserName]))

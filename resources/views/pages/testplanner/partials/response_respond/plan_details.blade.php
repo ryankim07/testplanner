@@ -17,14 +17,14 @@
         </div>
         <div class="col-xs-12 col-md-3">
             <div class="form-group">
-                <p>Started: <strong>{!! $plan['started_at'] !!}</strong></p>
-                <p>Expires: <strong>{!! $plan['expired_at'] !!}</strong></p>
+                <p>Started: <strong>{!! Tools::dateConverter($plan['started_at']) !!}</strong></p>
+                <p>Expires: <strong>{!! Tools::dateConverter($plan['expired_at']) !!}</strong></p>
             </div>
         </div>
         <div class="col-xs-12 col-md-3">
             <div class="form-group">
-                <p>Created: <strong>{!! $plan['created_at'] !!}</strong></p>
-                <p>Updated: <strong>{!! $plan['updated_at'] !!}</strong></p>
+                <p>Created: <strong>{!! Tools::dateConverter($plan['created_at']) !!}</strong></p>
+                <p>Updated: <strong>{!! Tools::dateConverter($plan['updated_at']) !!}</strong></p>
             </div>
         </div>
         <div class="col-xs-12 col-md-3">
@@ -43,7 +43,6 @@
 
                     <span class="label {!! $trLabel !!}">{!! empty($responseStatus) ? 'NEW' : strtoupper($responseStatus) !!}</span>
                 </p>
-                <p>Browser: {!! strtoupper($browser) !!}</p>
             </div>
         </div>
     </div>
