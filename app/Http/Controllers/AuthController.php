@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use PhpSpec\Exception\Exception;
 
-use App\Helpers\Tools;
+use App\Facades\Tools;
 
 use App\Models\User,
     App\Models\UserRole,

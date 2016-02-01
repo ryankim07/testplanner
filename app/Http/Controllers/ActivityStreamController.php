@@ -12,10 +12,9 @@
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
-use App\Helpers\Tools;
+use App\Facades\Tools;
 
-use App\Api\ActivityStreamApi,
-    App\Api\UserApi;
+use App\Api\ActivityStreamApi;
 
 use Auth;
 
@@ -27,20 +26,14 @@ class ActivityStreamController extends Controller
     protected $streamApi;
 
     /**
-     * @var User Api
-     */
-    protected $userApi;
-
-    /**
      * ActivityStreamController constructor
      *
      * @param ActivityStreamApi $streamApi
      */
-    public function __construct(ActivityStreamApi $streamApi, UserApi $userApi)
+    public function __construct(ActivityStreamApi $streamApi)
     {
         $this->middleware('auth');
         $this->streamApi = $streamApi;
-        $this->userApi   = $userApi;
     }
 
     /**
@@ -71,7 +64,7 @@ class ActivityStreamController extends Controller
 
         return response()->json([
             "status"      => "success",
-            "commentator" => $this->userApi->getUserFirstName(Auth::user()->id),
+            "commentator" => Tools::getUserFirstName(Auth::user()->id),
             "comment"     => $results->comment,
             "created_at"  => Tools::dateConverter($results->created_at)
         ]);

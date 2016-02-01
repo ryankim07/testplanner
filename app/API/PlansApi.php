@@ -17,7 +17,7 @@ use Illuminate\Database\QueryException;
 use PhpSpec\Exception\Exception;
 use App\Api\Abstracts\BaseApi;
 
-use App\Helpers\Tools;
+use App\Facades\Tools;
 
 use App\Models\Plans,
     App\Models\User,
@@ -475,8 +475,8 @@ class PlansApi extends BaseApi
             $plan->responses = $results;
         }
 
-        $plan->reporter       = $this->userApi->getUserFirstName($plan->creator_id);
-        $plan->assignee       = $this->userApi->getUserFirstName($plan->tester_id);
+        $plan->reporter       = Tools::getUserFirstName($plan->creator_id);
+        $plan->assignee       = Tools::getUserFirstName($plan->tester_id);
         $plan->browsers       = $plan->browsers;
 
         return get_object_vars($plan);

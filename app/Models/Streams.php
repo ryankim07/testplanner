@@ -1,7 +1,7 @@
 <?php namespace App\Models;
 
 /**
- * Class ActivityStream
+ * Class Streams
  *
  * Model
  *
@@ -13,18 +13,18 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Helpers\Tools;
+use App\Facades\Tools;
 
 use Auth;
 
-class Stream extends Model
+class Streams extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = "activity_stream";
+    protected $table = "streams";
 
     /**
      * The attributes that are mass assignable.
@@ -79,6 +79,6 @@ class Stream extends Model
      */
     public function comments()
     {
-        return $this->hasMany('App\Models\Comments', 'as_id', 'id');
+        return $this->hasMany('App\Models\Comments', 'stream_id', 'id');
     }
 }

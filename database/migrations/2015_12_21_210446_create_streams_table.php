@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateActivityCommentsTable extends Migration
+class CreateStreamsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,13 @@ class CreateActivityCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('activity_comments', function(Blueprint $table) {
+        Schema::create('streams', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('as_id')->unsigned();
-            $table->foreign('as_id')->references('id')->on('activity_stream');
+            $table->integer('plan_id')->unsigned();
+            $table->foreign('plan_id')->references('id')->on('plans');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->longText('comment');
+            $table->longText('activity');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateActivityCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('activity_comments');
+        Schema::drop('streams');
     }
 }

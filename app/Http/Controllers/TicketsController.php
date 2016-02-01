@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\TicketsFormRequest;
 use App\Http\Requests\UserResponseFormRequest;
 
-use App\Helpers\Tools;
+use App\Facades\Tools;
 use App\Helpers\Email;
 
 use App\Api\TicketsApi,
@@ -161,9 +161,9 @@ class TicketsController extends Controller
                 'description'        => $planData['description'],
                 'tester_id'          => $planData['tester_id'],
                 'creator_first_name' => $planData['reporter'],
-                'creator_email'      => User::getUserEmail($planData['creator_id']),
+                'creator_email'      => Tools::getUserEmail($planData['creator_id']),
                 'tester_first_name'  => $planData['assignee'],
-                'tester_email'       => User::getUserEmail($planData['tester_id']),
+                'tester_email'       => Tools::getUserEmail($planData['tester_id']),
                 'response'           => $response
             ]);
 

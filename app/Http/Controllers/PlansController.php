@@ -11,20 +11,22 @@
  * @copyright  Copyright (c) 2016 mophie (https://tp.nophie.us)
  */
 
-use App\Api\TablesApi;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\PlansFormRequest;
 use App\Http\Requests\PlanUpdateFormRequest;
 
-use App\Helpers\Tools;
-use App\Helpers\Email;
+use App\Events\LogActivity;
+use App\Events\SavingPlan;
+
+use App\Facades\Email;
 
 use App\Api\UserApi,
     App\Api\PlansApi,
     App\Api\TestersApi,
     App\Api\TicketsApi,
+    App\Api\TablesApi,
     App\Api\JiraApi;
 
 use App\Models\User;
@@ -55,6 +57,11 @@ class PlansController extends Controller
     protected $ticketsApi;
 
     /**
+     * @var Tables Api
+     */
+    protected $tablesApi;
+
+    /**
      * @var JiraApi
      */
     protected $jiraApi;
@@ -63,7 +70,7 @@ class PlansController extends Controller
      * PlansController constructor.
      */
     public function __construct(PlansApi $plansApi, UserApi $userApi, TestersApi $testersApi,
-                                TicketsApi $ticketsApi, JiraApi $jiraApi)
+                                TicketsApi $ticketsApi, TablesApi $tablesApi, JiraApi $jiraApi)
     {
         $this->middleware('auth');
         $this->middleware('testplanner', [
@@ -269,7 +276,11 @@ class PlansController extends Controller
 
         // Save plan
         $planId    = $this->plansApi->savePlan($planData, $ticketsData, $testerData);
-        $planData += ['plan_id' => $planId];
+        $planData += [
+            'plan_id' => $planId,
+            'type'    => 'plan',
+            'status'  => 'new'
+        ];
 
         if (!$planId) {
             // Delete session
@@ -280,11 +291,8 @@ class PlansController extends Controller
                 ->withErrors(['message' => config('testplanner.messages.plan.build_error')]);
         }
 
-        // Log to activity stream
-        ActivityStream::saveActivityStream($planData, 'plan', 'new');
-
-        // Mail all test browsers
-        Email::sendEmail('plan-created', array_merge($planData, ['testers' => $testerData]));
+        // Send notifications
+        event(new SavingPlan(array_merge($planData, ['testers' => $testerData])));
 
         // Delete session
         Session::forget('mophie_testplanner');
@@ -332,7 +340,7 @@ class PlansController extends Controller
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
-    public function search(Request $request, TablesApi $tablesApi)
+    public function search(Request $request)
     {
         $user  = Auth::user();
         $roles = $user->role()->get();
@@ -361,10 +369,10 @@ class PlansController extends Controller
         }
 
         $query   = DB::table('plans AS p');
-        $results = $tablesApi->searchResults($query);
+        $results = $this->tablesApi->searchResults($query);
 
         // Prepare columns to be shown
-        $table   = $tablesApi->prepare('order', [
+        $table   = $this->tablesApi->prepare('order', [
             'description',
             'first_name',
             'last_name',

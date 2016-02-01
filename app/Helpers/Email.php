@@ -11,7 +11,7 @@
  * @copyright  Copyright (c) 2016 mophie (https://tp.nophie.us)
  */
 
-use App\Helpers\Tools;
+use App\Facades\Tools;
 
 use Mail;
 use Session;

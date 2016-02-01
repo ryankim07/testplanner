@@ -69,21 +69,22 @@
 
             // Create new tickets
             var ticketBuilder = new TicketBuilder({
-                mode:            '<?php echo $plan['mode'] ?>',
-                formIdName:      'step-2-main',
-                ticketRowName:   'ticket-row',
-                ticketDescName:  'ticket-description',
-                objectiveName:   'objective',
-                testStepsName:   'test-steps',
-                ticketsObjName:  'tickets_obj',
-                addBtnName:      'add-ticket-btn',
-                removeBtnName:   'trash',
+                mode: '<?php echo $plan['mode'] ?>',
+                formIdName: 'step-2-main',
+                ticketRowName: 'ticket-row',
+                ticketDescName: 'ticket-description',
+                objectiveName: 'objective',
+                testStepsName: 'test-steps',
+                ticketsObjName: 'tickets_obj',
+                addBtnName: 'add-ticket-btn',
+                removeBtnName: 'trash',
                 continueBtnName: 'continue-btn',
-                updateBtnName:   'update-btn'
+                updateBtnName: 'update-btn'
             });
 
             // Load ticket builder
             ticketBuilder.load();
+        })
 
     </script>
 

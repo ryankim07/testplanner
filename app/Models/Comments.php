@@ -20,7 +20,7 @@ class Comments extends Model
      *
      * @var string
      */
-    protected $table = "activity_comments";
+    protected $table = "comments";
 
     /**
      * The attributes that are mass assignable
@@ -28,7 +28,7 @@ class Comments extends Model
      * @var array
      */
     protected $fillable = [
-        'as_id',
+        'stream_id',
         'user_id',
         'comment'
     ];
@@ -75,6 +75,6 @@ class Comments extends Model
      */
     public function stream()
     {
-        return $this->belongsTo('App\ActivityStream');
+        return $this->belongsTo('App\Models\Streams');
     }
 }

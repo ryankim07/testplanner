@@ -17,13 +17,17 @@ class JiraApi
 {
     private $_username;
     private $_password;
-    private $_jira_rest_url;
+    private $_issueQueryUrl;
+    private $_projectQueryUrl;
 
     public function __construct()
     {
-        $this->_username      = config('testplanner.jira.info.login');
-        $this->_password      = config('testplanner.jira.info.password');
-        $this->_jira_rest_url = config('testplanner.jira.info.rest_url');
+        $project                = config('testplanner.jira.info.project');
+        $jiraRestUrl            = config('testplanner.jira.info.rest_url');
+        $this->_username        = config('testplanner.jira.info.login');
+        $this->_password        = config('testplanner.jira.info.password');
+        $this->_issueQueryUrl   = $jiraRestUrl . '/search?jql=project=' . $project;
+        $this->_projectQueryUrl = $jiraRestUrl . '/project/' . $project . '/versions';
     }
 
     /**
@@ -49,7 +53,7 @@ class JiraApi
                 'Content-Type: application/json'
             ]);
 
-            $result  = curl_exec($ch);
+            $results = curl_exec($ch);
             $chError = curl_error($ch);
 
             curl_close($ch);
@@ -57,69 +61,11 @@ class JiraApi
             if ($chError) {
                 Tools::log('cURL server response error: ', $chError);
             } else {
-                return json_decode($result);
+                return json_decode($results);
             }
         } catch(\Exception $e) {
             Tools::log('cURL errors: ' . $e->getErrors(), $data);
         }
-    }
-
-    /**
-     * Get all issues from Jira and manipulate data from cURL
-     *
-     * @param $project
-     * @return array
-     */
-    public function getAllIssues($project)
-    {
-        // Query type
-        $data['query_url'] = $this->_jira_rest_url . '/search?jql=project=' . $project;
-
-        // Connect to api and get results
-        $data    = $this->_connect($data);
-        $results = [];
-
-        // Return on a certain array structure
-        if (isset($data)) {
-            foreach ($data->issues as $issue) {
-                $key = $issue->key;
-                $results[] = [
-                    'key' => $key,
-                    'summary' => $issue->fields->summary
-                ];
-            }
-
-            ksort($results, SORT_NUMERIC);
-        }
-
-        return $results;
-    }
-
-    /**
-     * Get all versions from Jira and manipulate data from cURL
-     *
-     * @param $project
-     * @return mixed
-     */
-    public function getAllProjectVersions($project)
-    {
-        // Query type
-        $data['query_url'] = $this->_jira_rest_url . '/project/' . $project . '/versions';
-
-        // Connect to api and get results
-        $data    = $this->_connect($data);
-        $results = [];
-
-        // Return on a certain array structure
-        if (isset($data)) {
-            foreach ($data as $version) {
-                $results[] = ['name' => $version->name];
-            }
-
-            krsort($results, SORT_NUMERIC);
-        }
-
-        return $results;
     }
 
     /**
@@ -130,12 +76,19 @@ class JiraApi
     public function jiraVersions()
     {
         // Get JIRA project versions
-        $results  = $this->getAllProjectVersions('ECOM');
-        $versions = [];
+        $data['query_url'] = $this->_projectQueryUrl;
+        $responseData  = $this->_connect($data);
+        $versions      = [];
 
-        if (isset($results)) {
-            foreach($results as $version) {
-                $versions[] = 'Test Plan for build v' . $version['name'];
+        // Return on a certain array structure
+        if (isset($responseData)) {
+            krsort($responseData);
+
+            foreach ($responseData as $version) {
+                $versions[] = [
+                    'label' => 'Test Plan for build v' . $version->name,
+                    'value' => $version->id
+                ];
             }
         }
 
@@ -150,15 +103,61 @@ class JiraApi
     public function jiraIssues()
     {
         // Get JIRA issues
-        $results = $this->getAllIssues('ECOM');
+        $data['query_url'] = $this->_issueQueryUrl;
+        $responseData = $this->_connect($data);
         $issues  = [];
 
-        if (isset($results)) {
-            foreach ($results as $issue) {
-                $issues[] = $issue['key'] . ': ' . $issue['summary'];
+        // Return on a certain array structure
+        if (isset($responseData)) {
+            foreach ($responseData->issues as $issue) {
+                $issues[] = $issue->key . ': ' . $issue->fields->summary;
             }
         }
 
         return $issues;
+    }
+
+    public function jiraIssuesByVersion($buildVersionId)
+    {
+        try {
+            // Query type
+            $data['query_url'] = $this->_issueQueryUrl;
+            $responseData      = $this->_connect($data);
+            $allIssues         = [];
+            $specificIssues    = [];
+
+            // Grab only specific issues to be auto filled
+            if (isset($responseData)) {
+                foreach($responseData->issues as $issue) {
+                    $issueId     = $issue->id;
+                    $key         = $issue->key;
+                    $fixVersions = $issue->fields->fixVersions;
+                    $summary     = $issue->fields->summary;
+
+                    foreach($fixVersions as $fixVersion) {
+                        if ($fixVersion->id == $buildVersionId) {
+                            $specificIssues[$issueId] = $key . ': ' . $summary;
+                        }
+                    }
+
+                    // Grab all issues to be shown as dropdown
+                    $allIssues[] = $issue->key . ': ' . $issue->fields->summary;
+                }
+            }
+        } catch(\Exception $e) {
+            Tools::log('cURL errors: ' . $e->getErrors(), $data);
+        }
+
+        // Set default array, therefore it shows blank ticket block
+        if (count($specificIssues) == 0) {
+            $specificIssues[0] = '';
+        }
+
+        $results = [
+            'allIssues'      => $allIssues,
+            'specificIssues' => $specificIssues
+        ];
+
+        return $results;
     }
 }

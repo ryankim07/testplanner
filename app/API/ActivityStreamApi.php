@@ -8,12 +8,12 @@
  * @author     Ryan Kim
  * @category   Mophie
  * @package    Test Planner
- * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
+ * @copyright  Copyright (c) 2016 mophie (https://tp.mophie.us)
  */
 
-use App\Helpers\Tools;
+use App\Facades\Tools;
 
-use App\Models\Stream,
+use App\Models\Streams,
     App\Models\Comments;
 
 use Session;
@@ -28,7 +28,7 @@ class ActivityStreamApi
     /**
      * @var Comments
      */
-    protected $commentModel;
+    protected $commentsModel;
 
     /**
      * @var TablesApi
@@ -36,16 +36,17 @@ class ActivityStreamApi
     protected $tablesApi;
 
     /**
-     * ActivityStream constructor
+     * ActivityStreamApi constructor
      *
-     * @param Stream $streams
+     * @param Streams $streams
      * @param Comments $comments
+     * @param TablesApi $tablesApi
      */
-    public function __construct(Stream $streams, Comments $comments, TablesApi $tables)
+    public function __construct(Streams $streams, Comments $comments, TablesApi $tablesApi)
     {
-        $this->model        = $streams;
-        $this->commentModel = $comments;
-        $this->tablesApi    = $tables;
+        $this->model         = $streams;
+        $this->commentsModel = $comments;
+        $this->tablesApi     = $tablesApi;
     }
 
     public function displayActivityStream()
@@ -82,15 +83,15 @@ class ActivityStreamApi
      * Save activity stream
      *
      * @param $plan
-     * @param $type
-     * @param null $status
      * @return bool
      */
-    public function saveActivityStream($plan, $type, $status = null)
+    public function saveActivityStream($plan)
     {
         try {
             $assigneeName = Tools::getUserFirstName($plan['creator_id']);
-            $userId       = $plan['creator_id'];
+            $userId = $plan['creator_id'];
+            $type   = $plan['type'];
+            $status = $plan['status'];
 
             if ($type != 'plan') {
                 $assigneeName = $plan['assignee'];
@@ -121,7 +122,7 @@ class ActivityStreamApi
             if ($status == 'new') {
                 $activity = $assigneeName . ' ' . $message . ' ' . $planLink;
 
-                $comment = $this->commentModel->create([
+                $this->model->create([
                     'plan_id'  => $plan['plan_id'],
                     'user_id'  => $userId,
                     'activity' => $activity
@@ -140,17 +141,17 @@ class ActivityStreamApi
     /**
      * Create comment in activity stream
      *
-     * @param $asId
+     * @param $streamId
      * @param $userId
      * @param $comment
      * @return bool
      */
-    public function saveActivityComment($asId, $userId, $comment)
+    public function saveActivityComment($streamId, $userId, $comment)
     {
-        $results = $this->model->create([
-            'as_id'   => $asId,
-            'user_id' => $userId,
-            'comment' => $comment
+        $results = $this->commentsModel->create([
+            'stream_id' => $streamId,
+            'user_id'   => $userId,
+            'comment'   => $comment
         ]);
 
         return $results;

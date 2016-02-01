@@ -11,6 +11,8 @@
  * @copyright  Copyright (c) 2016 mophie (https://tp.nophie.us)
  */
 
+use App\Models\User;
+
 use Lang;
 use Log;
 
@@ -195,5 +197,31 @@ class Tools
         }
 
         return $results;
+    }
+
+    /**
+     * Get user's info
+     *
+     * @param $userId
+     * @return mixed
+     */
+    public static function getUserFirstName($userId)
+    {
+        $user = User::find($userId);
+
+        return $user->first_name;
+    }
+
+    /**
+     * Get user's email
+     *
+     * @param $userId
+     * @return mixed
+     */
+    public static function getUserEmail($userId)
+    {
+        $info = User::find($userId);
+
+        return $info->email;
     }
 }

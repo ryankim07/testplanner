@@ -8,7 +8,7 @@
  * @author     Ryan Kim
  * @category   Mophie
  * @package    Test Planner
- * @copyright  Copyright (c) 2016 mophie (https://lpp.nophie.com)
+ * @copyright  Copyright (c) 2016 mophie (https://tp.mophie.us)
  */
 
 use Illuminate\Support\Facades\DB;
@@ -52,32 +52,6 @@ class UserApi extends BaseApi
         $this->model         = $user;
         $this->userRoleModel = $userRole;
         $this->tablesApi     = $tables;
-    }
-
-    /**
-     * Get user's info
-     *
-     * @param $userId
-     * @return mixed
-     */
-    public function getUserFirstName($userId)
-    {
-        $user = $this->model->find($userId);
-
-        return $user->first_name;
-    }
-
-    /**
-     * Get user's email
-     *
-     * @param $userId
-     * @return mixed
-     */
-    public function getUserEmail($userId)
-    {
-        $info = $this->model->find($userId);
-
-        return $info->email;
     }
 
     /**
