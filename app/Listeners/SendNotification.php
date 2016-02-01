@@ -1,5 +1,15 @@
 <?php namespace App\Listeners;
 
+/**
+ * Class SendNotification
+ *
+ * Listener
+ *
+ * @author     Ryan Kim
+ * @category   Mophie
+ * @package    Test Planner
+ * @copyright  Copyright (c) 2016 mophie (https://tp.nophie.us)
+ */
 
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;

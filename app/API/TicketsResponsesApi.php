@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use PhpSpec\Exception\Exception;
 
+use App\Events\RespondingPlan;
+
 use App\Facades\Tools;
 
 use App\Models\TicketsResponses;
@@ -68,7 +70,7 @@ class TicketsResponsesApi
                 if ($incomplete == $totalRows) {
                     $ticketStatus = 'new';
                 } elseif ($completed == $totalRows) {
-                    if ($rows['ticket_status'] == 'complete') {
+                    if ($rows['ticket_status'] == 'complete' || $rows['ticket_status'] == 'update') {
                         $ticketStatus = 'update';
                     } else {
                         $ticketStatus = 'complete';
@@ -79,13 +81,24 @@ class TicketsResponsesApi
 
                 // Create or update ticket response
                 $this->model->updateOrCreate([
-                    'id'        => $rows['ticket_resp_id']], [
+                    'id' => $rows['ticket_resp_id']
+                ], [
                     'plan_id'   => $planData['id'],
                     'tester_id' => $planData['tester_id'],
                     'browser'   => $browser,
                     'responses' => serialize($rows['tickets']),
-                    'status'    => $ticketStatus
+                    'status'    => $ticketStatus,
                 ]);
+
+                if ($ticketStatus != 'new') {
+                    $planData += [
+                        'type'   => 'ticket-response',
+                        'status' => $ticketStatus
+                    ];
+
+                    // Send notifications observer
+                    event(new respondingPlan($planData));
+                }
             }
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
@@ -101,9 +114,6 @@ class TicketsResponsesApi
             $redirect = true;
         }
 
-        // Commit all changes
-        DB::commit();
-
         // Redirect if errors
         if ($redirect) {
             // Rollback
@@ -115,6 +125,9 @@ class TicketsResponsesApi
             return false;
         }
 
-        return $ticketStatus;
+        // Commit all changes
+        DB::commit();
+
+        return true;
     }
 }

@@ -1,6 +1,15 @@
-<?php
+<?php namespace App\Providers;
 
-namespace App\Providers;
+/**
+ * Class EventServiceProvider
+ *
+ * Service Provider
+ *
+ * @author     Ryan Kim
+ * @category   Mophie
+ * @package    Test Planner
+ * @copyright  Copyright (c) 2016 mophie (https://tp.mophie.us)
+ */
 
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;

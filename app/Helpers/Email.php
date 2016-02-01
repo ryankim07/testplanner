@@ -40,7 +40,7 @@ class Email
                 break;
 
             case 'ticket-response':
-                $emailSubject =  $data['description'] . ' - ' . config('testplanner.mail.subjects.ticket_response') . ' ' . $data['tester_first_name'];
+                $emailSubject =  $data['description'] . ' - ' . config('testplanner.mail.subjects.ticket_response') . ' ' . Tools::getUserEmail($data['tester_id']);
                 $emailType    = 'emails.ticket_response';
                 break;
         }

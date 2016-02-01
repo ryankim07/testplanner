@@ -43,7 +43,9 @@
                                                     <th>First</th>
                                                     <th>Last</th>
                                                 @endif
-                                                <th class="text-center">Status</th>
+                                                @if($type == 'admin_created_plans')
+                                                    <th class="text-center">Status</th>
+                                                @endif
                                                 <th>Created</th>
                                                 @if($type == 'admin_created_plans')
                                                     <th class="text-center">View</th>
@@ -60,10 +62,9 @@
                                                         <td>{!! $plan->first_name !!}</td>
                                                         <td>{!! $plan->last_name !!}</td>
                                                     @endif
+                                                    @if($type == 'admin_created_plans')
                                                     <td class="text-center">
-                                                        @if($type == 'admin_created_plans')
-
-                                                            <?php
+                                                        <?php
                                                             if($plan->status == 'complete') {
                                                                 $label = 'label-default';
                                                             } else if($plan->status == 'progress') {
@@ -71,23 +72,9 @@
                                                             } else {
                                                                 $label = 'label-success';
                                                             }
-                                                            ?>
-
-                                                            <span class="label {!! $label !!}">{!! $plan->status !!}</span>
-                                                        @else
-
-                                                            <?php
-                                                            if($plan->ticket_response_status == 'complete') {
-                                                                $trLabel = 'label-default';
-                                                            } else if($plan->ticket_response_status == 'progress') {
-                                                                $trLabel = 'label-warning';
-                                                            } else {
-                                                                $trLabel = 'label-success';
-                                                            }
-                                                            ?>
-
-                                                            <span class="label {!! $trLabel !!}">{!! isset($plan->ticket_response_status) ? $plan->ticket_response_status : 'new' !!}</span>
-                                                        @endif
+                                                        ?>
+                                                        <span class="label {!! $label !!}">{!! $plan->status !!}</span>
+                                                    @endif
                                                     </td>
                                                     <td>{!! Tools::dateConverter($plan->created_at) !!}</td>
                                                     @if($type == 'admin_created_plans')

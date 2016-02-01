@@ -1,5 +1,16 @@
 <?php namespace App\Events;
 
+/**
+ * Class RespondingPlan
+ *
+ * Event
+ *
+ * @author     Ryan Kim
+ * @category   Mophie
+ * @package    Test Planner
+ * @copyright  Copyright (c) 2016 mophie (https://tp.mophie.us)
+ */
+
 use App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
