@@ -34,9 +34,9 @@
                 <div class="row nested-block">
                     <a href="{!! URL::route('plan.edit') !!}" class="pencil" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
                     <ul class="list-unstyled">
-                        <li>Description: <strong>{!! $plan['description'] !!}</strong></li>
-                        <li>Starts on: <strong>{!! $plan['started_at'] !!}</strong></li>
-                        <li>Expires on: <strong>{!! $plan['expired_at'] !!}</strong></li>
+                        <li><h5>Description:</h5> {!! $plan['description'] !!}</li>
+                        <li><h5>Starts on:</h5> {!! $plan['started_at'] !!}</li>
+                        <li><h5>Expires on:</h5> {!! $plan['expired_at'] !!}</li>
                     </ul>
                 </div>
                 <div class="page-header tickets"><h4>Tickets</h4></div>
@@ -45,9 +45,9 @@
                         <a href="#" class="trash" data-id="{!! $ticket['id'] !!}" title="Delete"><i class="fa fa-trash-o fa-lg"></i></a>
                         <a href="{!! URL::route('ticket.edit') !!}" class="pencil" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
                         <ul class="list-unstyled">
-                            <li><h4><span class="label label-default">Description</span></h4><h5>{!! $ticket['desc'] !!}</h5></li>
-                            <li><h4><span class="label label-primary">Objective</span></h4><h5>{!! $ticket['objective'] !!}</h5></li>
-                            <li><h4><span class="label label-info">Test Steps</span></h4><h5>{!! nl2br($ticket['test_steps']) !!}</h5></li>
+                            <li><h5>Description</h5>{!! $ticket['desc'] !!}</li>
+                            <li><h5>Objective</h5>{!! $ticket['objective'] !!}</li>
+                            <li><h5>Test Steps</h5>{!! nl2br($ticket['test_steps']) !!}</li>
                         </ul>
                     </div>
                 @endforeach

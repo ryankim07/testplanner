@@ -180,6 +180,10 @@ body {
     background-color: #FFFFFF;
 }
 
+#review-main .page-header:nth-child(n+2) {
+    margin-top: 30px;
+}
+
 
 /*
  * Images
@@ -237,11 +241,22 @@ body {
  */
 .btn-custom, .panel-custom {
     background: #777777;
+    border-color: #2e6da4;
     color: #FFFFFF;
 }
 
 .clear-btn {
     cursor: pointer;
+}
+
+#step-2-main #add-ticket-btn {
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    color: #fff;
+}
+
+#step-2-main #add-ticket-btn #another-ticket-text {
+    margin-left: 5px;
 }
 
 /*

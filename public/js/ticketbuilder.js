@@ -201,7 +201,7 @@ function TicketBuilder(config) {
                      '<div class="col-xs-12 col-md-12">' +
                      '<div class="clearfix">' +
                      '<div class="pull-left">' +
-                     '<input type="button" value="Add another ticket" class="btn-custom btn-sm" id="add-ticket-btn">' +
+                     '<button type="button" class="btn btn-custom btn-sm" id="add-ticket-btn"><i class="fa fa-plus-square"></i><span id="another-ticket-text">Add another ticket</span></button>' +
                      '</div></div></div></div>');
 
         addBtn.insertAfter($(formId + ' ' + ticketRowClass).last());
