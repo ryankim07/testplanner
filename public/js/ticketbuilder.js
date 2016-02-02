@@ -62,7 +62,7 @@ function TicketBuilder(config) {
             changeCreateTicketInputIndex(clonedField);
 
             // Add as new block after latest ticket row
-            clonedField.insertAfter($(ticketRowClass).last());
+            clonedField.insertAfter($(ticketRowClass).last()).hide().show('slow');
 
             // Display remove option
             $(removeBtnClass).show();
@@ -79,7 +79,9 @@ function TicketBuilder(config) {
         $(formId).on('click', removeBtnClass, function(e) {
             e.preventDefault();
 
-            $(this).closest(ticketRowClass).remove();
+            $(this).closest(ticketRowClass).slideUp('slow', function() {
+                $(this).closest(ticketRowClass).remove();
+            });
 
             // Cannot remove all the rows, only one should be left over
             removeTrashBtn(true);
@@ -198,11 +200,11 @@ function TicketBuilder(config) {
     function addAnotherTicketBtn()
     {
         var addBtn = $('<div class="form-group">' +
-                     '<div class="col-xs-12 col-md-12">' +
-                     '<div class="clearfix">' +
-                     '<div class="pull-left">' +
-                     '<button type="button" class="btn btn-custom btn-sm" id="add-ticket-btn"><i class="fa fa-plus-square"></i><span id="another-ticket-text">Add another ticket</span></button>' +
-                     '</div></div></div></div>');
+            '<div class="col-xs-12 col-md-12">' +
+            '<div class="clearfix">' +
+            '<div class="pull-left">' +
+            '<button type="button" class="btn btn-custom btn-sm" id="add-ticket-btn"><i class="fa fa-plus-square"></i><span id="another-ticket-text">Add another ticket</span></button>' +
+            '</div></div></div></div>');
 
         addBtn.insertAfter($(formId + ' ' + ticketRowClass).last());
     }

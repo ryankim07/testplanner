@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col-xs-10 col-md-12">
                         <i class="fa fa-check-square-o fa-3x header-icon"></i>
-                        <h4>Responses - </h4>
+                        <h4>Responses - {!! $description !!}</h4>
                     </div>
                 </div>
             </div>

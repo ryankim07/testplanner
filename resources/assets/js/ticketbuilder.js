@@ -62,7 +62,7 @@ function TicketBuilder(config) {
             changeCreateTicketInputIndex(clonedField);
 
             // Add as new block after latest ticket row
-            clonedField.insertAfter($(ticketRowClass).last());
+            clonedField.insertAfter($(ticketRowClass).last()).hide().show('slow');
 
             // Display remove option
             $(removeBtnClass).show();
@@ -79,7 +79,9 @@ function TicketBuilder(config) {
         $(formId).on('click', removeBtnClass, function(e) {
             e.preventDefault();
 
-            $(this).closest(ticketRowClass).remove();
+            $(this).closest(ticketRowClass).slideUp('slow', function() {
+                $(this).closest(ticketRowClass).remove();
+            });
 
             // Cannot remove all the rows, only one should be left over
             removeTrashBtn(true);

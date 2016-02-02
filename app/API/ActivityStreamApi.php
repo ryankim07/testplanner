@@ -98,7 +98,7 @@ class ActivityStreamApi
                 $userId       = $plan['tester_id'];
             }
 
-            $planLink = link_to_route('plan.view.response', $plan['description'], [$plan['id'], $userId]);
+            $planLink = link_to_route('plan.view.response', $plan['description'], [$plan['plan_id'], $userId]);
             $message  = '';
 
             switch($type) {
