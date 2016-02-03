@@ -182,6 +182,10 @@
         @endif
 
         </div>
+
+        @if(isset($responses))
+
+        @endif
     </div>
 
     <script type="text/javascript">

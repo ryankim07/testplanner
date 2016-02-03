@@ -30,28 +30,54 @@ class TestPlannerSession
             return redirect()->secure($request->getRequestUri());
         }
 
-        $session = $request->session()->get('mophie_testplanner');
-        $url     = rawurldecode($request->url());
+        $tpSession    = $request->session()->get('mophie_testplanner');
+        $modalSession = $request->session()->get('tp.modal.visited');
+        $userSession  = $request->session()->get('tp.modal.user');
+
+        $url          = rawurldecode($request->url());
 
         switch($url) {
             /** DASHBOARD **/
 
             case url() . '/dashboard':
-                if (isset($session)) {
+                if (isset($tpSession)) {
                     $request->session()->forget('mophie_testplanner');
                 }
+
+                if (!$modalSession) {
+                    $request->session()->put('tp.modal', ['visited' => true]);
+                }
+
+                if (!$userSession) {
+                    $user = $request->user();
+                    $userRoles = $user->role()->get();
+
+                    foreach($userRoles as $role) {
+                        $roles[$role->id] = $role->name;
+                    }
+
+                    $request->session()->put('tp.user', [
+                        'id'         => $user->id,
+                        'first_name' => $user->first_name,
+                        'last_name'  => $user->last_name,
+                        'email'      => $user->email,
+                        'active'     => $user->active,
+                        'roles'      => $roles
+                    ]);
+                }
+
             break;
 
             /** PLANS **/
 
             case url() . '/plan/build':
-                if (isset($session)) {
+                if (isset($tpSession)) {
                     $request->session()->forget('mophie_testplanner');
                 }
             break;
 
             case url() . '/plan/{plan}':
-                if (!isset($session['plan'])) {
+                if (!isset($tpSession['plan'])) {
                     return redirect('/')
                         ->withInput()
                         ->withErrors(['message' => config('testplanner.messages.plan.session_error')]);
@@ -59,7 +85,7 @@ class TestPlannerSession
             break;
 
             case url() . '/plan/edit':
-                if (!isset($session['plan'])) {
+                if (!isset($tpSession['plan'])) {
                     return redirect('/')
                         ->withInput()
                         ->withErrors(['message' => config('testplanner.messages.plan.session_error')]);
@@ -68,9 +94,9 @@ class TestPlannerSession
 
             case url() . '/plan/review':
             case url() . '/plan/save':
-                if (!isset($session['plan']) ||
-                    !isset($session['tickets']) ||
-                    !isset($session['testers'])) {
+                if (!isset($tpSession['plan']) ||
+                    !isset($tpSession['tickets']) ||
+                    !isset($tpSession['testers'])) {
                     return redirect('/plan/build')->withInput()
                         ->withErrors(['message' => config('testplanner.messages.plan.session_error')]);
                 }
@@ -79,13 +105,13 @@ class TestPlannerSession
             /** TICKETS **/
 
             case url() . '/ticket/build':
-                if (!isset($session['plan'])) {
+                if (!isset($tpSession['plan'])) {
                     return redirect('/plan/build');
                 }
             break;
 
             case url() . '/ticket/{ticket}':
-                if (!isset($session['ticket'])) {
+                if (!isset($tpSession['ticket'])) {
                     return redirect('/')
                         ->withInput()
                         ->withErrors(['message' => config('testplanner.messages.plan.session_error')]);
@@ -93,7 +119,7 @@ class TestPlannerSession
             break;
 
             case url() . '/ticket/edit':
-                if (!isset($session['tickets'])) {
+                if (!isset($tpSession['tickets'])) {
                     return redirect('/')
                         ->withInput()
                         ->withErrors(['message' => config('testplanner.messages.plan.session_error')]);
@@ -103,14 +129,14 @@ class TestPlannerSession
             /** TESTERS **/
 
             case url() . '/tester/build':
-                if (!isset($session['plan']) ||
-                    !isset($session['tickets'])) {
+                if (!isset($tpSession['plan']) ||
+                    !isset($tpSession['tickets'])) {
                     return redirect('/plan/build');
                 }
             break;
 
             case url() . '/tester/{tester}':
-                if (!isset($session['testers'])) {
+                if (!isset($tpSession['testers'])) {
                     return redirect('/')
                         ->withInput()
                         ->withErrors(['message' => config('testplanner.messages.plan.session_error')]);
@@ -118,7 +144,7 @@ class TestPlannerSession
             break;
 
             case url() . '/tester/edit':
-                if (!isset($session['testers'])) {
+                if (!isset($tpSession['testers'])) {
                     return redirect('/')
                         ->withInput()
                         ->withErrors(['message' => config('testplanner.messages.plan.session_error')]);
@@ -126,7 +152,7 @@ class TestPlannerSession
             break;
 
             default:
-                if (!isset($session)) {
+                if (!isset($tpSession)) {
                     return redirect('/');
                 }
             break;

@@ -98,7 +98,7 @@ class ActivityStreamApi
                 $userId       = $plan['tester_id'];
             }
 
-            $planLink = link_to_route('plan.view.response', $plan['description'], [$plan['plan_id'], $userId]);
+            $planLink = link_to_route('plan.view.response', $plan['description'], [$plan['id'], $userId]);
             $message  = '';
 
             switch($type) {
@@ -122,7 +122,7 @@ class ActivityStreamApi
             $activity = $assigneeName . ' ' . $message . ' ' . $planLink;
 
             $this->model->create([
-                'plan_id'  => $plan['plan_id'],
+                'plan_id'  => $plan['id'],
                 'user_id'  => $userId,
                 'activity' => $activity
             ]);

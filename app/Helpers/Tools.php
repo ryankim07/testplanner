@@ -15,6 +15,7 @@ use App\Models\User;
 
 use Lang;
 use Log;
+use Session;
 
 class Tools
 {
@@ -223,5 +224,26 @@ class Tools
         $info = User::find($userId);
 
         return $info->email;
+    }
+
+    public static function checkUserRole($userRoles, $allowedRoles)
+    {
+        $found = 0;
+
+        // Check which section they belond to
+        foreach($allowedRoles as $allowedRole) {
+            foreach($userRoles as $userRole) {
+                if ($userRole == $allowedRole) {
+                    $found++;
+                }
+            }
+        }
+
+        if ($found == count($allowedRoles))
+        {
+            return true;
+        }
+
+        return false;
     }
 }
