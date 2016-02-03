@@ -39,20 +39,6 @@ class UserRole extends Model
      */
     protected $guarded = array('id');
 
-    public function addRoles($userId, $selectedRoles)
-    {
-        try {
-            foreach ($selectedRoles as $key => $id) {
-                $this->create([
-                    'user_id' => $userId,
-                    'role_id' => $id
-                ]);
-            }
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
     /**
      * Only one role belongs to a user
      *

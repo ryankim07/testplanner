@@ -34,7 +34,7 @@ class SystemApi implements SystemInterface
      */
     public function updateConfigs($data)
     {
-        $configs  = self::getConfigs();
+        $configs = $this->getConfigs();
 
         foreach($data as $key => $val) {
             list($arrKeys, $attr) = explode(':', $key);

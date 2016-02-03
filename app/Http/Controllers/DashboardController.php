@@ -17,7 +17,6 @@ use App\Api\PlansApi,
     App\Api\ActivityStreamApi;
 
 use Auth;
-use Session;
 
 class DashboardController extends Controller
 {
@@ -39,10 +38,6 @@ class DashboardController extends Controller
      */
     public function index(PlansApi $plansApi, ActivityStreamApi $activityApi)
     {
-        $user = Session::get('tp.user');
-        // Get session to launch modal
-        $responses = $plansApi->getPlansWithResponsesById($user['id']);
-
         // Get created and assigned plans
         $plans = $plansApi->getDashboardLists();
 
@@ -50,6 +45,6 @@ class DashboardController extends Controller
         $activities = $activityApi->getActivityStream();
 
         // Return view
-        return view('pages.main.dashboard', compact('responses', 'plans', 'activities'));
+        return view('pages.main.dashboard', compact('plans', 'activities'));
     }
 }

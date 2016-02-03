@@ -28,6 +28,7 @@ use App\Models\Plans,
 use App\Api\TablesApi;
 
 use Auth;
+use Session;
 
 class PlansApi extends BaseApi
 {
@@ -80,7 +81,7 @@ class PlansApi extends BaseApi
         $this->trModel      = $tr;
         $this->testersModel = $testers;
         $this->tablesApi    = $tablesApi;
-        $this->authUser     = Auth::user();
+        $this->authUser     = Session::get('tp.user');
     }
 
     /**
@@ -88,17 +89,17 @@ class PlansApi extends BaseApi
      *
      * @return array
      */
-    public function getDashboardCreatedAssigned()
+    public function getDashboardLists()
     {
         // Get user's role
         $user = $this->authUser;
 
         // Get assigned plans from others
-        $allAssigned = $this->getAllAssigned($user->id, 'created_at', 'DESC', 'dashboard');
+        $allAssigned = $this->getAllAssigned($user['id'], 'created_at', 'DESC', 'dashboard');
 
         // Display selected creator of the plan
-        if ($user->hasRole(['administrator'])) {
-            $allResponses = $this->getAllResponses($user->id, 'created_at', 'DESC', 'dashboard');
+        if (Tools::checkUserRole($user['roles'], ['administrator'])) {
+            $allResponses = $this->getAllResponses($user['id'], 'created_at', 'DESC', 'dashboard');
         }
 
         $results = [
@@ -216,7 +217,7 @@ class PlansApi extends BaseApi
         }
 
         $results = [
-            'plan' => ['description' => ''],
+            'description'     => $plan['description'],
             'usersTabHtml'    => $usersTabHtml,
             'browsersTabHtml' => $browsersTabHtml
         ];
@@ -224,6 +225,13 @@ class PlansApi extends BaseApi
         return $results;
     }
 
+    /**
+     * Respond to ticket
+     *
+     * @param $planId
+     * @param $userId
+     * @return array
+     */
     public function respond($planId, $userId)
     {
         // Get plan details
@@ -268,7 +276,7 @@ class PlansApi extends BaseApi
     public function getAllCreated($userApi, $userId)
     {
         // Display selected creator of the plan
-        if ($isRoot = $this->authUser->hasRole(['root'])) {
+        if ($isRoot = Tools::checkUserRole(Session::get('tp.user.roles'), ['root'])) {
             $userId = '';
         }
 
@@ -390,7 +398,7 @@ class PlansApi extends BaseApi
      *
      * @param $planId
      * @param $userId
-     * @return array|mixed
+     * @return array
      */
     public function planRenderer($planId, $userId)
     {
@@ -403,12 +411,13 @@ class PlansApi extends BaseApi
             ->where('t.user_id', '=', $userId)
             ->first();
 
-        $ticketTexts = unserialize($plan->tickets);
-
         // Get responses
         $ticketsResponses = $this->trModel->where('plan_id', '=', $planId)
             ->where('tester_id', '=', $userId)
             ->get();
+
+        // Get ticket definitions
+        $ticketTexts = unserialize($plan->tickets);
 
         // If there are no responses, create a blank object
         if ($ticketsResponses->count() == 0) {
@@ -463,9 +472,10 @@ class PlansApi extends BaseApi
             $plan->responses = $results;
         }
 
-        $plan->reporter = Tools::getUserFirstName($plan->creator_id);
-        $plan->assignee = Tools::getUserFirstName($plan->tester_id);
-        $plan->browsers = $plan->browsers;
+        $plan->reporter    = Tools::getUserFirstName($plan->creator_id);
+        $plan->assignee    = Tools::getUserFirstName($plan->tester_id);
+        $plan->browsers    = $plan->browsers;
+        $plan->description = $plan->description;
 
         return get_object_vars($plan);
     }
@@ -560,7 +570,7 @@ class PlansApi extends BaseApi
         // Start plan creation
         try {
             // Save new plan build
-            $plan = $this->model->create($planData);
+            $plan   = $this->model->create($planData);
             $planId = $plan->id;
 
             if (isset($plan->id)) {

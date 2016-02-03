@@ -84,7 +84,6 @@ Route::get('user/search', 'UsersController@search');
 Route::post('user/search', ['as' => 'user.search', 'uses' => 'UsersController@search']);
 
 
-
 /**
  *
  * Dashboard

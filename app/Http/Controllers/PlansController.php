@@ -325,13 +325,18 @@ class PlansController extends Controller
     public function search(Request $request)
     {
         // Get roles
-        $roles = $this->user->role()->get();
+        $roles = Session::get('tp.user.roles');
 
         // If user has root privileges, get all the plans that were created.
         // Otherwise just get the plans created with administrator privilege.
-        foreach($roles as $role) {
-            $roleName = $role->name;
-            $userId = $roleName == "root" ? 0 : $this->user->id;
+        foreach($roles as $id => $role) {
+            $userId = $id;
+
+            if ($role == "root") {
+                $userId   = 0;
+                $roleName = $role;
+            }
+
             break;
         }
 

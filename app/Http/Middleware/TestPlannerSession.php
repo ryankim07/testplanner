@@ -30,11 +30,9 @@ class TestPlannerSession
             return redirect()->secure($request->getRequestUri());
         }
 
-        $tpSession    = $request->session()->get('mophie_testplanner');
-        $modalSession = $request->session()->get('tp.modal.visited');
-        $userSession  = $request->session()->get('tp.modal.user');
-
-        $url          = rawurldecode($request->url());
+        $tpSession   = $request->session()->get('mophie_testplanner');
+        $userSession = $request->session()->get('tp.user');
+        $url         = rawurldecode($request->url());
 
         switch($url) {
             /** DASHBOARD **/
@@ -42,10 +40,6 @@ class TestPlannerSession
             case url() . '/dashboard':
                 if (isset($tpSession)) {
                     $request->session()->forget('mophie_testplanner');
-                }
-
-                if (!$modalSession) {
-                    $request->session()->put('tp.modal', ['visited' => true]);
                 }
 
                 if (!$userSession) {

@@ -47,11 +47,11 @@ class UserApi extends BaseApi
      *
      * @param User $user
      */
-    public function __construct(User $user, UserRole $userRole, TablesApi $tables)
+    public function __construct(User $user, UserRole $userRole, TablesApi $tablesApi)
     {
         $this->model         = $user;
         $this->userRoleModel = $userRole;
-        $this->tablesApi     = $tables;
+        $this->tablesApi     = $tablesApi;
     }
 
     /**
@@ -85,11 +85,7 @@ class UserApi extends BaseApi
         ];
 
         // Prepare dropdown list of all roles
-        $allRoles  = Role::all();
-
-        foreach($allRoles as $eachRole) {
-            $rolesOptions[$eachRole->id] = $eachRole->custom_role_name;
-        }
+        $rolesOptions = Tools::getRolesDropdownOptions();
 
         $results['role_options'] = count($rolesOptions) > 0 ? $rolesOptions : '';
 

@@ -11,7 +11,8 @@
  * @copyright  Copyright (c) 2016 mophie (https://tp.nophie.us)
  */
 
-use App\Models\User;
+use App\Models\User,
+    App\Models\Role;
 
 use Lang;
 use Log;
@@ -166,6 +167,22 @@ class Tools
             } else {
                 $results[$each->user_id] = $each->first_name;
             }
+        }
+
+        return $results;
+    }
+
+    /**
+     * Get dropdown of all roles available for user
+     *
+     * @return mixed
+     */
+    public static function getRolesDropdownOptions()
+    {
+        $allRoles = Role::all();
+
+        foreach($allRoles as $eachRole) {
+            $results[$eachRole->id] = $eachRole->custom_role_name;
         }
 
         return $results;

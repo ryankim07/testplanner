@@ -16,8 +16,7 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button class="btn btn-primary modal-win-update">Update</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="close-btn">Close</button>
             </div>
         </div>
     </div>
