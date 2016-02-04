@@ -124,12 +124,14 @@ function TicketBuilder(config) {
      */
     function changeCreateTicketInputIndex(obj)
     {
-        var index = stringGen(5);
+        $.each(obj, function() {
+            var index = stringGen(5);
 
-        obj.attr('id', index);
-        obj.find(ticketDescClass).attr('name', 'desc["' + index + '"]');
-        obj.find(objectiveClass).attr('name', 'objective["' + index + '"]');
-        obj.find(testStepsClass).attr('name', 'test_steps["' + index + '"]');
+            $(this).attr('id', index);
+            $(this).find(ticketDescClass).attr('name', 'desc["' + index + '"]');
+            $(this).find(objectiveClass).attr('name', 'objective["' + index + '"]');
+            $(this).find(testStepsClass).attr('name', 'test_steps["' + index + '"]');
+        });
 
         return true;
     }

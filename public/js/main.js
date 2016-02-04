@@ -175,7 +175,7 @@ function registerEditUserJs(mode, url)
                 if(jqXhr.status === 422) {
                     var msgs = '';
 
-                    $.each(jqXhr.responseJSON, function (key, item) {
+                    $.each(jqXhr.responseJSON, function(key, item) {
                         msgs += '<i class="fa fa-exclamation-circle fa-lg" aria-hidden="true"></i><span class="sr-only">Error:</span> ' + item + '<br/>';
                     });
 

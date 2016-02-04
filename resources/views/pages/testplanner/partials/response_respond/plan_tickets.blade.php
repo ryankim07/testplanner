@@ -7,7 +7,7 @@
 |
 --}}
 
-    @foreach($responses['tickets'] as $ticket)
+    @foreach($responses['tickets'] as $index => $ticket)
         <div class="row nested-block ticket-panel" id="{!! $ticket['id'] !!}">
             <legend>Ticket - {!! Html::link(isset($ticket['description_url']) ? $ticket['description_url'] : '#', $ticket['desc'], ['class' => 'jira-issue', 'target' => '_blank', 'title' => 'Click to view issue in Jira']) !!}</legend>
             <div class="col-xs-12 col-md-6">
@@ -25,42 +25,42 @@
                 @if($mode == 'respond')
                     <div class="radio">
                         <?php
-                        $passed = '';
-                        $failed = '';
+                            $passed = '';
+                            $failed = '';
 
-                        if (isset($ticket['test_status'])) {
-                            $passed = $ticket['test_status'] == 1 ? true : '';
-                            $failed = $ticket['test_status'] == 0 ? true : '';
-                        }
+                            if (isset($ticket['test_status'])) {
+                                $passed = $ticket['test_status'] == 1 ? true : '';
+                                $failed = $ticket['test_status'] == 0 ? true : '';
+                            }
                         ?>
 
                         <label>
-                            {!! Form::radio($browser . '_' . $ticket['id'] . '_test_status[]', 1, $passed, ['class' => 'test_status']) !!}
+                            {!! Form::radio($browser . '_' . $ticket['id'] . '_test_status[' . $index . ']', 1, $passed, ['class' => 'test_status']) !!}
                             Passed
                         </label>
                         <label>
-                            {!! Form::radio($browser . '_' . $ticket['id'] . '_test_status[]', 0, $failed, ['class' => 'test_status']) !!}
+                            {!! Form::radio($browser . '_' . $ticket['id'] . '_test_status[' . $index . ']', 0, $failed, ['class' => 'test_status']) !!}
                             Failed
                         </label>
 
                     </div>
                 @else
                     <?php
-                    $passed = '';
-                    $failed = '';
-                    if (isset($ticket['test_status'])) {
-                        $passed = $ticket['test_status'] == 1 ? true : '';
-                        $failed = $ticket['test_status'] == 0 ? true : '';
-                    }
+                        $passed = '';
+                        $failed = '';
+                        if (isset($ticket['test_status'])) {
+                            $passed = $ticket['test_status'] == 1 ? true : '';
+                            $failed = $ticket['test_status'] == 0 ? true : '';
+                        }
                     ?>
 
                     <p>
                             <span>
                             @if($passed)
-                                    Passed
-                                @elseif($failed)
-                                    Failed
-                                @endif
+                                Passed
+                            @elseif($failed)
+                                Failed
+                            @endif
                             </span>
                     </p>
                 @endif
@@ -70,7 +70,6 @@
                     <legend>Notes</legend>
                     @if($mode == 'respond')
                         <?php $notesResponse = isset($ticket['notes_response']) ? $ticket['notes_response'] : null; ?>
-
                         {!! Form::textarea('notes_response[]', $notesResponse, ['class' => 'form-control notes-response', 'rows' => '10']) !!}
                     @else
                         {!! isset($ticket['notes_response']) ? nl2br($ticket['notes_response']) : null !!}
