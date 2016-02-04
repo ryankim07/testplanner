@@ -11,6 +11,7 @@
  * @copyright  Copyright (c) 2016 mophie (https://tp.nophie.us)
  */
 
+use App\Http\Requests;
 use Illuminate\Http\Request;
 
 use App\Api\PlansApi,

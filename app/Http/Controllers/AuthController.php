@@ -13,9 +13,8 @@ use PhpSpec\Exception\Exception;
 
 use App\Facades\Tools;
 
-use App\Api\UserRoleApi;
-
 use App\Models\User,
+    App\Models\UserRole,
     App\Models\Role;
 
 use Auth;
@@ -26,23 +25,17 @@ class AuthController extends Controller
     use AuthenticatesAndRegistersUsers;
 
     /**
-     * @var UserRoleApi
-     */
-    protected $userRoleApi;
-
-    /**
      * AuthController constructor.
      *
      * @param Guard $auth
      * @param User $user
      */
-    public function __construct(Guard $auth, User $user, UserRoleApi $userRoleApi)
+    public function __construct(Guard $auth, User $user)
     {
-        $this->middleware('auth', ['except' => ['getLogin', 'postLogin', 'getRegister', 'postRegister']]);
+        $this->auth = $auth;
+        $this->user = $user;
 
-        $this->auth        = $auth;
-        $this->user        = $user;
-        $this->userRoleApi = $userRoleApi;
+        $this->middleware('auth', ['except' => ['getLogin', 'postLogin', 'getRegister', 'postRegister']]);
     }
 
     /**
@@ -102,8 +95,12 @@ class AuthController extends Controller
      */
     public function getRegister()
     {
-        // Prepare dropdown list of all roles
-        $rolesOptions = Tools::getRolesDropdownOptions();
+        // Prepare dropdown for roles
+        $allRoles = Role::all();
+
+        foreach($allRoles as $eachRole) {
+            $rolesOptions[$eachRole->id] = $eachRole->custom_role_name;
+        }
 
         $viewHtml = view('pages.main.user', [
             'mode'                 => 'register',
@@ -168,7 +165,7 @@ class AuthController extends Controller
             }
 
             // Add user's role
-            $this->userRoleApi->addRoles($userId, $selectedRoles);
+            UserRole::addRoles($userId, $selectedRoles);
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
             $redirect = true;

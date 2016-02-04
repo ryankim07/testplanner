@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="panel-body">
-                @if(isset($plans))
+                @if(count($plans))
                     <div class="row table-options">
                         <div class="pull-right">
                             {!! Form::button('Search', ['class' => 'btn btn-custom btn-sm', 'type' => 'submit']) !!}

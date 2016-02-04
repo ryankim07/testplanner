@@ -18,7 +18,7 @@
 
         @include('errors.list')
 
-                <!-- ASSIGNED OR ADMIN CREATED PLANS -->
+        <!-- ASSIGNED OR ADMIN CREATED PLANS -->
 
         @if(!empty($plans))
             <div class="col-xs-12 col-md-7">
@@ -33,7 +33,7 @@
                                 @endif
                             </div>
                             <div class="panel-body">
-                                @if(count($group) > 0)
+                                @if(count($group['plans']->get()))
                                     <div class="table-responsive dashboard-table">
                                         <table class="table">
                                             <thead>
@@ -98,7 +98,13 @@
                                         </div>
                                     </div>
                                 @else
-                                    <p><span>No records found.</span></p>
+                                    <p><span>
+                                        @if($type == 'admin_created_plans')
+                                            {!! config('testplanner.messages.plan.no_plans_created') !!}
+                                        @else
+                                            {!! config('testplanner.messages.plan.no_plans_assigned') !!}
+                                        @endif
+                                    </span></p>
                                 @endif
                             </div>
                         </div>
@@ -113,7 +119,7 @@
                             <span>Plans</span>
                         </div>
                         <div class="panel-body">
-                            <p><span>There are no plans at the current moment.</span></p>
+                            <p><span></span></p>
                         </div>
                     </div>
                 </div>
@@ -130,7 +136,7 @@
         <div class="panel-heading">Activity Stream</div>
         <div class="panel-body">
             @if(count($activities) == 0)
-                <p><span>There are no activities at the current moment.</span></p>
+                <p><span>{!! config('testplanner.messages.plan.no_activities_found') !!}</span></p>
             @else
                 @foreach($activities as $stream)
                     <div class="row activity-stream nested-block">

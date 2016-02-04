@@ -193,8 +193,8 @@ Route::post('ticket/remove', [
 ]);
 
 Route::post('ticket/save-ticket-response', ['as' => 'ticket.save.response', 'uses' => 'TicketsController@save']);
-Route::resource('ticket', 'TicketsController', ['except' => ['index', 'create', 'edit', 'show', 'destroy']]);
-
+//Route::resource('ticket', 'TicketsController', ['except' => ['index', 'create', 'edit', 'show', 'destroy']]);
+Route::resource('ticket', 'TicketsController');
 
 /**
  *

@@ -6,7 +6,7 @@
 | This template is used when showing all users for the system.
 |
 --}}
-
+<?php var_dump($users) ?>
 @extends('layout.main.master')
 
 @section('content')

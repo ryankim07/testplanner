@@ -81,7 +81,7 @@ class PlansApi extends BaseApi
         $this->trModel      = $tr;
         $this->testersModel = $testers;
         $this->tablesApi    = $tablesApi;
-        $this->authUser     = Session::get('tp.user');
+        $this->authUser     = Session::get('mophie.user');
     }
 
     /**
@@ -92,20 +92,19 @@ class PlansApi extends BaseApi
     public function getDashboardLists()
     {
         // Get user's role
-        $user = $this->authUser;
+        $user         = $this->authUser;
+        $allAssigned  = [];
+        $allResponses = [];
 
         // Get assigned plans from others
         $allAssigned = $this->getAllAssigned($user['id'], 'created_at', 'DESC', 'dashboard');
+        $results['plans_assigned'] = $allAssigned;
 
         // Display selected creator of the plan
         if (Tools::checkUserRole($user['roles'], ['administrator'])) {
             $allResponses = $this->getAllResponses($user['id'], 'created_at', 'DESC', 'dashboard');
+            $results['admin_created_plans'] = $allResponses;
         }
-
-        $results = [
-            'plans_assigned'      => $allAssigned,
-            'admin_created_plans' => $allResponses
-        ];
 
         return $results;
     }
@@ -276,7 +275,7 @@ class PlansApi extends BaseApi
     public function getAllCreated($userApi, $userId)
     {
         // Display selected creator of the plan
-        if ($isRoot = Tools::checkUserRole(Session::get('tp.user.roles'), ['root'])) {
+        if ($isRoot = Tools::checkUserRole(Session::get('mophie.user.roles'), ['root'])) {
             $userId = '';
         }
 

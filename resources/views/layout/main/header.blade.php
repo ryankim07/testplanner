@@ -24,7 +24,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Plans <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                @if(Tools::checkUserRole(Session::get('tp.user.roles'), ['root', 'administrator']))
+                                @if(Tools::checkUserRole(Session::get('mophie.user.roles'), ['root', 'administrator']))
                                     <li>
                                         <a href="{!! URL::route('plan.build') !!}" class="menu-link"><i class="fa fa-cubes menu-link-icon"></i>Build</a>
                                     </li>
@@ -37,7 +37,7 @@
                                 </li>
                             </ul>
                         </li>
-                        @if(Tools::checkUserRole(Session::get('tp.user.roles'), ['root', 'administrator']))
+                        @if(Tools::checkUserRole(Session::get('mophie.user.roles'), ['root', 'administrator']))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Testers <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
@@ -55,7 +55,7 @@
                                 </li>
                             </ul>
                         </li>
-                        @if(Tools::checkUserRole(Session::get('tp.user.roles'), ['root']))
+                        @if(Tools::checkUserRole(Session::get('mophie.user.roles'), ['root']))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Accounts <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
@@ -65,7 +65,7 @@
                                 </ul>
                             </li>
                         @endif
-                        @if(Tools::checkUserRole(Session::get('tp.user.roles'), ['root']))
+                        @if(Tools::checkUserRole(Session::get('mophie.user.roles'), ['root']))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">System <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">

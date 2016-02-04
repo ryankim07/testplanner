@@ -30,6 +30,7 @@ use App\Api\UserApi,
 use App\Models\User;
 
 use Auth;
+use Session;
 
 class PlansController extends Controller
 {
@@ -68,14 +69,11 @@ class PlansController extends Controller
      */
     protected $user;
 
-    protected $session;
-
     /**
      * PlansController constructor.
      */
     public function __construct(PlansApi $plansApi, UserApi $userApi, TestersApi $testersApi,
-                                TicketsApi $ticketsApi, TablesApi $tablesApi, JiraApi $jiraApi,
-                                Request $request)
+                                TicketsApi $ticketsApi, TablesApi $tablesApi, JiraApi $jiraApi)
     {
         $this->middleware('auth');
         $this->middleware('testplanner', [
@@ -88,7 +86,6 @@ class PlansController extends Controller
         $this->ticketsApi = $ticketsApi;
         $this->jiraApi    = $jiraApi;
         $this->user       = Auth::user();
-        $this->session    = $request->session();
     }
 
     /**
@@ -126,7 +123,7 @@ class PlansController extends Controller
     public function edit()
     {
         // Get plan session data
-        $planData = $this->session->get('mophie_testplanner.plan');
+        $planData =Session::get('mophie_testplanner.plan');
 
         // Get Jira versions
         $jiraVersions = $this->jiraApi->jiraVersions();
@@ -147,7 +144,7 @@ class PlansController extends Controller
     public function update(PlansFormRequest $request)
     {
         // Save data to session
-        $this->session->put('mophie_testplanner.plan', array_except($request->all(), ['_token', '_method']));
+       Session::put('mophie_testplanner.plan', array_except($request->all(), ['_token', '_method']));
 
         return redirect()->action('PlansController@review');
     }
@@ -161,8 +158,8 @@ class PlansController extends Controller
     public function store(PlansFormRequest $request)
     {
         // Save data to session
-        $this->session->put('mophie_testplanner.users', $this->userApi->usersList());
-        $this->session->put('mophie_testplanner.plan', array_except($request->all(), '_token'));
+       Session::put('mophie_testplanner.users', $this->userApi->usersList());
+       Session::put('mophie_testplanner.plan', array_except($request->all(), '_token'));
 
         return redirect('ticket/build');
     }
@@ -255,10 +252,10 @@ class PlansController extends Controller
     {
         // Get from session data
         return view('pages.testplanner.review', [
-            'plan'    => $this->session->get('mophie_testplanner.plan'),
-            'tickets' => $this->session->get('mophie_testplanner.tickets'),
-            'users'   => $this->session->get('mophie_testplanner.users'),
-            'testers' => json_encode($this->session->get('mophie_testplanner.testers'))
+            'plan'    =>Session::get('mophie_testplanner.plan'),
+            'tickets' =>Session::get('mophie_testplanner.tickets'),
+            'users'   =>Session::get('mophie_testplanner.users'),
+            'testers' => json_encode(Session::get('mophie_testplanner.testers'))
         ]);
     }
 
@@ -270,15 +267,15 @@ class PlansController extends Controller
     public function save()
     {
         // Retrieve session data
-        $planData    = $this->session->get('mophie_testplanner.plan');
-        $ticketsData = $this->session->get('mophie_testplanner.tickets');
-        $testerData  = $this->session->get('mophie_testplanner.testers');
+        $planData    =Session::get('mophie_testplanner.plan');
+        $ticketsData =Session::get('mophie_testplanner.tickets');
+        $testerData  =Session::get('mophie_testplanner.testers');
 
         // Save plan
         $saveData = $this->plansApi->savePlan($planData, $ticketsData, $testerData);
 
         // Delete session
-        $this->session->forget('mophie_testplanner');
+       Session::forget('mophie_testplanner');
 
         if (!$saveData) {
             return redirect()->action('PlansController@review')
@@ -311,7 +308,7 @@ class PlansController extends Controller
             // Send notifications observer
             event(new updatingPlan(array_merge($planData, ['testers' => $request->get('browser_testers')])));
 
-            $msg = config('testplanner.messages.plan.build_update');
+            $msg = $planData['description'] . ' ' . config('testplanner.messages.plan.build_update');
         }
 
         return redirect('dashboard')->with('flash_success', $msg);
@@ -325,7 +322,7 @@ class PlansController extends Controller
     public function search(Request $request)
     {
         // Get roles
-        $roles = Session::get('tp.user.roles');
+        $roles = Session::get('mophie.user.roles');
 
         // If user has root privileges, get all the plans that were created.
         // Otherwise just get the plans created with administrator privilege.

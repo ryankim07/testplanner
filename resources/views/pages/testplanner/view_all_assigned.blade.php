@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="panel-body">
-                @if(isset($plans))
+                @if(count($plans))
                     <div class="row table-options">
                         <div class="pull-right">
                             {!! Form::button('Search', ['class' => 'btn btn-custom btn-sm', 'type' => 'submit']) !!}
@@ -54,7 +54,7 @@
                         </table>
                     </div>
                 @else
-                    <p>{!! config('testplanner.messages.plan.no_plans_found') !!}</p>
+                    <p>{!! config('testplanner.messages.plan.no_plans_assigned') !!}</p>
                 @endif
             </div>
         </div>

@@ -255,7 +255,8 @@ body {
     color: #fff;
 }
 
-#step-2-main #add-ticket-btn #another-ticket-text {
+#step-2-main #add-ticket-btn #another-ticket-text,
+#view-main #add-ticket-btn #another-ticket-text {
     margin-left: 5px;
 }
 

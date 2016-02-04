@@ -21,7 +21,11 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $listen = [];
+    protected $listen = [
+        'auth.logout' => [
+            'App\\Listeners\AuthLogout',
+        ]
+    ];
 
     /**
      * The subscriber classes to register.
