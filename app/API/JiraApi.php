@@ -13,6 +13,8 @@
 
 use App\Facades\Tools;
 
+use Cache;
+
 class JiraApi
 {
     private $_username;
@@ -26,7 +28,7 @@ class JiraApi
         $jiraRestUrl            = config('testplanner.jira.info.rest_url');
         $this->_username        = config('testplanner.jira.info.login');
         $this->_password        = config('testplanner.jira.info.password');
-        $this->_issueQueryUrl   = $jiraRestUrl . '/search?jql=project=' . $project;
+        $this->_issueQueryUrl   = $jiraRestUrl . '/search?jql=project=' . $project . '&startAt=0&maxResults=100';
         $this->_projectQueryUrl = $jiraRestUrl . '/project/' . $project . '/versions';
     }
 
@@ -75,16 +77,23 @@ class JiraApi
      */
     public function jiraVersions()
     {
-        // Get JIRA project versions
-        $data['query_url'] = $this->_projectQueryUrl;
-        $responseData  = $this->_connect($data);
-        $versions      = [];
+        // Get JIRA project versions from cache, if it doesn't exist,
+        // pull items from Jira API
+        if (Cache::has('jira_versions')) {
+            $data = Cache::get('jira_versions');
+        } else {
+            $options['query_url'] = $this->_projectQueryUrl;
+            $data = $this->_connect($options);
+            krsort($data);
+
+            Cache::put('jira_versions', $data, config('testplanner.jira.cache.versions_lifetime'));
+        }
 
         // Return on a certain array structure
-        if (isset($responseData)) {
-            krsort($responseData);
+        if (isset($data)) {
+            $versions = [];
 
-            foreach ($responseData as $version) {
+            foreach ($data as $version) {
                 $versions[] = [
                     'label' => config('testplanner.jira.info.version_description') . $version->name,
                     'value' => $version->id
@@ -102,14 +111,23 @@ class JiraApi
      */
     public function jiraIssues()
     {
-        // Get JIRA issues
-        $data['query_url'] = $this->_issueQueryUrl;
-        $responseData = $this->_connect($data);
-        $issues  = [];
+        // Get JIRA issues from cache, if it doesn't exist,
+        // pull items from Jira API
+        if (Cache::has('jira_issues')) {
+            $data = Cache::get('jira_issues');
+        } else {
+            $options['query_url'] = $this->_issueQueryUrl;
+            $data = $this->_connect($options);
+            krsort($data);
+
+            Cache::put('jira_issues', $data, config('testplanner.jira.cache.issues_lifetime'));
+        }
 
         // Return on a certain array structure
-        if (isset($responseData)) {
-            foreach ($responseData->issues as $issue) {
+        if (isset($data)) {
+            $issues  = [];
+
+            foreach ($data->issues as $issue) {
                 $issues[] = $issue->key . ': ' . $issue->fields->summary;
             }
         }
@@ -117,18 +135,32 @@ class JiraApi
         return $issues;
     }
 
+    /**
+     * Get all issues, also specific issues by build version ID
+     *
+     * @param $buildVersionId
+     * @return array
+     */
     public function jiraIssuesByVersion($buildVersionId)
     {
         try {
-            // Query type
-            $data['query_url'] = $this->_issueQueryUrl;
-            $responseData      = $this->_connect($data);
-            $allIssues         = [];
-            $specificIssues    = [];
+            // Get JIRA issues from cache, if it doesn't exist,
+            // pull items from Jira API
+            if (Cache::has('jira_issues')) {
+                $data = Cache::get('jira_issues');
+            } else {
+                $options['query_url'] = $this->_issueQueryUrl;
+                $data = $this->_connect($options);
+
+                Cache::put('jira_issues', $data, config('testplanner.jira.cache.issues_lifetime'));
+            }
 
             // Grab only specific issues to be auto filled
-            if (isset($responseData)) {
-                foreach($responseData->issues as $issue) {
+            if (isset($data)) {
+                $allIssues      = [];
+                $specificIssues = [];
+
+                foreach($data->issues as $issue) {
                     $issueId     = $issue->id;
                     $key         = $issue->key;
                     $fixVersions = $issue->fields->fixVersions;
@@ -143,6 +175,8 @@ class JiraApi
                     // Grab all issues to be shown as dropdown
                     $allIssues[] = $issue->key . ': ' . $issue->fields->summary;
                 }
+
+                ksort($allIssues);
             }
         } catch(\Exception $e) {
             Tools::log('cURL errors: ' . $e->getErrors(), $data);

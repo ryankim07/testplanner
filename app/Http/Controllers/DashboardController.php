@@ -39,6 +39,10 @@ class DashboardController extends Controller
      */
     public function index(PlansApi $plansApi, ActivityStreamApi $activityApi)
     {
+        // Testing observer
+        //$plans = $plansApi->planStatuses();
+
+
         // Get created and assigned plans
         $plans = $plansApi->getDashboardLists();
 

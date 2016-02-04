@@ -37,12 +37,14 @@
                 'rolesSelectedOptions' => $rolesSelectedOptions
             ])
 
-            @include('pages/main/partials/button', [
-                'type'      => 'button',
-                'btnText'   => $mode == 'edit' ? 'Update' : 'Register',
-                'direction' => 'pull-left',
-                'class'     => 'btn btn-custom btn-sm',
-                'id'        => $mode == 'edit' ? 'update-btn' : 'register-btn'
+            @include('pages/main/partials/double_buttons', [
+                'direction'     => 'pull-left',
+                'cancelClass'   => 'btn-custom close-viewer',
+                'opClass'		=> 'btn-custom',
+                'cancelBtnText' => 'Cancel',
+                'cancelBtnId'   => 'cancel-btn',
+                'opBtnText'     => $mode == 'edit' ? 'Update' : 'Register',
+                'opBtnId'	    => $mode == 'edit' ? 'update-btn' : 'register-btn'
             ])
 
         </div>

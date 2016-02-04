@@ -51,4 +51,9 @@ class TicketsResponses extends Model
     {
         return $this->belongsTo('App\Models\Testers');
     }
+
+    public function plan()
+    {
+        return $this->belongsTo('App\Models\Plans');
+    }
 }

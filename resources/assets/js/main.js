@@ -235,8 +235,7 @@ function loadUsersJs(url, data)
  */
 function grabBrowserTesters(formId)
 {
-    $('#' + formId).on('click', '#continue-btn, #update-btn', function(e) {
-        e.preventDefault();
+    $('#' + formId).on('click', '#continue-btn, #update-btn', function() {
         var browserTesters = [];
 
         $('.testers').each(function() {
@@ -259,7 +258,7 @@ function grabBrowserTesters(formId)
         });
 
         var input = $("<input>").attr({"type":"hidden","name":"browser_testers"}).val(JSON.stringify(browserTesters));
-        $('form').append(input).submit();
+        $('form').append(input);
     });
 }
 

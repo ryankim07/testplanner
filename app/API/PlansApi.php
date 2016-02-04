@@ -330,7 +330,7 @@ class PlansApi extends BaseApi
         $query = $this->getAllPlans($table['sorting']['sortBy'], $table['sorting']['order'], $userId);
 
         if ($from == 'dashboard') {
-            $query = $query->take(config('testplanner.tables.pagination.dashboard'));
+            //$query = $query->take(config('testplanner.tables.pagination.dashboard'));
         } else {
             $query = $query->paginate(config('testplanner.tables.pagination.lists'));
         }
@@ -405,7 +405,7 @@ class PlansApi extends BaseApi
         $plan = DB::table('plans AS p')
             ->join('testers AS t', 'p.id', '=', 't.plan_id')
             ->join('tickets AS ti', 'p.id', '=', 'ti.plan_id')
-            ->select('p.*', 't.user_id AS tester_id', 't.browsers', 'ti.tickets')
+            ->select('p.*', 'p.id AS plan_id', 't.user_id AS tester_id', 't.browsers', 'ti.tickets')
             ->where('p.id', '=', $planId)
             ->where('t.user_id', '=', $userId)
             ->first();
@@ -440,12 +440,15 @@ class PlansApi extends BaseApi
 
                     foreach ($responses as $response) {
                         $ticketTextId = $ticketText['id'];
+
                         if ($ticketTextId == $response['id']) {
                             $ticketDesc = $ticketText['desc'];
-                            list($project, $summary) = explode(':', $ticketDesc);
 
-                            if (preg_match('/^ECOM-\d/', $project)) {
+                            if (preg_match('/^ECOM-\d/', $ticketDesc)) {
+                                list($project, $summary) = explode(':', $ticketDesc);
                                 $descUrl = url(config('testplanner.jira.info.domain')) . '/browse/' . $project;
+                            } else {
+                                $descUrl = '';
                             }
 
                             $responseTickets[$ticketTextId] = [
@@ -627,5 +630,39 @@ class PlansApi extends BaseApi
         ];
 
         return $planData;
+    }
+
+    public function planStatuses()
+    {
+        $status = [
+            'new'      => 0,
+            'progress' => 0,
+            'update'   => 1,
+            'complete' => 1
+        ];
+
+        $plans = $this->model->all();
+
+        $statusTotal    = 0;
+        $totalResponses = 0;
+
+        foreach($plans as $plan) {
+            $userResponses = $plan->ticketsResponses()->get();
+            $totalResponses += count($userResponses);
+
+            foreach($userResponses as $ticket) {
+                $statusTotal += $status[$ticket->status];
+            }
+
+            if ($statusTotal == 0) {
+                $status = 'new';
+            } elseif ($statusTotal == $totalResponses) {
+                $status = 'complete';
+            } else {
+                $status = 'progress';
+            }
+
+            Plan::find($plan->id)->update(['status' => $status]);
+        }
     }
 }

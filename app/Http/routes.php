@@ -207,11 +207,13 @@ Route::get('tester/build', [
     'roles'      => ['root', 'administrator'],
     'uses'       => 'TestersController@build'
 ]);
+
 Route::get('tester/edit', [
     'as'         => 'tester.edit',
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator'],
     'uses'       => 'TestersController@edit']);
+
 Route::resource('tester', 'TestersController', ['except' => ['index', 'create', 'edit', 'show', 'destroy']]);
 
 /*Event::listen('illuminate.query',function($query){

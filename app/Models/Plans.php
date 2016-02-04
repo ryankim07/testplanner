@@ -91,6 +91,11 @@ class Plans extends Model
         return $this->hasMany('App\Models\Testers', 'plan_id', 'id');
     }
 
+    public function ticketsResponses()
+    {
+        return $this->hasMany('App\Models\TicketsResponses', 'plan_id', 'id');
+    }
+
     /**
      * Scope a query to only include creator
      *

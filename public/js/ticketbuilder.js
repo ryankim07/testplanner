@@ -95,9 +95,7 @@ function TicketBuilder(config) {
     {
         var buttons = continueBtnId + ', ' + updateBtnId;
 
-        $(formId).on('click', buttons, function(e) {
-            e.preventDefault();
-
+        $(formId).on('click', buttons, function() {
             var tickets = [];
 
             $(formId + ' ' + ticketRowClass).each(function() {
@@ -112,7 +110,7 @@ function TicketBuilder(config) {
 
             // Create hidden field
             var input = $("<input>").attr({"type":"hidden","name":"tickets_obj"}).val(JSON.stringify(tickets));
-            $('form').append(input).submit();
+            $('form').append(input);
         });
     }
 
