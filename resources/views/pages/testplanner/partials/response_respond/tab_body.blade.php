@@ -16,7 +16,7 @@
             'responseStatus' => $plan['responses'][$browserName]['response_status']
         ])
 
-        @if($mode == 'response' && !isset($plan['responses'][$browserName]))
+        @if($mode == 'responses' && empty($plan['responses'][$browserName]['ticket_resp_id']))
             @include('errors.panel_body', ['msg' => config('testplanner.messages.plan.users_non_responses')])
         @else
             @include('pages/testplanner/partials/response_respond/plan_tickets', [
