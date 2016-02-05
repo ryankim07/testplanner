@@ -27,8 +27,6 @@ use App\Api\UserApi,
     App\Api\TablesApi,
     App\Api\JiraApi;
 
-use App\Models\User;
-
 use Auth;
 use Session;
 

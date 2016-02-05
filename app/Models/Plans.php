@@ -76,9 +76,9 @@ class Plans extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function tickets()
+    public function ticket()
     {
-        return $this->hasMany('App\Models\Tickets', 'plan_id', 'id');
+        return $this->hasOne('App\Models\Tickets', 'plan_id', 'id');
     }
 
     /**
