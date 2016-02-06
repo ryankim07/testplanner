@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\PlansFormRequest;
 use App\Http\Requests\PlanUpdateFormRequest;
 
+use App\Facades\Tools;
+
 use App\Events\SavingPlan,
     App\Events\UpdatingPlan;
 
@@ -82,6 +84,7 @@ class PlansController extends Controller
         $this->plansApi   = $plansApi;
         $this->testersApi = $testersApi;
         $this->ticketsApi = $ticketsApi;
+        $this->tablesApi  = $tablesApi;
         $this->jiraApi    = $jiraApi;
         $this->user       = Auth::user();
     }
@@ -183,7 +186,7 @@ class PlansController extends Controller
     public function viewAllCreated(Request $request)
     {
         $adminId = $request->get('admin');
-        $plans   = $this->plansApi->getAllCreated($this->userApi, $adminId);
+        $plans   = $this->plansApi->getAllCreated($adminId);
 
         return view('pages.testplanner.view_all_created', $plans);
     }
@@ -265,9 +268,9 @@ class PlansController extends Controller
     public function save()
     {
         // Retrieve session data
-        $planData    =Session::get('mophie_testplanner.plan');
-        $ticketsData =Session::get('mophie_testplanner.tickets');
-        $testerData  =Session::get('mophie_testplanner.testers');
+        $planData    = Session::get('mophie_testplanner.plan');
+        $ticketsData = Session::get('mophie_testplanner.tickets');
+        $testerData  = Session::get('mophie_testplanner.testers');
 
         // Save plan
         $saveData = $this->plansApi->savePlan($planData, $ticketsData, $testerData);
@@ -313,66 +316,66 @@ class PlansController extends Controller
     }
 
     /**
-     * Search functionality for each table
+     * All created plans search functionality
      *
+     * @param Request $request
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
-    public function search(Request $request)
+    public function searchAllCreated(Request $request)
     {
-        // Get roles
-        $roles = Session::get('mophie.user.roles');
+        $searchTerms = array_except($request->all(), ['_token', 'admin']);
+        $adminId     = $request->get('admin');
+        $roles       = Session::get('mophie.user.roles');
 
-        // If user has root privileges, get all the plans that were created.
-        // Otherwise just get the plans created with administrator privilege.
-        foreach($roles as $id => $role) {
-            $userId = $id;
+        $results = $this->plansApi->prepareSearchAllCreated($searchTerms, $roles, $adminId);
 
-            if ($role == "root") {
-                $userId   = 0;
-                $roleName = $role;
-            }
+        return view('pages.testplanner.view_all_created', $results);
+    }
 
-            break;
-        }
+    /**
+     * All assigned plans search functionality
+     *
+     * @param Request $request
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function searchAllAssigned(Request $request)
+    {
+        $searchTerms = array_except($request->all(), ['_token', 'admin']);
 
-        // Display selected creator of the plan
-        $adminId = $request->get('admin');
-        if (isset($adminId)) {
-            $userId = $adminId;
-        }
-
-        // Administrators who created plans
-        $admins = $this->userApi->getAllUsersByRole($roleName);
-
-        // Set up dropdown list of all admins
-        $adminsList[0] = 'All';
-        foreach($admins as $admin) {
-            $adminsList[$admin->id] = $admin->first_name;
-        }
-
-        $query   = DB::table('plans AS p');
-        $results = $this->tablesApi->searchResults($query);
-
-        // Prepare columns to be shown
-        $table   = $this->tablesApi->prepare('order', [
+        $columns = [
             'description',
             'first_name',
             'last_name',
+            'created_at',
+            'updated_at',
+            'respond'
+        ];
+
+        $results = $this->plansApi->search($searchTerms, $columns);
+
+        return view('pages.testplanner.view_all_assigned', $results);
+    }
+
+    /**
+     * All plans responses search functionality
+     *
+     * @param Request $request
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function searchAllResponses(Request $request)
+    {
+        $searchTerms = array_except($request->all(), ['_token', 'admin']);
+
+        $columns = [
+            'description',
             'status',
             'created_at',
             'updated_at',
-            'edit'
-        ], 'PlansController@index');
+            'view'
+        ];
 
-        return view('pages.testplanner.view_all_created', [
-            'userId'      => $userId,
-            'role'        => $roleName,
-            'plans'       => isset($results['list']) ? $results['list'] : '',
-            'totalPlans'  => isset($results['totalCount']) ? $results['totalCount'] : 0,
-            'columns'     => $table['columns'],
-            'columnsLink' => $table['columns_link'],
-            'link'        => $results['link'],
-            'adminsList'  => isset($adminsList) ? $adminsList : ''
-        ]);
+        $results = $this->plansApi->search($searchTerms, $columns);
+
+        return view('pages.testplanner.view_all_responses', $results);
     }
 }

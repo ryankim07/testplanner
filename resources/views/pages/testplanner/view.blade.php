@@ -55,7 +55,7 @@
 
 		$(document).ready(function() {
 			// Load Jira versions, issues
-			jiraVersions('view-main', 'plan-description', <?php echo $plan['jira_versions']; ?>);
+			jiraVersions('view-main', 'plan-description', <?php echo $plan['jira_versions']; ?>, '{!! URL::route('ticket.render') !!}');
 			jiraIssues('view-main', 'ticket-description',<?php echo $plan['jira_issues']; ?>);
 
 			// Fill expiration date

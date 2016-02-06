@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('plan_status:update')
-            ->everyMinute()
+            ->hourly()
             ->sendOutputTo(storage_path().'/logs/cron.log');
     }
 }

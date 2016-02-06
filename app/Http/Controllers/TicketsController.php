@@ -30,7 +30,7 @@ class TicketsController extends Controller
 
 
     /**
-     * TicketsController constructor.
+     * TicketsController constructor
      */
     public function __construct(JiraApi $jiraApi)
     {
@@ -154,7 +154,7 @@ class TicketsController extends Controller
     }
 
     /**
-     * Remove tickets from review page
+     * Ajax remove tickets from review page
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -170,5 +170,30 @@ class TicketsController extends Controller
         Session::put('mophie_testplanner.tickets', $modifiedData);
 
         return response()->json('success');
+    }
+
+    /**
+     * Ajax render tickets dynamically
+     *
+     * @param $buildVersionId
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function renderTicketAjax($buildVersionId, Request $request)
+    {
+        $buildVersionId = $request->get('build_version_id');
+
+        $jiraIssues  = $this->jiraApi->jiraIssuesByVersion($buildVersionId);
+        $ticketsHtml = '';
+
+        foreach($jiraIssues['specificIssues'] as $issue) {
+            $ticketsHtml .= view('pages/testplanner/partials/tickets', [
+                'mode'   => 'custom',
+                'ticket' => ['desc' => htmlentities($issue, ENT_QUOTES, 'UTF-8')]
+            ])->render();
+        }
+
+        return response()->json([json_encode($ticketsHtml)]);
     }
 }

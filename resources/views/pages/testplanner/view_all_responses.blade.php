@@ -13,7 +13,7 @@
 
     <div class="col-xs-12 col-md-12 main" id="view-all-responses-main">
 
-        {!! Form::open(['route' => 'plan.search', 'class' => 'form-horizontal', 'role' => 'search']) !!}
+        {!! Form::open(['route' => 'plan.search.responses', 'class' => 'form-horizontal', 'role' => 'search']) !!}
 
         <div class="panel panel-default">
             <div class="panel-heading">

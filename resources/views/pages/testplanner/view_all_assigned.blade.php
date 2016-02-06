@@ -14,7 +14,7 @@
 
     <div class="col-xs-12 col-md-12 main" id="view-all-assigned-main">
 
-        {!! Form::open(['route' => 'plan.search', 'role' => 'search']) !!}
+        {!! Form::open(['route' => 'plan.search.assigned', 'role' => 'search']) !!}
 
         <div class="panel panel-default">
             <div class="panel-heading">

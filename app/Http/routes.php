@@ -163,7 +163,9 @@ Route::put('plan/update-built-plan/{id}', [
     'uses'       => 'PlansController@updateBuiltPlan']);
 
 Route::get('plan/search', 'PlansController@search');
-Route::post('plan/search', ['as' => 'plan.search', 'uses' => 'PlansController@search']);
+Route::post('plan/search-all-created', ['as' => 'plan.search.created', 'uses' => 'PlansController@searchAllCreated']);
+Route::post('plan/search-all-assigned', ['as' => 'plan.search.assigned', 'uses' => 'PlansController@searchAllAssigned']);
+Route::post('plan/search-all-responses', ['as' => 'plan.search.responses', 'uses' => 'PlansController@searchAllResponses']);
 Route::resource('plan', 'PlansController', ['except' => ['create', 'show', 'destroy']]);
 
 
@@ -184,6 +186,13 @@ Route::get('ticket/edit', [
     'middleware' => 'roles',
     'roles'      => ['root', 'administrator'],
     'uses'       => 'TicketsController@edit']);
+
+Route::get('ticket/render{build_version_id}', [
+    'as'         => 'ticket.render',
+    'middleware' => 'roles',
+    'roles'      => ['root', 'administrator'],
+    'uses'       => 'TicketsController@renderTicketAjax'
+]);
 
 Route::post('ticket/remove', [
     'as'         => 'ticket.remove.ajax',

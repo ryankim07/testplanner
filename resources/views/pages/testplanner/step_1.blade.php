@@ -73,7 +73,7 @@
 	<script type="text/javascript">
 
 		$(document).ready(function() {
-			jiraVersions('step-1-main', 'plan-description', <?php echo $jira_versions; ?>);
+			jiraVersions('step-1-main', 'plan-description', <?php echo $jira_versions; ?>, '');
 			planStartExpireDates();
 		});
 
