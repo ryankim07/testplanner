@@ -33,7 +33,7 @@
                                 @endif
                             </div>
                             <div class="panel-body">
-                                @if(count($group['plans']->get()))
+                                @if(count($group['plans']))
                                     <div class="table-responsive dashboard-table">
                                         <table class="table">
                                             <thead>
@@ -55,7 +55,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($group['plans']->get() as $plan)
+                                            @foreach($group['plans'] as $plan)
                                                 <tr class="{!! $type !!}_rows">
                                                     <td>{!! $plan->description !!}</td>
                                                     @if($type != 'admin_created_plans')
