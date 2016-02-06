@@ -351,7 +351,7 @@ class PlansController extends Controller
             'respond'
         ];
 
-        $results = $this->plansApi->search($searchTerms, $columns);
+        $results = $this->tablesApi->searchPlans($searchTerms, $columns);
 
         return view('pages.testplanner.view_all_assigned', $results);
     }
@@ -374,7 +374,7 @@ class PlansController extends Controller
             'view'
         ];
 
-        $results = $this->plansApi->search($searchTerms, $columns);
+        $results = $this->tablesApi->searchPlans($searchTerms, $columns);
 
         return view('pages.testplanner.view_all_responses', $results);
     }

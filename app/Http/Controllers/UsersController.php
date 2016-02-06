@@ -15,7 +15,8 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserResponseFormRequest;
 
-use App\Api\UserApi;
+use App\Api\UserApi,
+    App\Api\TablesApi;
 
 use Session;
 
@@ -94,5 +95,19 @@ class UsersController extends Controller
             'type'         => 'success',
             'redirect_url' => url('user/all')
         ]);
+    }
+
+    /**
+     * Users search functionality
+     *
+     * @param Request $request
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function search(Request $request, TablesApi $tablesApi)
+    {
+        $searchTerms = array_except($request->all(), ['_token', 'admin']);
+        $results     = $tablesApi->searchUsers($searchTerms);
+
+        return view('pages.main.view_all_users', $results);
     }
 }
