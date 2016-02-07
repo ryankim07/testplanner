@@ -118,7 +118,6 @@ class JiraApi
         } else {
             $options['query_url'] = $this->_issueQueryUrl;
             $data = $this->_connect($options);
-            krsort($data);
 
             Cache::put('jira_issues', $data, config('testplanner.jira.cache.issues_lifetime'));
         }

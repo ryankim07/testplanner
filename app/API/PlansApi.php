@@ -38,11 +38,6 @@ class PlansApi extends BaseApi
     protected $model;
 
     /**
-     * @var User
-     */
-    protected $userModel;
-
-    /**
      * @var TicketsResponses
      */
     protected $trModel;
@@ -56,6 +51,11 @@ class PlansApi extends BaseApi
      * @var Testers
      */
     protected $testersModel;
+
+    /**
+     * @var UserApi
+     */
+    protected $userApi;
 
     /**
      * @var Tables
@@ -72,14 +72,14 @@ class PlansApi extends BaseApi
      *
      * @param Plans $plans
      */
-    public function __construct(Plans $plans, User $user, Tickets $tickets, TicketsResponses $tr,
-                                Testers $testers, TablesApi $tablesApi)
+    public function __construct(Plans $plans, Tickets $tickets, TicketsResponses $tr,
+                                Testers $testers, UserApi $userApi, TablesApi $tablesApi)
     {
         $this->model        = $plans;
-        $this->userModel    = $user;
         $this->ticketsModel = $tickets;
         $this->trModel      = $tr;
         $this->testersModel = $testers;
+        $this->userApi      = $userApi;
         $this->tablesApi    = $tablesApi;
         $this->authUser     = Session::get('mophie.user');
     }
@@ -119,8 +119,9 @@ class PlansApi extends BaseApi
      */
     public function viewPlan($id, $userApi, $jiraApi)
     {
-        $plan    = $this->model->find($id);
-        $tickets = unserialize($plan->tickets()->first()->tickets);
+        $plan      = $this->model->find($id);
+        $tickets   = unserialize($plan->ticket()->first()->tickets);
+        $usersList = $userApi->usersList();
 
         // Render tickets
         $ticketsHtml = '';
@@ -145,7 +146,7 @@ class PlansApi extends BaseApi
                 'started_at'    => Tools::dateConverter($plan->started_at),
                 'expired_at'    => Tools::dateConverter($plan->expired_at),
                 'tickets_html'  => $ticketsHtml,
-                'users'         => $userApi->usersList(),
+                'users'         => $usersList,
                 'testers'       => json_encode($plan->testers()->get()->toArray()),
                 'jira_versions' => json_encode($jiraVersions),
                 'jira_issues'   => json_encode($jiraIssues)
@@ -272,7 +273,7 @@ class PlansApi extends BaseApi
      * @param $userId
      * @return array
      */
-    public function getAllCreated($userApi, $userId)
+    public function getAllCreated($userId)
     {
         // Display selected creator of the plan
         if ($isRoot = Tools::checkUserRole(Session::get('mophie.user.roles'), ['root'])) {
@@ -281,7 +282,7 @@ class PlansApi extends BaseApi
 
         // Administrators who created plans
         $dropDownOptions = [];
-        $dropDownOptions = $userApi->getUsersDropdrownOptions();
+        $dropDownOptions = $this->userApi->getUsersDropdrownOptions();
 
         // Prepare columns to be shown
         $table = $this->tablesApi->prepare('order', [
@@ -330,7 +331,7 @@ class PlansApi extends BaseApi
         $query = $this->getAllPlans($table['sorting']['sortBy'], $table['sorting']['order'], $userId);
 
         if ($from == 'dashboard') {
-            //$query = $query->take(config('testplanner.tables.pagination.dashboard'));
+            $query = $query->take(config('testplanner.tables.pagination.dashboard'))->get();
         } else {
             $query = $query->paginate(config('testplanner.tables.pagination.lists'));
         }
@@ -368,7 +369,7 @@ class PlansApi extends BaseApi
             ->groupBy('p.id');
 
         if ($from == 'dashboard') {
-            $query->take(config('testplanner.tables.pagination.dashboard'));
+            $query= $query->take(config('testplanner.tables.pagination.dashboard'))->get();
         } else {
             $query = $query->paginate(config('testplanner.tables.pagination.lists'));
         }
@@ -632,37 +633,55 @@ class PlansApi extends BaseApi
         return $planData;
     }
 
-    public function planStatuses()
+    /**
+     * Setup additional keys/values when searching all created
+     *
+     * @param $searchTerms
+     * @param $roles
+     * @param $adminId
+     * @return array|mixed
+     */
+    public function prepareSearchAllCreated($searchTerms, $roles, $adminId)
     {
-        $status = [
-            'new'      => 0,
-            'progress' => 0,
-            'update'   => 1,
-            'complete' => 1
+        // If user has root privileges, get all the plans that were created.
+        // Otherwise just get the plans created with administrator privilege.
+        $adminList = [];
+        $roleName = '';
+
+        if (in_array('root', $roles)) {
+            $userId = 0;
+            $roleName = 'root';
+        }
+
+        // Display selected creator of the plan
+        if (isset($adminId)) {
+            $userId = $adminId;
+        }
+
+        // Administrators who created plans
+        $admins = $this->userApi->getAllUsersByRole(['root', 'administrator']);
+
+        // Set up dropdown list of all admins
+        $adminsList = Tools::getUsersDropdrownOptions($admins, 'admin');
+
+        $columns = [
+            'description',
+            'first_name',
+            'last_name',
+            'status',
+            'created_at',
+            'updated_at',
+            'edit'
         ];
 
-        $plans = $this->model->all();
+        $results = $this->tablesApi->searchPlans($searchTerms, $columns);
 
-        $statusTotal    = 0;
-        $totalResponses = 0;
+        $results += [
+            'userId'     => $userId,
+            'role'       => $roleName,
+            'adminsList' => $adminsList
+        ];
 
-        foreach($plans as $plan) {
-            $userResponses = $plan->ticketsResponses()->get();
-            $totalResponses += count($userResponses);
-
-            foreach($userResponses as $ticket) {
-                $statusTotal += $status[$ticket->status];
-            }
-
-            if ($statusTotal == 0) {
-                $status = 'new';
-            } elseif ($statusTotal == $totalResponses) {
-                $status = 'complete';
-            } else {
-                $status = 'progress';
-            }
-
-            Plan::find($plan->id)->update(['status' => $status]);
-        }
+        return $results;
     }
 }

@@ -398,18 +398,13 @@ function renderTickets(buildVersionId, url)
             },
             dataType: "json",
             success: function(resp) {
-                var allLatestTicket = $('form').find('.ticket-row');
-                var latestTicket    = $('form').find('.ticket-row').last();
-                var responses       = $(JSON.parse(resp));
-
-                $.each(allLatestTicket, function() {
-                    $(this).find('.trash').show();
-                    $(this).css('background', 'red');
-                });
+                var oldTickets   = $('form').find('.ticket-row');
+                var latestTicket = oldTickets.last();
+                var newTickets   = $(JSON.parse(resp));
 
                 // Append unique IDs on each ticket block
-                if (responses.length > 0) {
-                    $.each(responses, function() {
+                if (newTickets.length > 0) {
+                    $.each(newTickets, function() {
                         var index = stringGen(5);
 
                         $(this).attr('id', index);
@@ -419,8 +414,20 @@ function renderTickets(buildVersionId, url)
                     });
                 }
 
-                // Add new blocks after latest block
-                latestTicket.after(responses);
+                // Display modal window
+                $('#view-main .modal-body').html('Would like to merge all the older tickets?');
+                $('#view-main #modal-win').modal('show');
+
+                $('#view-main #modal-win').on('click', '#yes-btn', function() {
+                    $('#view-main .trash').show();
+                    latestTicket.after(newTickets);
+                    $('#view-main #modal-win').modal('hide');
+                });
+
+                $('#view-main #modal-win').on('click', '#close-btn', function() {
+                    $('#view-main .ticket-row').remove();
+                    newTickets.insertAfter($('#view-main #tickets-header'));
+                });
             }
         })
     ).done(function() {

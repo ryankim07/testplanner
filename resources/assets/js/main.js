@@ -357,14 +357,19 @@ function jiraIssues(formId, ticketDescClass, issues)
 /**
  * Load Jira versions
  */
-function jiraVersions(formId, descId, versions)
+function jiraVersions(formId, descId, versions, renderUrl)
 {
     $('#' + formId).on('focus', '#' + descId, function () {
         $(this).autocomplete({
             source: versions,
             select: function(event, ui) {
-                $("#plan-description").val( ui.item.label );
-                $("#build-version-id").val( ui.item.value );
+                $("#plan-description").val(ui.item.label);
+
+                if (formId != 'view-main') {
+                    $("#build-version-id").val(ui.item.value);
+                } else {
+                    renderTickets(ui.item.value, renderUrl);
+                }
 
                 return false;
             }
@@ -372,6 +377,61 @@ function jiraVersions(formId, descId, versions)
     });
 
     clearInputField(formId, descId, '');
+}
+
+/**
+ * Ajax render tickets dynamically
+ *
+ * @param buildVersionId
+ * @param url
+ */
+function renderTickets(buildVersionId, url)
+{
+    // Ajax get newer issues
+    $.when(
+        $.ajax({
+            method: "GET",
+            url: url,
+            data: {
+                "_token": $('form').find('input[name=_token]').val(),
+                "build_version_id": buildVersionId
+            },
+            dataType: "json",
+            success: function(resp) {
+                var oldTickets   = $('form').find('.ticket-row');
+                var latestTicket = oldTickets.last();
+                var newTickets   = $(JSON.parse(resp));
+
+                // Append unique IDs on each ticket block
+                if (newTickets.length > 0) {
+                    $.each(newTickets, function() {
+                        var index = stringGen(5);
+
+                        $(this).attr('id', index);
+                        $(this).find('.ticket-description').attr('name', 'desc["' + index + '"]');
+                        $(this).find('.objective').attr('name', 'objective["' + index + '"]');
+                        $(this).find('.test-steps').attr('name', 'test_steps["' + index + '"]');
+                    });
+                }
+
+                // Display modal window
+                $('#view-main .modal-body').html('Would like to merge all the older tickets?');
+                $('#view-main #modal-win').modal('show');
+
+                $('#view-main #modal-win').on('click', '#yes-btn', function() {
+                    $('#view-main .trash').show();
+                    latestTicket.after(newTickets);
+                    $('#view-main #modal-win').modal('hide');
+                });
+
+                $('#view-main #modal-win').on('click', '#close-btn', function() {
+                    $('#view-main .ticket-row').remove();
+                    newTickets.insertAfter($('#view-main #tickets-header'));
+                });
+            }
+        })
+    ).done(function() {
+    });
 }
 
 /**

@@ -16,7 +16,8 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="close-btn">Close</button>
+                <button type="button" class="btn btn-custom" id="yes-btn">Yes</button>
+                <button type="button" class="btn btn-custom" data-dismiss="modal" id="close-btn">No</button>
             </div>
         </div>
     </div>

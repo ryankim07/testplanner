@@ -35,6 +35,7 @@ class TablesApi
     {
         $this->gridApi = $grid;
     }
+
     /**
      * Returns sort and order of columns
      *
@@ -50,69 +51,6 @@ class TablesApi
         $order  = empty($order)  ? 'DESC' : $order;
 
         return ['sortBy' => $sortBy, 'order' => $order];
-    }
-
-    /**
-     * Return search results from filters or links
-     *
-     * @param $query
-     * @return mixed
-     */
-    public function searchResults($query)
-    {
-        $searchTerms = Request::input();
-
-        // Remove certain keys when querying
-        $filters     = array_except($searchTerms, ['_token', 'admin', 'created_from', 'created_to', 'sortBy', 'order', 'page']);
-        $perPage     = 1;
-        $page        = isset($searchTerms['page']) ? $searchTerms['page'] : 1;
-        $url         = parse_url(Request::url());
-
-        // Default sort and order
-        $sortBy = empty($searchTerms['sortBy']) ? 'p.created_at' : $searchTerms['sortBy'];
-        $order  = empty($searchTerms['order'])  ? 'DESC' :$searchTerms['order'];
-        $from   = !empty($searchTerms['created_from']) ? Tools::dbDateConverter($searchTerms['created_from'], '00:00:00') : null;
-        $to     = !empty($searchTerms['created_to'])   ? Tools::dbDateConverter($searchTerms['created_to'], '23:59:59') : null;
-
-        if (isset($filters['first_name']) && isset($filters['first_name'])) {
-            $query->join('users AS u', function($join) use ($filters) {
-                $join->on('u.id', '=', 'p.creator_id')
-                    ->where('u.first_name', 'LIKE', '%' . $filters['first_name'] . '%')
-                    ->where('u.last_name', 'LIKE', '%' . $filters['last_name'] . '%');
-            });
-        }
-
-        foreach(array_except($filters, ['first_name', 'last_name']) as $key => $value) {
-            if (!empty($value)) {
-                $query->where('p.' . $key, 'LIKE', '%' . $value . '%');
-            }
-        }
-
-        $query->select('p.*', 'u.first_name', 'u.last_name');
-
-        if (isset($from) && isset($to)) {
-            $query->whereBetween('p.created_at', [$from, $to]);
-        }
-
-        $totalCount = $query->count();
-
-        $query->orderBy($sortBy, $order)
-            ->take($perPage)
-            ->offset(($page-1) * $perPage);
-
-        // Manual paginator
-        if (isset($searchTerms['page'])) {
-            $list = new LengthAwarePaginator($query->get(), $totalCount, $perPage, $page, ["path" => $url['path']]);
-        } else {
-            $list = $query->paginate($perPage);
-        }
-
-        $results['list']       = $list;
-        $results['totalCount'] = $totalCount;
-        $results['order']      = $order;
-        $results['link']       = array_except($searchTerms, ['_token', 'page']);
-
-        return $results;
     }
 
     /**
@@ -133,5 +71,149 @@ class TablesApi
         $table['columns_link'] = $columnLink;
 
         return $table;
+    }
+
+    /**
+     * Plans search functionality
+     *
+     * @param $searchTerms
+     * @param $columns
+     * @return array|mixed
+     */
+    public function searchPlans($searchTerms, $columns)
+    {
+        // Remove certain keys when querying
+        $filters = array_except($searchTerms, ['created_from', 'created_to', 'sortBy', 'order', 'page']);
+        $perPage = config('testplanner.tables.pagination.lists');
+        $page    = isset($searchTerms['page']) ? $searchTerms['page'] : 1;
+        $url     = parse_url(Request::url());
+
+        // Default sort and order
+        $sortBy = empty($searchTerms['sortBy']) ? 'p.created_at' : $searchTerms['sortBy'];
+        $order  = empty($searchTerms['order'])  ? 'DESC' :$searchTerms['order'];
+        $from   = !empty($searchTerms['created_from']) ? Tools::dbDateConverter($searchTerms['created_from'], '00:00:00') : null;
+        $to     = !empty($searchTerms['created_to'])   ? Tools::dbDateConverter($searchTerms['created_to'], '23:59:59') : null;
+
+        $query = DB::table('plans AS p');
+
+        // If first and last names
+        if (isset($filters['first_name']) && isset($filters['last_name'])) {
+            $query->join('users AS u', function($join) use ($filters) {
+                $join->on('u.id', '=', 'p.creator_id')
+                    ->where('u.first_name', 'LIKE', '%' . $filters['first_name'] . '%')
+                    ->where('u.last_name', 'LIKE', '%' . $filters['last_name'] . '%');
+            });
+        }
+
+        // Remaining where conditions
+        foreach(array_except($filters, ['first_name', 'last_name']) as $key => $value) {
+            if (!empty($value)) {
+                $query->where('p.' . $key, 'LIKE', '%' . $value . '%');
+            }
+        }
+
+        if (isset($from) && isset($to)) {
+            $query->whereBetween('p.created_at', [$from, $to]);
+        }
+
+        $totalCount = $query->count();
+
+        $query->orderBy($sortBy, $order)
+            ->take($perPage)
+            ->offset(($page-1) * $perPage);
+
+        // Manual paginator
+        if (isset($searchTerms['page'])) {
+            $list = new LengthAwarePaginator($query->get(), $totalCount, $perPage, $page, ["path" => $url['path']]);
+        } else {
+            $list = $query->paginate($perPage);
+        }
+
+        // Prepare columns to be shown
+        $table = $this->prepare('order', $columns, 'PlansController@index');
+
+        $results = [
+            'plans'       => $list,
+            'totalCount'  => $totalCount,
+            'order'       => $order,
+            'link'        => $searchTerms,
+            'columns'     => $table['columns'],
+            'columnsLink' => $table['columns_link']
+        ];
+
+        return $results;
+    }
+
+    /**
+     * Users search functionality
+     *
+     * @param $searchTerms
+     * @return array
+     */
+    public function searchUsers($searchTerms)
+    {
+        // Remove certain keys when querying
+        $filters = array_except($searchTerms, ['created_from', 'created_to', 'sortBy', 'order', 'page']);
+        $perPage = config('testplanner.tables.pagination.lists');
+        $page    = isset($searchTerms['page']) ? $searchTerms['page'] : 1;
+        $url     = parse_url(Request::url());
+
+        // Default sort and order
+        $sortBy = empty($searchTerms['sortBy']) ? 'created_at' : $searchTerms['sortBy'];
+        $order  = empty($searchTerms['order'])  ? 'DESC' :$searchTerms['order'];
+        $from   = !empty($searchTerms['created_from']) ? Tools::dbDateConverter($searchTerms['created_from'], '00:00:00') : null;
+        $to     = !empty($searchTerms['created_to'])   ? Tools::dbDateConverter($searchTerms['created_to'], '23:59:59') : null;
+
+        $query = DB::table('users');
+
+        // Remaining where conditions
+        foreach($filters as $key => $value) {
+            if (!empty($value)) {
+                $query->where($key, 'LIKE', '%' . $value . '%');
+            }
+        }
+
+        if (isset($from) && isset($to)) {
+            $query->whereBetween('created_at', [$from, $to]);
+        }
+
+        $totalCount = $query->count();
+
+        $query->orderBy($sortBy, $order)
+            ->take($perPage)
+            ->offset(($page-1) * $perPage);
+
+        // Manual paginator
+        if (isset($searchTerms['page'])) {
+            $list = new LengthAwarePaginator($query->get(), $totalCount, $perPage, $page, ["path" => $url['path']]);
+        } else {
+            $list = $query->paginate($perPage);
+        }
+
+        // Columns
+        $columns = [
+            'first_name',
+            'last_name',
+            'email',
+            'active',
+            'role_names',
+            'created_at',
+            'updated_at',
+            'edit'
+        ];
+
+        // Prepare columns to be shown
+        $table = $this->prepare('order', $columns, 'UsersController@index');
+
+        $results = [
+            'users'       => $list,
+            'totalCount'  => $totalCount,
+            'order'       => $order,
+            'link'        => $searchTerms,
+            'columns'     => $table['columns'],
+            'columnsLink' => $table['columns_link']
+        ];
+
+        return $results;
     }
 }

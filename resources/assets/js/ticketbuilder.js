@@ -83,7 +83,7 @@ function TicketBuilder(config) {
                 $(this).closest(ticketRowClass).remove();
             });
 
-            // Cannot remove all the rows, only one should be left over
+            // Cannot remove all the rows, at least one should be left over
             removeTrashBtn(true);
         });
     }

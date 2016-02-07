@@ -73,7 +73,8 @@ class ActivityStreamApi
      */
     public function getActivityStream()
     {
-        $query = $this->model->orderBy('created_at', 'DESC')
+        $query = $this->model
+            ->orderBy('created_at', 'DESC')
             ->paginate(config('testplanner.tables.pagination.activity_stream'));
 
         return $query;
