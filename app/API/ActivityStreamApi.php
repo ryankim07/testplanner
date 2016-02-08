@@ -117,6 +117,7 @@ class ActivityStreamApi
                     } else if ($status == 'complete') {
                         $message = config('testplanner.messages.plan.response_resolved');
                     }
+
                     break;
             }
 

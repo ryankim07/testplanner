@@ -60,7 +60,7 @@ return [
             'build_update_error'  => 'There seems to be a problem while updating the plan.  Please contact the administrator.',
             'session_error'       => 'There seems to be a problem processing your plan build. Make sure if plan was created.  If not, please contact the administrator for this error.',
             'users_non_responses' => 'User has not submitted responses yet.',
-            'response_success'    => 'Your plan has been posted successfully.',
+            'response_success'    => 'Your response has been posted successfully.',
             'response_error'      => 'There seems to be a problem processing your response. Please contact the administrator.',
             'response_updated'    => 'has updated',
             'response_resolved'   => 'resolved',

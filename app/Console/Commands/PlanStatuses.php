@@ -49,7 +49,7 @@ class PlanStatuses extends Command
     public function handle(PlansJobs $job)
     {
         try {
-            $results = $job->updatePlanStatuses();
+            $results = $job->updatePlansStatus();
 
             $this->info(implode(',', $results));
         } catch (\Exception $e) {

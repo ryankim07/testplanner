@@ -16,8 +16,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use PhpSpec\Exception\Exception;
 
-use App\Events\RespondingPlan;
-
 use App\Facades\Tools;
 
 use App\Models\TicketsResponses;
@@ -47,8 +45,8 @@ class TicketsResponsesApi
      */
     public function saveResponse($planData)
     {
-        $redirect      = false;
-        $errorMsg      = '';
+        $redirect = false;
+        $errorMsg = '';
 
         DB::beginTransaction();
 
@@ -70,7 +68,7 @@ class TicketsResponsesApi
                 if ($incomplete == $totalRows) {
                     $ticketStatus = 'new';
                 } elseif ($completed == $totalRows) {
-                    if ($rows['ticket_status'] == 'complete' || $rows['ticket_status'] == 'update') {
+                    if ($rows['ticket_status'] == 'complete' && $ticket['original_data'] == 'modified') {
                         $ticketStatus = 'update';
                     } else {
                         $ticketStatus = 'complete';
@@ -83,22 +81,12 @@ class TicketsResponsesApi
                 $this->model->updateOrCreate([
                     'id' => $rows['ticket_resp_id']
                 ], [
-                    'plan_id'   => $planData['id'],
+                    'plan_id'   => $planData['plan_id'],
                     'tester_id' => $planData['tester_id'],
                     'browser'   => $browser,
                     'responses' => serialize($rows['tickets']),
                     'status'    => $ticketStatus,
                 ]);
-
-                if ($ticketStatus != 'new') {
-                    $planData += [
-                        'type'   => 'ticket-response',
-                        'status' => $ticketStatus
-                    ];
-
-                    // Send notifications observer
-                    event(new respondingPlan($planData));
-                }
             }
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();

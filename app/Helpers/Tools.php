@@ -148,6 +148,17 @@ class Tools
     }
 
     /**
+     * Convert double quote in text
+     *
+     * @param $text
+     * @return string
+     */
+    public function convertDoubleQuotes($text)
+    {
+        return htmlentities($text, ENT_QUOTES, 'UTF-8');
+    }
+
+    /**
      * Restructure users dropdown options
      *
      * @param $list
@@ -243,6 +254,13 @@ class Tools
         return $info->email;
     }
 
+    /**
+     * Determine if certain roles are allowed to resources
+     *
+     * @param $userRoles
+     * @param $allowedRoles
+     * @return bool
+     */
     public static function checkUserRole($userRoles, $allowedRoles)
     {
         $found = 0;

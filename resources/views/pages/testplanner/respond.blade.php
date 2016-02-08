@@ -14,7 +14,6 @@
     <div class="col-xs-12 col-md-12 main" id="respond-main">
 
         {!! Form::open(['route' => 'ticket.save.response', 'class' => 'form-horizontal', 'id' => 'ticket-response-form']) !!}
-        {!! Form::hidden('plan', json_encode(array_only($plan, ['id', 'creator_id', 'description', 'tester_id', 'reporter', 'assignee', 'ticket_status']))) !!}
 
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -59,11 +58,15 @@
 
 
             // Respond functionalities
-            //loadResponseRespondJs();
+            loadResponseRespondJs();
 
             // Back button
             backButtonSubmit('{!! URL::previous() !!}');
 
+            // Grab older values
+            var inputs = $('input[type="radio"], textarea').each(function() {
+                $(this).data('original', this.value);
+            });
 
             // If there are responded tickets, change button label for update
             var totalResponses = 0;
@@ -86,6 +89,15 @@
                 });
             }
 
+            // If notes response is blank, deactivate button
+            $('#respond-main').on('blur', '.notes-response', function() {
+                var notes = $(this).val();
+
+                if (notes.length == 0) {
+                    $('#respond-btn').prop('disabled', true);
+                }
+            });
+
             $('#respond-main').on('click', '#respond-btn', function() {
                 var browsers = {};
                 var tickets  = [];
@@ -95,11 +107,22 @@
                     var ticketPanel = $(this).find('.ticket-panel');
 
                     ticketPanel.each(function() {
+                        var testStatus        = $(this).find('input[type="radio"]:checked').val();
+                        var testStatusOrig    = $(this).find('input[type="radio"]').data('original');
+                        var notesResponse     = $(this).find('.notes-response').val();
+                        var notesResponseOrig = $(this).find('.notes-response').data('original');
+                        var origData          = 'unmodified';
+
+                        if (testStatus != testStatusOrig || notesResponse != notesResponseOrig) {
+                            origData = 'modified';
+                        }
+
                         // Create ticket object
                         tickets.push({
                             "id":             $(this).attr('id'),
-                            "test_status":    $(this).find('input[type="radio"]:checked').val(),
-                            "notes_response": $(this).find('.notes-response').val()
+                            "test_status":    testStatus,
+                            "notes_response": notesResponse,
+                            "original_data":  origData
                         });
                     });
 

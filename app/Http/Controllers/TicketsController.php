@@ -15,6 +15,8 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Requests\TicketsFormRequest;
 
+use App\Events\RespondingPlan;
+
 use App\Api\TicketsApi,
     App\Api\TicketsResponsesApi,
     App\Api\JiraApi;
@@ -109,7 +111,14 @@ class TicketsController extends Controller
     public function update(TicketsFormRequest $request)
     {
         // Save data to session
-        Session::put('mophie_testplanner.tickets', json_decode($request->get('tickets_obj'), true));
+        $tickets = json_decode($request->get('tickets_obj'), true);
+
+        foreach($tickets as $ticket) {
+            $ticket['desc'] = Tools::convertDoubleQuotes($ticket['desc']);
+            $results[] = $ticket;
+        }
+
+        Session::put('mophie_testplanner.tickets', $results);
 
         return redirect('plan/review');
     }
@@ -123,7 +132,14 @@ class TicketsController extends Controller
     public function store(TicketsFormRequest $request)
     {
         // Save data to session
-        Session::put('mophie_testplanner.tickets', json_decode($request->get('tickets_obj'), true));
+        $tickets = json_decode($request->get('tickets_obj'), true);
+
+        foreach($tickets as $ticket) {
+            $ticket['desc'] = Tools::convertDoubleQuotes($ticket['desc']);
+            $results[] = $ticket;
+        }
+
+        Session::put('mophie_testplanner.tickets', $results);
 
         return redirect('tester/build');
     }
@@ -137,9 +153,9 @@ class TicketsController extends Controller
      */
     public function save(Request $request, TicketsResponsesApi $trApi)
     {
-        $planData = json_decode($request->get('plan'), true);
-        $tickets  = json_decode($request->get('tickets_obj'), true);
-        $planData += ['tickets_responses'  => $tickets];
+        $planData  = Session::get('mophie.plan');
+        $tickets   = json_decode($request->get('tickets_obj'), true);
+        $planData += ['tickets_responses' => $tickets];
 
         // Save ticket response
         $response = $trApi->saveResponse($planData);
@@ -149,6 +165,9 @@ class TicketsController extends Controller
                 ->withInput()
                 ->withErrors(['message' => config('testplanner.messages.plan.response_error')]);
         }
+
+        // Send notifications observer
+        event(new respondingPlan($planData));
 
         return redirect('dashboard')->with('flash_success', config('testplanner.messages.plan.response_success'));
     }
@@ -170,30 +189,5 @@ class TicketsController extends Controller
         Session::put('mophie_testplanner.tickets', $modifiedData);
 
         return response()->json('success');
-    }
-
-    /**
-     * Ajax render tickets dynamically
-     *
-     * @param $buildVersionId
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
-     */
-    public function renderTicketAjax($buildVersionId, Request $request)
-    {
-        $buildVersionId = $request->get('build_version_id');
-
-        $jiraIssues  = $this->jiraApi->jiraIssuesByVersion($buildVersionId);
-        $ticketsHtml = '';
-
-        foreach($jiraIssues['specificIssues'] as $issue) {
-            $ticketsHtml .= view('pages/testplanner/partials/tickets', [
-                'mode'   => 'custom',
-                'ticket' => ['desc' => htmlentities($issue, ENT_QUOTES, 'UTF-8')]
-            ])->render();
-        }
-
-        return response()->json([json_encode($ticketsHtml)]);
     }
 }

@@ -79,7 +79,8 @@
                 addBtnName:      'add-ticket-btn',
                 removeBtnName:   'trash',
                 continueBtnName: 'continue-btn',
-                updateBtnName:   'update-btn'
+                updateBtnName:   'update-btn',
+                clearBtnName:    'clear-btn'
             });
 
             // Load ticket builder

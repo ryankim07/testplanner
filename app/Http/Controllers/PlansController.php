@@ -124,7 +124,7 @@ class PlansController extends Controller
     public function edit()
     {
         // Get plan session data
-        $planData =Session::get('mophie_testplanner.plan');
+        $planData = Session::get('mophie_testplanner.plan');
 
         // Get Jira versions
         $jiraVersions = $this->jiraApi->jiraVersions();
@@ -239,6 +239,10 @@ class PlansController extends Controller
     public function respond($planId)
     {
         $respond = $this->plansApi->respond($planId, $this->user->id);
+
+        Session::put('mophie.plan',array_merge(['type' => 'ticket-response'], array_only($respond['plan'], [
+            'plan_id', 'creator_id', 'description', 'tester_id', 'reporter', 'assignee', 'ticket_status']))
+        );
 
         return view('pages.testplanner.respond', $respond);
     }

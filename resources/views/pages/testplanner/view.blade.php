@@ -56,8 +56,12 @@
 	<script type="text/javascript">
 
 		$(document).ready(function() {
+
+			$('#view-main #plan-description').prop('readonly', true);
+			$('#step-1-main .clear-btn').hide();
+
 			// Load Jira versions, issues
-			jiraVersions('view-main', 'plan-description', <?php echo $plan['jira_versions']; ?>, '{!! URL::route('ticket.render') !!}');
+			jiraVersions('view-main', 'plan-description', <?php echo $plan['jira_versions']; ?>);
 			jiraIssues('view-main', 'ticket-description',<?php echo $plan['jira_issues']; ?>);
 
 			// Fill expiration date
@@ -75,7 +79,8 @@
                 addBtnName:      'add-ticket-btn',
                 removeBtnName:   'trash',
                 continueBtnName: 'continue-btn',
-                updateBtnName:   'update-btn'
+                updateBtnName:   'update-btn',
+				clearBtnName:    'clear-btn'
 			});
 
 			// Load ticket builder

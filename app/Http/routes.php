@@ -187,13 +187,6 @@ Route::get('ticket/edit', [
     'roles'      => ['root', 'administrator'],
     'uses'       => 'TicketsController@edit']);
 
-Route::get('ticket/render{build_version_id}', [
-    'as'         => 'ticket.render',
-    'middleware' => 'roles',
-    'roles'      => ['root', 'administrator'],
-    'uses'       => 'TicketsController@renderTicketAjax'
-]);
-
 Route::post('ticket/remove', [
     'as'         => 'ticket.remove.ajax',
     'middleware' => 'roles',

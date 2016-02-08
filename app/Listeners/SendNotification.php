@@ -15,7 +15,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 use App\Api\ActivityStreamApi,
-    App\Api\EmailApi;
+    App\Api\EmailApi,
+    App\Api\Jobs\PlansJobs;
 
 class SendNotification
 {
@@ -30,15 +31,21 @@ class SendNotification
     protected $emailApi;
 
     /**
+     * @var JobsApi
+     */
+    protected $jobsApi;
+
+    /**
      * SendNotification constructor
      *
      * @param ActivityStreamApi $asApi
      * @param EmailApi $emailApi
      */
-    public function __construct(ActivityStreamApi $asApi, EmailApi $emailApi)
+    public function __construct(ActivityStreamApi $asApi, EmailApi $emailApi, PlansJobs $jobsApi)
     {
         $this->asApi    = $asApi;
         $this->emailApi = $emailApi;
+        $this->jobsApi  = $jobsApi;
     }
 
     /**
@@ -83,11 +90,14 @@ class SendNotification
     {
         $data = $event->planData;
 
+        // Update plan status
+        $results = $this->jobsApi->updatePlanStatus($data['plan_id']);
+
         // Log activity stream
-        $this->asApi->saveActivityStream($data);
+        $this->asApi->saveActivityStream(array_merge($data, $results));
 
         // Mail all test browsers
-        $this->emailApi->sendEmail('ticket-response', $data);
+        $this->emailApi->sendEmail('ticket-response', array_merge($data, $results));
     }
 
     /**

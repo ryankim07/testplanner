@@ -73,7 +73,12 @@
 	<script type="text/javascript">
 
 		$(document).ready(function() {
-			jiraVersions('step-1-main', 'plan-description', <?php echo $jira_versions; ?>, '');
+			@if($mode != 'build')
+				$('#step-1-main #plan-description').prop('readonly', true);
+				$('#step-1-main .clear-btn').hide();
+			@endif
+
+			jiraVersions('step-1-main', 'plan-description', <?php echo $jira_versions; ?>);
 			planStartExpireDates();
 		});
 

@@ -13,6 +13,7 @@ function TicketBuilder(config) {
     var continueBtnId   = '#' + config.continueBtnName;
     var updateBtnId     = '#' + config.updateBtnName;
     var removeBtnClass  = '.' + config.removeBtnName;
+    var clearBtnClass   = '.' + config.clearBtnName;
     var ticketRowClass  = '.' + config.ticketRowName;
     var ticketDescClass = '.' + config.ticketDescName;
     var objectiveClass  = '.' + config.objectiveName;
@@ -44,6 +45,11 @@ function TicketBuilder(config) {
 
         // Add Button
         addAnotherTicketBtn();
+
+        if (config.mode == 'edit') {
+            // Disable ticket descriptions
+            disableFields();
+        }
     }
 
     /**
@@ -129,6 +135,22 @@ function TicketBuilder(config) {
             $(this).find(ticketDescClass).attr('name', 'desc["' + index + '"]');
             $(this).find(objectiveClass).attr('name', 'objective["' + index + '"]');
             $(this).find(testStepsClass).attr('name', 'test_steps["' + index + '"]');
+        });
+
+        return true;
+    }
+
+    /**
+     * Disable ticket descriptions
+     *
+     * @param obj
+     * @returns {boolean}
+     */
+    function disableFields()
+    {
+        $(formId + ' .nested-block').each(function() {
+            $(this).find(ticketDescClass).prop('readonly', true);
+            $(this).find(clearBtnClass).hide();
         });
 
         return true;
