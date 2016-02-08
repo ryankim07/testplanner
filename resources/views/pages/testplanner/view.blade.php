@@ -31,7 +31,11 @@
 				</div>
                 <div class="page-header" id="tickets-header"><h4>Tickets</h4></div>
                 	{!! $plan['tickets_html'] !!}
-                <div class="page-header"><h4>Browsers</h4></div>
+                <div class="page-header">
+					<h4 class="pull-left">Browsers</h4>
+					<h6 class="pull-right"><em>* Disable options contain responses</em></h6>
+					<div class="clearfix"></div>
+				</div>
                 <div class="row nested-block">
                     @include('pages/testplanner/partials/testers', ['users' => $plan['users']])
                 </div>

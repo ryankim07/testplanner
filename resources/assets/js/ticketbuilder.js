@@ -80,17 +80,15 @@ function TicketBuilder(config) {
      */
     function removeTicket()
     {
-        var addBtn = $(ticketRowClass + ' ' + addBtnId);
-
         $(formId).on('click', removeBtnClass, function(e) {
             e.preventDefault();
 
             $(this).closest(ticketRowClass).slideUp('slow', function() {
                 $(this).closest(ticketRowClass).remove();
-            });
 
-            // Cannot remove all the rows, at least one should be left over
-            removeTrashBtn(true);
+                // Cannot remove all the rows, at least one should be left over
+                removeTrashBtn(true);
+            });
         });
     }
 
@@ -210,8 +208,8 @@ function TicketBuilder(config) {
 
         // Show again add ticket button
         if (displayBtn) {
-            if (addBtn.css('display') == 'none') {
-                addBtn.show();
+            if ($(addBtnId).css('display') == 'none') {
+                $(addBtnId).show();
             }
         }
     }

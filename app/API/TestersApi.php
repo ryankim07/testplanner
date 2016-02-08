@@ -56,25 +56,17 @@ class TestersApi
         try {
             $testersData = json_decode($testersData, true);
 
+            $query = $this->model->where('plan_id', '=', $planId)->delete();
+
             foreach($testersData as $tester) {
-                // Get primary key of testers table
-                $id = '';
-                $query = $this->model->where('plan_id', '=', $planId)
-                    ->where('user_id', '=', $tester['id'])
-                    ->first();
-
-                if (isset($query->id)) {
-                    $id = $query->id;
-                }
-
                 // Create new or update
-                $this->model->updateOrCreate([
-                    'id' => $id
-                ], [
-                    'plan_id'  => $planId,
-                    'user_id'  => $tester['id'],
-                    'browsers' => $tester['browsers']
-                ]);
+                if (count($tester['input-ids']) > 0 && !empty($tester['browsers'])) {
+                    $this->model->create([
+                        'plan_id'  => $planId,
+                        'user_id'  => $tester['id'],
+                        'browsers' => $tester['browsers']
+                    ]);
+                }
             }
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
@@ -93,7 +85,7 @@ class TestersApi
             DB::rollback();
 
             // Log to system
-            Tools::log($errorMsg, $testerData);
+            Tools::log($errorMsg, $testersData);
 
             return false;
         }

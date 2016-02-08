@@ -54,9 +54,6 @@ $('#view-all-assigned-main').on('click', '.edit-link', function() {
  */
 function loadDashboardJs(url)
 {
-    // Hide initially
-    $('#dashboard-main .activity-comment-area').hide();
-
     // Disable all buttons for adding comment
     $('#dashboard-main .activity-comment-add').prop('disabled', true);
 
@@ -275,20 +272,26 @@ function preCheckBrowserTesters(testers, mode)
 
     $.each(testers, function (i, objs) {
         var inputIds = mode == 'plan-edit' ? objs['browsers'] : objs['input-ids'];
+        var responses = mode == 'plan-edit' ? objs['responses'] : '';
 
         if(mode == 'plan-edit') {
             inputIds = inputIds.split(',');
         }
 
-        $.each(inputIds, function (i, inputId) {
+        $.each(inputIds, function (i, browser) {
             if (mode == 'review') {
-                $('#' + inputId).replaceWith(checkIcon);
+                $('#' + browser).replaceWith(checkIcon);
             } else {
                 if (mode == 'plan-edit') {
-                    inputId = 'tester-' + objs['user_id']  + '-' + inputId;
-                }
+                    inputId = 'tester-' + objs['user_id']  + '-' + browser;
 
-                $('#' + inputId).prop('checked', true);
+                    var radioEl = $('#' + inputId);
+                    radioEl.prop('checked', true);
+
+                    if (responses[browser] === true) {
+                        radioEl.prop('disabled', true);
+                    }
+                }
             }
         });
     });

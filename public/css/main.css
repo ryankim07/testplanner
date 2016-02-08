@@ -108,6 +108,10 @@ body {
  * Dashboard
  */
 
+#dashboard-main .activity-comment-area {
+    display: none;
+}
+
 #dashboard-main .nested-block {
     padding: 10px 10px 10px 10px;
 }

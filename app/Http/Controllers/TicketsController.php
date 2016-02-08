@@ -17,6 +17,8 @@ use App\Http\Requests\TicketsFormRequest;
 
 use App\Events\RespondingPlan;
 
+use App\Facades\Tools;
+
 use App\Api\TicketsApi,
     App\Api\TicketsResponsesApi,
     App\Api\JiraApi;

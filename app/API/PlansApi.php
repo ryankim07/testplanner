@@ -123,6 +123,26 @@ class PlansApi extends BaseApi
         $tickets   = unserialize($plan->ticket()->first()->tickets);
         $usersList = $userApi->usersList();
 
+        $browserResponses = [];
+        foreach($plan->testers()->get() as $tester) {
+            $responses = $tester->tickets()->where('plan_id', '=', $plan->id)->get();
+            $tester->responses = [];
+
+            foreach($responses as $response) {
+                $exists = false;
+                if (isset($response->id) && $response['status'] != 'new') {
+                    $exists = true;
+                }
+
+                $thisResponse[$response->browser] = $exists;
+                $tester->responses = $thisResponse;
+            }
+
+            $results[] = $tester->toArray();
+        }
+
+        $testers = $results;
+
         // Render tickets
         $ticketsHtml = '';
         foreach($tickets as $ticket) {
@@ -147,7 +167,7 @@ class PlansApi extends BaseApi
                 'expired_at'    => Tools::dateConverter($plan->expired_at),
                 'tickets_html'  => $ticketsHtml,
                 'users'         => $usersList,
-                'testers'       => json_encode($plan->testers()->get()->toArray()),
+                'testers'       => json_encode($testers),
                 'jira_versions' => json_encode($jiraVersions),
                 'jira_issues'   => json_encode($jiraIssues)
             ]
@@ -363,8 +383,6 @@ class PlansApi extends BaseApi
             })
             ->select('p.*', 'u.first_name', 'u.last_name', 't.browsers')
             ->where('t.user_id', '=', $userId)
-            ->where('p.status', '=', 'new')
-            ->orWhere('p.status', '=', 'progress')
             ->orderBy($sortBy, $order)
             ->groupBy('p.id');
 
@@ -585,7 +603,7 @@ class PlansApi extends BaseApi
 
                 // Save new testers
                 foreach($testerData as $tester) {
-                    if (!empty($tester['browsers'])) {
+                    if (count($tester['input-ids']) > 0 && !empty($tester['browsers'])) {
                         $this->testersModel->create([
                             'plan_id' => $planId,
                             'user_id' => $tester['id'],
