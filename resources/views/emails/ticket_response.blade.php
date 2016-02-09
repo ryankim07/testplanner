@@ -639,8 +639,8 @@
 
                                                             <p><strong>Hi, {!! $reporter !!}!</strong></p>
 
-                                                            <p>{!! $assignee !!}, has responded tickets in the plan.</p>
-                                                            <p>Click the link to be taken to the test plan: {!! Html::linkRoute('plan.view.response', $description, [$plan_id, $tester_id]) !!}.</p>
+                                                            <p>{!! $assignee !!}, {!! Tools::getStatusText('email', 'ticket-response', $tickets_overall_status) !!}.</p>
+                                                            <p>Click the link to be taken to response: {!! Html::linkRoute('plan.view.response', $description, [$plan_id, $tester_id]) !!}.</p>
                                                         </td>
                                                     </tr>
 

@@ -45,8 +45,10 @@ class TicketsResponsesApi
      */
     public function saveResponse($planData)
     {
-        $redirect = false;
-        $errorMsg = '';
+        $totalTickets = count($planData['tickets_responses']);
+        $allStatus    = [];
+        $redirect     = false;
+        $errorMsg     = '';
 
         DB::beginTransaction();
 
@@ -76,6 +78,9 @@ class TicketsResponsesApi
                 } else {
                     $ticketStatus = 'progress';
                 }
+
+                // Collect status for every tickets
+                $allStatus[] = $ticketStatus;
 
                 // Create or update ticket response
                 $this->model->updateOrCreate([
@@ -116,6 +121,8 @@ class TicketsResponsesApi
         // Commit all changes
         DB::commit();
 
-        return true;
+        $results = Tools::getOverallStatus($allStatus, $totalTickets);
+
+        return $results;
     }
 }

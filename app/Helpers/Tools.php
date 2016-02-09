@@ -302,12 +302,47 @@ class Tools
             $overallStatus = 'update';
         } elseif ($update) {
             $overallStatus = 'update';
-        } elseif ($allComplete && ($totalCount == count($totalCount))) {
+        } elseif ($allComplete && ($totalCount == count($allStatus))) {
             $overallStatus = 'complete';
         } else {
             $overallStatus = 'progress';
         }
 
         return $overallStatus;
+    }
+
+    /**
+     * Get status text message
+     *
+     * @param $section
+     * @param $type
+     * @param $status
+     * @return mixed
+     */
+    public static function getStatusText($section, $type, $status)
+    {
+        // Activity status
+        switch($section) {
+            case 'activity':
+            case 'email':
+                if ($type == 'plan') {
+                    if ($status == 'new') {
+                        $message = config('testplanner.messages.plan.new');
+                    } elseif ($status == 'update') {
+                        $message = config('testplanner.messages.plan.update');
+                    }
+                } elseif ($type == 'ticket-response') {
+                    if ($status == 'progress') {
+                        $message = config('testplanner.messages.tickets.response_progress');
+                    } elseif ($status == 'update') {
+                        $message = config('testplanner.messages.tickets.response_updated');
+                    } elseif ($status == 'complete') {
+                        $message = config('testplanner.messages.tickets.response_resolved');
+                    }
+                }
+            break;
+        }
+
+        return $message;
     }
 }

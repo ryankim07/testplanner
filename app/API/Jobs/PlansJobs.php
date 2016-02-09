@@ -13,6 +13,7 @@
 
 use App\Models\Plans;
 
+use App\Facades\Tools;
 
 class PlansJobs
 {
@@ -78,7 +79,6 @@ class PlansJobs
     public function getTestersTicketsStatus($plan, $testers, $model = null)
     {
         $totalBrowsers = 0;
-        $overallStatus = 'new';
         $allStatus     = [];
 
         foreach ($testers as $eachTester) {
@@ -105,22 +105,7 @@ class PlansJobs
             }
         }
 
-        // Determine plan status
-        $allComplete = $this->in_array_all('complete', $allStatus);
-        $new         = in_array('new', $allStatus);
-        $complete    = in_array('complete', $allStatus);
-        $progress    = in_array('progress', $allStatus);
-        $update      = in_array('update', $allStatus);
-
-        if ($complete && $update) {
-            $overallStatus = 'update';
-        } elseif ($update) {
-            $overallStatus = 'update';
-        } elseif ($allComplete && $totalBrowsers == count($allStatus)) {
-            $overallStatus = 'complete';
-        } else {
-            $overallStatus = 'progress';
-        }
+        $overallStatus = Tools::getOverallStatus($allStatus, $totalBrowsers);
 
         $plan->update(['status' => $overallStatus]);
 
@@ -130,17 +115,5 @@ class PlansJobs
             $results = $plan->description;
         }
         return $results;
-    }
-
-    /**
-     * Check if all the array values contains the same chosen value
-     *
-     * @param $value
-     * @param $array
-     * @return bool
-     */
-    public function in_array_all($value, $array)
-    {
-        return (reset($array) == $value && count(array_unique($array)) == 1);
     }
 }

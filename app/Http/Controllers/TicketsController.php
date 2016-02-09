@@ -165,15 +165,15 @@ class TicketsController extends Controller
         if (!$response) {
             return redirect()->action('PlansController@respond')
                 ->withInput()
-                ->withErrors(['message' => config('testplanner.messages.plan.response_error')]);
+                ->withErrors(['message' => config('testplanner.messages.tickets.response_error')]);
         }
 
         // Send notifications observer
-        $planData += ['tickets_overall_response' => $response];
+        $planData += ['tickets_overall_status' => $response];
 
         event(new respondingPlan($planData));
 
-        return redirect('dashboard')->with('flash_success', config('testplanner.messages.plan.response_success'));
+        return redirect('dashboard')->with('flash_success', config('testplanner.messages.tickets.response_success'));
     }
 
     /**

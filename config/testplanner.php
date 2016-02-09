@@ -59,17 +59,21 @@ return [
             'build_update'        => 'details has been updated successfully.',
             'build_update_error'  => 'There seems to be a problem while updating the plan.  Please contact the administrator.',
             'session_error'       => 'There seems to be a problem processing your plan build. Make sure if plan was created.  If not, please contact the administrator for this error.',
-            'users_non_responses' => 'User has not submitted responses yet.',
-            'response_success'    => 'Your response has been posted successfully.',
-            'response_error'      => 'There seems to be a problem processing your response. Please contact the administrator.',
-            'response_updated'    => 'has updated',
-            'response_resolved'   => 'resolved',
             'no_users_found'      => 'There are no users at the current moment.',
             'no_plans_assigned'   => 'There are no plans assigned to you.',
             'no_plans_created'    => 'There are no plans created to others',
             'no_plans_found'      => 'There are no plans at the current moment.',
             'no_responses_found'  => 'There are no responses at the current moment.',
             'no_activities_found' => 'There are no activities at the current moment.',
+        ],
+
+        'tickets' => [
+            'users_non_responses' => 'User has not submitted responses yet.',
+            'response_success'    => 'Your response has been posted successfully.',
+            'response_error'      => 'There seems to be a problem processing your response. Please contact the administrator.',
+            'response_updated'    => 'has updated',
+            'response_progress'   => 'has answered one of the tickets in plan',
+            'response_resolved'   => 'resolved',
         ],
 
         'system' => [

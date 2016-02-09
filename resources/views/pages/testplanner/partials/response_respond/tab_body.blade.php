@@ -23,7 +23,7 @@
         ])
 
         @if($mode == 'responses' && empty($respId))
-            @include('errors.panel_body', ['msg' => config('testplanner.messages.plan.users_non_responses')])
+            @include('errors.panel_body', ['msg' => config('testplanner.messages.tickets.users_non_responses')])
         @else
             @include('pages/testplanner/partials/response_respond/plan_tickets', [
                 'mode'      => $mode,
