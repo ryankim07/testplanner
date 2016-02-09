@@ -169,6 +169,8 @@ class TicketsController extends Controller
         }
 
         // Send notifications observer
+        $planData += ['tickets_overall_response' => $response];
+
         event(new respondingPlan($planData));
 
         return redirect('dashboard')->with('flash_success', config('testplanner.messages.plan.response_success'));

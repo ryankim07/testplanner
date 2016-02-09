@@ -281,4 +281,33 @@ class Tools
 
         return false;
     }
+
+    /**
+     * Get a total status of plans or tickets
+     *
+     * @param $allStatus
+     * @param $totalCount
+     * @return string
+     */
+    public static function getOverallStatus($allStatus, $totalCount)
+    {
+        // Determine plan status
+        $allComplete = (reset($allStatus) == 'complete' && count(array_unique($allStatus)) == 1);
+        $new         = in_array('new', $allStatus);
+        $complete    = in_array('complete', $allStatus);
+        $progress    = in_array('progress', $allStatus);
+        $update      = in_array('update', $allStatus);
+
+        if ($complete && $update) {
+            $overallStatus = 'update';
+        } elseif ($update) {
+            $overallStatus = 'update';
+        } elseif ($allComplete && ($totalCount == count($totalCount))) {
+            $overallStatus = 'complete';
+        } else {
+            $overallStatus = 'progress';
+        }
+
+        return $overallStatus;
+    }
 }
