@@ -32,13 +32,13 @@
                 <p>Status:
 
                     <?php
-                    if($responseStatus == 'complete') {
-                        $trLabel = 'label-default';
-                    } else if($responseStatus == 'progress') {
-                        $trLabel = 'label-warning';
-                    } else {
-                        $trLabel = 'label-success';
-                    }
+                        if($responseStatus == 'complete') {
+                            $trLabel = 'label-default';
+                        } else if($responseStatus == 'progress') {
+                            $trLabel = 'label-warning';
+                        } else {
+                            $trLabel = 'label-success';
+                        }
                     ?>
 
                     <span class="label {!! $trLabel !!}">{!! empty($responseStatus) ? 'NEW' : strtoupper($responseStatus) !!}</span>

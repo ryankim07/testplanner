@@ -97,30 +97,11 @@ class ActivityStreamApi
             if ($type != 'plan') {
                 $assigneeName = $plan['assignee'];
                 $userId       = $plan['tester_id'];
+                $status       = $plan['tickets_overall_status'];
             }
 
             $planLink = link_to_route('plan.view.response', $plan['description'], [$plan['plan_id'], $userId]);
-            $message  = '';
-
-            switch($type) {
-                case 'plan':
-                    if ($status == 'new') {
-                        $message = config('testplanner.messages.plan.new');
-                    } elseif ($status == 'update') {
-                        $message = config('testplanner.messages.plan.update');
-                    }
-                    break;
-
-                case 'ticket-response':
-                    if ($status == 'progress' || $status == 'update') {
-                        $message = config('testplanner.messages.plan.response_updated');
-                    } else if ($status == 'complete') {
-                        $message = config('testplanner.messages.plan.response_resolved');
-                    }
-
-                    break;
-            }
-
+            $message  = Tools::getStatusText('activity', $type, $status);
             $activity = $assigneeName . ' ' . $message . ' ' . $planLink;
 
             $this->model->create([

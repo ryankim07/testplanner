@@ -7,22 +7,13 @@
 |
 --}}
 
-<?php
-    $responses = isset($plan['responses'][$browserName]) ? $plan['responses'][$browserName] : '';
-    $respId    = isset($responses['ticket_resp_id']) ? $responses['ticket_resp_id'] : '';
-    $status    = isset($responses['response_status']) ? $responses['response_status'] : '';
-?>
-
     <div id="{!! $paneSelectorId !!}" class="tab-pane">
-        {!! Form::hidden($browserName . '_ticket_resp_id', $respId, ['class' => 'ticket-resp-id']) !!}
-        {!! Form::hidden($browserName . '_ticket_status', $status, ['class' => 'ticket-status']) !!}
-
         @include('pages/testplanner/partials/response_respond/plan_details', [
             'plan'           => $plan,
-            'responseStatus' => $status
+            'responseStatus' => $responses['response_status']
         ])
 
-        @if($mode == 'responses' && empty($respId))
+        @if($mode == 'responses' && (count($responses['tickets']) == 0 || $responses['response_status'] == 'new'))
             @include('errors.panel_body', ['msg' => config('testplanner.messages.tickets.users_non_responses')])
         @else
             @include('pages/testplanner/partials/response_respond/plan_tickets', [
@@ -30,5 +21,8 @@
                 'responses' => $responses,
                 'browser'   => $browserName
             ])
+
+            {!! Form::hidden($browserName . '_ticket_resp_id', $responses['ticket_resp_id'], ['class' => 'ticket-resp-id']) !!}
+            {!! Form::hidden($browserName . '_ticket_status', $responses['response_status'], ['class' => 'ticket-status']) !!}
         @endif
     </div>

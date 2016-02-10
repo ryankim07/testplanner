@@ -72,8 +72,8 @@ return [
             'response_success'    => 'Your response has been posted successfully.',
             'response_error'      => 'There seems to be a problem processing your response. Please contact the administrator.',
             'response_updated'    => 'has updated',
-            'response_progress'   => 'has answered one of the tickets in plan',
-            'response_resolved'   => 'resolved',
+            'response_progress'   => 'has answered one of the tickets in the plan',
+            'response_resolved'   => 'resolved his plan',
         ],
 
         'system' => [

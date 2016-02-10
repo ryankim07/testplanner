@@ -27,26 +27,26 @@ class EmailApi
      */
     public static function sendEmail($type, $data)
     {
-        // Type of email to be send out
-        switch($type) {
-            case 'plan-created':
-                $emailSubject = $data['description'] . ' - ' . config('testplanner.mail.subjects.plan_created');
-                $emailType    = 'emails.plan_created';
-            break;
-
-            case 'plan-updated':
-                $emailSubject = $data['description'] . ' - ' . config('testplanner.mail.subjects.plan_updated');
-                $emailType    = 'emails.plan_updated';
-                break;
-
-            case 'ticket-response':
-                $emailSubject =  $data['description'] . ' - ' . config('testplanner.mail.subjects.ticket_response') . ' ' . Tools::getUserEmail($data['tester_id']);
-                $emailType    = 'emails.ticket_response';
-                break;
-        }
-
-        // Process email
         try {
+            // Subject and email type selector
+            switch($type) {
+                case 'plan-created':
+                    $emailSubject = $data['description'] . ' - ' . config('testplanner.mail.subjects.plan_created');
+                    $emailType    = 'emails.plan_created';
+                    break;
+
+                case 'plan-updated':
+                    $emailSubject = $data['description'] . ' - ' . config('testplanner.mail.subjects.plan_updated');
+                    $emailType    = 'emails.plan_updated';
+                    break;
+
+                case 'ticket-response':
+                    $emailSubject =  $data['description'] . ' - ' . config('testplanner.mail.subjects.ticket_response') . ' ' . $data['assignee'];
+                    $emailType    = 'emails.ticket_response';
+                    break;
+            }
+
+            // Type of email to be send out
             switch($emailType) {
                 case 'emails.plan_created':
                 case 'emails.plan_updated':

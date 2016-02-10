@@ -99,8 +99,8 @@
             });
 
             $('#respond-main').on('click', '#respond-btn', function() {
-                var browsers = {};
-                var tickets  = [];
+                var browsers   = {};
+                var tickets    = [];
 
                 $('.tab-pane').each(function() {
                     var browserId   = $(this).attr('id');
@@ -119,10 +119,10 @@
 
                         // Create ticket object
                         tickets.push({
-                            "id":             $(this).attr('id'),
-                            "test_status":    testStatus,
+                            "id": $(this).attr('id'),
+                            "test_status": testStatus,
                             "notes_response": notesResponse,
-                            "original_data":  origData
+                            "original_data": origData
                         });
                     });
 
