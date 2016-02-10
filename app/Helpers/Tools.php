@@ -21,144 +21,6 @@ use Session;
 class Tools
 {
     /**
-     * Generate random numbers according to length
-     *
-     * @param int $max
-     * @return string
-     */
-    public static function generateSalt($max = 32)
-    {
-        $baseStr = time() . rand(0, 1000000) . rand(0, 1000000);
-        $md5Hash = md5($baseStr);
-
-        if($max < 32) {
-            $md5Hash = substr($md5Hash, 0, $max);
-        }
-
-        return $md5Hash;
-    }
-
-    /**
-     * Converts datetime to mm/dd/YYY format
-     *
-     * @param $date
-     * @return bool|string
-     */
-    public static function dateConverter($date)
-    {
-        return date('m/d/Y', strtotime($date));
-    }
-
-    /**
-     * Converts datetime to mm/dd/YYY format
-     *
-     * @param $date
-     * @return bool|string
-     */
-    public static function dateAndTimeConverter($date)
-    {
-        return date('m/d/Y h:i:s', strtotime($date));
-    }
-
-    /**
-     * Converts datetime to db format
-     *
-     * @param $date
-     * @return bool|string
-     */
-    public static function dbDateConverter($date, $time)
-    {
-        return date('Y-m-d' . ' ' . $time, strtotime($date));
-    }
-
-    /**
-     * Get days, hours or minutes difference
-     *
-     * @param $date
-     * @return string
-     */
-    public static function timeDifference($date)
-    {
-        $interval = date_diff(date_create($date), date_create(date('Y-m-d H:i:s', time())));
-        $years    = $interval->format('%y');
-        $months   = $interval->format('%m');
-        $days     = $interval->format('%d');
-        $hours    = $interval->format('%h');
-        $minutes  = $interval->format('%i');
-        $curMonth = date('m', time());
-        $curYear  = date('Y', time());
-
-        if ($years != 0) {
-            $results = $years . ' ' . ($years > 1 ? 'years' : 'year') . ' ' . $ago;
-        } else if ($years == 0 && $months != 0) {
-            if ($months == 12) {
-                $results = '1 year ago';
-            } else {
-                $results = $months . ' months ago' ;
-            }
-        } else if ($years == 0 && $months == 0 && $days != 0) {
-            if ($days == 1) {
-                $results = 'Yesterday';
-            } else if ($days > 1 && $days < 7) {
-                $results = $days . ' days ago';
-            } else if ($days == 7) {
-                $results = 'Last week';
-            } else if ($days > 7 && $days <= 14) {
-                $results = '2 weeks ago';
-            } else if ($days > 14 && $days <= 21) {
-                $results = '3 weeks ago';
-            } else if ($days > 21 && $days <= cal_days_in_month(CAL_GREGORIAN, $curMonth, $curYear)) {
-                $results = '1 month ago';
-            }
-
-            if ($days != 1 && $days != 7) {
-                $results = $days . ' days ago';
-            }
-        } else if ($years == 0 && $months == 0 && $days == 0 && $hours != 0) {
-            if ($hours == 24) {
-                $results = '1 day ago';
-            } else {
-                $results = $hours . ' ' . ($hours > 1 ? 'hours' : 'hour') . ' ago';
-            }
-        } else if ($years == 0 && $months == 0 && $days == 0 && $hours == 0 && $minutes != 0) {
-            if ($minutes == 60) {
-                $results = '1 hour ago';
-            } else {
-                $results = $minutes . ' ' . ($minutes > 1 ? 'minutes' : 'minute') . ' ago';
-            }
-        } else {
-            $results = '1 minute ago';
-        }
-
-        return $results;
-    }
-
-    /**
-     * Log to the system
-     *
-     * @param $errorMsg
-     * @param $data
-     */
-    public static function log($errorMsg, $data)
-    {
-        $header = "\n\n" . "The following error occurred: " . "\n\n";
-        $msg    = $header . $errorMsg . "\n\n" . print_r($data, true);
-
-        Log::notice($msg);
-    }
-
-    /**
-     * Convert double quote in text
-     *
-     * @param $text
-     * @return string
-     */
-    public function convertDoubleQuotes($text)
-    {
-        return htmlentities($text, ENT_QUOTES, 'UTF-8');
-    }
-
-    /**
      * Restructure users dropdown options
      *
      * @param $list
@@ -274,8 +136,7 @@ class Tools
             }
         }
 
-        if ($found == count($allowedRoles))
-        {
+        if ($found > 0) {
             return true;
         }
 
@@ -344,5 +205,143 @@ class Tools
         }
 
         return $message;
+    }
+
+    /**
+    * Generate random numbers according to length
+    *
+    * @param int $max
+    * @return string
+    */
+    public static function generateSalt($max = 32)
+    {
+        $baseStr = time() . rand(0, 1000000) . rand(0, 1000000);
+        $md5Hash = md5($baseStr);
+
+        if($max < 32) {
+            $md5Hash = substr($md5Hash, 0, $max);
+        }
+
+        return $md5Hash;
+    }
+
+    /**
+     * Converts datetime to mm/dd/YYY format
+     *
+     * @param $date
+     * @return bool|string
+     */
+    public static function dateConverter($date)
+    {
+        return date('m/d/Y', strtotime($date));
+    }
+
+    /**
+     * Converts datetime to mm/dd/YYY format
+     *
+     * @param $date
+     * @return bool|string
+     */
+    public static function dateAndTimeConverter($date)
+    {
+        return date('m/d/Y h:i:s', strtotime($date));
+    }
+
+    /**
+     * Converts datetime to db format
+     *
+     * @param $date
+     * @return bool|string
+     */
+    public static function dbDateConverter($date, $time)
+    {
+        return date('Y-m-d' . ' ' . $time, strtotime($date));
+    }
+
+    /**
+     * Convert double quote in text
+     *
+     * @param $text
+     * @return string
+     */
+    public function convertDoubleQuotes($text)
+    {
+        return htmlentities($text, ENT_QUOTES, 'UTF-8');
+    }
+
+    /**
+     * Get days, hours or minutes difference
+     *
+     * @param $date
+     * @return string
+     */
+    public static function timeDifference($date)
+    {
+        $interval = date_diff(date_create($date), date_create(date('Y-m-d H:i:s', time())));
+        $years    = $interval->format('%y');
+        $months   = $interval->format('%m');
+        $days     = $interval->format('%d');
+        $hours    = $interval->format('%h');
+        $minutes  = $interval->format('%i');
+        $curMonth = date('m', time());
+        $curYear  = date('Y', time());
+
+        if ($years != 0) {
+            $results = $years . ' ' . ($years > 1 ? 'years' : 'year') . ' ' . $ago;
+        } else if ($years == 0 && $months != 0) {
+            if ($months == 12) {
+                $results = '1 year ago';
+            } else {
+                $results = $months . ' months ago' ;
+            }
+        } else if ($years == 0 && $months == 0 && $days != 0) {
+            if ($days == 1) {
+                $results = 'Yesterday';
+            } else if ($days > 1 && $days < 7) {
+                $results = $days . ' days ago';
+            } else if ($days == 7) {
+                $results = 'Last week';
+            } else if ($days > 7 && $days <= 14) {
+                $results = '2 weeks ago';
+            } else if ($days > 14 && $days <= 21) {
+                $results = '3 weeks ago';
+            } else if ($days > 21 && $days <= cal_days_in_month(CAL_GREGORIAN, $curMonth, $curYear)) {
+                $results = '1 month ago';
+            }
+
+            if ($days != 1 && $days != 7) {
+                $results = $days . ' days ago';
+            }
+        } else if ($years == 0 && $months == 0 && $days == 0 && $hours != 0) {
+            if ($hours == 24) {
+                $results = '1 day ago';
+            } else {
+                $results = $hours . ' ' . ($hours > 1 ? 'hours' : 'hour') . ' ago';
+            }
+        } else if ($years == 0 && $months == 0 && $days == 0 && $hours == 0 && $minutes != 0) {
+            if ($minutes == 60) {
+                $results = '1 hour ago';
+            } else {
+                $results = $minutes . ' ' . ($minutes > 1 ? 'minutes' : 'minute') . ' ago';
+            }
+        } else {
+            $results = '1 minute ago';
+        }
+
+        return $results;
+    }
+
+    /**
+     * Log to the system
+     *
+     * @param $errorMsg
+     * @param $data
+     */
+    public static function log($errorMsg, $data)
+    {
+        $header = "\n\n" . "The following error occurred: " . "\n\n";
+        $msg    = $header . $errorMsg . "\n\n" . print_r($data, true);
+
+        Log::notice($msg);
     }
 }

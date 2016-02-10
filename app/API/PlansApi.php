@@ -323,14 +323,22 @@ class PlansApi extends BaseApi
      */
     public function getAllCreated($userId)
     {
+        // If there's no user ID, get current user
+        if (!isset($userId)) {
+            $userId = $this->authUser['id'];
+        }
+
         // Display selected creator of the plan
-        if ($isRoot = Tools::checkUserRole(Session::get('mophie.user.roles'), ['root'])) {
+        if ($isRoot = Tools::checkUserRole($this->authUser['roles'], ['root'])) {
             $userId = '';
         }
 
-        // Administrators who created plans
+        // Only root can see what all other creators plans
         $dropDownOptions = [];
-        $dropDownOptions = $this->userApi->getUsersDropdrownOptions();
+
+        if (empty($userId)) {
+            $dropDownOptions = $this->userApi->getUsersDropdrownOptions();
+        }
 
         // Prepare columns to be shown
         $table = $this->tablesApi->prepare('order', [

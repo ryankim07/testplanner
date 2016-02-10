@@ -14,6 +14,8 @@
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
+use App\Facades\Tools;
+
 use App\Api\ActivityStreamApi,
     App\Api\EmailApi,
     App\Api\Jobs\PlansJobs;

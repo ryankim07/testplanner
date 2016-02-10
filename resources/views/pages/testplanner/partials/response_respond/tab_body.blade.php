@@ -13,7 +13,7 @@
             'responseStatus' => $responses['response_status']
         ])
 
-        @if($mode == 'responses' && (count($responses['tickets']) == 0 || $responses['response_status'] == 'new'))
+        @if($mode == 'responses' && (count($responses['tickets']) == 0 || $responses['response_status'] == '' || $responses['response_status'] == 'new'))
             @include('errors.panel_body', ['msg' => config('testplanner.messages.tickets.users_non_responses')])
         @else
             @include('pages/testplanner/partials/response_respond/plan_tickets', [

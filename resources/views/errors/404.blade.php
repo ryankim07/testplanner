@@ -8,7 +8,7 @@
 --}}
 
 @extends('layout.main.master')
-@section('body-class','error')
+
 @section('content')
 
 <div class="content">

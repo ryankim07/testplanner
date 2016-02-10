@@ -69,10 +69,17 @@ class EmailApi
                 break;
 
                 case 'emails.ticket_response':
-                    Mail::send($emailType, $data, function ($message) use ($data, $emailSubject) {
-                        $message->from(Tools::getUserEmail($data['tester_id']), $data['assignee']);
-                        $message->to(Tools::getUserEmail($data['creator_id']), $data['reporter'])->subject($emailSubject);
-                    });
+                    $data += [
+                        'testerEmail'  => Tools::getUserEmail($data['tester_id']),
+                        'creatorEmail' => Tools::getUserEmail($data['creator_id'])
+                    ];
+
+                    if ($data['creatorEmail'] != $data['testerEmail']) {
+                        Mail::send($emailType, $data, function ($message) use ($data, $emailSubject) {
+                            $message->from($data['testerEmail'], $data['assignee']);
+                            $message->to($data['creatorEmail'], $data['reporter'])->subject($emailSubject);
+                        });
+                    }
                 break;
             }
         } catch(\Exception $e) {
