@@ -63,7 +63,7 @@ class SendNotification
         $this->asApi->saveActivityStream($data);
 
         // Mail all test browsers
-        $this->emailApi->sendEmail('plan-new', $data);
+        $this->emailApi->sendEmail('plan-created', $data);
     }
 
     /**

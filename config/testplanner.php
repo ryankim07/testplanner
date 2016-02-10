@@ -54,6 +54,7 @@ return [
         'plan' => [
             'new'                 => 'created a new plan,',
             'update'              => 'updated plan,',
+            'build_exists'        => 'The test plan your are tyring to create, already exists.',
             'new_build'           => 'New plan successfully created.',
             'build_error'         => 'There seems to be a problem while building the plan.  Please contact the administrator.',
             'build_update'        => 'details has been updated successfully.',
@@ -73,7 +74,7 @@ return [
             'response_error'      => 'There seems to be a problem processing your response. Please contact the administrator.',
             'response_updated'    => 'has updated one of the tickets in the plan',
             'response_progress'   => 'has answered one of the tickets in the plan',
-            'response_resolved'   => 'resolved his plan',
+            'response_resolved'   => 'resolved',
         ],
 
         'system' => [

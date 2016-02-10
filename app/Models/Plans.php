@@ -29,6 +29,7 @@ class Plans extends Model
      */
     protected $fillable = [
         'description',
+        'jira_bvid',
         'creator_id',
         'status',
         'started_at',

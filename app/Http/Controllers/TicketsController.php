@@ -19,7 +19,8 @@ use App\Events\RespondingPlan;
 
 use App\Facades\Tools;
 
-use App\Api\TicketsApi,
+use App\Api\PlansApi,
+    App\Api\TicketsApi,
     App\Api\TicketsResponsesApi,
     App\Api\JiraApi;
 
@@ -27,6 +28,11 @@ use Session;
 
 class TicketsController extends Controller
 {
+    /**
+     * @var PlansApi
+     */
+    protected $plansApi;
+
     /**
      * @var JiraApi
      */
@@ -36,11 +42,12 @@ class TicketsController extends Controller
     /**
      * TicketsController constructor
      */
-    public function __construct(JiraApi $jiraApi)
+    public function __construct(PlansApi $plansApi, JiraApi $jiraApi)
     {
         $this->middleware('auth');
         $this->middleware('testplanner', ['only' => ['build', 'edit']]);
-        $this->jiraApi = $jiraApi;
+        $this->plansApi = $plansApi;
+        $this->jiraApi  = $jiraApi;
     }
 
     /**
@@ -51,7 +58,11 @@ class TicketsController extends Controller
     public function build()
     {
         // Grab Jira build version ID
-        $buildVersionId = Session::get('mophie_testplanner.plan.build_version_id');
+        $buildVersionId = Session::get('mophie_testplanner.plan.jira_bvid');
+
+        if (!$this->plansApi->checkPlanJiraBuildVersion($buildVersionId)) {
+            return redirect('plan/build')->with('flash_error', config('testplanner.messages.plan.build_exists'));
+        }
 
         // Get Jira issues
         $jiraIssues  = $this->jiraApi->jiraIssuesByVersion($buildVersionId);
@@ -60,7 +71,7 @@ class TicketsController extends Controller
         foreach($jiraIssues['specificIssues'] as $issue) {
             $ticketsHtml .= view('pages/testplanner/partials/tickets', [
                 'mode'   => 'custom',
-                'ticket' => ['desc' => $issue]
+                'ticket' => ['desc' => Tools::convertDoubleQuotes($issue)]
             ])->render();
         }
 

@@ -16,8 +16,9 @@ class CreatePlansTable extends Migration
         {
             $table->increments('id');
             $table->text('description');
+            $table->varchar(20)->nullable();
             $table->integer('creator_id');
-            $table->string('status', 20)->default('new');
+            $table->string('status', 10)->default('new');
             $table->timestamp('started_at');
             $table->timestamp('expired_at');
             $table->timestamps();
