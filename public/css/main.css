@@ -188,6 +188,14 @@ body {
     margin-top: 30px;
 }
 
+#review-main .review-text {
+    margin-left: -1.5em;
+}
+
+#review-main h5 {
+    color: #000;
+}
+
 
 /*
  * Images
@@ -219,6 +227,11 @@ body {
     top:0;
     right:0;
     color: #777777;
+}
+
+#review-main .fa-tag, .fa-calendar,
+.fa-star, .fa-sort-numeric-asc {
+    color: #000;
 }
 
 #response-main img, #respond-main img {

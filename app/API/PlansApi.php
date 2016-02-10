@@ -211,6 +211,12 @@ class PlansApi extends BaseApi
             $tabBodyHtml   = '';
 
             foreach ($browsers as $browser) {
+                $responses = isset($plan['responses'][$browser]) ? $plan['responses'][$browser] : [
+                    'ticket_resp_id'  => '',
+                    'response_status' => '',
+                    'tickets'         => []
+                ];
+
                 // Browsers header tab
                 $tabHeaderHtml .= view('pages/testplanner/partials/response_respond/tab_header', [
                     'selectorId'   => $browser . '-' . $testerId,
@@ -223,7 +229,15 @@ class PlansApi extends BaseApi
                     'mode'           => 'responses',
                     'browserName'    => $browser,
                     'paneSelectorId' => $browser . '-' . $testerId,
-                    'plan'           => $plan
+                    'responses'      => $responses,
+                    'plan'           => array_only($plan, [
+                        'reporter',
+                        'assignee',
+                        'started_at',
+                        'expired_at',
+                        'created_at',
+                        'updated_at'
+                    ])
                 ])->render();
             }
 
@@ -264,6 +278,12 @@ class PlansApi extends BaseApi
 
         foreach ($browsers as $browser) {
             // Render users tab
+            $responses = isset($plan['responses'][$browser]) ? $plan['responses'][$browser] : [
+                'ticket_resp_id'  => '',
+                'response_status' => '',
+                'tickets'         => []
+            ];
+
             $tabHeaderHtml .= view('pages/testplanner/partials/response_respond/tab_header', [
                 'selectorId'   => $browser,
                 'selectorName' => $browser,
@@ -274,7 +294,15 @@ class PlansApi extends BaseApi
                 'mode'           => 'respond',
                 'browserName'    => $browser,
                 'paneSelectorId' => $browser,
-                'plan'           => $plan
+                'responses'      => $responses,
+                'plan'           => array_only($plan, [
+                    'reporter',
+                    'assignee',
+                    'started_at',
+                    'expired_at',
+                    'created_at',
+                    'updated_at'
+                ])
             ])->render();
         }
 

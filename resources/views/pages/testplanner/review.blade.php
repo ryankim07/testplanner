@@ -33,10 +33,13 @@
                 <div class="page-header"><h4>Plan Details</h4></div>
                 <div class="row nested-block">
                     <a href="{!! URL::route('plan.edit') !!}" class="pencil" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
-                    <ul class="list-unstyled">
-                        <li><h5>Description:</h5> {!! $plan['description'] !!}</li>
-                        <li><h5>Starts on:</h5> {!! $plan['started_at'] !!}</li>
-                        <li><h5>Expires on:</h5> {!! $plan['expired_at'] !!}</li>
+                    <ul class="list-unstyled fa-ul">
+                        <li><i class="fa-li fa fa-tag"></i> <h5>Description:</h5></li>
+                        <li class="review-text">{!! $plan['description'] !!}</li>
+                        <li><i class="fa-li fa fa-calendar"></i> <h5>Starts on:</h5></li>
+                        <li class="review-text">{!! $plan['started_at'] !!}</li>
+                        <li><i class="fa-li fa fa-calendar"></i> <h5>Expires on:</h5></li>
+                        <li class="review-text">{!! $plan['expired_at'] !!}</li>
                     </ul>
                 </div>
                 <div class="page-header tickets"><h4>Tickets</h4></div>
@@ -44,10 +47,13 @@
                     <div class="row nested-block ticket-row" id="{!! $ticket['id'] !!}">
                         <a href="#" class="trash" data-id="{!! $ticket['id'] !!}" title="Delete"><i class="fa fa-trash-o fa-lg"></i></a>
                         <a href="{!! URL::route('ticket.edit') !!}" class="pencil" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
-                        <ul class="list-unstyled">
-                            <li><h5>Description</h5>{!! $ticket['desc'] !!}</li>
-                            <li><h5>Objective</h5>{!! $ticket['objective'] !!}</li>
-                            <li><h5>Test Steps</h5>{!! nl2br($ticket['test_steps']) !!}</li>
+                        <ul class="list-unstyled fa-ul">
+                            <li><i class="fa-li fa fa-tag"></i> <h5>Description</h5></li>
+                            <li class="review-text">{!! $ticket['desc'] !!}</li>
+                            <li><i class="fa-li fa fa-star"></i> <h5>Objective</h5></li>
+                            <li class="review-text">{!! $ticket['objective'] !!}</li>
+                            <li><i class="fa-li fa fa-sort-numeric-asc"></i> <h5>Test Steps</h5></li>
+                            <li class="review-text">{!! nl2br($ticket['test_steps']) !!}</li>
                         </ul>
                     </div>
                 @endforeach
