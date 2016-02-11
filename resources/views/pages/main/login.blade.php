@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                @include('pages/main/partials/button', [
+                @include('pages/main/partials/submit', [
                     'btnText'   => 'Login',
                     'direction' => 'pull-left',
                     'class'		=> 'btn-custom btn-sm',

@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                @include('pages/main/partials/button', [
+                @include('pages/main/partials/submit', [
                     'btnText'   => 'Reset Password',
                     'direction' => 'pull-left',
                     'class'		=> 'btn-custom btn-sm',

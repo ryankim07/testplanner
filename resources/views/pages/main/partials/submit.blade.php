@@ -17,8 +17,7 @@
                         $id    = !isset($id) ? '' : $id;
                     ?>
 
-                    {!! Form::button($btnText, ['class' => 'btn ' . ' ' . $class, 'id' => $id]) !!}
-                    @endif
+                    {!! Form::submit($btnText, ['class' => 'btn ' . $class, 'id' => $id]) !!}
                 </div>
             </div>
         </div>

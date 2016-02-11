@@ -100,14 +100,10 @@ class ActivityStreamApi
                 $status       = $plan['tickets_overall_status'];
             }
 
-            $planLink = link_to_route('plan.view.response', $plan['description'], [$plan['plan_id'], $userId]);
-            $message  = Tools::getStatusText('activity', $type, $status);
-            $activity = $assigneeName . ' ' . $message . ' ' . $planLink;
-
             $this->model->create([
                 'plan_id'  => $plan['plan_id'],
                 'user_id'  => $userId,
-                'activity' => $activity
+                'activity' => $assigneeName . ' ' . Tools::getStatusText('activity', $type, $status) . ' ' . $plan['description']
             ]);
         } catch(\Exception $e) {
             Tools::log($e->getMessage() . ' activity stream', $plan);

@@ -49,20 +49,21 @@
 		</div>
 
 		@if($mode == 'build')
-            @include('pages/main/partials/button', [
+            @include('pages/main/partials/submit', [
                 'btnText'   => 'Continue',
                 'direction' => 'pull-right',
                 'class'		=> 'btn-primary',
                 'id'		=> 'continue-btn'
             ])
         @else
-			@include('pages/main/partials/double_submit_buttons', [
-                'direction'     => 'pull-right',
-                'class'		    => 'btn-primary',
-                'btnText'       => 'Go Back',
-                'btnId'		    => 'back-btn',
-                'submitBtnText' => 'Update',
-                'submitBtnId'	=> 'update-btn',
+			@include('pages/main/partials/submit_and_button', [
+                'direction'   => 'pull-right',
+                'btnText'     => 'Go Back',
+                'btnClass'    => 'btn-primary',
+                'btnId'       => 'back-btn',
+                'submitText'  => 'Update',
+                'submitClass' => 'btn-primary',
+                'submitId'    => 'update-btn'
             ])
         @endif
 
@@ -78,8 +79,16 @@
 				$('#step-1-main .clear-btn').hide();
 			@endif
 
+			// Jira versions
 			jiraVersions('step-1-main', 'plan-description', <?php echo $jira_versions; ?>);
+
+			// Start and expiration dates
 			planStartExpireDates();
+
+			// Back button
+			@if($mode != 'build')
+                backButtonSubmit('{!! URL::previous() !!}');
+			@endif
 		});
 
 	</script>

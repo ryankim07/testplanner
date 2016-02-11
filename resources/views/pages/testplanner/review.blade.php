@@ -65,11 +65,14 @@
             </div>
         </div>
 
-        @include('pages/main/partials/button', [
-            'btnText'   => 'Finalize',
-            'direction' => 'pull-right',
-            'class'		=> 'btn-primary',
-            'id'        => 'continue-btn'
+        @include('pages/main/partials/submit_and_button', [
+            'direction'   => 'pull-right',
+            'btnText'     => 'Restart All',
+            'btnClass'    => 'btn-primary',
+            'btnId'       => 'cancel-btn',
+            'submitText'  => 'Finalize',
+            'submitClass' => 'btn-primary',
+            'submitId'    => 'continue-btn'
         ])
 
         {!! Form::close() !!}
@@ -82,7 +85,7 @@
 
             // Load ticket builder
             var ticketBuilder = new TicketBuilder({
-                formIdName: 'review-main',
+                formIdName:    'review-main',
                 ticketRowName: 'ticket-row',
                 removeBtnName: 'trash'
             });
@@ -92,6 +95,9 @@
 
             // Preselect testers checkbox input
             preCheckBrowserTesters('<?php echo $testers ?>', 'review');
+
+            // Restart plan building
+            backButtonSubmit('{!! URL::route('plan.build') !!}');
         });
 
     </script>

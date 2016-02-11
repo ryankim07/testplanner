@@ -34,15 +34,16 @@
                     <div class="row table-options">
                         <div class="pull-right">
 
-                            @include('pages/main/partials/double_submit_buttons', [
-                               'direction'     => 'pull-right',
-                               'class'		   => 'btn-custom btn-sm',
-                               'btnText'       => 'Add New',
-                               'btnId'         => 'add-btn',
-                               'submitBtnText' => 'Search',
-                               'submitBtnId'   => 'search-btn',
-                               'btnDataName'   => 'data-click',
-                               'btnData'       => 'register'
+                            @include('pages/main/partials/submit_and_button', [
+                                'direction'   => 'pull-right',
+                                'btnText'     => 'Add New',
+                                'btnClass'    => 'btn-custom btn-sm',
+                                'btnId'       => 'add-btn',
+                                'btnDataName' => 'data-click',
+                                'btnData'     => 'register',
+                                'submitText'  => 'Search',
+                                'submitClass' => 'btn-custom btn-sm',
+                                'submitId'    => 'search-btn'
                             ])
 
                         </div>

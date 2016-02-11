@@ -42,13 +42,14 @@
 			</div>
 		</div>
 
-		@include('pages/main/partials/double_submit_buttons', [
-			'direction'     => 'pull-right',
-            'class'		    => 'btn-custom',
-            'btnText'       => 'Cancel',
-            'btnId'		    => 'back-btn',
-            'submitBtnText' => 'Update',
-            'submitBtnId'	=> 'update-btn',
+		@include('pages/main/partials/submit_and_button', [
+            'direction'   => 'pull-right',
+            'btnText'     => 'Go Back',
+            'btnClass'    => 'btn-primary',
+            'btnId'       => 'back-btn',
+            'submitText'  => 'Update',
+            'submitClass' => 'btn-primary',
+            'submitId'    => 'update-btn'
         ])
 
 		{!! Form::close() !!}

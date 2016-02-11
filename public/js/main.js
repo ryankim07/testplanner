@@ -367,7 +367,7 @@ function jiraVersions(formId, descId, versions)
             source: versions,
             select: function(event, ui) {
                 $("#plan-description").val(ui.item.label);
-                $("#build-version-id").val(ui.item.value);
+                $("#jira-bvid").val(ui.item.value);
 
                 return false;
             }

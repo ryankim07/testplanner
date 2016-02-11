@@ -42,20 +42,21 @@
         </div>
 
         @if($mode == 'build')
-            @include('pages/main/partials/button', [
+            @include('pages/main/partials/submit', [
                 'btnText'   => 'Continue',
                 'direction' => 'pull-right',
                 'class'		=> 'btn-primary',
                 'id'		=> 'continue-btn'
             ])
         @else
-            @include('pages/main/partials/double_submit_buttons', [
-                'direction'     => 'pull-right',
-                'class'		    => 'btn-primary',
-                'btnText'       => 'Go Back',
-                'btnId'		    => 'back-btn',
-                'submitBtnText' => 'Update',
-                'submitBtnId'	=> 'update-btn',
+            @include('pages/main/partials/submit_and_button', [
+                'direction'   => 'pull-right',
+                'btnText'     => 'Go Back',
+                'btnClass'    => 'btn-primary',
+                'btnId'       => 'back-btn',
+                'submitText'  => 'Update',
+                'submitClass' => 'btn-primary',
+                'submitId'    => 'update-btn'
             ])
         @endif
 
@@ -67,12 +68,17 @@
 
         $(document).ready(function() {
             // Preselect testers checkbox input
-            @if($mode == 'edit')
+            @if($mode != 'build')
                 preCheckBrowserTesters('<?php echo $testers ?>', 'build-edit');
             @endif
 
             // Prepare data when submitting
             grabBrowserTesters('step-3-main');
+
+            // Back button
+            @if($mode != 'build')
+                backButtonSubmit('{!! URL::previous() !!}');
+            @endif
         });
 
     </script>

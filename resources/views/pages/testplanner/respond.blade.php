@@ -37,13 +37,14 @@
             </div>
         </div>
 
-        @include('pages/main/partials/double_submit_buttons', [
-            'direction'     => 'pull-right',
-            'class'		   => 'btn-custom',
-            'btnText'       => 'Cancel',
-            'btnId'         => 'back-btn',
-            'submitBtnText' => 'Submit Response',
-            'submitBtnId'   => 'respond-btn'
+        @include('pages/main/partials/submit_and_button', [
+            'direction'   => 'pull-right',
+            'btnText'     => 'Cancel',
+            'btnClass'    => 'btn-custom',
+            'btnId'       => 'back-btn',
+            'submitText'  => 'Submit Response',
+            'submitClass' => 'btn-custom',
+            'submitId'    => 'respond-btn'
         ])
 
         {!! Form::close() !!}
