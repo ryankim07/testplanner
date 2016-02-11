@@ -638,6 +638,8 @@ class PlansApi extends BaseApi
                 ]);
 
                 // Save new testers
+                $assignedTesters = [];
+
                 foreach($testerData as $tester) {
                     if (count($tester['input-ids']) > 0 && !empty($tester['browsers'])) {
                         $this->testersModel->create([
@@ -645,6 +647,8 @@ class PlansApi extends BaseApi
                             'user_id' => $tester['id'],
                             'browsers' => $tester['browsers']
                         ]);
+
+                        $assignedTesters[] = $tester;
                     }
                 }
             }
@@ -665,7 +669,7 @@ class PlansApi extends BaseApi
             DB::rollback();
 
             // Log to system
-            Tools::log($errorMsg, array_merge($planData, $ticketsData, $testerData));
+            Tools::log($errorMsg, array_merge($planData, $ticketsData, $assignedTesters));
 
             return false;
         }
@@ -681,7 +685,7 @@ class PlansApi extends BaseApi
             'type'    => 'plan',
             'status'  => 'new',
             'plan_id' => $planId,
-            'testers' => $testerData
+            'testers' => $assignedTesters
         ];
 
         return $planData;
@@ -737,5 +741,22 @@ class PlansApi extends BaseApi
         ];
 
         return $results;
+    }
+
+    /**
+     * Check if same plan already exists by Jira build version
+     *
+     * @param $buildId
+     * @return bool
+     */
+    public function checkPlanJiraBuildVersion($buildId)
+    {
+        $results = $this->model->where('jira_bvid', '=', $buildId)->first();
+
+        if (isset($results->id)) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -282,12 +282,16 @@ function preCheckBrowserTesters(testers, mode)
             if (mode == 'review') {
                 $('#' + browser).replaceWith(checkIcon);
             } else {
+                var radioEl = $('#' + browser);
+
                 if (mode == 'plan-edit') {
-                    inputId = 'tester-' + objs['user_id']  + '-' + browser;
+                    inputId = 'tester-' + objs['user_id'] + '-' + browser;
+                    radioEl = $('#' + inputId);
+                }
 
-                    var radioEl = $('#' + inputId);
-                    radioEl.prop('checked', true);
+                radioEl.prop('checked', true);
 
+                if (mode == 'plan-edit') {
                     if (responses[browser] === true) {
                         radioEl.prop('disabled', true);
                     }
