@@ -574,7 +574,7 @@ img{height:auto !important;}
                       <table border="0" align="left" cellpadding="0" cellspacing="0" class="container" style="font-family: century gothic, Helvetica, sans-serif; font-size:22px; font-weight: 100;">
                         <tbody><tr>
                           <td height="70" align="center" valign="middle" class="clear-padding">
-                            <a href="http://www.mophie.com/contact-us?utm_source=exacttarget&utm_medium=Email&utm_campaign=h2proregistration" style="text-decoration: none; color: #000001;">
+                            <a href="#" style="text-decoration: none; color: #000001;">
                               <img src="http://image.news.mophie.com/lib/fe8e137275600d7477/m/1/mophie-logo-retina-042315.gif" width="200" height="70" alt="mophie" style="max-width:300px; max-height:70px; text-align:center;" border="0" hspace="0" vspace="0">  
                             </a>
                           </td>
@@ -637,14 +637,9 @@ img{height:auto !important;}
                          <tr>
                            <td style="font-size: 14px; line-height: 26px; font-family:Open Sans,Arial,Tahoma, Helvetica, sans-serif; color:#000001; font-weight:500; text-align:left; ">
 
-                           <p><strong>Hi, {!! $first_name !!}!</strong></p>
+                           <p><strong>Hi,</strong></p>
                            
-                           <p>We have a new test plan I’d like to get your help on in order to get the latest updates tested and ready to push to production.</p>
-                           <p>To make sure we cover all of the browsers, you have been assigned to test on <strong>{!! str_replace(',', ', ', ucwords($browsers)) !!}</strong>.</p>
-                           <p>Click the link to be taken to the test plan: {!! Html::linkRoute('plan.respond', $description, $plan_id) !!}.</p>
-
-                            <p>If you come across any bugs or funny business, please take a screenshot of the issue, notes of the steps you took to get the error, and url and send it back over to me.</p>
-                            <p>Please have the testing completed and back to me by {!! $expired_at !!}.</p>
+                           <p>Click here to reset your password: {!! url('password/getReset/'.$token) !!}</p>
                            </td>
                          </tr>
                          
@@ -676,10 +671,80 @@ img{height:auto !important;}
          </td>
        </tr>
      </tbody></table>
-     <!-- end  container width 600px --> 
+     <!-- end  container width 600px -->
+
    </td>
  </tr>
-    </tbody></table>
+    <tr>
+        <td align="center" valign="top" class="fix-box">
+            <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" class="container" style="background-color:#f9f9f9;">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <!-- start logo footer and address -->
+                        <a href="http://www.mophie.com/staypowerful">
+                            <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
+                                <tbody><tr>
+                                    <td valign="top">
+
+                                        <!--start space height -->
+                                <tbody>
+                                <!--end space height -->
+
+
+                                <table width="560" align="center" border="0" cellspacing="0" cellpadding="0" class="container" style="background-color:#f9f9f9;">
+
+                                    <!--start space height -->
+                                    <tbody>
+                                    <tr>
+                                        <td height="10"></td>
+                                    </tr>
+                                    <!--end space height -->
+
+                                    </tbody>
+                                </table>
+                        </a>
+                    </td>
+                </tr>
+                </tbody></table>
+            <!-- end logo footer and address -->
+
+            <table width="600" align="center" border="0" cellspacing="0" cellpadding="0" class="container" style="background-color:#f9f9f9;">
+
+                <!--start space height -->
+                <tbody><tr>
+                    <td height="10"></td>
+                </tr>
+                <!--end space height -->
+
+                <tr>
+                    <!-- start COPY RIGHT content -->
+                    <td valign="top" style="font-size: 11px; line-height: 18px; font-family:Proxima nova, Lato, Proxima nova, Open Sans, Arial, Helvetica, Tahoma, sans-serif; color:#b6b6b6; font-weight:300; text-align:center; ">
+                        <br /><p>&copy; mophie, inc.<br /><br />
+              <span style="color: #b6b6b6;">mophie, juice pack, mophie juice pack, juice pack helium, mophie juice pack helium, juice pack air, mophie juice pack air, juice pack plus, mophie juice pack plus, powerstation, mophie powerstation, space pack and the mophie logo are trademarks of mophie, inc. Apple and iPhone are a registered trademark of Apple Inc.<br><br>
+
+
+              </span><a href="http://www.mophie.com/patents" style="text-decoration: none; color: #8C8C8C; font-weight:700;">www.mophie.com/patents</a></p>
+
+                        <p style="color: #b6b6b6;">6244 Technology Ave. Kalamazoo, MI 49009</p>
+
+                        <p style="color: #b6b6b6;">Designed with &#9829; in CA</p>
+
+                        <p style="color: #b6b6b6;"><a href="http://www.mophie.com/contact-us" style="text-decoration: none; color: #8C8C8C; font-weight:700;">Contact us</a> | <a href="http://www.mophie.com/privacy-policy" style="text-decoration: none; color: #8C8C8C; font-weight:700;">Privacy Policy</a>
+                    </td>
+                    <!-- end COPY RIGHT content -->
+                </tr>
+
+                <!--start space height -->
+                <tr>
+                    <td height="10"></td>
+                </tr>
+                <!--end space height -->
+
+                </tbody></table>
+        </td>
+    </tr>
+</tbody></table>
   </td>
     </tr>
 <!--  END FOOTER COPY RIGHT -->

@@ -673,6 +673,76 @@
                 </tr>
                 </tbody></table>
             <!-- end  container width 600px -->
+
+   </td>
+ </tr>
+    <tr>
+        <td align="center" valign="top" class="fix-box">
+            <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" class="container" style="background-color:#f9f9f9;">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <!-- start logo footer and address -->
+                        <a href="http://www.mophie.com/staypowerful">
+                            <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
+                                <tbody><tr>
+                                    <td valign="top">
+
+                                        <!--start space height -->
+                                <tbody>
+                                <!--end space height -->
+
+
+                                <table width="560" align="center" border="0" cellspacing="0" cellpadding="0" class="container" style="background-color:#f9f9f9;">
+
+                                    <!--start space height -->
+                                    <tbody>
+                                    <tr>
+                                        <td height="10"></td>
+                                    </tr>
+                                    <!--end space height -->
+
+                                    </tbody>
+                                </table>
+                        </a>
+                    </td>
+                </tr>
+                </tbody></table>
+            <!-- end logo footer and address -->
+
+            <table width="600" align="center" border="0" cellspacing="0" cellpadding="0" class="container" style="background-color:#f9f9f9;">
+
+                <!--start space height -->
+                <tbody><tr>
+                    <td height="10"></td>
+                </tr>
+                <!--end space height -->
+
+                <tr>
+                    <!-- start COPY RIGHT content -->
+                    <td valign="top" style="font-size: 11px; line-height: 18px; font-family:Proxima nova, Lato, Proxima nova, Open Sans, Arial, Helvetica, Tahoma, sans-serif; color:#b6b6b6; font-weight:300; text-align:center; ">
+                        <br /><p>&copy; mophie, inc.<br /><br />
+              <span style="color: #b6b6b6;">mophie, juice pack, mophie juice pack, juice pack helium, mophie juice pack helium, juice pack air, mophie juice pack air, juice pack plus, mophie juice pack plus, powerstation, mophie powerstation, space pack and the mophie logo are trademarks of mophie, inc. Apple and iPhone are a registered trademark of Apple Inc.<br><br>
+
+
+              </span><a href="http://www.mophie.com/patents" style="text-decoration: none; color: #8C8C8C; font-weight:700;">www.mophie.com/patents</a></p>
+
+                        <p style="color: #b6b6b6;">6244 Technology Ave. Kalamazoo, MI 49009</p>
+
+                        <p style="color: #b6b6b6;">Designed with &#9829; in CA</p>
+
+                        <p style="color: #b6b6b6;"><a href="http://www.mophie.com/contact-us" style="text-decoration: none; color: #8C8C8C; font-weight:700;">Contact us</a> | <a href="http://www.mophie.com/privacy-policy" style="text-decoration: none; color: #8C8C8C; font-weight:700;">Privacy Policy</a>
+                    </td>
+                    <!-- end COPY RIGHT content -->
+                </tr>
+
+                <!--start space height -->
+                <tr>
+                    <td height="10"></td>
+                </tr>
+                <!--end space height -->
+
+                </tbody></table>
         </td>
     </tr>
     </tbody></table>

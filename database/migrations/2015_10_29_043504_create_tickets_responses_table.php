@@ -19,7 +19,7 @@ class CreateTicketsResponsesTable extends Migration
             $table->foreign('plan_id')->references('id')->on('plans');
             $table->integer('tester_id')->unsigned();
             $table->foreign('tester_id')->references('id')->on('users');
-            $table->string('browser', 100);
+            $table->mediumText('browser');
             $table->longText('responses');
             $table->string('status', 20);
             $table->timestamps();

@@ -208,6 +208,34 @@ class Tools
     }
 
     /**
+     * Browser translations
+     *
+     * @param $browsers
+     * @return array
+     */
+    public static function translateBrowserName($browsers)
+    {
+        $translations = [
+            'chrome'  => 'Chrome',
+            'firefox' => 'Firefox',
+            'safari'  => 'Safari',
+            'ie'      => 'IE',
+            'ios'     => 'IOS',
+            'android' => 'Android'
+        ];
+
+        if (count($browsers) > 1) {
+            foreach($browsers as $browser) {
+                $results[] = $translations[$browser];
+            }
+
+            return $results;
+        } else {
+            return $translations[$browsers];
+        }
+    }
+
+    /**
     * Generate random numbers according to length
     *
     * @param int $max
