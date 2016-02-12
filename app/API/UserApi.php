@@ -59,7 +59,13 @@ class UserApi extends BaseApi
      */
     public function usersList()
     {
-        return $this->model->all()->toArray();
+        $users = $this->model->all()->toArray();
+
+        foreach($users as $user) {
+            $results[$user['id']] = $user;
+        }
+
+        return $results;
     }
 
     /**
@@ -101,15 +107,9 @@ class UserApi extends BaseApi
      */
     public function getAllUsersQuery($sortBy, $order)
     {
-        $sortBy = 'sub.' . $sortBy;
-
-        $sub = $this->baseUsersQuery()
-            ->select('u.*', 'ur.role_id AS role_ids', 'r.name AS role_names')
-            ->toSql(); // Do not remove this
-
-        $query = DB::table(DB::raw("($sub) AS sub"))
-            ->select('sub.*', DB::raw("GROUP_CONCAT(sub.role_ids SEPARATOR ', ') AS role_ids"), DB::raw("GROUP_CONCAT(sub.role_names ORDER BY sub.role_names SEPARATOR ', ') AS role_names"))
-            ->groupBy('sub.id')
+        $query = $this->baseUsersQuery()
+            ->select('u.*', DB::raw("GROUP_CONCAT(ur.role_id SEPARATOR ', ') AS role_ids"), DB::raw("GROUP_CONCAT(r.name ORDER BY r.name SEPARATOR ', ') AS role_names"))
+            ->groupBy('u.id')
             ->orderBy($sortBy, $order);
 
         return $query;
@@ -161,20 +161,6 @@ class UserApi extends BaseApi
             ->get();
 
         return $query;
-    }
-
-    public function getUsersDropdrownOptions()
-    {
-        $list = $this->getAllUsersByRole(['root', 'administrator']);
-
-        // Set up dropdown list of all admins
-        $results[0] = 'All';
-
-        foreach($list as $each) {
-            $results[$each->id] = $each->first_name;
-        }
-
-        return $results;
     }
 
     /**

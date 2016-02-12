@@ -20,7 +20,7 @@
                         $data        = !isset($btnData) ? '' : $btnData;
                     ?>
 
-                    {!! Form::button($btnText, ['class' => 'btn ' . $btnClass, 'id' => $btnId, 'data-click' => $btnData]) !!}
+                    {!! Form::button($btnText, ['class' => 'btn ' . $btnClass, 'id' => $btnId, 'data-click' => $data]) !!}
                     {!! Form::submit($submitText, ['class' => 'btn ' . $submitClass, 'id' => $submitId]) !!}
                 </div>
             </div>

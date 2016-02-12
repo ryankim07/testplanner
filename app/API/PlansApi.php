@@ -337,7 +337,11 @@ class PlansApi extends BaseApi
         $dropDownOptions = [];
 
         if (empty($userId)) {
-            $dropDownOptions = $this->userApi->getUsersDropdrownOptions();
+            // Administrators who created plans
+            $admins = $this->userApi->getAllUsersByRole(['root', 'administrator']);
+
+            // Set up dropdown list of all admins
+            $dropDownOptions = Tools::getUsersDropdrownOptions($admins, 'admin');
         }
 
         // Prepare columns to be shown
@@ -460,21 +464,22 @@ class PlansApi extends BaseApi
         $plan = DB::table('plans AS p')
             ->join('testers AS t', 'p.id', '=', 't.plan_id')
             ->join('tickets AS ti', 'p.id', '=', 'ti.plan_id')
-            ->select('p.*', 'p.id AS plan_id', 't.user_id AS tester_id', 't.browsers', 'ti.tickets')
+            ->leftJoin('tickets_responses AS tr', function($join) use ($userId) {
+                $join->on('p.id', '=', 'tr.plan_id')
+                    ->where('tr.tester_id', '=', $userId);
+            })
+            ->select('p.id AS plan_id', 'p.description', 'p.creator_id', 'p.status', 'p.started_at', 'p.expired_at',
+                'p.created_at', 'p.updated_at', 't.user_id AS tester_id', 't.browsers', 'ti.tickets', DB::raw("GROUP_CONCAT(tr.responses SEPARATOR '<>') AS responses"))
             ->where('p.id', '=', $planId)
-            ->where('t.user_id', '=', $userId)
+            ->groupBy('p.id')
             ->first();
 
-        // Get responses
-        $ticketsResponses = $this->trModel->where('plan_id', '=', $planId)
-            ->where('tester_id', '=', $userId)
-            ->get();
-
         // Get ticket definitions
-        $ticketTexts = unserialize($plan->tickets);
+        $ticketTexts      = unserialize($plan->tickets);
+        $ticketsResponses = explode('<>', $plan->responses);
 
         // If there are no responses, create a blank object
-        if ($ticketsResponses->count() == 0) {
+        if (count(array_filter($ticketsResponses)) == 0) {
             $browsers = explode(',', $plan->browsers);
 
             foreach($browsers as $browser) {
