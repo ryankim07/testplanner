@@ -13,8 +13,10 @@ use PhpSpec\Exception\Exception;
 
 use App\Facades\Tools;
 
+use App\Api\UserRoleApi,
+    App\Api\UserApi;
+
 use App\Models\User,
-    App\Models\UserRole,
     App\Models\Role;
 
 use Auth;
@@ -58,7 +60,7 @@ class AuthController extends Controller
      * @param LoginFormRequest $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
-    public function postLogin(LoginFormRequest $request)
+    public function postLogin(LoginFormRequest $request, UserApi $userApi)
     {
         if ($this->auth->validate(['email' => $request->email, 'password' => $request->password, 'active' => 0])) {
             return redirect($this->loginPath())
@@ -68,6 +70,35 @@ class AuthController extends Controller
 
         if ($this->auth->attempt($request->only('email', 'password')))
         {
+            $userSession     = $request->session()->get('mophie.user');
+            $allUsersSession = $request->session()->get('mophie.all_users');
+
+            // Save current user to session
+            if (!$userSession) {
+                $user = $request->user();
+                $userRoles = $user->role()->get();
+
+                foreach($userRoles as $role) {
+                    $roles[$role->id] = $role->name;
+                }
+
+                $request->session()->put('mophie.user', [
+                    'id'         => $user->id,
+                    'first_name' => $user->first_name,
+                    'last_name'  => $user->last_name,
+                    'email'      => $user->email,
+                    'active'     => $user->active,
+                    'roles'      => $roles
+                ]);
+            }
+
+            // Save all users to session
+            if (!$allUsersSession) {
+                $allUsers = $userApi->usersList();
+
+                $request->session()->put('mophie.all_users', $allUsers);
+            }
+
             return redirect()->intended('dashboard');
         }
 
@@ -118,7 +149,7 @@ class AuthController extends Controller
      * @param RegisterFormRequest $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
-    public function postRegister(RegisterFormRequest $request)
+    public function postRegister(RegisterFormRequest $request, UserRoleApi $userRoleApi)
     {
         $redirect = false;
         $errorMsg = '';
@@ -165,7 +196,7 @@ class AuthController extends Controller
             }
 
             // Add user's role
-            UserRole::addRoles($userId, $selectedRoles);
+            $userRoleApi->addRoles($userId, $selectedRoles);
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
             $redirect = true;

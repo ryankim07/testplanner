@@ -39,7 +39,6 @@
                                 'btnText'     => 'Add New',
                                 'btnClass'    => 'btn-custom btn-sm',
                                 'btnId'       => 'add-btn',
-                                'btnDataName' => 'data-click',
                                 'btnData'     => 'register',
                                 'submitText'  => 'Search',
                                 'submitClass' => 'btn-custom btn-sm',

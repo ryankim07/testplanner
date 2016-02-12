@@ -69,7 +69,7 @@
             'direction'   => 'pull-right',
             'btnText'     => 'Restart All',
             'btnClass'    => 'btn-primary',
-            'btnId'       => 'cancel-btn',
+            'btnId'       => 'back-btn',
             'submitText'  => 'Finalize',
             'submitClass' => 'btn-primary',
             'submitId'    => 'continue-btn'

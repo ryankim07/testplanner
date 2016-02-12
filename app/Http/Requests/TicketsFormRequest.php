@@ -32,8 +32,8 @@ class TicketsFormRequest extends Request
 	 */
 	public function rules()
     {
-        $desc = $this->request->get('desc');
-        $desc = array_filter($desc);
+        $desc = array_filter($this->request->get('desc'));
+
         $rules = [];
 
         if (count($desc) == 0) {
@@ -50,8 +50,8 @@ class TicketsFormRequest extends Request
      */
     public function messages()
     {
-        $desc  = $this->request->get('desc');
-        $desc = array_filter($desc);
+        $desc = array_filter($this->request->get('desc'));
+
         $messages = [];
 
         if (count($desc) == 0) {

@@ -18,7 +18,6 @@
                     ?>
 
                     {!! Form::button($btnText, ['class' => 'btn ' . ' ' . $class, 'id' => $id]) !!}
-                    @endif
                 </div>
             </div>
         </div>

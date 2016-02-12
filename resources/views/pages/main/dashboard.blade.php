@@ -27,7 +27,7 @@
                         <div class="panel panel-info" id="{!! $type !!}">
                             <div class="panel-heading">
                                 @if($type == 'admin_created_plans')
-                                    Plans assigned to others
+                                    Plans created to others
                                 @else
                                     Plans assigned to me
                                 @endif

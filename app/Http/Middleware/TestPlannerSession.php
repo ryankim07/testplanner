@@ -30,9 +30,8 @@ class TestPlannerSession
             return redirect()->secure($request->getRequestUri());
         }
 
-        $session     = $request->session()->get('mophie_testplanner');
-        $userSession = $request->session()->get('mophie.user');
-        $url         = rawurldecode($request->url());
+        $session = $request->session()->get('mophie_testplanner');
+        $url     = rawurldecode($request->url());
 
         switch($url) {
             /** DASHBOARD **/
@@ -41,25 +40,6 @@ class TestPlannerSession
                 if (isset($session)) {
                     $request->session()->forget('mophie_testplanner');
                 }
-
-                if (!$userSession) {
-                    $user = $request->user();
-                    $userRoles = $user->role()->get();
-
-                    foreach($userRoles as $role) {
-                        $roles[$role->id] = $role->name;
-                    }
-
-                    $request->session()->put('mophie.user', [
-                        'id'         => $user->id,
-                        'first_name' => $user->first_name,
-                        'last_name'  => $user->last_name,
-                        'email'      => $user->email,
-                        'active'     => $user->active,
-                        'roles'      => $roles
-                    ]);
-                }
-
             break;
 
             /** PLANS **/

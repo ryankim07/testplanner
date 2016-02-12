@@ -637,9 +637,14 @@ img{height:auto !important;}
                          <tr>
                            <td style="font-size: 14px; line-height: 26px; font-family:Open Sans,Arial,Tahoma, Helvetica, sans-serif; color:#000001; font-weight:500; text-align:left; ">
 
-                           <p><strong>Hi,</strong></p>
+                           <p><strong>Hi, {!! $first_name !!}!</strong></p>
                            
-                           <p>Click here to reset your password: {!! url('password/getReset/'.$token) !!}</p>
+                           <p>We have a new test plan I’d like to get your help on in order to get the latest updates tested and ready to push to production.</p>
+                           <p>To make sure we cover all of the browsers, you have been assigned to test on <strong>{!! str_replace(',', ', ', $browsers) !!}</strong>.</p>
+                           <p>Click the link to be taken to the test plan: {!! Html::linkRoute('plan.respond', $description, $plan_id) !!}.</p>
+
+                            <p>If you come across any bugs or funny business, please take a screenshot of the issue, notes of the steps you took to get the error, and url and send it back over to me.</p>
+                            <p>Please have the testing completed and back to me by {!! $expired_at !!}.</p>
                            </td>
                          </tr>
                          

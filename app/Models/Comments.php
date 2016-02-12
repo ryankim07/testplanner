@@ -54,7 +54,7 @@ class Comments extends Model
      */
     public function getUserFirstNameAttribute()
     {
-        return User::getUserFirstName($this->user_id);
+        return Tools::getUserFirstName($this->user_id);
     }
 
     /**

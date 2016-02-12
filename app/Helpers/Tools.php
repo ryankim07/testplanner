@@ -98,9 +98,9 @@ class Tools
      */
     public static function getUserFirstName($userId)
     {
-        $user = User::find($userId);
+        $allUsers = Session::get('mophie.all_users');
 
-        return $user->first_name;
+        return $allUsers[$userId]['first_name'];
     }
 
     /**
@@ -111,9 +111,9 @@ class Tools
      */
     public static function getUserEmail($userId)
     {
-        $info = User::find($userId);
+        $allUsers = Session::get('mophie.all_users');
 
-        return $info->email;
+        return $allUsers[$userId]['email'];
     }
 
     /**

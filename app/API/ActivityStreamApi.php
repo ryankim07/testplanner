@@ -74,6 +74,7 @@ class ActivityStreamApi
     public function getActivityStream()
     {
         $query = $this->model
+            ->with('comments')
             ->orderBy('created_at', 'DESC')
             ->paginate(config('testplanner.tables.pagination.activity_stream'));
 

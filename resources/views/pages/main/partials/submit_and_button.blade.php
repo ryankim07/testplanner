@@ -17,10 +17,10 @@
                         $btnId       = !isset($btnId) ? '' : $btnId;
                         $submitClass = !isset($submitClass) ? '' : $submitClass;
                         $submitId    = !isset($submitId) ? '' : $submitId;
-                        $data        = !isset($btnDataName) && !isset($btnData) ? '' : $btnDataName . '=>' .  $btnData;
+                        $data        = !isset($btnData) ? '' : $btnData;
                     ?>
 
-                    {!! Form::button($btnText, ['class' => 'btn ' . $btnClass, 'id' => $btnId, $data]) !!}
+                    {!! Form::button($btnText, ['class' => 'btn ' . $btnClass, 'id' => $btnId, 'data-click' => $btnData]) !!}
                     {!! Form::submit($submitText, ['class' => 'btn ' . $submitClass, 'id' => $submitId]) !!}
                 </div>
             </div>
