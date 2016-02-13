@@ -640,7 +640,7 @@ img{height:auto !important;}
                            <p><strong>Hi, {!! $first_name !!}!</strong></p>
                            
                            <p>We have a new test plan I’d like to get your help on in order to get the latest updates tested and ready to push to production.</p>
-                           <p>To make sure we cover all of the browsers, you have been assigned to test on <strong>{!! str_replace(',', ', ', $browsers) !!}</strong>.</p>
+                           <p>To make sure we cover all of the browsers, you have been assigned to test on <strong>{!! $browsers !!}</strong>.</p>
                            <p>Click the link to be taken to the test plan: {!! Html::linkRoute('plan.respond', $description, $plan_id) !!}.</p>
 
                             <p>If you come across any bugs or funny business, please take a screenshot of the issue, notes of the steps you took to get the error, and url and send it back over to me.</p>

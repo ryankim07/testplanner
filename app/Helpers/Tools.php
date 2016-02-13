@@ -27,7 +27,7 @@ class Tools
      * @param $type
      * @return mixed
      */
-    public static function getUsersDropdrownOptions($list, $type)
+    public function getUsersDropdrownOptions($list, $type)
     {
         // Set up dropdown list of all admins
         $results[0] = 'All';
@@ -50,7 +50,7 @@ class Tools
      *
      * @return mixed
      */
-    public static function getRolesDropdownOptions()
+    public function getRolesDropdownOptions()
     {
         $allRoles = Role::all();
 
@@ -67,7 +67,7 @@ class Tools
      * @param $browser
      * @return string
      */
-    public static function capitalizeBrowserNames($browser)
+    public function capitalizeBrowserNames($browser)
     {
         return implode(', ', array_map('ucfirst', explode(',', $browser)));
     }
@@ -78,7 +78,7 @@ class Tools
      * @param $browsers
      * @return string
      */
-    public static function getTesterBrowserImg($browsers)
+    public function getTesterBrowserImg($browsers)
     {
         $browsers= explode(',', $browsers);
         $results = '';
@@ -96,7 +96,7 @@ class Tools
      * @param $userId
      * @return mixed
      */
-    public static function getUserFirstName($userId)
+    public function getUserFirstName($userId)
     {
         $allUsers = Session::get('mophie.all_users');
 
@@ -109,7 +109,7 @@ class Tools
      * @param $userId
      * @return mixed
      */
-    public static function getUserEmail($userId)
+    public function getUserEmail($userId)
     {
         $allUsers = Session::get('mophie.all_users');
 
@@ -123,7 +123,7 @@ class Tools
      * @param $allowedRoles
      * @return bool
      */
-    public static function checkUserRole($userRoles, $allowedRoles)
+    public function checkUserRole($userRoles, $allowedRoles)
     {
         $found = 0;
 
@@ -150,7 +150,7 @@ class Tools
      * @param $totalCount
      * @return string
      */
-    public static function getOverallStatus($allStatus, $totalCount)
+    public function getOverallStatus($allStatus, $totalCount)
     {
         // Determine plan status
         $allComplete = (reset($allStatus) == 'complete' && count(array_unique($allStatus)) == 1);
@@ -180,7 +180,7 @@ class Tools
      * @param $status
      * @return mixed
      */
-    public static function getStatusText($section, $type, $status)
+    public function getStatusText($section, $type, $status)
     {
         // Activity status
         switch($section) {
@@ -213,7 +213,7 @@ class Tools
      * @param $browsers
      * @return array
      */
-    public static function translateBrowserName($browsers)
+    public function translateBrowserName($browsers)
     {
         $translations = [
             'chrome'  => 'Chrome',
@@ -224,12 +224,14 @@ class Tools
             'android' => 'Android'
         ];
 
-        if (count($browsers) > 1) {
-            foreach($browsers as $browser) {
-                $results[] = $translations[$browser];
+        $allBrowsers = explode(',', $browsers);
+
+        if (count($allBrowsers) > 1) {
+            foreach($allBrowsers as $eachBrowser) {
+                $results[] = $translations[$eachBrowser];
             }
 
-            return $results;
+            return $this->natural_language_join($results);
         } else {
             return $translations[$browsers];
         }
@@ -241,7 +243,7 @@ class Tools
     * @param int $max
     * @return string
     */
-    public static function generateSalt($max = 32)
+    public function generateSalt($max = 32)
     {
         $baseStr = time() . rand(0, 1000000) . rand(0, 1000000);
         $md5Hash = md5($baseStr);
@@ -259,7 +261,7 @@ class Tools
      * @param $date
      * @return bool|string
      */
-    public static function dateConverter($date)
+    public function dateConverter($date)
     {
         return date('m/d/Y', strtotime($date));
     }
@@ -270,7 +272,7 @@ class Tools
      * @param $date
      * @return bool|string
      */
-    public static function dateAndTimeConverter($date)
+    public function dateAndTimeConverter($date)
     {
         return date('m/d/Y h:i:s', strtotime($date));
     }
@@ -281,7 +283,7 @@ class Tools
      * @param $date
      * @return bool|string
      */
-    public static function dbDateConverter($date, $time)
+    public function dbDateConverter($date, $time)
     {
         return date('Y-m-d' . ' ' . $time, strtotime($date));
     }
@@ -298,12 +300,30 @@ class Tools
     }
 
     /**
+     * Add commas and "and" before last string
+     *
+     * @param array $list
+     * @param string $conjunction
+     * @return mixed|string
+     */
+    public function natural_language_join(array $list, $conjunction = 'and')
+    {
+        $last = array_pop($list);
+
+        if ($list) {
+            return implode(', ', $list) . ' ' . $conjunction . ' ' . $last;
+        }
+
+        return $last;
+    }
+
+    /**
      * Get days, hours or minutes difference
      *
      * @param $date
      * @return string
      */
-    public static function timeDifference($date)
+    public function timeDifference($date)
     {
         $interval = date_diff(date_create($date), date_create(date('Y-m-d H:i:s', time())));
         $years    = $interval->format('%y');
@@ -365,7 +385,7 @@ class Tools
      * @param $errorMsg
      * @param $data
      */
-    public static function log($errorMsg, $data)
+    public function log($errorMsg, $data)
     {
         $header = "\n\n" . "The following error occurred: " . "\n\n";
         $msg    = $header . $errorMsg . "\n\n" . print_r($data, true);
