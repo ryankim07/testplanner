@@ -11,6 +11,7 @@
 	<div class="col-xs-12 col-md-12 main" id="view-main">
 
 		{!! Form::model($plan, ['method' => 'PATCH', 'action' => ['PlansController@updateBuiltPlan', $plan['id']], 'class' => 'form-horizontal', 'id' => 'plan-edit-form']) !!}
+		{!! Form::hidden('orig_data', $plan['orig_data']) !!}}
 
 		<div class="panel panel-default">
 			<div class="panel-heading">

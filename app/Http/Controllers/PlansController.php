@@ -303,15 +303,19 @@ class PlansController extends Controller
      */
     public function updateBuiltPlan($planId, PlanUpdateFormRequest $request)
     {
-        $planData      = $this->plansApi->updateBuiltPlanDetails($planId, $request);
-        $ticketsUpdate = $this->ticketsApi->updateBuiltTickets($planId, $request->get('tickets_obj'));
-        $testersUpdate = $this->testersApi->updateBuiltTesters($planId, $request->get('browser_testers'));
+        $ticketsObj     = $request->get('tickets_obj');
+        $testersBrowser = $request->get('browser_testers');
+        $origData       = $request->get('orig_data');
+        $planData       = $this->plansApi->updateBuiltPlan($planId, $request);
+        $ticketsUpdate  = $this->ticketsApi->updateBuiltTickets($planId, $ticketsObj);
+        $testersUpdate  = $this->testersApi->updateBuiltTesters($planId, $testersBrowser, $origData);
 
         $msg = config('testplanner.messages.plan.build_update_error');
 
-        if ((count($planData) > 0) && $ticketsUpdate && $testersUpdate) {
+        if ((count($planData) > 0) && (count($testersUpdate) > 0) && $ticketsUpdate) {
             // Send notifications observer
-            event(new updatingPlan(array_merge($planData, ['testers' => $request->get('browser_testers')])));
+            $testersBrowser += ['user_browser_changes' => $testersUpdate];
+            event(new updatingPlan(array_merge($planData, ['testers' => $testersBrowser])));
 
             $msg = $planData['description'] . ' ' . config('testplanner.messages.plan.build_update');
         }

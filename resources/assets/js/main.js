@@ -420,9 +420,7 @@ function planCreatedDates()
 }
 
 /**
- *
  * General
- *
  */
 function backButtonSubmit(url) {
     $('form').on('click', '#back-btn', function() {
@@ -430,6 +428,13 @@ function backButtonSubmit(url) {
     });
 }
 
+/**
+ * Activate tab
+ *
+ * @param formId
+ * @param navClass
+ * @param contentClass
+ */
 function activateTabNav(formId, navClass, contentClass)
 {
     $('#' + formId + ' ' + '.' + navClass + ' li:first-child').addClass('active');

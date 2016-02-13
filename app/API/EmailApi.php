@@ -53,7 +53,7 @@ class EmailApi
                     if (count($data['testers']) > 1) {
                         // Multiple testers
                         foreach ($data['testers'] as $tester) {
-                            $tester['browsers'] = Tools::translateBrowserName(explode(',', $tester['browsers']));
+                            $tester['browsers'] = Tools::translateBrowserName($tester['browsers']);
 
                             Mail::send($emailType, array_merge($data, $tester), function ($message) use ($tester, $emailSubject) {
                                 $message->to($tester['email'], $tester['first_name'])->subject($emailSubject);
