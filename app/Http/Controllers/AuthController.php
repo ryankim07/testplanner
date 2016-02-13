@@ -70,35 +70,6 @@ class AuthController extends Controller
 
         if ($this->auth->attempt($request->only('email', 'password')))
         {
-            $userSession     = $request->session()->get('mophie.user');
-            $allUsersSession = $request->session()->get('mophie.all_users');
-
-            // Save current user to session
-            if (!$userSession) {
-                $user = $request->user();
-                $userRoles = $user->role()->get();
-
-                foreach($userRoles as $role) {
-                    $roles[$role->id] = $role->name;
-                }
-
-                $request->session()->put('mophie.user', [
-                    'id'         => $user->id,
-                    'first_name' => $user->first_name,
-                    'last_name'  => $user->last_name,
-                    'email'      => $user->email,
-                    'active'     => $user->active,
-                    'roles'      => $roles
-                ]);
-            }
-
-            // Save all users to session
-            if (!$allUsersSession) {
-                $allUsers = $userApi->usersList();
-
-                $request->session()->put('mophie.all_users', $allUsers);
-            }
-
             return redirect()->intended('dashboard');
         }
 
@@ -240,5 +211,10 @@ class AuthController extends Controller
             'type'         => 'success',
             'redirect_url' => url('user/all')
         ]);
+    }
+
+    protected function authenticated(Request $request, User $user)
+    {
+        return redirect()->intended('/dashboard');
     }
 }

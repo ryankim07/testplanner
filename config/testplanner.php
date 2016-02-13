@@ -72,9 +72,9 @@ return [
             'users_non_responses' => 'User has not submitted responses yet.',
             'response_success'    => 'Your response has been posted successfully.',
             'response_error'      => 'There seems to be a problem processing your response. Please contact the administrator.',
-            'response_updated'    => 'has updated one of the tickets in the plan',
-            'response_progress'   => 'has answered one of the tickets in the plan',
-            'response_resolved'   => 'resolved',
+            'response_updated'    => 'has updated one of the tickets in the plan.',
+            'response_progress'   => 'has answered one of the tickets in the plan.',
+            'response_resolved'   => 'resolved his plan.',
         ],
 
         'system' => [

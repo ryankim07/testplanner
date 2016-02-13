@@ -112,18 +112,17 @@ class PlansApi extends BaseApi
     /**
      * Display plan
      *
-     * @param $id
+     * @param $planId
      * @param $userApi
      * @param $jiraApi
      * @return array
      */
-    public function viewPlan($id, $userApi, $jiraApi)
+    public function viewPlan($planId, $userApi, $jiraApi)
     {
-        $plan      = $this->model->find($id);
+        $plan      = $this->model->find($planId);
         $tickets   = unserialize($plan->ticket()->first()->tickets);
         $usersList = $userApi->usersList();
 
-        $browserResponses = [];
         foreach($plan->testers()->get() as $tester) {
             $responses = $tester->tickets()->where('plan_id', '=', $plan->id)->get();
             $tester->responses = [];
@@ -185,7 +184,7 @@ class PlansApi extends BaseApi
     public function responses($planId)
     {
         // Plan details
-        $testers = $this->getTestersByPlanId($planId);
+        $testers = $this->model->find($planId)->testers()->get();
 
         $usersTabHtml    = '';
         $browsersTabHtml = '';
@@ -464,22 +463,21 @@ class PlansApi extends BaseApi
         $plan = DB::table('plans AS p')
             ->join('testers AS t', 'p.id', '=', 't.plan_id')
             ->join('tickets AS ti', 'p.id', '=', 'ti.plan_id')
-            ->leftJoin('tickets_responses AS tr', function($join) use ($userId) {
-                $join->on('p.id', '=', 'tr.plan_id')
-                    ->where('tr.tester_id', '=', $userId);
-            })
-            ->select('p.id AS plan_id', 'p.description', 'p.creator_id', 'p.status', 'p.started_at', 'p.expired_at',
-                'p.created_at', 'p.updated_at', 't.user_id AS tester_id', 't.browsers', 'ti.tickets', DB::raw("GROUP_CONCAT(tr.responses SEPARATOR '<>') AS responses"))
+            ->select('p.*', 'p.id AS plan_id', 't.user_id AS tester_id', 't.browsers', 'ti.tickets')
             ->where('p.id', '=', $planId)
-            ->groupBy('p.id')
+            ->where('t.user_id', '=', $userId)
             ->first();
 
+        // Get responses
+        $ticketsResponses = $this->trModel->where('plan_id', '=', $planId)
+            ->where('tester_id', '=', $userId)
+            ->get();
+
         // Get ticket definitions
-        $ticketTexts      = unserialize($plan->tickets);
-        $ticketsResponses = explode('<>', $plan->responses);
+        $ticketTexts = unserialize($plan->tickets);
 
         // If there are no responses, create a blank object
-        if (count(array_filter($ticketsResponses)) == 0) {
+        if ($ticketsResponses->count() == 0) {
             $browsers = explode(',', $plan->browsers);
 
             foreach($browsers as $browser) {

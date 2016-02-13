@@ -36,5 +36,6 @@ class AuthLogout
     {
         Session::forget('mophie_testplanner');
         Session::forget('mophie.user');
+        Session::forget('mophie.all_users');
     }
 }

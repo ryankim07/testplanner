@@ -67,7 +67,7 @@
 
         @include('pages/main/partials/submit_and_button', [
             'direction'   => 'pull-right',
-            'btnText'     => 'Restart All',
+            'btnText'     => 'Restart',
             'btnClass'    => 'btn-primary',
             'btnId'       => 'back-btn',
             'submitText'  => 'Finalize',

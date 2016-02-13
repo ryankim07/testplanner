@@ -53,7 +53,7 @@ class EmailApi
                     if (count($data['testers']) > 1) {
                         // Multiple testers
                         foreach ($data['testers'] as $tester) {
-                            $tester['browsers'] = Tools::translateBrowserName($tester['browsers']);
+                            $tester['browsers'] = Tools::translateBrowserName(explode(',', $tester['browsers']));
 
                             Mail::send($emailType, array_merge($data, $tester), function ($message) use ($tester, $emailSubject) {
                                 $message->to($tester['email'], $tester['first_name'])->subject($emailSubject);
@@ -71,13 +71,15 @@ class EmailApi
                 break;
 
                 case 'emails.ticket_response':
-                    array_add($data, 'testerEmail', Tools::getUserEmail($data['tester_id']));
-                    array_add($data, 'creatorEmail', Tools::getUserEmail($data['creator_id']));
+                    $data += [
+                        'tester_email'  => Tools::getUserEmail($data['tester_id']),
+                        'creator_email' => Tools::getUserEmail($data['creator_id'])
+                    ];
 
-                    if ($data['creatorEmail'] != $data['testerEmail']) {
+                    if ($data['creator_email'] != $data['tester_email']) {
                         Mail::send($emailType, $data, function ($message) use ($data, $emailSubject) {
-                            $message->from($data['testerEmail'], $data['assignee']);
-                            $message->to($data['creatorEmail'], $data['reporter'])->subject($emailSubject);
+                            $message->from($data['tester_email'], $data['assignee']);
+                            $message->to($data['creator_email'], $data['reporter'])->subject($emailSubject);
                         });
                     }
                 break;

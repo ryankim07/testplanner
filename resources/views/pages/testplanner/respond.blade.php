@@ -57,7 +57,6 @@
             // Activate first tab nav and tab content
             activateTabNav('respond-main', 'nav-tabs', 'tab-content');
 
-
             // Respond functionalities
             loadResponseRespondJs();
 
