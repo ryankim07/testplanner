@@ -92,55 +92,8 @@
             // Activate first tab nav and tab content
             activateTabNav('system-main', 'nav-pills', 'tab-content');
 
-            // Grab all the original contents
-            var inputs = $('input[type="text"]').each(function() {
-                $(this).data('original', this.value);
-            });
-
-            $('#system-main').on('click', '#update-btn', function() {
-                var fields = [];
-                var items  = {};
-
-                // Clear existing flash messages
-                if ($('.alert').length > 0) {
-                    $('.alert').remove();
-                }
-
-                // Grab token
-                items['_token'] = $('form').find('input[name=_token]').val();
-
-                // Grab only fields that were changed
-                inputs.each(function() {
-                    if ($(this).data('original') != this.value) {
-                        items[$(this).data('name')] = this.value;
-                    }
-                });
-
-                // Update by Ajax
-                $.when(
-                    $.ajax({
-                        method: "POST",
-                        url: $('form').attr('action'),
-                        data: items,
-                        dataType: "json",
-                        success: function (res) {
-                            var divClass  = res.status == 'success' ? 'alert-success' : 'alert-danger';
-                            var divIcon   = res.status == 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-                            var divSrOnly = res.status == 'success' ? 'Success' : 'Error';
-
-                            var msgBlock = $('<div class="alert ' + divClass + '" role="alert"></div>');
-                            msgBlock.empty().html('<i class="fa ' + divIcon + ' fa-lg" aria-hidden="true"></i><span class="sr-only">' + divSrOnly + '</span> ' + res.msg + '<br/>');
-
-                            $('#system-main #system-main-panel-body').prepend(msgBlock);
-                        }
-                    })
-                 ).done(function() {
-                    var inputs = $('input[type="text"]').each(function() {
-                        $(this).data('original', this.value);
-                    });
-                 });
-
-            });
+            // Load system
+            loadSystemJs();
         });
 
     </script>

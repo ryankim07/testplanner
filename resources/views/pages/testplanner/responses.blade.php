@@ -50,9 +50,6 @@
             // Activate inner browsers first tab nav and tab content
             activateTabNav('response-main', 'nav-tabs', 'inner-tab');
 
-            // Respond functionalities
-            loadResponseRespondJs();
-
             // Back button
             backButtonSubmit('{!! URL::previous() !!}');
         });

@@ -130,9 +130,84 @@ function loadDashboardJs(url)
 /**
  * Responding to ticket
  */
-function loadResponseRespondJs()
+function loadRespondJs()
 {
+    // Grab older values
+    var inputs = $('input[type="radio"], textarea').each(function() {
+        $(this).data('original', this.value);
+    });
 
+    // If there are responded tickets, change button label for update
+    var totalResponses = 0;
+
+    $('#respond-main .ticket-panel').each(function() {
+        var notesResponse = $(this).find('.notes-response');
+
+        if (notesResponse.val() != '') {
+            totalResponses++;
+        }
+    });
+
+    if (totalResponses > 0) {
+        $('#respond-btn').prop('value', 'Update Response')
+    } else if (totalResponses == 0) {
+        $('#respond-btn').prop('disabled', true);
+
+        $('#respond-main').on('focus', '.notes-response', function() {
+            $('#respond-btn').prop('disabled', false);
+        });
+    }
+
+    // If notes response is blank, deactivate button
+    $('#respond-main').on('blur', '.notes-response', function() {
+        var notes = $(this).val();
+
+        if (notes.length == 0) {
+            $('#respond-btn').prop('disabled', true);
+        }
+    });
+
+    $('#respond-main').on('click', '#respond-btn', function() {
+        var browsers   = {};
+        var tickets    = [];
+
+        $('.tab-pane').each(function() {
+            var browserId   = $(this).attr('id');
+            var ticketPanel = $(this).find('.ticket-panel');
+
+            ticketPanel.each(function() {
+                var testStatus        = $(this).find('input[type="radio"]:checked').val();
+                var testStatusOrig    = $(this).find('input[type="radio"]').data('original');
+                var notesResponse     = $(this).find('.notes-response').val();
+                var notesResponseOrig = $(this).find('.notes-response').data('original');
+                var origData          = 'unmodified';
+
+                if (testStatus != testStatusOrig || notesResponse != notesResponseOrig) {
+                    origData = 'modified';
+                }
+
+                // Create ticket object
+                tickets.push({
+                    "id": $(this).attr('id'),
+                    "test_status": testStatus,
+                    "notes_response": notesResponse,
+                    "original_data": origData
+                });
+            });
+
+            browsers[browserId] = {
+                'ticket_resp_id': $(this).find('.ticket-resp-id').val(),
+                'ticket_status': $(this).find('.ticket-status').val(),
+                'tickets': tickets,
+            };
+
+            tickets = [];
+        });
+
+        // Create hidden field
+        var input = $("<input>").attr({"type":"hidden","name":"tickets_obj"}).val(JSON.stringify(browsers));
+        $('form').append(input);
+    });
 }
 
 
@@ -420,9 +495,7 @@ function planCreatedDates()
 }
 
 /**
- *
  * General
- *
  */
 function backButtonSubmit(url) {
     $('form').on('click', '#back-btn', function() {
@@ -430,8 +503,68 @@ function backButtonSubmit(url) {
     });
 }
 
+/**
+ * Activate tab
+ *
+ * @param formId
+ * @param navClass
+ * @param contentClass
+ */
 function activateTabNav(formId, navClass, contentClass)
 {
     $('#' + formId + ' ' + '.' + navClass + ' li:first-child').addClass('active');
     $('#' + formId + ' ' + '.' + contentClass + ' div:first-child').removeClass('fade').addClass('active fade in');
+}
+
+function loadSystemJs()
+{
+    // Grab all the original contents
+    var inputs = $('input[type="text"]').each(function() {
+        $(this).data('original', this.value);
+    });
+
+    $('#system-main').on('click', '#update-btn', function() {
+        var fields = [];
+        var items  = {};
+
+        // Clear existing flash messages
+        if ($('.alert').length > 0) {
+            $('.alert').remove();
+        }
+
+        // Grab token
+        items['_token'] = $('form').find('input[name=_token]').val();
+
+        // Grab only fields that were changed
+        inputs.each(function() {
+            if ($(this).data('original') != this.value) {
+                items[$(this).data('name')] = this.value;
+            }
+        });
+
+        // Update by Ajax
+        $.when(
+            $.ajax({
+                method: "POST",
+                url: $('form').attr('action'),
+                data: items,
+                dataType: "json",
+                success: function (res) {
+                    var divClass  = res.status == 'success' ? 'alert-success' : 'alert-danger';
+                    var divIcon   = res.status == 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+                    var divSrOnly = res.status == 'success' ? 'Success' : 'Error';
+
+                    var msgBlock = $('<div class="alert ' + divClass + '" role="alert"></div>');
+                    msgBlock.empty().html('<i class="fa ' + divIcon + ' fa-lg" aria-hidden="true"></i><span class="sr-only">' + divSrOnly + '</span> ' + res.msg + '<br/>');
+
+                    $('#system-main #system-main-panel-body').prepend(msgBlock);
+                }
+            })
+        ).done(function() {
+            var inputs = $('input[type="text"]').each(function() {
+                $(this).data('original', this.value);
+            });
+        });
+
+    });
 }

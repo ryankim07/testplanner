@@ -216,4 +216,65 @@ class TablesApi
 
         return $results;
     }
+
+    public function searchActivities($searchTerms)
+    {
+        // Remove certain keys when querying
+        $filters = array_except($searchTerms, ['created_from', 'created_to', 'sortBy', 'order', 'page']);
+        $perPage = config('testplanner.tables.pagination.lists');
+        $page    = isset($searchTerms['page']) ? $searchTerms['page'] : 1;
+        $url     = parse_url(Request::url());
+
+        // Default sort and order
+        $sortBy = empty($searchTerms['sortBy']) ? 'created_at' : $searchTerms['sortBy'];
+        $order  = empty($searchTerms['order'])  ? 'DESC' :$searchTerms['order'];
+        $from   = !empty($searchTerms['created_from']) ? Tools::dbDateConverter($searchTerms['created_from'], '00:00:00') : null;
+        $to     = !empty($searchTerms['created_to'])   ? Tools::dbDateConverter($searchTerms['created_to'], '23:59:59') : null;
+
+        $query = DB::table('streams');
+
+        // Remaining where conditions
+        foreach($filters as $key => $value) {
+            if (!empty($value)) {
+                $query->where($key, 'LIKE', '%' . $value . '%');
+            }
+        }
+
+        if (isset($from) && isset($to)) {
+            $query->whereBetween('created_at', [$from, $to]);
+        }
+
+        $totalCount = $query->count();
+
+        $query->orderBy($sortBy, $order)
+            ->take($perPage)
+            ->offset(($page-1) * $perPage);
+
+        // Manual paginator
+        if (isset($searchTerms['page'])) {
+            $list = new LengthAwarePaginator($query->get(), $totalCount, $perPage, $page, ["path" => $url['path']]);
+        } else {
+            $list = $query->paginate($perPage);
+        }
+
+        // Columns
+        $columns = [
+            'activity',
+            'created_at'
+        ];
+
+        // Prepare columns to be shown
+        $table = $this->prepare('order', $columns, 'ActivityStreamController@index');
+
+        $results = [
+            'activities'  => $list,
+            'totalCount'  => $totalCount,
+            'order'       => $order,
+            'link'        => $searchTerms,
+            'columns'     => $table['columns'],
+            'columnsLink' => $table['columns_link']
+        ];
+
+        return $results;
+    }
 }

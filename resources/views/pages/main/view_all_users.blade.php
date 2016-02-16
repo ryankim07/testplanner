@@ -80,6 +80,7 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
+            loadAllUsersJs();
             $('#view-all-users-main').on('click', '#add-btn, .edit-link', function(e) {
                 var mode = $(this).data('click');
                 var url  = '{!! URL::route('auth.register') !!}';
