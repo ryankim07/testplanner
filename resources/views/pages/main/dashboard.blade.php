@@ -146,9 +146,9 @@
                                 {!! $stream['custom_activity'] !!}
                             </div>
                             <div class="row activity-comment-line-block">
-                                <ul class="list-styled">
+                                <ul class="list-styled fa-ul">
                                     @foreach($stream['comments'] as $eachComment)
-                                        <li class="activity-comment-line"><em>{!! $eachComment['comment'] !!} (commented by {!! $eachComment['user_first_name'] !!} on {!! $eachComment['created_at'] !!})</em></li>
+                                        <li class="activity-comment-line"><i class="fa-li fa fa-comment"></i><em>{!! $eachComment['comment'] !!} (commented by {!! $eachComment['user_first_name'] !!} on {!! $eachComment['created_at'] !!})</em></li>
                                     @endforeach
                                 </ul>
                             </div>

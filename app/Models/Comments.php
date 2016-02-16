@@ -13,6 +13,8 @@
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Facades\Tools;
+
 class Comments extends Model
 {
     /**
