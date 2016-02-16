@@ -44,7 +44,7 @@ class TestersApi
      * @param $testersData
      * @return array|bool
      */
-    public function updateBuiltTesters($planId, $testersData)
+    public function updateBuiltTesters($planId, $testersData, $origData)
     {
         $redirect = false;
         $errorMsg = '';
@@ -54,17 +54,38 @@ class TestersApi
 
         // Start testers update
         try {
-            $testersData = json_decode($testersData, true);
-
             $query = $this->model->where('plan_id', '=', $planId)->delete();
 
             foreach($testersData as $tester) {
+                $testerId = $tester['id'];
+                $browsers = $tester['browsers'];
+
+                $newCount = isset($browsers) ? count(explode(',', $browsers)) : 0;
+
+                // Formerly selected browsers
+                $oldCount = isset($origData[$testerId]) ? count(explode(',', $origData[$testerId])) : 0;
+
+                if ($oldCount == $newCount) {
+                    $updateStatus = 0;
+                } elseif ($newCount > $oldCount) {
+                    $updateStatus = 1;
+                } elseif ($oldCount < $newCount || $oldCount > $newCount) {
+                    $updateStatus = -1;
+                }
+
+                $tester += [
+                    'update_status'      => $updateStatus,
+                    'update_status_text' => Tools::planTesterChanges($updateStatus)
+                ];
+
+                $results[] = $tester;
+
                 // Create new or update
-                if (count($tester['input-ids']) > 0 && !empty($tester['browsers'])) {
+                if (count($tester['input-ids']) > 0 && !empty($browsers)) {
                     $this->model->create([
                         'plan_id'  => $planId,
-                        'user_id'  => $tester['id'],
-                        'browsers' => $tester['browsers']
+                        'user_id'  => $testerId,
+                        'browsers' => $browsers
                     ]);
                 }
             }
@@ -93,6 +114,6 @@ class TestersApi
         // Commit all changes
         DB::commit();
 
-        return true;
+        return $results;
     }
 }

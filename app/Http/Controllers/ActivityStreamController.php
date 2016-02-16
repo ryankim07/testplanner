@@ -14,7 +14,8 @@ use Illuminate\Http\Request;
 
 use App\Facades\Tools;
 
-use App\Api\ActivityStreamApi;
+use App\Api\ActivityStreamApi,
+    App\Api\TablesApi;
 
 use Auth;
 
@@ -70,8 +71,18 @@ class ActivityStreamController extends Controller
         ]);
     }
 
-    public function search()
+    /**
+     * Activities search functionality
+     *
+     * @param Request $request
+     * @param TablesApi $tablesApi
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function search(Request $request, TablesApi $tablesApi)
     {
+        $searchTerms = array_except($request->all(), ['_token', 'admin']);
+        $results     = $tablesApi->searchActivities($searchTerms);
 
+        return view('pages.testplanner.view_all_activities', $results);
     }
 }

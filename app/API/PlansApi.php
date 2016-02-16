@@ -119,9 +119,11 @@ class PlansApi extends BaseApi
      */
     public function viewPlan($planId, $userApi, $jiraApi)
     {
-        $plan      = $this->model->find($planId);
-        $tickets   = unserialize($plan->ticket()->first()->tickets);
-        $usersList = $userApi->usersList();
+        $plan       = $this->model->find($planId);
+        $tickets    = unserialize($plan->ticket()->first()->tickets);
+        $usersList  = $userApi->usersList();
+        $allTesters = [];
+        $origData   = [];
 
         foreach($plan->testers()->get() as $tester) {
             $responses = $tester->tickets()->where('plan_id', '=', $plan->id)->get();
@@ -137,10 +139,9 @@ class PlansApi extends BaseApi
                 $tester->responses = $thisResponse;
             }
 
-            $results[] = $tester->toArray();
+            $allTesters[] = $tester->toArray();
+            $origData[$tester->user_id] = $tester->browsers;
         }
-
-        $testers = $results;
 
         // Render tickets
         $ticketsHtml = '';
@@ -166,9 +167,10 @@ class PlansApi extends BaseApi
                 'expired_at'    => Tools::dateConverter($plan->expired_at),
                 'tickets_html'  => $ticketsHtml,
                 'users'         => $usersList,
-                'testers'       => json_encode($testers),
+                'testers'       => json_encode($allTesters),
                 'jira_versions' => json_encode($jiraVersions),
-                'jira_issues'   => json_encode($jiraIssues)
+                'jira_issues'   => json_encode($jiraIssues),
+                'orig_data'     => json_encode($origData)
             ]
         ];
 
@@ -558,7 +560,7 @@ class PlansApi extends BaseApi
      * @param $request
      * @return array|bool
      */
-    public function updateBuiltPlanDetails($planId, $request)
+    public function updateBuiltPlan($planId, $request)
     {
         $redirect = false;
         $errorMsg = '';
@@ -603,7 +605,7 @@ class PlansApi extends BaseApi
         $results = [
             'type'        => 'plan',
             'status'      => 'update',
-            'id'          => $plan->id,
+            'plan_id'     => $plan->id,
             'creator_id'  => $plan->creator_id,
             'description' => $plan->description
         ];

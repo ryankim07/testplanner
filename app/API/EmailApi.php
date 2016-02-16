@@ -30,54 +30,34 @@ class EmailApi
         try {
             // Subject and email type selector
             switch($type) {
-                case 'plan-created':
-                    $emailSubject = $data['description'] . ' - ' . config('testplanner.mail.subjects.plan_created');
-                    $emailType    = 'emails.plan_created';
-                    break;
+                case 'plan_created':
+                case 'plan_updated':
+                    $emailSubject = $data['description'] . ' - ' . config('testplanner.mail.subjects.' . $type);
 
-                case 'plan-updated':
-                    $emailSubject = $data['description'] . ' - ' . config('testplanner.mail.subjects.plan_updated');
-                    $emailType    = 'emails.plan_updated';
-                    break;
-
-                case 'ticket-response':
-                    $emailSubject =  $data['description'] . ' - ' . config('testplanner.mail.subjects.ticket_response') . ' ' . $data['assignee'];
-                    $emailType    = 'emails.ticket_response';
-                    break;
-            }
-
-            // Type of email to be send out
-            switch($emailType) {
-                case 'emails.plan_created':
-                case 'emails.plan_updated':
-                    if (count($data['testers']) > 1) {
-                        // Multiple testers
-                        foreach ($data['testers'] as $tester) {
-                            $tester['browsers'] = Tools::translateBrowserName($tester['browsers']);
-
-                            Mail::send($emailType, array_merge($data, $tester), function ($message) use ($tester, $emailSubject) {
-                                $message->to($tester['email'], $tester['first_name'])->subject($emailSubject);
-                            });
-                        }
-                    } else {
-                        // Single tester
-                        $tester = array_shift($data['testers']);
+                    foreach ($data['testers'] as $tester) {
+                        $type = 'emails.' . $type;
                         $tester['browsers'] = Tools::translateBrowserName($tester['browsers']);
 
-                        Mail::send($emailType, array_merge($data, $tester), function ($message) use ($tester, $emailSubject) {
+                        if ($type = 'plan_updated' && $tester['update_status'] != 0) {
+                            $type = 'emails.plan_browser_updated';
+                        }
+
+                        Mail::send($type, array_merge($data, $tester), function ($message) use ($tester, $emailSubject) {
                             $message->to($tester['email'], $tester['first_name'])->subject($emailSubject);
                         });
                     }
                 break;
 
-                case 'emails.ticket_response':
+                case 'ticket_response':
+                    $emailSubject =  $data['description'] . ' - ' . config('testplanner.mail.subjects.' . $type) . ' ' . $data['assignee'];
+
                     $data += [
                         'tester_email'  => Tools::getUserEmail($data['tester_id']),
                         'creator_email' => Tools::getUserEmail($data['creator_id'])
                     ];
 
                     if ($data['creator_email'] != $data['tester_email']) {
-                        Mail::send($emailType, $data, function ($message) use ($data, $emailSubject) {
+                        Mail::send('emails.' . $type, $data, function ($message) use ($data, $emailSubject) {
                             $message->from($data['tester_email'], $data['assignee']);
                             $message->to($data['creator_email'], $data['reporter'])->subject($emailSubject);
                         });
