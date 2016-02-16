@@ -63,7 +63,7 @@ class SendNotification
         $this->asApi->saveActivityStream($data);
 
         // Mail all test browsers
-        $this->emailApi->sendEmail('plan-created', $data);
+        $this->emailApi->sendEmail('plan_created', $data);
     }
 
     /**
@@ -79,8 +79,7 @@ class SendNotification
         $this->asApi->saveActivityStream($data);
 
         // Mail all test browsers
-        // Mail all test browsers
-        $this->emailApi->sendEmail('plan-updated', $data);
+        $this->emailApi->sendEmail('plan_updated', $data);
     }
 
     /**
@@ -99,7 +98,7 @@ class SendNotification
         $this->asApi->saveActivityStream(array_merge($data, $results));
 
         // Mail all test browsers
-        $this->emailApi->sendEmail('ticket-response', array_merge($data, $results));
+        $this->emailApi->sendEmail('ticket_response', array_merge($data, $results));
     }
 
     /**

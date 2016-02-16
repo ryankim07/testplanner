@@ -303,9 +303,9 @@ class PlansController extends Controller
      */
     public function updateBuiltPlan($planId, PlanUpdateFormRequest $request)
     {
-        $ticketsObj     = $request->get('tickets_obj');
-        $testersBrowser = $request->get('browser_testers');
-        $origData       = $request->get('orig_data');
+        $ticketsObj     = json_decode($request->get('tickets_obj'), true);
+        $testersBrowser = json_decode($request->get('browser_testers'), true);
+        $origData       = json_decode($request->get('orig_data'), true);
         $planData       = $this->plansApi->updateBuiltPlan($planId, $request);
         $ticketsUpdate  = $this->ticketsApi->updateBuiltTickets($planId, $ticketsObj);
         $testersUpdate  = $this->testersApi->updateBuiltTesters($planId, $testersBrowser, $origData);
@@ -314,8 +314,7 @@ class PlansController extends Controller
 
         if ((count($planData) > 0) && (count($testersUpdate) > 0) && $ticketsUpdate) {
             // Send notifications observer
-            $testersBrowser += ['user_browser_changes' => $testersUpdate];
-            event(new updatingPlan(array_merge($planData, ['testers' => $testersBrowser])));
+            event(new updatingPlan(array_merge($planData, ['testers' => $testersUpdate])));
 
             $msg = $planData['description'] . ' ' . config('testplanner.messages.plan.build_update');
         }

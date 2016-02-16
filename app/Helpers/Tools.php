@@ -144,6 +144,28 @@ class Tools
     }
 
     /**
+     * @param $status
+     * @return string
+     */
+    public function planTesterChanges($status)
+    {
+        switch($status) {
+            case 1:
+                $msg = config('testplanner.messages.browsers.added');
+            break;
+
+            case -1:
+                $msg = config('testplanner.messages.browsers.removed');
+            break;
+
+            default:
+                $msg = '';
+        }
+
+        return $msg;
+    }
+
+    /**
      * Get a total status of plans or tickets
      *
      * @param $allStatus

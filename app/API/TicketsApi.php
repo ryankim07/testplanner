@@ -54,8 +54,7 @@ class TicketsApi
 
         // Start tickets update
         try {
-            $ticketsData = json_decode($ticketsData, true);
-            $ticket      = $this->model->where('plan_id', '=', $planId);
+            $ticket = $this->model->where('plan_id', '=', $planId);
             $ticket->update(['tickets' => serialize($ticketsData)]);
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();

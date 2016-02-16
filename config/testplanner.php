@@ -77,6 +77,11 @@ return [
             'response_resolved'   => 'resolved his plan.',
         ],
 
+        'browsers' => [
+            'removed' => 'Browsers that were assigned to test, have been removed from',
+            'added'   => 'More browsers have been assigned for testing on ',
+        ],
+
         'system' => [
             'update_success'        => 'Fields successfully updated',
             'update_error'          => 'Fields need to be modified for update.',
