@@ -21,8 +21,8 @@ return [
             'domain'   => 'https://mophie.atlassian.net',
             'rest_url' => 'https://mophie.atlassian.net/rest/api/2',
             'project'  => 'ECOM',
-            'login'    => 'ryan.kim',
-            'password' => 'Sk1ncare',
+            'login'    => '',
+            'password' => '',
             'version_description' => 'Test Plan for build v',
         ],
         'cache' => [
